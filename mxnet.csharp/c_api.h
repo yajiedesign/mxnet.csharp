@@ -5,23 +5,10 @@
  */
 #ifndef MXNET_C_API_H_
 #define MXNET_C_API_H_
+//#include <stdint.h>
+#define MXNET_DLL 
+#define MXNET_EXTERN_C
 
-#ifdef __cplusplus
-#define MXNET_EXTERN_C extern "C"
-#endif
-
-#include <stdint.h>
-
-/*! \brief MXNET_DLL prefix for windows */
-#ifdef _WIN32
-#ifdef MXNET_EXPORTS
-#define MXNET_DLL MXNET_EXTERN_C __declspec(dllexport)
-#else
-#define MXNET_DLL MXNET_EXTERN_C __declspec(dllimport)
-#endif
-#else
-#define MXNET_DLL MXNET_EXTERN_C
-#endif
 
 /*! \brief manually define unsigned int */
 typedef unsigned int mx_uint;
@@ -418,7 +405,7 @@ MXNET_DLL int MXFuncGetInfo(FunctionHandle fun,
                             const char ***arg_names,
                             const char ***arg_type_infos,
                             const char ***arg_descriptions,
-                            const char **return_type = NULL);
+                            const char **return_type );
 /*!
  * \brief get the argument requirements of the function
  * \param fun input function handle
@@ -512,7 +499,7 @@ MXNET_DLL int MXSymbolGetAtomicSymbolInfo(AtomicSymbolCreator creator,
                                           const char ***arg_type_infos,
                                           const char ***arg_descriptions,
                                           const char **key_var_num_args,
-                                          const char **return_type = NULL);
+                                          const char **return_type );//=Null
 /*!
  * \brief Create an AtomicSymbol.
  * \param creator the AtomicSymbolCreator
