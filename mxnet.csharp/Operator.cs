@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using SymbolHandle = System.IntPtr;
 using AtomicSymbolCreator = System.IntPtr;
 namespace mxnet.csharp
 {
-
-    class Operator
+    partial class Operator
     {
        static readonly  OpMap   op_map_ = new OpMap();
         Dictionary<string, string> params_desc_ = new Dictionary<string, string>();
@@ -47,10 +47,22 @@ namespace mxnet.csharp
         /// <param name="name">name name of the input symbol</param>
         /// <param name="symbol">the input symbol</param>
         /// <returns></returns>
-        Operator SetInput(string name, Symbol symbol)
+        public  Operator SetInput(string name, Symbol symbol)
         {
             input_keys.Add(name);
             input_values.Add(symbol.GetHandle());
+            return this;
+        }
+        public Operator AddInput(Symbol s1)
+        {
+            PushInput(s1);
+            return this;
+        }
+
+        public Operator AddInput(Symbol s1, Symbol s2)
+        {
+            PushInput(s1);
+            PushInput(s2);
             return this;
         }
         /*!
@@ -65,6 +77,8 @@ namespace mxnet.csharp
         {
             input_values.Add(symbol.GetHandle());
         }
+
+      
 
 
         /// <summary>
@@ -91,10 +105,22 @@ namespace mxnet.csharp
                 input_keys.Add(data);
             }
 
+
+
             NativeMethods.MXSymbolCreateAtomicSymbol(handle_, (uint)param_keys.Count, param_keys.ToArray(),
                                        param_values.ToArray(), out symbol_handle);
-            NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint)input_values.Count, input_keys.ToArray(),
-                            input_values.ToArray());
+
+            if (input_keys.Count > 0)
+            {
+                NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint) input_values.Count, input_keys.ToArray(),
+                    input_values.ToArray());
+            }
+            else
+            {
+                NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint)input_values.Count, IntPtr.Zero,
+                    input_values.ToArray());
+            }
+
             return new Symbol(symbol_handle);
         }
 

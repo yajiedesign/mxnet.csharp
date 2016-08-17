@@ -78,10 +78,10 @@ namespace mxnet.csharp
         }
 
 
-        //public static Symbol operator +(Symbol rhs)
-        //{
-        //    return _Plus(this, rhs);
-        //}
+        public static Symbol operator +(Symbol lhs, Symbol rhs)
+        {
+            return Operator._Plus(lhs, rhs);
+        }
         //public static Symbol operator -(Symbol rhs)
         //{
         //    return _Minus(this, rhs);

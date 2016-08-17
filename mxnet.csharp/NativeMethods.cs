@@ -548,7 +548,7 @@ namespace mxnet.csharp
         ///out_array: AtomicSymbolCreator**
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListAtomicSymbolCreators")]
         public static extern int MXSymbolListAtomicSymbolCreators(out uint out_size,
-            [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] out_array);
+            out IntPtr out_array_ptr);
 
 
         /// Return Type: int
@@ -570,14 +570,14 @@ namespace mxnet.csharp
         ///return_type: char**
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolGetAtomicSymbolInfo")]
         public static extern int MXSymbolGetAtomicSymbolInfo(IntPtr creator,
-          [Out][MarshalAs(UnmanagedType.LPStr)] string name,
-          [Out][MarshalAs(UnmanagedType.LPStr)] string description,
-          [Out] uint num_args,
-          [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] arg_names,
-          [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] arg_type_infos,
-          [Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] arg_descriptions,
-          [Out][MarshalAs(UnmanagedType.LPStr)] string key_var_num_args,
-          [Out][MarshalAs(UnmanagedType.LPStr)] string return_type);
+          [Out]out IntPtr name,
+          [Out]out IntPtr description,
+          [Out]out uint num_args,
+          [Out]out IntPtr arg_names,
+          [Out]out IntPtr arg_type_infos,
+          [Out]out IntPtr arg_descriptions,
+          [Out]out IntPtr key_var_num_args,
+          [Out]out IntPtr return_type);
 
 
         /// Return Type: int
@@ -747,8 +747,15 @@ namespace mxnet.csharp
         public static extern int MXSymbolCompose(IntPtr sym, 
             [In] [MarshalAs(UnmanagedType.LPStr)] string name,
             uint num_args,
-            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
-            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] args);
+           [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
+           [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] args);
+
+        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolCompose")]
+        public static extern int MXSymbolCompose(IntPtr sym,
+          [In] [MarshalAs(UnmanagedType.LPStr)] string name,
+          uint num_args,
+         [In]  IntPtr keys,
+         [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] args);
 
 
         /// Return Type: int
