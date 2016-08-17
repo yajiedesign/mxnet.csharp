@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -103,6 +104,99 @@ namespace mxnet.csharp
                      .SetParam("scalar", scalar)
                      .CreateSymbol();
         }
-    
+
+        public static Symbol Crop( string symbol_name,
+    int num_args,
+    Symbol data,
+    Symbol crop_like,
+    Shape offset = null,
+    Shape h_w = null,
+    bool center_crop = false) {
+            if (offset == null)
+            {
+                offset = new Shape(0, 0);
+            }
+            if (h_w == null)
+            {
+                h_w = new Shape(0, 0);
+            }
+
+            return new Operator("Crop")
+    .SetParam("num_args", num_args)
+    .SetParam("offset", offset)
+    .SetParam("h_w", h_w)
+    .SetParam("center_crop", center_crop)
+    .SetInput("arg0", data)
+    .SetInput("arg1", crop_like)
+    .CreateSymbol(symbol_name);
+    }
+
+
+    /*!
+     * \breif Slice input equally along specified axis.
+     * \param data input symbol. 
+     * \param num_outputs Number of outputs to be sliced. 
+     * \param axis Dimension along which to slice. 
+     * \param squeeze_axis If true AND the sliced dimension becomes 1, squeeze that dimension. 
+     * \return new symbol
+     */
+     Symbol SliceChannel(Symbol data,
+                               int num_outputs,
+                               int axis = 1,
+                               bool squeeze_axis = false)
+    {
+        return new Operator("SliceChannel")
+                 .SetParam("num_outputs", num_outputs)
+                 .SetParam("axis", axis)
+                 .SetParam("squeeze_axis", squeeze_axis).
+                 AddInput(data)
+                 .CreateSymbol();
+    }
+
+
+    /*!
+     * \breif Slice input equally along specified axis.
+     * \param symbol_name name of the resulting symbol.
+     * \param data input symbol. 
+     * \param num_outputs Number of outputs to be sliced. 
+     * \param axis Dimension along which to slice. 
+     * \param squeeze_axis If true AND the sliced dimension becomes 1, squeeze that dimension. 
+     * \return new symbol
+     */
+     Symbol SliceChannel(string symbol_name,
+                               Symbol data,
+                               int num_outputs,
+                               int axis = 1,
+                               bool squeeze_axis = false)
+    {
+        return new  Operator("SliceChannel")
+                 .SetParam("num_outputs", num_outputs)
+                 .SetParam("axis", axis)
+                 .SetParam("squeeze_axis", squeeze_axis).AddInput(data)
+                 .CreateSymbol(symbol_name);
+    }
+
+    /*!
+     * \breif Apply activation function to input.
+     *        Softmax Activation is only available with CUDNN on GPUand will be
+     *        computed at each location across channel if input is 4D.
+     * \param symbol_name name of the resulting symbol.
+     * \param data Input data to activation function. 
+     * \param act_type Activation function to be applied. 
+     * \return new symbol
+     */
+     Symbol Activation(  string symbol_name,
+                             Symbol data,
+                              string act_type)
+    {
+        Debug.Assert(act_type == "relu" ||
+               act_type == "sigmoid" ||
+               act_type == "softrelu" ||
+               act_type == "tanh");
+        return new Operator("Activation")
+                 .SetParam("act_type", act_type)
+                 .SetInput("data", data)
+                 .CreateSymbol(symbol_name);
+    }
 }
 }

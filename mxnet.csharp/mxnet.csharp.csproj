@@ -44,6 +44,7 @@
     <Compile Include="Operator.cs" />
     <Compile Include="OperatorSupplement.cs" />
     <Compile Include="OpMap.cs" />
+    <Compile Include="Shape.cs" />
     <Compile Include="Symbol.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
