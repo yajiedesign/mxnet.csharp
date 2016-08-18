@@ -9,36 +9,52 @@ namespace mxnet.csharp
 {
     class Shape
     {
- 
-
-
 
         // the shape will be stored in data_stack_
         // when dimension is smaller than kStackCache
         // when it is bigger, it will be stored in data_heap_;
-        /*! \brief size of in stack space */
+
+        /// <summary>
+        ///  size of in stack space 
+        /// </summary>
         const int kStackCache = 4;
-        /*! \brief number of dimnsion of the shape */
+
+        /// <summary>
+        /// number of dimnsion of the shape
+        /// </summary>
         int ndim_;
-        /*! \brief number of cells allocated in data_heap_ */
+
+        /// <summary>
+        /// number of cells allocated in data_heap_
+        /// </summary>
         int num_heap_allocated_;
-        /*! \brief in stack space used to store shape when it is small */
+
+        /// <summary>
+        /// in stack space used to store shape when it is small
+        /// </summary>
         int[] data_stack_ = new int[kStackCache];
-        /*! \brief space to store shape when dimension is big*/
+ 
+        /// <summary>
+        /// space to store shape when dimension is big
+        /// </summary>
         int[] data_heap_;
 
 
-        /*! \brief constructor */
 
-   public     Shape()
+        /// <summary>
+        /// constructor
+        /// </summary>
+
+        public Shape()
 
         {
             ndim_ = 0;
         }
-        /*!
-        * \brief constructor from a vector of index_t
-        * \param v the vector
-        */
+
+        /// <summary>
+        /// constructor from a vector of index
+        /// </summary>
+        /// <param name="v">the vector</param>
         public Shape(ICollection<int> v)
         {
             ndim_ = v.Count;
@@ -55,10 +71,11 @@ namespace mxnet.csharp
                 Array.Copy(v.ToArray(), data_heap_, v.Count); ;
             }
         }
-        /*!
-        * \brief constructor one dimmension shape
-        * \param s1 size of the first dimmension
-        */
+
+        /// <summary>
+        /// constructor one dimmension shape
+        /// </summary>
+        /// <param name="s1">size of the first dimmension</param>
         public Shape(int s1)
         {
             ndim_ = 1;
@@ -75,11 +92,12 @@ namespace mxnet.csharp
                 data_heap_[0] = s1;
             }
         }
-        /*!
-        * \brief constructor two dimmension shape
-        * \param s1 size of the first dimmension
-        * \param s2 size of the second dimmension
-        */
+
+        /// <summary>
+        /// constructor two dimmension shape
+        /// </summary>
+        /// <param name="s1">size of the first dimmension</param>
+        /// <param name="s2">size of the second dimmension</param>
         public Shape(int s1, int s2)
 
         {
@@ -99,12 +117,12 @@ namespace mxnet.csharp
                 data_heap_[1] = s2;
             }
         }
-        /*!
-        * \brief constructor three dimmension shape
-        * \param s1 size of the first dimmension
-        * \param s2 size of the second dimmension
-        * \param s3 size of the third dimmension
-        */
+        /// <summary>
+        /// constructor three dimmension shape
+        /// </summary>
+        /// <param name="s1">size of the first dimmension</param>
+        /// <param name="s2">size of the second dimmension</param>
+        /// <param name="s3">size of the third dimmension</param>
         public Shape(int s1, int s2, int s3)
         {
             ndim_ = 3;
@@ -125,13 +143,14 @@ namespace mxnet.csharp
                 data_heap_[2] = s3;
             }
         }
-        /*!
-        * \brief constructor four dimmension shape
-        * \param s1 size of the first dimmension
-        * \param s2 size of the second dimmension
-        * \param s3 size of the third dimmension
-        * \param s4 size of the fourth dimmension
-        */
+  
+        /// <summary>
+        /// constructor four dimmension shape
+        /// </summary>
+        /// <param name="s1">size of the first dimmension</param>
+        /// <param name="s2">size of the second dimmension</param>
+        /// <param name="s3">size of the third dimmension</param>
+        /// <param name="s4">size of the fourth dimmension</param>
         public Shape(int s1, int s2, int s3, int s4)
         {
             ndim_ = 4;
@@ -154,14 +173,15 @@ namespace mxnet.csharp
                 data_heap_[3] = s4;
             }
         }
-        /*!
-        * \brief constructor five dimmension shape
-        * \param s1 size of the first dimmension
-        * \param s2 size of the second dimmension
-        * \param s3 size of the third dimmension
-        * \param s4 size of the fourth dimmension
-        * \param s5 size of the fifth dimmension
-        */
+
+        /// <summary>
+        /// constructor five dimmension shape
+        /// </summary>
+        /// <param name="s1">size of the first dimmension</param>
+        /// <param name="s2">size of the second dimmension</param>
+        /// <param name="s3">size of the third dimmension</param>
+        /// <param name="s4">size of the fourth dimmension</param>
+        /// <param name="s5">size of the fifth dimmension</param>
         public Shape(int s1, int s2, int s3, int s4, int s5)
         {
             ndim_ = 5;
@@ -186,10 +206,10 @@ namespace mxnet.csharp
                 data_heap_[5] = s5;
             }
         }
-        /*!
-        * \brief constructor from Shape
-        * \param s the source shape
-        */
+        /// <summary>
+        /// constructor from Shape
+        /// </summary>
+        /// <param name="s">the source shape</param>
         public Shape(Shape s)
         {
             ndim_ = s.ndim_;
@@ -206,29 +226,42 @@ namespace mxnet.csharp
                 Array.Copy(s.data_heap_, data_heap_, ndim_);
             }
         }
- 
 
-        /*! \return the data content of the shape */
+
+  
+        /// <summary>
+        /// the data content of the shape
+        /// </summary>
+        /// <returns></returns>
         public ReadOnlyCollection<int> data()
         {
             return Array.AsReadOnly( ndim_ <= kStackCache ? data_stack_ : data_heap_);
         }
-        /*! \brief return number of dimension of the tensor inside */
+
+        /// <summary>
+        ///  return number of dimension of the tensor inside
+        /// </summary>
+        /// <returns></returns>
         int ndim()
         {
             return ndim_;
         }
-        /*!
-        * \brief get corresponding index
-        * \param i dimension index
-        * \return the corresponding dimension size
-        */
+
+        /// <summary>
+        /// get corresponding index
+        /// </summary>
+        /// <param name="i">dimension index</param>
+        /// <returns>the corresponding dimension size</returns>
         int this[int i]
         {
             get { return data()[i]; }
         }
 
-        /*! \brief total number of elements in the tensor */
+
+        /// <summary>
+        /// total number of elements in the tensor
+        /// </summary>
+        /// <returns></returns>
         int Size()
         {
             int size = 1;
@@ -239,10 +272,13 @@ namespace mxnet.csharp
             }
             return size;
         }
-        /*!
-        * \return whether two shape equals
-        * \param s the shape to compare against
-        */
+
+        /// <summary>
+        /// whether two shape equals
+        /// </summary>
+        /// <param name="l">the shape to compare against</param>
+        /// <param name="r">the shape to compare against</param>
+        /// <returns></returns>
         public static bool operator ==(Shape l, Shape r)
         {
             if (l == null) return false;
@@ -264,10 +300,13 @@ namespace mxnet.csharp
             }
             return true;
         }
-        /*!
-        * \return whether two shape not equals
-        * \param s the shape to compare against
-        */
+
+        /// <summary>
+        /// whether two shape not equals
+        /// </summary>
+        /// <param name="l"></param>
+        /// <param name="r"></param>
+        /// <returns></returns>
         public static bool operator !=(Shape l, Shape r )
         {
             return !(l == r);
@@ -308,10 +347,10 @@ namespace mxnet.csharp
         }
 
 
-        /*!
-        * \brief internal function to set the dimension
-        * \param dim the dimension of the shape
-        */
+        /// <summary>
+        /// internal function to set the dimension
+        /// </summary>
+        /// <param name="dim">dim the dimension of the shape</param>
         void SetDim(int dim)
         {
             if (dim > kStackCache &&
