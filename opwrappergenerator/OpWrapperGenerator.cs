@@ -41,6 +41,11 @@ namespace opwrappergenerator
                 out key_var_num_args_ptr,
                 out return_type_ptr);
                 string name = Marshal.PtrToStringAnsi(name_ptr);
+                if (name.StartsWith("_"))
+                {
+                    continue;
+                }
+
                 string description = Marshal.PtrToStringAnsi(description_ptr);
 
                 IntPtr[] arg_names_array = new IntPtr[num_args];

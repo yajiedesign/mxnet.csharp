@@ -41,24 +41,29 @@ namespace opwrappergenerator
             string ret = "";
             var argsLocal = this.args.Skip(use_name ? 0 : 1).ToList();
 
+            if (name == "Reshape")
+            {
+                
+            }
+
             //enum
             if (use_name)
             {
                 foreach (var arg in argsLocal.Where(w => w.IsEnum))
                 {
-                    ret += $"/// <summary>\n/// {arg.Description}\n/// </summary>\n";
+                    ret += $"/// <summary>\n/// {arg.Description.Replace("\n","")}\n/// </summary>\n";
                     ret += arg.Enum.GetDefinitionString();
                 }
             }
 
 
             //comments 
-            ret += $"/// <summary>\n/// {description}\n/// </summary>\n";
+            ret += $"/// <summary>\n/// {description.Replace("\n", "")}\n/// </summary>\n";
 
 
             foreach (var arg in argsLocal)
             {
-                ret += $"/// <param name=\"{arg.Nane}\">{arg.Description}</param>";
+                ret += $"/// <param name=\"{arg.Nane}\">{arg.Description.Replace("\n", "")}</param>";
             }
             ret += $" /// <returns>returns new symbol</returns>\n";
 
@@ -69,12 +74,23 @@ namespace opwrappergenerator
                 ret += $"{arg.TypeName} {arg.Nane}";
                 if (arg.HasDefault)
                 {
+
                     ret += $"={arg.DefaultString}";
                 }
                 ret += ",\n";
             }
-            ret = ret.Substring(0, ret.Length - 2);
+            if (argsLocal.Count > 0)
+            {
+                ret = ret.Substring(0, ret.Length - 2);
+            }
+      
             ret += ")\n{";
+
+            foreach (var arg in argsLocal)
+            {
+                ret += arg.DefaultStringWithObject;
+            }
+
             ret += $"return new Operator(\"{name}\")\n";
 
             foreach (var arg in args)
@@ -104,7 +120,7 @@ namespace opwrappergenerator
                 {
                     continue;
                 }
-                ret += $".AddInput(\"{arg.Nane}\", {arg.Nane})\n";
+                ret += $".AddInput({arg.Nane})\n";
             }
             if (use_name)
             {

@@ -8,9 +8,9 @@ using SymbolHandle = System.IntPtr;
 using AtomicSymbolCreator = System.IntPtr;
 namespace mxnet.csharp
 {
-    partial class Operator
+    public partial class Operator
     {
-       static readonly  OpMap   op_map_ = new OpMap();
+        static readonly OpMap op_map_ = new OpMap();
         Dictionary<string, string> params_desc_ = new Dictionary<string, string>();
         bool variable_params_ = false;
         Dictionary<string, string> params_ = new Dictionary<string, string>();
@@ -22,7 +22,7 @@ namespace mxnet.csharp
         /// Operator constructor
         /// </summary>
         /// <param name="operator_name">type of the operator</param>
-        Operator(string operator_name)
+        public Operator(string operator_name)
         {
             handle_ = op_map_.GetSymbolCreator(operator_name);
         }
@@ -34,7 +34,7 @@ namespace mxnet.csharp
         /// <param name="name">name of the config parameter</param>
         /// <param name="value">value of the config parameter</param>
         /// <returns></returns>
-        Operator SetParam<TT>(string name, TT value)
+        public Operator SetParam<TT>(string name, TT value)
         {
 
             params_[name] = value.ToString();
@@ -47,7 +47,7 @@ namespace mxnet.csharp
         /// <param name="name">name name of the input symbol</param>
         /// <param name="symbol">the input symbol</param>
         /// <returns></returns>
-        public  Operator SetInput(string name, Symbol symbol)
+        public Operator SetInput(string name, Symbol symbol)
         {
             input_keys.Add(name);
             input_values.Add(symbol.GetHandle());
@@ -56,6 +56,14 @@ namespace mxnet.csharp
         public Operator AddInput(Symbol s1)
         {
             PushInput(s1);
+            return this;
+        }
+        public Operator AddInput(ICollection<Symbol> sc)
+        {
+            foreach (var s in sc)
+            {
+                PushInput(s);
+            }
             return this;
         }
 
@@ -78,7 +86,7 @@ namespace mxnet.csharp
             input_values.Add(symbol.GetHandle());
         }
 
-      
+
 
 
         /// <summary>
@@ -86,7 +94,7 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="name">the name of the operator</param>
         /// <returns>the operator Symbol</returns>
-        Symbol CreateSymbol(string name = "")
+        public Symbol CreateSymbol(string name = "")
         {
             string pname = name == "" ? null : name;
 
@@ -112,7 +120,7 @@ namespace mxnet.csharp
 
             if (input_keys.Count > 0)
             {
-                NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint) input_values.Count, input_keys.ToArray(),
+                NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint)input_values.Count, input_keys.ToArray(),
                     input_values.ToArray());
             }
             else

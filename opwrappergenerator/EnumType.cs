@@ -9,22 +9,33 @@ namespace opwrappergenerator
 {
     class EnumType
     {
-        private readonly Regex typereg = new Regex("'(.*)'");
+        private readonly Regex typereg = new Regex("'(.*?)'");
+        private readonly Regex typerangereg = new Regex("{(.*)}");
         private string name;
         private string[] enumValues = null;
         public EnumType(string typeName = "ElementWiseOpType", string typeString = "{'avg', 'max', 'sum'}")
         {
             name = typeName;
+            if (name.Contains("SoftmaxOutput"))
+            {
+                
+            }
       
             if (typeString.StartsWith("{"))
             {
-                var matchs = typereg.Matches(typeString);
-                List<string> enums = new List<string>();
-                foreach (Match item in matchs)
+
+                var rangematch = typerangereg.Match(typeString);
+                if (rangematch.Success)
                 {
-                    enums.Add(item.Groups[1].Value);
+
+                    var matchs = typereg.Matches(rangematch.Groups[1].Value);
+                    List<string> enums = new List<string>();
+                    foreach (Match item in matchs)
+                    {
+                        enums.Add(item.Groups[1].Value);
+                    }
+                    enumValues = enums.ToArray();
                 }
-                enumValues = enums.ToArray();
             }
             else
             {
@@ -38,18 +49,33 @@ namespace opwrappergenerator
         public string GetDefinitionString(int indent = 0)
         {
             string ret = "";
-            ret += $"enum {name}\n{{";
+            ret += $"public enum {name}\n{{";
             foreach (var value in enumValues)
             {
-                ret += $"{value},\n";
+                if (value == "null")
+                {
+                    ret += $"_null,\n";
+                }
+                else
+                {
+                    ret += $"{value},\n";
+                }
             }
-            ret = ret.Substring(0, ret.Length -2);
+            if (enumValues.Length > 0)
+            {
+                ret = ret.Substring(0, ret.Length - 2);
+            }
+
             ret += "\n};";
             return ret;
         }
 
         public string GetDefaultValueString(string value = "")
         {
+            if (value == "null")
+            {
+                value = "_null";
+            }
             return name + "." + value;
         }
       

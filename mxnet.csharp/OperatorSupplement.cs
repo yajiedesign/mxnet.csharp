@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
-    partial class Operator
+    public partial class Operator
     {
         public static Symbol _Plus(Symbol lhs, Symbol rhs)
         {

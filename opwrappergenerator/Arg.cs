@@ -27,9 +27,12 @@ namespace opwrappergenerator
         public string TypeName { get; }
         public bool HasDefault { get; } = false;
         public string DefaultString { get; }
+        public string DefaultStringWithObject { get; } = "";
 
         public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
         {
+
+
             this.Nane = argName;
             this.Description = descString;
             if (typeString.StartsWith("{"))
@@ -41,9 +44,17 @@ namespace opwrappergenerator
             else
             {
                 string typename;
+
                 if (typeDict.TryGetValue(typeString.Split(' ').First().Replace(",", ""), out typename))
                 {
                     TypeName = typename;
+                }
+                else
+                {
+                    if (opName == "Reshape")
+                    {
+                        TypeName = "Shape";
+                    }
                 }
             }
             if (typeString.IndexOf("default", StringComparison.Ordinal) != -1)
@@ -66,7 +77,12 @@ namespace opwrappergenerator
                 }
                 else if (DefaultString.StartsWith("("))
                 {
-                    DefaultString = "Shape" + DefaultString;
+                    DefaultStringWithObject = $"{Nane}= new Shape{DefaultString};";
+                    DefaultString = "null";       
+                }
+                if (TypeName == "float")
+                {
+                    DefaultString = DefaultString + "f";
                 }
             }
 

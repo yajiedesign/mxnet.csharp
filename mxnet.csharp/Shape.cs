@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
-    class Shape
+    public class Shape
     {
+  
 
         // the shape will be stored in data_stack_
         // when dimension is smaller than kStackCache
