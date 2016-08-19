@@ -107,7 +107,7 @@ namespace opwrappergenerator
 
                 if (arg.IsEnum)
                 {
-                    ret += $".SetParam(\"{arg.Name}\", {arg.Enum.GetName()}Convert[(int){arg.Name}])\n";
+                    ret += $".SetParam(\"{arg.Name}\", {arg.Enum.Name}Convert[(int){arg.Name}])\n";
                 }
                 else
                 {

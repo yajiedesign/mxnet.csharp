@@ -11,44 +11,39 @@ namespace opwrappergenerator
 {
     class EnumType
     {
-        private readonly Regex typereg = new Regex("'(.*?)'");
-        private readonly Regex typerangereg = new Regex("{(.*)}");
-        private string name;
-        private string[] enumValues = null;
+        private static readonly Regex TypeReg = new Regex("'(.*?)'");
+        private static readonly Regex TypeRangeReg = new Regex("{(.*)}");
+        private readonly string[] _enumValues = null;
+
+        public string Name { get; }
         public EnumType(string typeName = "ElementWiseOpType", string typeString = "{'avg', 'max', 'sum'}")
         {
-            name = typeName;
-      
+            Name = ToCamelCase(typeName);
+
             if (typeString.StartsWith("{"))
             {
 
-                var rangematch = typerangereg.Match(typeString);
+                var rangematch = TypeRangeReg.Match(typeString);
                 if (rangematch.Success)
                 {
 
-                    var matchs = typereg.Matches(rangematch.Groups[1].Value);
+                    var matchs = TypeReg.Matches(rangematch.Groups[1].Value);
                     List<string> enums = new List<string>();
                     foreach (Match item in matchs)
                     {
                         enums.Add(item.Groups[1].Value);
                     }
-                    enumValues = enums.ToArray();
+                    _enumValues = enums.ToArray();
                 }
             }
-            else
-            {
-
-
-            }
-
         }
 
 
         public string GetDefinitionString()
         {
             string ret = "";
-            ret += $"public enum {ToCamelCase(name)}\n{{";
-            foreach (var value in enumValues)
+            ret += $"public enum {Name}\n{{";
+            foreach (var value in _enumValues)
             {
                 if (value == "null")
                 {
@@ -59,7 +54,7 @@ namespace opwrappergenerator
                     ret += $"{ToCamelCase(value)},\n";
                 }
             }
-            if (enumValues.Length > 0)
+            if (_enumValues.Length > 0)
             {
                 ret = ret.Substring(0, ret.Length - 2);
             }
@@ -68,24 +63,17 @@ namespace opwrappergenerator
             return ret;
         }
 
-        private static string ToCamelCase(string name)
-        {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
-            return textInfo.ToTitleCase(name).Replace("_","");
-        }
+
 
         public string GetConvertString()
         {
             string ret = "";
-            ret += $"private static readonly List<string> {ToCamelCase(name)}Convert = new List<string>(){{";
-            foreach (var value in enumValues)
+            ret += $"private static readonly List<string> {Name}Convert = new List<string>(){{";
+            foreach (var value in _enumValues)
             {
-
-                    ret += $"\"{value}\",";
-                
+                ret += $"\"{value}\",";
             }
-            if (enumValues.Length > 0)
+            if (_enumValues.Length > 0)
             {
                 ret = ret.Substring(0, ret.Length - 1);
             }
@@ -96,12 +84,14 @@ namespace opwrappergenerator
 
         public string GetDefaultValueString(string value = "")
         {
-            return ToCamelCase(name) + "." + ToCamelCase(value);
+            return Name + "." + ToCamelCase(value);
         }
 
-        public string GetName()
+        private static string ToCamelCase(string name)
         {
-            return ToCamelCase(name);
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+            return textInfo.ToTitleCase(name).Replace("_", "");
         }
     }
 }

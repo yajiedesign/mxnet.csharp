@@ -39,7 +39,7 @@ namespace opwrappergenerator
             {
                 IsEnum = true;
                 Enum = new EnumType(opName +"_" + argName, typeString);
-                TypeName = Enum.GetName();
+                TypeName = Enum.Name;
             }
             else
             {
