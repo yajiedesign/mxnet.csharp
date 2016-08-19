@@ -2,27 +2,33 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace opwrappergenerator
 {
     internal class Op
     {
-        private string name;
-        private string description;
-        private List<Arg> args;
+        private static readonly Regex R = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                 (?<=[^A-Z])(?=[A-Z]) |
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace| RegexOptions.Compiled);
+
+        private readonly string _name;
+        private readonly string _description;
+        private readonly List<Arg> _args;
 
         public Op(string name, string description, List<Arg> args)
         {
-            this.name = name;
-            this.description = description;
+            this._name = name;
+            this._description = description;
 
             var nameArg = new Arg(name,
                 "symbol_name",
                 "string",
                 "name of the resulting symbol");
             args.Insert(0, nameArg);
-            this.args = args.Where(w => !w.HasDefault).Concat(args.Where(w => w.HasDefault)).ToList();
+            this._args = args.Where(w => !w.HasDefault).Concat(args.Where(w => w.HasDefault)).ToList();
 
         }
         /// <summary>
@@ -40,10 +46,9 @@ namespace opwrappergenerator
         /// <returns></returns>
         public string GetOpDefinitionString(bool use_name)
         {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
+  
             string ret = "";
-            var argsLocal = this.args.Skip(use_name ? 0 : 1).ToList();
+            var argsLocal = this._args.Skip(use_name ? 0 : 1).ToList();
 
 
             //enum
@@ -61,7 +66,7 @@ namespace opwrappergenerator
 
 
             //comments 
-            ret += $"/// <summary>\n/// {description.Replace("\n", "")}\n/// </summary>\n";
+            ret += $"/// <summary>\n/// {_description.Replace("\n", "")}\n/// </summary>\n";
 
 
             foreach (var arg in argsLocal)
@@ -71,7 +76,7 @@ namespace opwrappergenerator
             ret += $" /// <returns>returns new symbol</returns>\n";
 
 
-            ret += $"public Symbol {textInfo.ToTitleCase(name)}(";
+            ret += $"public Symbol {ConvertName(_name)}(";
             foreach (var arg in argsLocal)
             {
                 ret += $"{arg.TypeName} {arg.Name}";
@@ -94,9 +99,9 @@ namespace opwrappergenerator
                 ret += arg.DefaultStringWithObject ;
             }
 
-            ret += $"\nreturn new Operator(\"{name}\")\n";
+            ret += $"\nreturn new Operator(\"{_name}\")\n";
 
-            foreach (var arg in args)
+            foreach (var arg in _args)
             {
                 if (arg.TypeName == "Symbol" ||
                     arg.TypeName == "Symbol[]" ||
@@ -118,7 +123,7 @@ namespace opwrappergenerator
             }
 
 
-            foreach (var arg in args)
+            foreach (var arg in _args)
             {
                 if (arg.TypeName != "Symbol")
                 {
@@ -127,7 +132,7 @@ namespace opwrappergenerator
                 ret += $".SetInput(\"{arg.Name}\", {arg.Name})\n";
             }
 
-            foreach (var arg in args)
+            foreach (var arg in _args)
             {
                 if (arg.TypeName != "Symbol[]")
                 {
@@ -146,6 +151,17 @@ namespace opwrappergenerator
             }
             ret += "}";
             return ret;
+        }
+
+        private string ConvertName(string name)
+        {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
+
+
+            var ret = R.Replace(name, "_");
+            return textInfo.ToTitleCase(ret).Replace("_", "");
         }
     }
 }
