@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace opwrappergenerator
@@ -20,7 +22,7 @@ namespace opwrappergenerator
             {"string", "string"}
         };
 
-        public string Nane { get; }
+        public string Name { get; }
         public string Description { get; }
         public bool IsEnum { get; } = false;
         public EnumType Enum { get; }
@@ -31,15 +33,13 @@ namespace opwrappergenerator
 
         public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
         {
-
-
-            this.Nane = argName;
+            this.Name = GetName(argName);
             this.Description = descString;
             if (typeString.StartsWith("{"))
             {
                 IsEnum = true;
-                Enum = new EnumType(opName + argName, typeString);
-                TypeName = opName + argName;
+                Enum = new EnumType(opName +"_" + argName, typeString);
+                TypeName = Enum.GetName();
             }
             else
             {
@@ -77,7 +77,7 @@ namespace opwrappergenerator
                 }
                 else if (DefaultString.StartsWith("("))
                 {
-                    DefaultStringWithObject = $"{Nane}= new Shape{DefaultString};";
+                    DefaultStringWithObject = $"if({Name}==null){{ {Name}= new Shape{DefaultString};}}\n";
                     DefaultString = "null";       
                 }
                 if (TypeName == "float")
@@ -86,6 +86,17 @@ namespace opwrappergenerator
                 }
             }
 
+        }
+
+        private string GetName(string argName)
+        {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+
+            var namesp = argName.Split('_');
+
+
+            return namesp.First()+ string.Join("", namesp.Skip(1).Select(s => textInfo.ToTitleCase(s)));
         }
     }
     

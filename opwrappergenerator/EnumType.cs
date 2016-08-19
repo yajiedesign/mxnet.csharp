@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace opwrappergenerator
@@ -16,10 +18,6 @@ namespace opwrappergenerator
         public EnumType(string typeName = "ElementWiseOpType", string typeString = "{'avg', 'max', 'sum'}")
         {
             name = typeName;
-            if (name.Contains("SoftmaxOutput"))
-            {
-                
-            }
       
             if (typeString.StartsWith("{"))
             {
@@ -46,19 +44,19 @@ namespace opwrappergenerator
         }
 
 
-        public string GetDefinitionString(int indent = 0)
+        public string GetDefinitionString()
         {
             string ret = "";
-            ret += $"public enum {name}\n{{";
+            ret += $"public enum {ToCamelCase(name)}\n{{";
             foreach (var value in enumValues)
             {
                 if (value == "null")
                 {
-                    ret += $"_null,\n";
+                    ret += $"Null,\n";
                 }
                 else
                 {
-                    ret += $"{value},\n";
+                    ret += $"{ToCamelCase(value)},\n";
                 }
             }
             if (enumValues.Length > 0)
@@ -70,14 +68,40 @@ namespace opwrappergenerator
             return ret;
         }
 
+        private static string ToCamelCase(string name)
+        {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
+            return textInfo.ToTitleCase(name).Replace("_","");
+        }
+
+        public string GetConvertString()
+        {
+            string ret = "";
+            ret += $"private static readonly List<string> {ToCamelCase(name)}Convert = new List<string>(){{";
+            foreach (var value in enumValues)
+            {
+
+                    ret += $"\"{value}\",";
+                
+            }
+            if (enumValues.Length > 0)
+            {
+                ret = ret.Substring(0, ret.Length - 1);
+            }
+
+            ret += "};";
+            return ret;
+        }
+
         public string GetDefaultValueString(string value = "")
         {
-            if (value == "null")
-            {
-                value = "_null";
-            }
-            return name + "." + value;
+            return ToCamelCase(name) + "." + ToCamelCase(value);
         }
-      
+
+        public string GetName()
+        {
+            return ToCamelCase(name);
+        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading;
 
 namespace opwrappergenerator
 {
@@ -38,13 +40,11 @@ namespace opwrappergenerator
         /// <returns></returns>
         public string GetOpDefinitionString(bool use_name)
         {
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
             string ret = "";
             var argsLocal = this.args.Skip(use_name ? 0 : 1).ToList();
 
-            if (name == "Reshape")
-            {
-                
-            }
 
             //enum
             if (use_name)
@@ -52,8 +52,11 @@ namespace opwrappergenerator
                 foreach (var arg in argsLocal.Where(w => w.IsEnum))
                 {
                     ret += $"/// <summary>\n/// {arg.Description.Replace("\n","")}\n/// </summary>\n";
-                    ret += arg.Enum.GetDefinitionString();
+                    ret += arg.Enum.GetDefinitionString() +"\n";
+                    ret += arg.Enum.GetConvertString() + "\n";
                 }
+
+
             }
 
 
@@ -63,15 +66,15 @@ namespace opwrappergenerator
 
             foreach (var arg in argsLocal)
             {
-                ret += $"/// <param name=\"{arg.Nane}\">{arg.Description.Replace("\n", "")}</param>";
+                ret += $"/// <param name=\"{arg.Name}\">{arg.Description.Replace("\n", "")}</param>\n";
             }
             ret += $" /// <returns>returns new symbol</returns>\n";
 
 
-            ret += $"public Symbol {name}(";
+            ret += $"public Symbol {textInfo.ToTitleCase(name)}(";
             foreach (var arg in argsLocal)
             {
-                ret += $"{arg.TypeName} {arg.Nane}";
+                ret += $"{arg.TypeName} {arg.Name}";
                 if (arg.HasDefault)
                 {
 
@@ -88,20 +91,30 @@ namespace opwrappergenerator
 
             foreach (var arg in argsLocal)
             {
-                ret += arg.DefaultStringWithObject;
+                ret += arg.DefaultStringWithObject ;
             }
 
-            ret += $"return new Operator(\"{name}\")\n";
+            ret += $"\nreturn new Operator(\"{name}\")\n";
 
             foreach (var arg in args)
             {
                 if (arg.TypeName == "Symbol" ||
                     arg.TypeName == "Symbol[]" ||
-                    arg.TypeName == "string")
+                    arg.Name == "symbolName")
                 {
                     continue;
                 }
-                ret += $".SetParam(\"{arg.Nane}\", {arg.Nane})\n";
+
+                if (arg.IsEnum)
+                {
+                    ret += $".SetParam(\"{arg.Name}\", {arg.Enum.GetName()}Convert[(int){arg.Name}])\n";
+                }
+                else
+                {
+                    ret += $".SetParam(\"{arg.Name}\", {arg.Name})\n";
+                }
+        
+
             }
 
 
@@ -111,7 +124,7 @@ namespace opwrappergenerator
                 {
                     continue;
                 }
-                ret += $".SetInput(\"{arg.Nane}\", {arg.Nane})\n";
+                ret += $".SetInput(\"{arg.Name}\", {arg.Name})\n";
             }
 
             foreach (var arg in args)
@@ -120,11 +133,11 @@ namespace opwrappergenerator
                 {
                     continue;
                 }
-                ret += $".AddInput({arg.Nane})\n";
+                ret += $".AddInput({arg.Name})\n";
             }
             if (use_name)
             {
-                ret += ".CreateSymbol(symbol_name);\n";
+                ret += ".CreateSymbol(symbolName);\n";
             }
             else
             {
