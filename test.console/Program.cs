@@ -15,7 +15,8 @@ namespace test.console
 
             Symbol data1 = Symbol.Variable("data1");
             Symbol data2 = Symbol.Variable("data2");
-            Symbol p = data1 + data2;
+
+            var p = data1 + data1;
 
             Console.WriteLine(p);
 

@@ -21,7 +21,7 @@ namespace opwrappergenerator
             {"long", "long"},
             {"string", "string"}
         };
-
+        public string OrginName { get; }
         public string Name { get; }
         public string Description { get; }
         public bool IsEnum { get; } = false;
@@ -33,6 +33,7 @@ namespace opwrappergenerator
 
         public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
         {
+            this.OrginName = argName;
             this.Name = GetName(argName);
             this.Description = descString;
             if (typeString.StartsWith("{"))

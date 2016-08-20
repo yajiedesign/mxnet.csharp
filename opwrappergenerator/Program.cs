@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
-    public class OperatorWarp
+    public partial class OperatorWarp
     {" + opWrapperGenerator.ParseAllOps().Replace("\n","\r\n") + 
     @"}
 }

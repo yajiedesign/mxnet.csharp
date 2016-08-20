@@ -76,7 +76,7 @@ namespace opwrappergenerator
             ret += $" /// <returns>returns new symbol</returns>\n";
 
 
-            ret += $"public Symbol {ConvertName(_name)}(";
+            ret += $"public static Symbol {ConvertName(_name)}(";
             foreach (var arg in argsLocal)
             {
                 ret += $"{arg.TypeName} {arg.Name}";
@@ -112,11 +112,11 @@ namespace opwrappergenerator
 
                 if (arg.IsEnum)
                 {
-                    ret += $".SetParam(\"{arg.Name}\", {arg.Enum.Name}Convert[(int){arg.Name}])\n";
+                    ret += $".SetParam(\"{arg.OrginName}\", {arg.Enum.Name}Convert[(int){arg.Name}])\n";
                 }
                 else
                 {
-                    ret += $".SetParam(\"{arg.Name}\", {arg.Name})\n";
+                    ret += $".SetParam(\"{arg.OrginName}\", {arg.Name})\n";
                 }
         
 
@@ -129,7 +129,7 @@ namespace opwrappergenerator
                 {
                     continue;
                 }
-                ret += $".SetInput(\"{arg.Name}\", {arg.Name})\n";
+                ret += $".SetInput(\"{arg.OrginName}\", {arg.Name})\n";
             }
 
             foreach (var arg in _args)

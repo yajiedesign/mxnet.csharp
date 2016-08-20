@@ -606,21 +606,22 @@ namespace mxnet.csharp
         ///symbols: SymbolHandle*
         ///out: SymbolHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolCreateGroup")]
-        public static extern int MXSymbolCreateGroup(uint num_symbols, ref IntPtr symbols, ref IntPtr @out);
+        public static extern int MXSymbolCreateGroup(uint num_symbols,
+           [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] symbols, out IntPtr @out);
 
 
         /// Return Type: int
         ///fname: char*
         ///out: SymbolHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolCreateFromFile")]
-        public static extern int MXSymbolCreateFromFile([In] [MarshalAs(UnmanagedType.LPStr)] string fname, ref IntPtr @out);
+        public static extern int MXSymbolCreateFromFile([In] [MarshalAs(UnmanagedType.LPStr)] string fname, out IntPtr @out);
 
 
         /// Return Type: int
         ///json: char*
         ///out: SymbolHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolCreateFromJSON")]
-        public static extern int MXSymbolCreateFromJSON([In] [MarshalAs(UnmanagedType.LPStr)] string json, ref IntPtr @out);
+        public static extern int MXSymbolCreateFromJSON([In] [MarshalAs(UnmanagedType.LPStr)] string json, out IntPtr @out);
 
 
         /// Return Type: int
@@ -634,7 +635,7 @@ namespace mxnet.csharp
         ///symbol: SymbolHandle->void*
         ///out_json: char**
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolSaveToJSON")]
-        public static extern int MXSymbolSaveToJSON(IntPtr symbol, ref IntPtr out_json);
+        public static extern int MXSymbolSaveToJSON(IntPtr symbol, out IntPtr out_json);
 
 
         /// Return Type: int
@@ -647,7 +648,7 @@ namespace mxnet.csharp
         ///symbol: SymbolHandle->void*
         ///out: SymbolHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolCopy")]
-        public static extern int MXSymbolCopy(IntPtr symbol, ref IntPtr @out);
+        public static extern int MXSymbolCopy(IntPtr symbol, out IntPtr @out);
 
 
         /// Return Type: int
@@ -703,7 +704,7 @@ namespace mxnet.csharp
         ///out_size: mx_uint*
         ///out_str_array: char***
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListArguments")]
-        public static extern int MXSymbolListArguments(IntPtr symbol, ref uint out_size, ref IntPtr out_str_array);
+        public static extern int MXSymbolListArguments(IntPtr symbol, out uint out_size, out IntPtr out_str_array);
 
 
         /// Return Type: int
@@ -711,14 +712,14 @@ namespace mxnet.csharp
         ///out_size: mx_uint*
         ///out_str_array: char***
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListOutputs")]
-        public static extern int MXSymbolListOutputs(IntPtr symbol, ref uint out_size, ref IntPtr out_str_array);
+        public static extern int MXSymbolListOutputs(IntPtr symbol, out uint out_size, out IntPtr out_str_array);
 
 
         /// Return Type: int
         ///symbol: SymbolHandle->void*
         ///out: SymbolHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolGetInternals")]
-        public static extern int MXSymbolGetInternals(IntPtr symbol, ref IntPtr @out);
+        public static extern int MXSymbolGetInternals(IntPtr symbol, out IntPtr @out);
 
 
         /// Return Type: int
@@ -726,7 +727,7 @@ namespace mxnet.csharp
         ///index: mx_uint->unsigned int
         ///out: SymbolHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolGetOutput")]
-        public static extern int MXSymbolGetOutput(IntPtr symbol, uint index, ref IntPtr @out);
+        public static extern int MXSymbolGetOutput(IntPtr symbol, uint index, out IntPtr @out);
 
 
         /// Return Type: int
@@ -734,7 +735,7 @@ namespace mxnet.csharp
         ///out_size: mx_uint*
         ///out_str_array: char***
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListAuxiliaryStates")]
-        public static extern int MXSymbolListAuxiliaryStates(IntPtr symbol, ref uint out_size, ref IntPtr out_str_array);
+        public static extern int MXSymbolListAuxiliaryStates(IntPtr symbol, out uint out_size, out IntPtr out_str_array);
 
 
         /// Return Type: int
