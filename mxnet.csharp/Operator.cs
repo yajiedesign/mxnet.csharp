@@ -36,7 +36,10 @@ namespace mxnet.csharp
         /// <returns></returns>
         public Operator SetParam<TT>(string name, TT value)
         {
-
+            if (value == null)
+            {
+                return this;
+            }
             params_[name] = value.ToString();
             return this;
         }
@@ -49,6 +52,10 @@ namespace mxnet.csharp
         /// <returns></returns>
         public Operator SetInput(string name, Symbol symbol)
         {
+            if (symbol == null)
+            {
+                return this;
+            }
             input_keys.Add(name);
             input_values.Add(symbol.GetHandle());
             return this;
@@ -120,13 +127,20 @@ namespace mxnet.csharp
 
             if (inputKeys.Count > 0)
             {
-                NativeMethods.MXSymbolCompose(symbolHandle, pname, (uint)input_values.Count, inputKeys.ToArray(),
-                    input_values.ToArray());
+                if (NativeMethods.MXSymbolCompose(symbolHandle, pname, (uint) input_values.Count, inputKeys.ToArray(),
+                    input_values.ToArray()) != 0)
+                {
+                    string error = (NativeMethods.MXGetLastError());
+
+                }
             }
             else
             {
-                NativeMethods.MXSymbolCompose(symbolHandle, pname, (uint)input_values.Count, IntPtr.Zero,
-                    input_values.ToArray());
+                if (NativeMethods.MXSymbolCompose(symbolHandle, pname, (uint) input_values.Count, IntPtr.Zero,
+                    input_values.ToArray())==0)
+                {
+                    string error = (NativeMethods.MXGetLastError());
+                }
             }
 
             return new Symbol(symbolHandle);

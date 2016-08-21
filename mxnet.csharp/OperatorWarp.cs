@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
-    public  partial class OperatorWarp
+    public partial class OperatorWarp
     {/// <summary>
      /// Activation function to be applied.
      /// </summary>
@@ -125,156 +125,138 @@ namespace mxnet.csharp
         /// Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Same as Numpy. The axes to perform the reduction.If left empty, a global reduction will be performed.</param>
         /// <param name="keepdims">Same as Numpy. If keepdims is set to true, the axis which is reduced is left in the result as dimension with size one.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Sum(string symbolName,
-        Symbol src,
+        Symbol data,
         Shape axis = null,
         bool keepdims = false)
         {
-            if (axis == null) { axis = new Shape(); }
-
             return new Operator("sum")
             .SetParam("axis", axis)
             .SetParam("keepdims", keepdims)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Same as Numpy. The axes to perform the reduction.If left empty, a global reduction will be performed.</param>
         /// <param name="keepdims">Same as Numpy. If keepdims is set to true, the axis which is reduced is left in the result as dimension with size one.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sum(Symbol src,
+        public static Symbol Sum(Symbol data,
         Shape axis = null,
         bool keepdims = false)
         {
-            if (axis == null) { axis = new Shape(); }
-
             return new Operator("sum")
             .SetParam("axis", axis)
             .SetParam("keepdims", keepdims)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// (Depreciated! Use sum instead!) Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Same as Numpy. The axes to perform the reduction.If left empty, a global reduction will be performed.</param>
         /// <param name="keepdims">Same as Numpy. If keepdims is set to true, the axis which is reduced is left in the result as dimension with size one.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol SumAxis(string symbolName,
-        Symbol src,
+        Symbol data,
         Shape axis = null,
         bool keepdims = false)
         {
-            if (axis == null) { axis = new Shape(); }
-
             return new Operator("sum_axis")
             .SetParam("axis", axis)
             .SetParam("keepdims", keepdims)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// (Depreciated! Use sum instead!) Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Same as Numpy. The axes to perform the reduction.If left empty, a global reduction will be performed.</param>
         /// <param name="keepdims">Same as Numpy. If keepdims is set to true, the axis which is reduced is left in the result as dimension with size one.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SumAxis(Symbol src,
+        public static Symbol SumAxis(Symbol data,
         Shape axis = null,
         bool keepdims = false)
         {
-            if (axis == null) { axis = new Shape(); }
-
             return new Operator("sum_axis")
             .SetParam("axis", axis)
             .SetParam("keepdims", keepdims)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Broadcast data in the given axis to the given size. The original size of the broadcasting axis must be 1.
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">The axes to perform the broadcasting.</param>
         /// <param name="size">Target sizes of the broadcasting axes.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol BroadcastAxis(string symbolName,
-        Symbol src,
+        Symbol data,
         Shape axis = null,
         Shape size = null)
         {
-            if (axis == null) { axis = new Shape(); }
-            if (size == null) { size = new Shape(); }
-
             return new Operator("broadcast_axis")
             .SetParam("axis", axis)
             .SetParam("size", size)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Broadcast data in the given axis to the given size. The original size of the broadcasting axis must be 1.
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">The axes to perform the broadcasting.</param>
         /// <param name="size">Target sizes of the broadcasting axes.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastAxis(Symbol src,
+        public static Symbol BroadcastAxis(Symbol data,
         Shape axis = null,
         Shape size = null)
         {
-            if (axis == null) { axis = new Shape(); }
-            if (size == null) { size = new Shape(); }
-
             return new Operator("broadcast_axis")
             .SetParam("axis", axis)
             .SetParam("size", size)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Broadcast data to the target shape. The original size of the broadcasting axis must be 1.
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="shape">The shape of the desired array. We can set the dim to zero if it's same as the original. E.g `A = broadcast_to(B, shape=(10, 0, 0))` has the same meaning as `A = broadcast_axis(B, axis=0, size=10)`.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol BroadcastTo(string symbolName,
-        Symbol src,
+        Symbol data,
         Shape shape = null)
         {
-            if (shape == null) { shape = new Shape(); }
-
             return new Operator("broadcast_to")
             .SetParam("shape", shape)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Broadcast data to the target shape. The original size of the broadcasting axis must be 1.
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="shape">The shape of the desired array. We can set the dim to zero if it's same as the original. E.g `A = broadcast_to(B, shape=(10, 0, 0))` has the same meaning as `A = broadcast_axis(B, axis=0, size=10)`.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastTo(Symbol src,
+        public static Symbol BroadcastTo(Symbol data,
         Shape shape = null)
         {
-            if (shape == null) { shape = new Shape(); }
-
             return new Operator("broadcast_to")
             .SetParam("shape", shape)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
@@ -370,10 +352,10 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
         /// <param name="data">Input data to the ConvolutionOp.</param>
-        /// <param name="weight">Weight matrix.</param>
-        /// <param name="bias">Bias parameter.</param>
         /// <param name="kernel">convolution kernel size: (y, x) or (d, y, x)</param>
         /// <param name="numFilter">convolution filter(channel) number</param>
+        /// <param name="weight">Weight matrix.</param>
+        /// <param name="bias">Bias parameter.</param>
         /// <param name="stride">convolution stride: (y, x) or (d, y, x)</param>
         /// <param name="dilate">convolution dilate: (y, x)</param>
         /// <param name="pad">pad for convolution: (y, x) or (d, y, x)</param>
@@ -384,10 +366,10 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol Convolution(string symbolName,
         Symbol data,
-        Symbol weight,
-        Symbol bias,
         Shape kernel,
         int numFilter,
+        Symbol weight = null,
+        Symbol bias = null,
         Shape stride = null,
         Shape dilate = null,
         Shape pad = null,
@@ -419,10 +401,10 @@ namespace mxnet.csharp
         /// Apply convolution to input then add a bias.
         /// </summary>
         /// <param name="data">Input data to the ConvolutionOp.</param>
-        /// <param name="weight">Weight matrix.</param>
-        /// <param name="bias">Bias parameter.</param>
         /// <param name="kernel">convolution kernel size: (y, x) or (d, y, x)</param>
         /// <param name="numFilter">convolution filter(channel) number</param>
+        /// <param name="weight">Weight matrix.</param>
+        /// <param name="bias">Bias parameter.</param>
         /// <param name="stride">convolution stride: (y, x) or (d, y, x)</param>
         /// <param name="dilate">convolution dilate: (y, x)</param>
         /// <param name="pad">pad for convolution: (y, x) or (d, y, x)</param>
@@ -432,10 +414,10 @@ namespace mxnet.csharp
         /// <param name="cudnnTune">Whether to find convolution algo by running performance test.Leads to higher startup time but may give better speed.auto tune is turned off by default.Set environment varialbe MXNET_CUDNN_AUTOTUNE_DEFAULT=1 to turn on by default.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Convolution(Symbol data,
-        Symbol weight,
-        Symbol bias,
         Shape kernel,
         int numFilter,
+        Symbol weight = null,
+        Symbol bias = null,
         Shape stride = null,
         Shape dilate = null,
         Shape pad = null,
@@ -660,10 +642,10 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
         /// <param name="data">Input data to the DeconvolutionOp.</param>
-        /// <param name="weight">Weight matrix.</param>
-        /// <param name="bias">Bias parameter.</param>
         /// <param name="kernel">deconvolution kernel size: (y, x)</param>
         /// <param name="numFilter">deconvolution filter(channel) number</param>
+        /// <param name="weight">Weight matrix.</param>
+        /// <param name="bias">Bias parameter.</param>
         /// <param name="stride">deconvolution stride: (y, x)</param>
         /// <param name="pad">pad for deconvolution: (y, x), a good number is : (kernel-1)/2, if target_shape set, pad will be ignored and will be computed automatically</param>
         /// <param name="adj">adjustment for output shape: (y, x), if target_shape set, adj will be ignored and will be computed automatically</param>
@@ -674,10 +656,10 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol Deconvolution(string symbolName,
         Symbol data,
-        Symbol weight,
-        Symbol bias,
         Shape kernel,
         int numFilter,
+        Symbol weight = null,
+        Symbol bias = null,
         Shape stride = null,
         Shape pad = null,
         Shape adj = null,
@@ -710,10 +692,10 @@ namespace mxnet.csharp
         /// Apply deconvolution to input then add a bias.
         /// </summary>
         /// <param name="data">Input data to the DeconvolutionOp.</param>
-        /// <param name="weight">Weight matrix.</param>
-        /// <param name="bias">Bias parameter.</param>
         /// <param name="kernel">deconvolution kernel size: (y, x)</param>
         /// <param name="numFilter">deconvolution filter(channel) number</param>
+        /// <param name="weight">Weight matrix.</param>
+        /// <param name="bias">Bias parameter.</param>
         /// <param name="stride">deconvolution stride: (y, x)</param>
         /// <param name="pad">pad for deconvolution: (y, x), a good number is : (kernel-1)/2, if target_shape set, pad will be ignored and will be computed automatically</param>
         /// <param name="adj">adjustment for output shape: (y, x), if target_shape set, adj will be ignored and will be computed automatically</param>
@@ -723,10 +705,10 @@ namespace mxnet.csharp
         /// <param name="noBias">Whether to disable bias parameter.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Deconvolution(Symbol data,
-        Symbol weight,
-        Symbol bias,
         Shape kernel,
         int numFilter,
+        Symbol weight = null,
+        Symbol bias = null,
         Shape stride = null,
         Shape pad = null,
         Shape adj = null,
@@ -963,288 +945,288 @@ namespace mxnet.csharp
         /// Take absolute value of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Abs(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("abs")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take absolute value of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Abs(Symbol src)
+        public static Symbol Abs(Symbol data)
         {
             return new Operator("abs")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take sign value of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Sign(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("sign")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take sign value of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sign(Symbol src)
+        public static Symbol Sign(Symbol data)
         {
             return new Operator("sign")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take round value of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Round(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("round")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take round value of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Round(Symbol src)
+        public static Symbol Round(Symbol data)
         {
             return new Operator("round")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take ceil value of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Ceil(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("ceil")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take ceil value of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Ceil(Symbol src)
+        public static Symbol Ceil(Symbol data)
         {
             return new Operator("ceil")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take floor value of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Floor(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("floor")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take floor value of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Floor(Symbol src)
+        public static Symbol Floor(Symbol data)
         {
             return new Operator("floor")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take square of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Square(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("square")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take square of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Square(Symbol src)
+        public static Symbol Square(Symbol data)
         {
             return new Operator("square")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take sqrt of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Sqrt(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("sqrt")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take sqrt of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sqrt(Symbol src)
+        public static Symbol Sqrt(Symbol data)
         {
             return new Operator("sqrt")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take rsqrt of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Rsqrt(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("rsqrt")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take rsqrt of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Rsqrt(Symbol src)
+        public static Symbol Rsqrt(Symbol data)
         {
             return new Operator("rsqrt")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take exp of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Exp(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("exp")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take exp of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Exp(Symbol src)
+        public static Symbol Exp(Symbol data)
         {
             return new Operator("exp")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take log of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Log(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("log")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take log of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Log(Symbol src)
+        public static Symbol Log(Symbol data)
         {
             return new Operator("log")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take cos of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Cos(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("cos")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take cos of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Cos(Symbol src)
+        public static Symbol Cos(Symbol data)
         {
             return new Operator("cos")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Take sin of the src
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Sin(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("sin")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Take sin of the src
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sin(Symbol src)
+        public static Symbol Sin(Symbol data)
         {
             return new Operator("sin")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
@@ -1252,15 +1234,15 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
         /// <param name="data">Input data to the EmbeddingOp.</param>
-        /// <param name="weight">Enbedding weight matrix.</param>
         /// <param name="inputDim">input dim of one-hot encoding</param>
         /// <param name="outputDim">output dim of embedding</param>
+        /// <param name="weight">Enbedding weight matrix.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Embedding(string symbolName,
         Symbol data,
-        Symbol weight,
         int inputDim,
-        int outputDim)
+        int outputDim,
+        Symbol weight = null)
         {
             return new Operator("Embedding")
             .SetParam("input_dim", inputDim)
@@ -1273,14 +1255,14 @@ namespace mxnet.csharp
         /// Get embedding for one-hot input. A n-dimensional input tensor will be trainsformed into a (n+1)-dimensional tensor, where a new dimension is added for the embedding results.
         /// </summary>
         /// <param name="data">Input data to the EmbeddingOp.</param>
-        /// <param name="weight">Enbedding weight matrix.</param>
         /// <param name="inputDim">input dim of one-hot encoding</param>
         /// <param name="outputDim">output dim of embedding</param>
+        /// <param name="weight">Enbedding weight matrix.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Embedding(Symbol data,
-        Symbol weight,
         int inputDim,
-        int outputDim)
+        int outputDim,
+        Symbol weight = null)
         {
             return new Operator("Embedding")
             .SetParam("input_dim", inputDim)
@@ -1294,16 +1276,16 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
         /// <param name="data">Input data to the FullyConnectedOp.</param>
+        /// <param name="numHidden">Number of hidden nodes of the output.</param>
         /// <param name="weight">Weight matrix.</param>
         /// <param name="bias">Bias parameter.</param>
-        /// <param name="numHidden">Number of hidden nodes of the output.</param>
         /// <param name="noBias">Whether to disable bias parameter.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol FullyConnected(string symbolName,
         Symbol data,
-        Symbol weight,
-        Symbol bias,
         int numHidden,
+        Symbol weight = null,
+        Symbol bias = null,
         bool noBias = false)
         {
             return new Operator("FullyConnected")
@@ -1318,15 +1300,15 @@ namespace mxnet.csharp
         /// Apply matrix multiplication to input then add a bias.
         /// </summary>
         /// <param name="data">Input data to the FullyConnectedOp.</param>
+        /// <param name="numHidden">Number of hidden nodes of the output.</param>
         /// <param name="weight">Weight matrix.</param>
         /// <param name="bias">Bias parameter.</param>
-        /// <param name="numHidden">Number of hidden nodes of the output.</param>
         /// <param name="noBias">Whether to disable bias parameter.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol FullyConnected(Symbol data,
-        Symbol weight,
-        Symbol bias,
         int numHidden,
+        Symbol weight = null,
+        Symbol bias = null,
         bool noBias = false)
         {
             return new Operator("FullyConnected")
@@ -1580,77 +1562,73 @@ namespace mxnet.csharp
         /// Transpose the input matrix and return a new one
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axes">Target axis order. By default the axes will be inverted.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Transpose(string symbolName,
-        Symbol src,
+        Symbol data,
         Shape axes = null)
         {
-            if (axes == null) { axes = new Shape(); }
-
             return new Operator("transpose")
             .SetParam("axes", axes)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Transpose the input matrix and return a new one
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axes">Target axis order. By default the axes will be inverted.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Transpose(Symbol src,
+        public static Symbol Transpose(Symbol data,
         Shape axes = null)
         {
-            if (axes == null) { axes = new Shape(); }
-
             return new Operator("transpose")
             .SetParam("axes", axes)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Expand the shape of array by inserting a new axis.
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Position (amongst axes) where new axis is to be inserted.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol ExpandDims(string symbolName,
-        Symbol src,
+        Symbol data,
         int axis)
         {
             return new Operator("expand_dims")
             .SetParam("axis", axis)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Expand the shape of array by inserting a new axis.
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Position (amongst axes) where new axis is to be inserted.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol ExpandDims(Symbol src,
+        public static Symbol ExpandDims(Symbol data,
         int axis)
         {
             return new Operator("expand_dims")
             .SetParam("axis", axis)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Slice the input along certain axis and return a sliced array.
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">The axis to be sliced</param>
         /// <param name="begin">The beginning index to be sliced</param>
         /// <param name="end">The end index to be sliced</param>
         /// <returns>returns new symbol</returns>
         public static Symbol SliceAxis(string symbolName,
-        Symbol src,
+        Symbol data,
         int axis,
         int begin,
         int end)
@@ -1659,18 +1637,18 @@ namespace mxnet.csharp
             .SetParam("axis", axis)
             .SetParam("begin", begin)
             .SetParam("end", end)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Slice the input along certain axis and return a sliced array.
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">The axis to be sliced</param>
         /// <param name="begin">The beginning index to be sliced</param>
         /// <param name="end">The end index to be sliced</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SliceAxis(Symbol src,
+        public static Symbol SliceAxis(Symbol data,
         int axis,
         int begin,
         int end)
@@ -1679,7 +1657,7 @@ namespace mxnet.csharp
             .SetParam("axis", axis)
             .SetParam("begin", begin)
             .SetParam("end", end)
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
@@ -1925,22 +1903,13 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
         /// <param name="data">Input data to reshape.</param>
-        /// <param name="targetShape">(Deprecated! Use shape instead.) Target new shape. One and only one dim can be 0, in which case it will be inferred from the rest of dims</param>
-        /// <param name="keepHighest">(Deprecated! Use shape instead.) Whether keep the highest dim unchanged.If set to true, then the first dim in target_shape is ignored,and always fixed as input</param>
         /// <param name="shape">Target new shape. If the dim is same, set it to 0. If the dim is set to be -1, it will be inferred from the rest of dims. One and only one dim can be -1</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Reshape(string symbolName,
         Symbol data,
-        Shape targetShape = null,
-        bool keepHighest = false,
         Shape shape = null)
         {
-            if (targetShape == null) { targetShape = new Shape(0, 0); }
-            if (shape == null) { shape = new Shape(); }
-
             return new Operator("Reshape")
-            .SetParam("target_shape", targetShape)
-            .SetParam("keep_highest", keepHighest)
             .SetParam("shape", shape)
             .SetInput("data", data)
             .CreateSymbol(symbolName);
@@ -1949,21 +1918,12 @@ namespace mxnet.csharp
         /// Reshape input to target shape
         /// </summary>
         /// <param name="data">Input data to reshape.</param>
-        /// <param name="targetShape">(Deprecated! Use shape instead.) Target new shape. One and only one dim can be 0, in which case it will be inferred from the rest of dims</param>
-        /// <param name="keepHighest">(Deprecated! Use shape instead.) Whether keep the highest dim unchanged.If set to true, then the first dim in target_shape is ignored,and always fixed as input</param>
         /// <param name="shape">Target new shape. If the dim is same, set it to 0. If the dim is set to be -1, it will be inferred from the rest of dims. One and only one dim can be -1</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Reshape(Symbol data,
-        Shape targetShape = null,
-        bool keepHighest = false,
         Shape shape = null)
         {
-            if (targetShape == null) { targetShape = new Shape(0, 0); }
-            if (shape == null) { shape = new Shape(); }
-
             return new Operator("Reshape")
-            .SetParam("target_shape", targetShape)
-            .SetParam("keep_highest", keepHighest)
             .SetParam("shape", shape)
             .SetInput("data", data)
             .CreateSymbol();
@@ -2235,24 +2195,24 @@ namespace mxnet.csharp
         /// Calculate Smooth L1 Loss(lhs, scalar)
         /// </summary>
         /// <param name="symbolName">name of the resulting symbol</param>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
         public static Symbol SmoothL1(string symbolName,
-        Symbol src)
+        Symbol data)
         {
             return new Operator("smooth_l1")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol(symbolName);
         }
         /// <summary>
         /// Calculate Smooth L1 Loss(lhs, scalar)
         /// </summary>
-        /// <param name="src">Left symbolic input to the function</param>
+        /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SmoothL1(Symbol src)
+        public static Symbol SmoothL1(Symbol data)
         {
             return new Operator("smooth_l1")
-            .SetInput("src", src)
+            .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>

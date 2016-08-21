@@ -33,6 +33,10 @@ namespace opwrappergenerator
 
         public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
         {
+            if (argName == "src")
+            {
+                argName = "data";
+            }
             this.OrginName = argName;
             this.Name = GetName(argName);
             this.Description = descString;
@@ -57,6 +61,8 @@ namespace opwrappergenerator
                         TypeName = "Shape";
                     }
                 }
+
+             
             }
             if (typeString.IndexOf("default", StringComparison.Ordinal) != -1)
             {
@@ -78,13 +84,22 @@ namespace opwrappergenerator
                 }
                 else if (DefaultString.StartsWith("("))
                 {
-                    DefaultStringWithObject = $"if({Name}==null){{ {Name}= new Shape{DefaultString};}}\n";
+                    if (DefaultString != "()")
+                    {
+                        DefaultStringWithObject = $"if({Name}==null){{ {Name}= new Shape{DefaultString};}}\n";
+                    }
+     
                     DefaultString = "null";       
                 }
                 if (TypeName == "float")
                 {
                     DefaultString = DefaultString + "f";
                 }
+            }
+            if (argName == "weight" || argName == "bias")
+            {
+                HasDefault = true;
+                DefaultString = "null";
             }
 
         }

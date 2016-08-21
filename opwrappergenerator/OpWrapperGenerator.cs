@@ -62,10 +62,15 @@ namespace opwrappergenerator
                 List<Arg> args = new List<Arg>();
                 for (int j = 0; j < numArgs; j++)
                 {
+                    var descriptions = Marshal.PtrToStringAnsi(argDescriptionsArray[j]);
+                    if (descriptions.Contains("Deprecated"))
+                    {
+                        continue;
+                    }
                     Arg arg = new Arg(name,
                         Marshal.PtrToStringAnsi(argNamesArray[j]),
                         Marshal.PtrToStringAnsi(argTypeInfosArray[j]),
-                        Marshal.PtrToStringAnsi(argDescriptionsArray[j])
+                     descriptions
                         );
                     args.Add(arg);
                 }
