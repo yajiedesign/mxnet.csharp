@@ -10,6 +10,7 @@ namespace mxnet.csharp
 {
     public partial class Operator 
     {
+        private readonly string _operatorName;
         static readonly OpMap op_map_ = new OpMap();
         Dictionary<string, string> params_desc_ = new Dictionary<string, string>();
         bool variable_params_ = false;
@@ -24,6 +25,7 @@ namespace mxnet.csharp
         /// <param name="operator_name">type of the operator</param>
         public Operator(string operator_name)
         {
+            _operatorName = operator_name;
             handle_ = op_map_.GetSymbolCreator(operator_name);
         }
 
@@ -103,7 +105,7 @@ namespace mxnet.csharp
         /// <returns>the operator Symbol</returns>
         public Symbol CreateSymbol(string name = "")
         {
-            string pname = name == "" ? null : name;
+            string pname = name == "" ? NameManager.Instance.GetName(_operatorName) : name;
 
             SymbolHandle symbolHandle;
             List<string> inputKeys = new List<string>();

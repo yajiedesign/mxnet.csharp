@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using SymbolHandle = System.IntPtr;
 
@@ -272,73 +273,95 @@ namespace mxnet.csharp
             return ret;
         }
 
+        private static uint[] PtrToArrayUint32(IntPtr ptr, int size)
+        {
+            if (size == 0)
+            {
+                return null;
+            }
+            int[] array = new int[size];
+            Marshal.Copy(ptr, array, 0, size);
+            var ret = array.Select(s => (uint)s).ToArray();
+
+            return ret;
+        }
+        private static List<uint[]> PtrToArrayUint32(IntPtr dataPtr, int dataSize, uint[] shapeNdim)
+        {
+            if (dataSize== 0)
+            {
+                return null;
+            }
+            IntPtr[] ptrArray = new IntPtr[dataSize];
+            Marshal.Copy(dataPtr, ptrArray, 0, dataSize);
+            List<uint[]> ret = new List<uint[]>();
+
+            for (int i = 0; i < dataSize; i++)
+            {
+                int[] data = new int[(int)shapeNdim[i]];
+                Marshal.Copy(ptrArray[i], data, 0, (int)shapeNdim[i]);
+                ret.Add(data.Select(s => (uint) s).ToArray());
+            }
+
+            return ret;
+        }
         public void InferShape(
-            Dictionary<string, uint[]> arg_shapes,
-            List<uint[]> in_shape,
-            List<uint[]> aux_shape,
-            List<uint[]> out_shape)
+            Dictionary<string, uint[]> argShapes,
+            List<uint[]> inShape,
+            List<uint[]> auxShape,
+            List<uint[]> outShape)
         {
             var keys = new List<string>();
-            var arg_ind_ptr = new List<uint>();
-            var arg_shape_data = new List<uint>();
+            var argIndPtr = new List<uint>();
+            var argShapeData = new List<uint>();
 
-            foreach (var arg in arg_shapes)
+            foreach (var arg in argShapes)
             {
                 keys.Add(arg.Key);
-                arg_ind_ptr.Add((uint) arg_shape_data.Count);
+                argIndPtr.Add((uint) argShapeData.Count);
                 foreach (var i in arg.Value)
                 {
-                    arg_shape_data.Add(i);
+                    argShapeData.Add(i);
                 }
             }
-            arg_ind_ptr.Add((uint) arg_shape_data.Count);
+            argIndPtr.Add((uint) argShapeData.Count);
 
-            uint in_shape_size;
-            IntPtr in_shape_ndim;
-            IntPtr in_shape_data;
-            uint out_shape_size;
-            IntPtr out_shape_ndim_ptr;
-            IntPtr out_shape_data_ptr;
-            uint aux_shape_size;
-            IntPtr aux_shape_ndim_ptr;
-            IntPtr aux_shape_data_ptr;
+            uint inShapeSize;
+            IntPtr inShapeNdimPtr;
+            IntPtr inShapeDataPtr;
+            uint outShapeSize;
+            IntPtr outShapeNdimPtr;
+            IntPtr outShapeDataPtr;
+            uint auxShapeSize;
+            IntPtr auxShapeNdimPtr;
+            IntPtr auxShapeDataPtr;
             int complete;
 
             Debug.Assert(NativeMethods.MXSymbolInferShape(GetHandle(), (uint) keys.Count, keys.ToArray(),
-                arg_ind_ptr.ToArray(), arg_shape_data.ToArray(),
-                out in_shape_size, out in_shape_ndim, out in_shape_data,
-                out out_shape_size, out out_shape_ndim_ptr, out out_shape_data_ptr,
-                out aux_shape_size, out aux_shape_ndim_ptr, out aux_shape_data_ptr,
+                argIndPtr.ToArray(), argShapeData.ToArray(),
+                out inShapeSize, out inShapeNdimPtr, out inShapeDataPtr,
+                out outShapeSize, out outShapeNdimPtr, out outShapeDataPtr,
+                out auxShapeSize, out auxShapeNdimPtr, out auxShapeDataPtr,
                 out complete) ==
                          0, NativeMethods.MXGetLastError());
-            var message = NativeMethods.MXGetLastError();
 
-            var m = Marshal.PtrToStructure(out_shape_ndim_ptr, typeof(uint[]));
+            var inShapeNdim = PtrToArrayUint32(inShapeNdimPtr, (int)inShapeSize);
+            var inShapeData = PtrToArrayUint32(inShapeDataPtr, (int)inShapeSize , inShapeNdim);
 
+            var outShapeNdim = PtrToArrayUint32(outShapeNdimPtr, (int)outShapeSize);
+            var outShapeData = PtrToArrayUint32(outShapeDataPtr, (int)outShapeSize, outShapeNdim);
 
-            //if (complete>0) {
-            //  for (uint i = 0; i<in_shape_size; ++i) {
-            //    in_shape.Add(std::vector<mx_uint>());
+            var auxShapeNdim = PtrToArrayUint32(auxShapeNdimPtr, (int)auxShapeSize);
+            var auxShapeData = PtrToArrayUint32(auxShapeDataPtr, (int)auxShapeSize, auxShapeNdim);
 
-            //    for (mx_uint j = 0; j<in_shape_ndim[i]; ++j) {
-            //      (* in_shape)[i].push_back(in_shape_data[i][j]);
-            //    }
-            //  }
-            //  for (uint i = 0; i<aux_shape_size; ++i) {
-            //    aux_shape->push_back(std::vector<mx_uint>());
-            //    for (mx_uint j = 0; j<aux_shape_ndim[i]; ++j) {
-            //      (* aux_shape)[i].push_back(aux_shape_data[i][j]);
-            //    }
-            //  }
-            //  for (uint i = 0; i<out_shape_size; ++i) {
-            //    out_shape->push_back(std::vector<mx_uint>());
-            //    for (mx_uint j = 0; j<out_shape_ndim[i]; ++j) {
-            //      (* out_shape)[i].push_back(out_shape_data[i][j]);
-            //    }
-            //}
-            // }
+            if (complete > 0)
+            {
+                if (inShapeData != null) { inShape.AddRange(inShapeData);}
+                if (outShapeData != null) { outShape.AddRange(outShapeData);}
+                if (auxShapeData != null) { auxShape.AddRange(auxShapeData);}
+            }
         }
 
+  
 
         public void InferArgsMap(
             Context context, Dictionary<string, NDArray> args_map,

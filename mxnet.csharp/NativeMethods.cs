@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-
+using System.Linq;
 namespace mxnet.csharp
 {
 
@@ -325,6 +325,8 @@ namespace mxnet.csharp
 
     public static class NativeMethods
     {
+
+  
 
         /// Return Type: char*
         [DllImport("libmxnet.dll", EntryPoint = "MXGetLastError")]

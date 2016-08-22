@@ -63,12 +63,11 @@ namespace test.console
 
         }
 
-        private float [] ReadLabel(string path)
+        private static readonly Regex Reg = new Regex("(\\d*)-.*", RegexOptions.Compiled);
+        private float[] ReadLabel(string path)
         {
-            Regex reg = new Regex("(\\d*)-.*", RegexOptions.Compiled);
-
-            var m = reg.Match(path);
-           return   m.Groups[1].Value.ToCharArray().Select(s => (float) ((int) s - (int) '0')).ToArray();
+            var m = Reg.Match(path);
+            return m.Groups[1].Value.ToCharArray().Select(s => (float)((int)s - (int)'0')).ToArray();
         }
 
         private float[] ReadFile(string path)

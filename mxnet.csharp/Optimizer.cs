@@ -16,7 +16,7 @@ namespace mxnet.csharp
         string opt_type_;
         OptimizerHandle handle_;
         OptimizerCreator creator_;
-        Dictionary<string, string> params_;
+        Dictionary<string, string> params_ = new Dictionary<string, string>();
 
         public Optimizer(string opt_type, float learning_rate, float weight_decay)
 

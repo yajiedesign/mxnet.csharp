@@ -43,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Executor.cs" />
+    <Compile Include="NameManager.cs" />
     <Compile Include="NDArray.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="OperatorSupplement.cs" />

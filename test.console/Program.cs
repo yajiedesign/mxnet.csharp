@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using mxnet.csharp;
 
@@ -13,33 +14,39 @@ namespace test.console
 
         static Symbol get_ocrnet(int batch_size)
         {
+            using (NameScop scop = new NameScop())
+            {
+                var data = Symbol.Variable("data");
+                var label = Symbol.Variable("softmax_label");
+                var conv1 = Symbol.Convolution(data, kernel: new Shape(5, 5), numFilter: 32);
+                var pool1 = Symbol.Pooling(conv1, poolType: OperatorWarp.PoolingPoolType.Max, kernel: new Shape(2, 2),
+                    stride: new Shape(1, 1));
+                var relu1 = Symbol.Activation(data: pool1, actType: OperatorWarp.ActivationActType.Relu);
 
-            var data = Symbol.Variable("data");
-            var label = Symbol.Variable("softmax_label");
-            var conv1 = Symbol.Convolution(data, kernel: new Shape(5, 5), numFilter: 32);
-            var pool1 = Symbol.Pooling(conv1, poolType: OperatorWarp.PoolingPoolType.Max, kernel: new Shape(2, 2), stride: new Shape(1, 1));
-            var relu1 = Symbol.Activation(data: pool1, actType: OperatorWarp.ActivationActType.Relu);
-
-            var conv2 = Symbol.Convolution(relu1, kernel: new Shape(5, 5), numFilter: 32);
-            var pool2 = Symbol.Pooling(data: conv2, poolType: OperatorWarp.PoolingPoolType.Avg, kernel: new Shape(2, 2), stride: new Shape(1, 1));
-            var relu2 = Symbol.Activation(data: pool2, actType: OperatorWarp.ActivationActType.Relu);
-            var conv3 = Symbol.Convolution(data: relu2, kernel: new Shape(3, 3), numFilter: 32);
-            var pool3 = Symbol.Pooling(data: conv3, poolType: OperatorWarp.PoolingPoolType.Avg, kernel: new Shape(2, 2), stride: new Shape(1, 1));
-            var relu3 = Symbol.Activation(data: pool3, actType: OperatorWarp.ActivationActType.Relu);
-            var flatten = Symbol.Flatten(data: relu3);
-            var fc1 = Symbol.FullyConnected(data: flatten, numHidden: 512);
-            var fc21 = Symbol.FullyConnected(data: fc1, numHidden: 10);
-            var fc22 = Symbol.FullyConnected(data: fc1, numHidden: 10);
-            var fc23 = Symbol.FullyConnected(data: fc1, numHidden: 10);
-            var fc24 = Symbol.FullyConnected(data: fc1, numHidden: 10);
-            var fc2 = Symbol.Concat(new Symbol[] { fc21, fc22, fc23, fc24 }, 4, dim: 0);
-            label = Symbol.Transpose(data = label);
-            label = Symbol.Reshape(data = label, shape: new Shape((uint)(batch_size * 4)));
-            return Symbol.SoftmaxOutput("softmax", fc2, label);
+                var conv2 = Symbol.Convolution(relu1, kernel: new Shape(5, 5), numFilter: 32);
+                var pool2 = Symbol.Pooling(data: conv2, poolType: OperatorWarp.PoolingPoolType.Avg,
+                    kernel: new Shape(2, 2), stride: new Shape(1, 1));
+                var relu2 = Symbol.Activation(data: pool2, actType: OperatorWarp.ActivationActType.Relu);
+                var conv3 = Symbol.Convolution(data: relu2, kernel: new Shape(3, 3), numFilter: 32);
+                var pool3 = Symbol.Pooling(data: conv3, poolType: OperatorWarp.PoolingPoolType.Avg,
+                    kernel: new Shape(2, 2), stride: new Shape(1, 1));
+                var relu3 = Symbol.Activation(data: pool3, actType: OperatorWarp.ActivationActType.Relu);
+                var flatten = Symbol.Flatten(data: relu3);
+                var fc1 = Symbol.FullyConnected(data: flatten, numHidden: 512);
+                var fc21 = Symbol.FullyConnected(data: fc1, numHidden: 10);
+                var fc22 = Symbol.FullyConnected(data: fc1, numHidden: 10);
+                var fc23 = Symbol.FullyConnected(data: fc1, numHidden: 10);
+                var fc24 = Symbol.FullyConnected(data: fc1, numHidden: 10);
+                var fc2 = Symbol.Concat(new Symbol[] {fc21, fc22, fc23, fc24}, 4, dim: 0);
+                label = Symbol.Transpose(data = label);
+                label = Symbol.Reshape(data = label, shape: new Shape((uint) (batch_size*4)));
+                return Symbol.SoftmaxOutput("softmax", fc2, label);
+            }
         }
 
         static void Main(string[] args)
         {
+
             int batchSize = 32;
             uint W = 60;
             uint H = 20;
@@ -90,10 +97,10 @@ namespace test.console
 
                 NDArray.WaitAll();
 
-               // Executor exe = pnet.SimpleBind(ctx_dev, args_map);
-                //exe.Forward(true);
-                //exe.Backward();
-                //exe.UpdateAll(opt, learning_rate, weight_decay);
+                Executor exe = pnet.SimpleBind(ctx_dev, args_map);
+                exe.Forward(true);
+                exe.Backward();
+                exe.UpdateAll(opt, learning_rate, weight_decay);
 
             }
 
