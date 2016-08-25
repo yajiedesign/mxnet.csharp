@@ -43,6 +43,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Executor.cs" />
+    <Compile Include="FeedForward.cs" />
+    <Compile Include="initializer\Initializer.cs" />
+    <Compile Include="initializer\Uniform.cs" />
+    <Compile Include="KVStore.cs" />
+    <Compile Include="metric\Accuracy.cs" />
+    <Compile Include="metric\CustomMetric.cs" />
+    <Compile Include="metric\EvalMetric.cs" />
+    <Compile Include="metric\EvalMetricResult.cs" />
     <Compile Include="NameManager.cs" />
     <Compile Include="NDArray.cs" />
     <Compile Include="Operator.cs" />

@@ -58,7 +58,7 @@ namespace test.console
 
 
             var first = rdtrain.First();
-            Context ctx = new Context(DeviceType.KCpu, 0);
+            Context ctx = new Context(DeviceType.KGpu, 0);
 
             NDArray dataArray = new NDArray(new Shape((uint)batchSize, 3, W, H), ctx, false);
             NDArray labelArray = new NDArray(new Shape((uint)batchSize,4), ctx, false);
@@ -69,25 +69,29 @@ namespace test.console
 
             dataArray.WaitToRead();
             labelArray.WaitToRead();
+
             //Symbol data1 = Symbol.Variable("data1");
             //Symbol data2 = Symbol.Variable("data2");
-
-
-
             var pnet = get_ocrnet(batchSize);
 
-            Dictionary<string, NDArray> args_map = new Dictionary<string, NDArray>();
-            args_map["data"] = dataArray;
-            args_map["softmax_label"] = labelArray;
 
-            pnet.InferArgsMap(ctx, args_map, args_map);
+            FeedForward model = new FeedForward(pnet, new List<Context> { ctx } );
+
+            model.Fit(rdtrain, rdval, "acc");
+
+
+
+            Dictionary<string, NDArray> argsMap = new Dictionary<string, NDArray>();
+            argsMap["data"] = dataArray;
+            argsMap["softmax_label"] = labelArray;
+
+            pnet.InferArgsMap(ctx, argsMap, argsMap);
             string error = NativeMethods.MXGetLastError();
             Optimizer opt = new Optimizer("ccsgd",learning_rate, weight_decay);
             opt.SetParam("momentum", 0.9)
                 .SetParam("rescale_grad", 1.0)
                 .SetParam("clip_gradient", 10);
-
-
+            Executor exe = pnet.SimpleBind(ctx, argsMap);
 
 
             foreach (var item in rdtrain)
@@ -97,10 +101,12 @@ namespace test.console
 
                 NDArray.WaitAll();
 
-                Executor exe = pnet.SimpleBind(ctx_dev, args_map);
+  
                 exe.Forward(true);
                 exe.Backward();
                 exe.UpdateAll(opt, learning_rate, weight_decay);
+
+
 
             }
 

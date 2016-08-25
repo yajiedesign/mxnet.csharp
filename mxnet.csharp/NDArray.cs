@@ -7,6 +7,7 @@ using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using NDArrayHandle = System.IntPtr;
+using FunctionHandle = System.IntPtr;
 
 namespace mxnet.csharp
 {
@@ -71,13 +72,6 @@ namespace mxnet.csharp
     };
     public class NDBlob : IDisposable
     {
-
-        /// <summary>
-        ///  default constructor
-        /// </summary>
-        NDBlob()
-        {
-        }
         /// <summary>
         /// construct with SymbolHandle to store
         /// </summary>
@@ -107,7 +101,6 @@ namespace mxnet.csharp
 
         public void Dispose()
         {
-
             Dispose(true);
         }
 
@@ -135,6 +128,12 @@ namespace mxnet.csharp
             NDArrayHandle handle;
             Debug.Assert(NativeMethods.MXNDArrayCreate(shape, (uint)shape.Length, context.GetDeviceType(),
                            context.GetDeviceId(), delayAlloc ? 1 : 0, out handle) == 0);
+            _blobPtr = new NDBlob(handle);
+        }
+        public NDArray(uint[] shape)
+        {
+            NDArrayHandle handle;
+            Debug.Assert(NativeMethods.MXNDArrayCreate(shape, (uint)shape.Length,  DeviceType.KCpu,  0, 0, out handle) == 0);
             _blobPtr = new NDBlob(handle);
         }
         public NDArray(Shape shape, Context context, bool delayAlloc)
@@ -190,6 +189,44 @@ namespace mxnet.csharp
         }
         public static void WaitAll() { Debug.Assert(NativeMethods.MXNDArrayWaitAll() == 0); }
 
+        public NDArray CopyTo(NDArray other)
+        {
+            FunctionHandle func_handle;
+            NativeMethods.MXGetFunction("_copyto", out func_handle);
+
+            var input = _blobPtr.Handle;
+            var output = other._blobPtr.Handle;
+            Debug.Assert(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output) == 0);
+            return other;
+        }
+
+        public NDArray Slice(uint begin, uint end)
+        {
+            NDArrayHandle handle;
+            Debug.Assert(NativeMethods.MXNDArraySlice(GetHandle(), begin, end, out handle) == 0);
+            return new NDArray(handle);
+        }
+
+        public NDArray SetValue(float value)
+        {
+            FunctionHandle func_handle;
+            NativeMethods.MXGetFunction("_set_value", out func_handle);
+            float[] scalar = { value };
+            IntPtr Zero = IntPtr.Zero;
+            var handle = _blobPtr.Handle;
+            Debug.Assert(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle) == 0);
+            return this;
+        }
+
+        public static  void SampleGaussian(float mu, float sigma, NDArray outArray)
+        {
+            FunctionHandle func_handle;
+            NativeMethods.MXGetFunction("_random_gaussian", out func_handle);
+            float[] scalar = { mu, sigma };
+            IntPtr Zero = IntPtr.Zero;
+            var handle = outArray._blobPtr.Handle;
+            Debug.Assert(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle) == 0);
+        }
 
         public uint Size()
         {

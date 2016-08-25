@@ -27,8 +27,9 @@ namespace mxnet.csharp
             NativeMethods.MXOptimizerFindCreator(opt_type, out creator_);
         }
 
-        public void Update(int index, NDArray weight, NDArray grad, float learning_rate,
-                         float weight_decay)
+        public void Update(int index, NDArray weight, NDArray grad,
+            float learning_rate,
+            float weight_decay)
         {
             if (!init_)
             {
@@ -49,7 +50,7 @@ namespace mxnet.csharp
                 learning_rate_, weight_decay_);
         }
 
-        void Update(int index, NDArray weight, NDArray grad)
+      public  void Update(int index, NDArray weight, NDArray grad)
         {
             Update(index, weight, grad, learning_rate_, weight_decay_);
         }
@@ -70,6 +71,15 @@ namespace mxnet.csharp
             }
             params_[name] = value.ToString();
             return this;
+        }
+
+        public string Serialize()
+        {
+            var @params = params_;
+            @params["opt_type"] = opt_type_;
+            @params["learning_rate"] = Convert.ToString(learning_rate_);
+            @params["weight_decay"] =  Convert.ToString(weight_decay_);
+            return string.Join("\n", @params.Select(s => $"{s.Key}=={s.Value}"));
         }
     }
 }

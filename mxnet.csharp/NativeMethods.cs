@@ -459,7 +459,7 @@ namespace mxnet.csharp
         ///slice_end: mx_uint->unsigned int
         ///out: NDArrayHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArraySlice")]
-        public static extern int MXNDArraySlice(IntPtr handle, uint slice_begin, uint slice_end, ref IntPtr @out);
+        public static extern int MXNDArraySlice(IntPtr handle, uint slice_begin, uint slice_end, out IntPtr @out);
 
 
         /// Return Type: int
@@ -520,7 +520,7 @@ namespace mxnet.csharp
         ///name: char*
         ///out: FunctionHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXGetFunction")]
-        public static extern int MXGetFunction([In] [MarshalAs(UnmanagedType.LPStr)] string name, ref IntPtr @out);
+        public static extern int MXGetFunction([In] [MarshalAs(UnmanagedType.LPStr)] string name, out IntPtr @out);
 
 
         /// Return Type: int
@@ -552,7 +552,10 @@ namespace mxnet.csharp
         ///scalar_args: mx_float*
         ///mutate_vars: NDArrayHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXFuncInvoke")]
-        public static extern int MXFuncInvoke(IntPtr fun, ref IntPtr use_vars, ref float scalar_args, ref IntPtr mutate_vars);
+        public static extern int MXFuncInvoke(IntPtr fun, 
+            ref IntPtr use_vars,
+                [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.R4)]  float[] scalar_args, 
+            ref IntPtr mutate_vars);
 
 
         /// Return Type: int
@@ -1070,7 +1073,7 @@ namespace mxnet.csharp
         ///type: char*
         ///out: KVStoreHandle*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreCreate")]
-        public static extern int MXKVStoreCreate([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string type, ref System.IntPtr @out);
+        public static extern int MXKVStoreCreate([System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string type, out System.IntPtr @out);
 
 
         /// Return Type: int
@@ -1085,7 +1088,22 @@ namespace mxnet.csharp
         ///keys: int*
         ///vals: NDArrayHandle*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreInit")]
-        public static extern int MXKVStoreInit(System.IntPtr handle, uint num, ref int keys, ref System.IntPtr vals);
+        public static extern int MXKVStoreInit(System.IntPtr handle, uint num,
+                 [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[]   keys,
+                 [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] System.IntPtr[] vals);
+
+
+        /// Return Type: int
+        /// handle: KVStoreHandle->void*
+        /// num: mx_uint->unsigned int
+        /// keys: int*
+        /// vals: NDArrayHandle*
+        /// priority: int
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStorePush")]
+        public static extern int MXKVStorePush(IntPtr handle, uint num,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] keys,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] vals
+            , int priority);
 
 
         /// Return Type: int
@@ -1094,18 +1112,10 @@ namespace mxnet.csharp
         ///keys: int*
         ///vals: NDArrayHandle*
         ///priority: int
-        [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStorePush")]
-        public static extern int MXKVStorePush(System.IntPtr handle, uint num, ref int keys, ref System.IntPtr vals, int priority);
-
-
-        /// Return Type: int
-        ///handle: KVStoreHandle->void*
-        ///num: mx_uint->unsigned int
-        ///keys: int*
-        ///vals: NDArrayHandle*
-        ///priority: int
-        [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStorePull")]
-        public static extern int MXKVStorePull(System.IntPtr handle, uint num, ref int keys, ref System.IntPtr vals, int priority);
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStorePull")]
+        public static extern int MXKVStorePull(IntPtr handle, uint num,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] keys,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] vals, int priority);
 
 
         /// Return Type: int
@@ -1120,39 +1130,39 @@ namespace mxnet.csharp
         ///handle: KVStoreHandle->void*
         ///type: char**
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetType")]
-        public static extern int MXKVStoreGetType(System.IntPtr handle, ref System.IntPtr type);
+        public static extern int MXKVStoreGetType(System.IntPtr handle, out System.IntPtr type);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
         ///ret: int*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetRank")]
-        public static extern int MXKVStoreGetRank(System.IntPtr handle, ref int ret);
+        public static extern int MXKVStoreGetRank(System.IntPtr handle, out int ret);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
         ///ret: int*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetGroupSize")]
-        public static extern int MXKVStoreGetGroupSize(System.IntPtr handle, ref int ret);
+        public static extern int MXKVStoreGetGroupSize(System.IntPtr handle, out int ret);
 
 
         /// Return Type: int
         ///ret: int*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreIsWorkerNode")]
-        public static extern int MXKVStoreIsWorkerNode(ref int ret);
+        public static extern int MXKVStoreIsWorkerNode(out int ret);
 
 
         /// Return Type: int
         ///ret: int*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreIsServerNode")]
-        public static extern int MXKVStoreIsServerNode(ref int ret);
+        public static extern int MXKVStoreIsServerNode(out int ret);
 
 
         /// Return Type: int
         ///ret: int*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreIsSchedulerNode")]
-        public static extern int MXKVStoreIsSchedulerNode(ref int ret);
+        public static extern int MXKVStoreIsSchedulerNode(out int ret);
 
 
         /// Return Type: int
@@ -1181,7 +1191,8 @@ namespace mxnet.csharp
         ///cmd_id: int
         ///cmd_body: char*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreSendCommmandToServers")]
-        public static extern int MXKVStoreSendCommmandToServers(System.IntPtr handle, int cmd_id, [System.Runtime.InteropServices.InAttribute()] [System.Runtime.InteropServices.MarshalAsAttribute(System.Runtime.InteropServices.UnmanagedType.LPStr)] string cmd_body);
+        public static extern int MXKVStoreSendCommmandToServers(System.IntPtr handle, int cmd_id,
+            [In(), MarshalAs(UnmanagedType.LPStr)]  string cmd_body);
 
 
         /// Return Type: int
@@ -1299,10 +1310,10 @@ namespace mxnet.csharp
         ///vals: char**
         ///out: OptimizerHandle*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXOptimizerCreateOptimizer")]
-        public static extern int MXOptimizerCreateOptimizer(System.IntPtr creator, uint num_param,
-                    [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
-              [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] vals, 
-            out System.IntPtr @out);
+        public static extern int MXOptimizerCreateOptimizer(IntPtr creator, uint num_param,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] vals,
+            out IntPtr @out);
 
 
         /// Return Type: int

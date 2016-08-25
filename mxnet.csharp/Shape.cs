@@ -234,9 +234,9 @@ namespace mxnet.csharp
         /// the data content of the shape
         /// </summary>
         /// <returns></returns>
-        public ReadOnlyCollection<uint> data()
+        public uint[] data()
         {
-            return Array.AsReadOnly( ndim_ <= kStackCache ? data_stack_ : data_heap_);
+            return ((uint[])(ndim_ <= kStackCache ? data_stack_ : data_heap_)).Take((int)ndim_).ToArray();
         }
 
         /// <summary>
@@ -266,13 +266,15 @@ namespace mxnet.csharp
        public uint Size()
         {
             uint size = 1;
-            ReadOnlyCollection<uint> d = this.data();
+            var d = this.data();
             for (int i = 0; i < ndim_; ++i)
             {
                 size *= d[i];
             }
             return size;
         }
+
+
 
         /// <summary>
         /// whether two shape equals
@@ -379,6 +381,12 @@ namespace mxnet.csharp
             if (ndim() == 1) ret += ",";
             ret += ")";
             return ret;
+        }
+
+
+        public static implicit operator uint[](Shape obj)
+        {
+            return obj.data();
         }
     }
 }

@@ -142,7 +142,7 @@ namespace mxnet.csharp
             get
             {
                 SymbolHandle @out;
-                NativeMethods.MXSymbolGetOutput(GetHandle(), (uint) index, out @out);
+                NativeMethods.MXSymbolGetOutput(GetHandle(), (uint)index, out @out);
                 return new Symbol(@out);
             }
         }
@@ -165,41 +165,41 @@ namespace mxnet.csharp
 
         public Symbol Group(IEnumerable<Symbol> symbols)
         {
-            var handle_list = new List<SymbolHandle>();
+            var handleList = new List<SymbolHandle>();
             foreach (var symbol in symbols)
             {
-                handle_list.Add(symbol.GetHandle());
+                handleList.Add(symbol.GetHandle());
             }
             SymbolHandle @out;
 
-            NativeMethods.MXSymbolCreateGroup((uint) handle_list.Count, handle_list.ToArray(), out @out);
+            NativeMethods.MXSymbolCreateGroup((uint)handleList.Count, handleList.ToArray(), out @out);
             return new Symbol(@out);
         }
 
-        public Symbol Load(string file_name)
+        public Symbol Load(string fileName)
         {
             SymbolHandle handle;
-            Debug.Assert(NativeMethods.MXSymbolCreateFromFile(file_name, out handle) == 0);
+            Debug.Assert(NativeMethods.MXSymbolCreateFromFile(fileName, out handle) == 0);
             return new Symbol(handle);
         }
 
-        public Symbol LoadJSON(string json_str)
+        public Symbol LoadJson(string jsonStr)
         {
             SymbolHandle handle;
-            Debug.Assert(NativeMethods.MXSymbolCreateFromJSON(json_str, out handle) == 0);
+            Debug.Assert(NativeMethods.MXSymbolCreateFromJSON(jsonStr, out handle) == 0);
             return new Symbol(handle);
         }
 
-        private void Save(string file_name)
+        private void Save(string fileName)
         {
-            Debug.Assert(NativeMethods.MXSymbolSaveToFile(GetHandle(), file_name) == 0);
+            Debug.Assert(NativeMethods.MXSymbolSaveToFile(GetHandle(), fileName) == 0);
         }
 
-        public string ToJSON()
+        public string ToJson()
         {
-            IntPtr out_json;
-            Debug.Assert(NativeMethods.MXSymbolSaveToJSON(GetHandle(), out out_json) == 0);
-            return Marshal.PtrToStringAnsi(out_json);
+            IntPtr outJson;
+            Debug.Assert(NativeMethods.MXSymbolSaveToJSON(GetHandle(), out outJson) == 0);
+            return Marshal.PtrToStringAnsi(outJson);
         }
 
         public Symbol GetInternals()
@@ -226,7 +226,7 @@ namespace mxnet.csharp
             var sarr = new IntPtr[size];
             if (size > 0)
             {
-                Marshal.Copy(sarrPtr, sarr, 0, (int) size);
+                Marshal.Copy(sarrPtr, sarr, 0, (int)size);
             }
             for (var i = 0; i < size; i++)
             {
@@ -245,7 +245,7 @@ namespace mxnet.csharp
             var sarr = new IntPtr[size];
             if (size > 0)
             {
-                Marshal.Copy(sarrPtr, sarr, 0, (int) size);
+                Marshal.Copy(sarrPtr, sarr, 0, (int)size);
             }
             for (var i = 0; i < size; i++)
             {
@@ -264,7 +264,7 @@ namespace mxnet.csharp
             var sarr = new IntPtr[size];
             if (size > 0)
             {
-                Marshal.Copy(sarrPtr, sarr, 0, (int) size);
+                Marshal.Copy(sarrPtr, sarr, 0, (int)size);
             }
             for (var i = 0; i < size; i++)
             {
@@ -287,7 +287,7 @@ namespace mxnet.csharp
         }
         private static List<uint[]> PtrToArrayUint32(IntPtr dataPtr, int dataSize, uint[] shapeNdim)
         {
-            if (dataSize== 0)
+            if (dataSize == 0)
             {
                 return null;
             }
@@ -299,16 +299,34 @@ namespace mxnet.csharp
             {
                 int[] data = new int[(int)shapeNdim[i]];
                 Marshal.Copy(ptrArray[i], data, 0, (int)shapeNdim[i]);
-                ret.Add(data.Select(s => (uint) s).ToArray());
+                ret.Add(data.Select(s => (uint)s).ToArray());
             }
 
             return ret;
         }
+        /// <summary>
+        /// Infer the shape of outputs and arguments of given known shapes of arguments
+        /// </summary>
+        /// <param name="argShapes"> Provide keyword arguments of known shapes.</param>
+        /// <param name="inShape">List of shapes of arguments.The order is in the same order as list_arguments()</param>
+        /// <param name="auxShape">List of shapes of outputs.The order is in the same order as list_outputs()</param>
+        /// <param name="outShape">List of shapes of outputs.The order is in the same order as list_auxiliary()</param>
+        public void InferShape(Dictionary<string, Shape> argShapes, List<uint[]> inShape, List<uint[]> auxShape, List<uint[]> outShape)
+        {
+            InferShape(argShapes.ToDictionary(x=>x.Key,y=> (uint[])y.Value) , inShape, auxShape, outShape);
+        }
+        /// <summary>
+        /// Infer the shape of outputs and arguments of given known shapes of arguments
+        /// </summary>
+        /// <param name="argShapes"> Provide keyword arguments of known shapes.</param>
+        /// <param name="inShape">List of shapes of arguments.The order is in the same order as list_arguments()</param>
+        /// <param name="auxShape">List of shapes of outputs.The order is in the same order as list_outputs()</param>
+        /// <param name="outShape">List of shapes of outputs.The order is in the same order as list_auxiliary()</param>
         public void InferShape(
             Dictionary<string, uint[]> argShapes,
-            List<uint[]> inShape,
-            List<uint[]> auxShape,
-            List<uint[]> outShape)
+            [Out] List<uint[]> inShape,
+            [Out] List<uint[]> auxShape,
+            [Out] List<uint[]> outShape)
         {
             var keys = new List<string>();
             var argIndPtr = new List<uint>();
@@ -317,13 +335,13 @@ namespace mxnet.csharp
             foreach (var arg in argShapes)
             {
                 keys.Add(arg.Key);
-                argIndPtr.Add((uint) argShapeData.Count);
+                argIndPtr.Add((uint)argShapeData.Count);
                 foreach (var i in arg.Value)
                 {
                     argShapeData.Add(i);
                 }
             }
-            argIndPtr.Add((uint) argShapeData.Count);
+            argIndPtr.Add((uint)argShapeData.Count);
 
             uint inShapeSize;
             IntPtr inShapeNdimPtr;
@@ -336,7 +354,7 @@ namespace mxnet.csharp
             IntPtr auxShapeDataPtr;
             int complete;
 
-            Debug.Assert(NativeMethods.MXSymbolInferShape(GetHandle(), (uint) keys.Count, keys.ToArray(),
+            Debug.Assert(NativeMethods.MXSymbolInferShape(GetHandle(), (uint)keys.Count, keys.ToArray(),
                 argIndPtr.ToArray(), argShapeData.ToArray(),
                 out inShapeSize, out inShapeNdimPtr, out inShapeDataPtr,
                 out outShapeSize, out outShapeNdimPtr, out outShapeDataPtr,
@@ -345,7 +363,7 @@ namespace mxnet.csharp
                          0, NativeMethods.MXGetLastError());
 
             var inShapeNdim = PtrToArrayUint32(inShapeNdimPtr, (int)inShapeSize);
-            var inShapeData = PtrToArrayUint32(inShapeDataPtr, (int)inShapeSize , inShapeNdim);
+            var inShapeData = PtrToArrayUint32(inShapeDataPtr, (int)inShapeSize, inShapeNdim);
 
             var outShapeNdim = PtrToArrayUint32(outShapeNdimPtr, (int)outShapeSize);
             var outShapeData = PtrToArrayUint32(outShapeDataPtr, (int)outShapeSize, outShapeNdim);
@@ -355,18 +373,23 @@ namespace mxnet.csharp
 
             if (complete > 0)
             {
-                if (inShapeData != null) { inShape.AddRange(inShapeData);}
-                if (outShapeData != null) { outShape.AddRange(outShapeData);}
-                if (auxShapeData != null) { auxShape.AddRange(auxShapeData);}
+                if (inShapeData != null) { inShape.AddRange(inShapeData); }
+                if (outShapeData != null) { outShape.AddRange(outShapeData); }
+                if (auxShapeData != null) { auxShape.AddRange(auxShapeData); }
             }
         }
 
-  
 
-        public void InferArgsMap(
-            Context context, Dictionary<string, NDArray> args_map,
-            Dictionary<string, NDArray> known_args)
+        void InferExecutorArrays(
+            Context context, List<NDArray> arg_arrays,
+            List<NDArray> grad_arrays, List<OpReqType> grad_reqs,
+            List<NDArray> aux_arrays,
+            Dictionary<string, NDArray> args_map,
+            Dictionary<string, NDArray> arg_grad_store,
+            Dictionary<string, OpReqType> grad_req_type,
+            Dictionary<string, NDArray> aux_map)
         {
+
             var arg_name_list = ListArguments();
             var in_shapes = new List<uint[]>();
             var aux_shapes = new List<uint[]>();
@@ -375,31 +398,152 @@ namespace mxnet.csharp
 
             foreach (var arg_name in arg_name_list)
             {
-                if (known_args.ContainsKey(arg_name))
-                    arg_shapes[arg_name] = known_args[arg_name].GetShape();
+                if (args_map.ContainsKey(arg_name))
+                {
+                    arg_shapes[arg_name] = args_map[arg_name].GetShape();
+                }
             }
+
 
             InferShape(arg_shapes, in_shapes, aux_shapes, out_shapes);
 
-            for (var i = 0; i < in_shapes.Count; ++i)
+            for (int i = 0; i < in_shapes.Count; ++i)
             {
                 var shape = in_shapes[i];
                 var arg_name = arg_name_list[i];
-                if (known_args.ContainsKey(arg_name))
+
+                if (args_map.ContainsKey(arg_name))
                 {
-                    args_map[arg_name] = known_args[arg_name];
+                    arg_arrays.Add(args_map[arg_name]);
                 }
                 else
                 {
-                    args_map[arg_name] = new NDArray(shape, context, false);
-                    //   NDArray,SampleGaussian(0, 1, args_map[arg_name]);
+                    var temp = new NDArray(shape, context, false);
+                    arg_arrays.Add(temp);
+                    NDArray.SampleGaussian(0, 1, temp);
+                }
+
+                if (arg_grad_store.ContainsKey(arg_name))
+                {
+                    grad_arrays.Add(arg_grad_store[arg_name]);
+                }
+                else
+                {
+                    grad_arrays.Add(new NDArray(shape, context, false));
+                }
+                if (grad_req_type.ContainsKey(arg_name))
+                {
+                    grad_reqs.Add(grad_req_type[arg_name]);
+                }
+                else
+                {
+                    grad_reqs.Add(csharp.OpReqType.KWriteTo);
                 }
             }
+
+            var aux_name_list = ListAuxiliaryStates();
+            for (int i = 0; i < aux_shapes.Count; ++i)
+            {
+                var shape = aux_shapes[i];
+                var aux_name = aux_name_list[i];
+                if (aux_map.ContainsKey(aux_name))
+                {
+                    aux_arrays.Add(aux_map[aux_name]);
+                }
+                else
+                {
+                    var temp = new NDArray(shape, context, false);
+                    aux_arrays.Add(temp);
+                    csharp.NDArray.SampleGaussian(0, 1, temp);
+                }
+            }
+        }
+
+        public void InferArgsMap(
+            Context context, Dictionary<string, NDArray> argsMap,
+            Dictionary<string, NDArray> knownArgs)
+        {
+            var argNameList = ListArguments();
+            var inShapes = new List<uint[]>();
+            var auxShapes = new List<uint[]>();
+            var outShapes = new List<uint[]>();
+            var argShapes = new Dictionary<string, uint[]>();
+
+            foreach (var argName in argNameList)
+            {
+                if (knownArgs.ContainsKey(argName))
+                {
+                    argShapes[argName] = knownArgs[argName].GetShape();
+                }
+            }
+
+            InferShape(argShapes, inShapes, auxShapes, outShapes);
+
+            for (var i = 0; i < inShapes.Count; ++i)
+            {
+                var shape = inShapes[i];
+                var argName = argNameList[i];
+                if (knownArgs.ContainsKey(argName))
+                {
+                    argsMap[argName] = knownArgs[argName];
+                }
+                else
+                {
+                    argsMap[argName] = new NDArray(shape, context, false);
+                    NDArray.SampleGaussian(0, 1, argsMap[argName]);
+                }
+            }
+        }
+
+        public Executor SimpleBind(
+            Context context, Dictionary<string, NDArray> args_map,
+            Dictionary<string, NDArray> arg_grad_store =null,
+            Dictionary<string, OpReqType> grad_req_type = null,
+            Dictionary<string, NDArray> aux_map = null)
+        {
+            if (arg_grad_store == null)
+            {
+                arg_grad_store = new Dictionary<string, NDArray>();
+            }
+            if (grad_req_type == null)
+            {
+                grad_req_type = new Dictionary<string, OpReqType>();
+            }
+            if (aux_map == null)
+            {
+                aux_map = new Dictionary<string, NDArray>();
+            }
+
+            List<NDArray> arg_arrays = new List<NDArray>();
+            List<NDArray> grad_arrays = new List<NDArray>();
+            List<OpReqType> grad_reqs = new List<OpReqType>();
+            List<NDArray> aux_arrays = new List<NDArray>();
+
+            InferExecutorArrays(context, arg_arrays, grad_arrays, grad_reqs,
+                                aux_arrays, args_map, arg_grad_store, grad_req_type,
+                                aux_map);
+
+            return new Executor(this, context, arg_arrays, grad_arrays, grad_reqs,
+                                aux_arrays);
+        }
+
+        private Executor Bind(Context context,
+            List<NDArray> arg_arrays,
+            List<NDArray> grad_arrays,
+            List<OpReqType> grad_reqs,
+            List<NDArray> aux_arrays,
+            Dictionary<string, Context> group_to_ctx,
+            Executor shared_exec)
+        {
+            return new Executor(this, context, arg_arrays, grad_arrays, grad_reqs,
+                                aux_arrays, group_to_ctx, shared_exec);
         }
 
         public SymbolHandle GetHandle()
         {
             return _blobPtr.Handle;
         }
+
+    
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using mxnet.csharp;
 using OpenCvSharp;
 
 namespace test.console
@@ -24,7 +25,7 @@ namespace test.console
     }
 
 
-    class ReadData : IEnumerable<DataBatch>
+    class ReadData : IEnumerable<DataBatch> , IDataIter
     {
         private readonly string _path;
         private readonly int _batchSize;
@@ -91,5 +92,16 @@ namespace test.console
         {
             return GetEnumerator();
         }
+
+        public string default_bucket_key { get; set; }
+
+        public Dictionary<string, Shape> provide_data { get; set; } = new Dictionary<string, Shape>()
+        {
+            {"data", new Shape((uint) 32, 3, 60, 20)}
+        };
+        public Dictionary<string, Shape> provide_label { get; set; } = new Dictionary<string, Shape>()
+        {
+            {"softmax_label", new Shape((uint) 32, 4)}
+        };
     }
 }
