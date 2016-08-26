@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 using mxnet.csharp.initializer;
+using mxnet.csharp.metric;
 
 namespace mxnet.csharp
 {
@@ -13,6 +15,7 @@ namespace mxnet.csharp
         string default_bucket_key { get; set; }
         Dictionary<string,Shape> provide_data { get; set; }
         Dictionary<string, Shape> provide_label { get; set; }
+        int batch_size { get; }
     }
 
     public class FeedForward
@@ -25,7 +28,7 @@ namespace mxnet.csharp
         private Func<string,Symbol> sym_gen;
         private List<Context> ctx;
         private int num_epoch;
-        private string optimizer;
+        private Optimizer optimizer;
         private Initializer initializer;
         private object _pred_exec;
         private int begin_epoch;
@@ -35,7 +38,7 @@ namespace mxnet.csharp
         public FeedForward(Symbol symbol, 
             List<Context> ctx = null,
             int num_epoch = 0, 
-            string optimizer = "sgd",
+            Optimizer optimizer = null,
             Initializer initializer =  null,
             Dictionary<string, NDArray> arg_params = null,
             Dictionary<string, NDArray> aux_params = null,
@@ -70,6 +73,15 @@ namespace mxnet.csharp
 
             this.kwargs = new Dictionary<string, object>();
 
+            if (optimizer == null)
+            {
+                float learning_rate = 1e-4f;
+                float weight_decay = 1e-4f;
+                optimizer = new Optimizer("ccsgd", learning_rate, weight_decay);
+                optimizer.SetParam("momentum", 0.9)
+                    .SetParam("rescale_grad", 1.0)
+                    .SetParam("clip_gradient", 10);
+            }
 
             this.optimizer = optimizer;
         // internal helper state;
@@ -87,7 +99,7 @@ namespace mxnet.csharp
             this.argument_checked = true;
 
             //check if symbol contain duplicated names.
-            _check_arguments(this.symbol);
+            Util._check_arguments(this.symbol);
             //rematch parameters to delete useless ones
             if (this.allow_extra_params)
             {
@@ -106,39 +118,14 @@ namespace mxnet.csharp
             }
         }
 
-        private void _check_arguments(Symbol symbol)
-        {
-            var argNames = symbol.ListArguments();
-            var argNamesDuplicate = argNames.GroupBy(i => i)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.ElementAt(0));
-            foreach (var name in argNamesDuplicate)
-            {
-                throw new Exception($"Find duplicated argument name \"{name}\"," +
-                                    $"please make the weight name non-duplicated(using name arguments)," +
-                                    $"arguments are {string.Join(" ", argNames)}");
-            }
-            var auxNames = symbol.ListAuxiliaryStates();
-            var auxNamesDuplicate = auxNames.GroupBy(i => i)
-                .Where(g => g.Count() > 1)
-                .Select(g => g.ElementAt(0));
-
-            foreach (var name in auxNamesDuplicate)
-            {
-                throw new Exception($"Find duplicated auxiliary name \"{name}\"," +
-                                    $"please make the weight name non-duplicated(using name arguments)," +
-                                    $"arguments are {string.Join(" ", argNames)}");
-            }
-        }
-
         public void Fit(IDataIter trainData,
             IDataIter evalData,
             metric.EvalMetric eval_metric = null,
             Action epoch_end_callback = null,
             Action batch_end_callback = null,
-            string kvstore = "local",
-            Action logger = null,
-            object work_load_list = null, object monitor = null,
+            string kvstore_input = "local",
+            ILog logger = null,
+            List<int> work_load_list = null, object monitor = null,
             Action eval_batch_end_callback = null
             )
         {
@@ -165,7 +152,109 @@ namespace mxnet.csharp
                 eval_metric = "acc";
             }
 
+            //create kvstore
+            var _create_kvstore_temp = _create_kvstore(kvstore_input, ctx.Count, arg_params);
+            var kvstore = _create_kvstore_temp.Item1;
+            var update_on_kvstore = _create_kvstore_temp.Item2;
 
+            var param_idx2name =new  Dictionary<int, string>();
+            if (update_on_kvstore)
+            {
+                param_idx2name = param_names.Select((x, i) => new { i = i, x = x }).ToDictionary(k => k.i, v => v.x);
+            }
+            else
+            {
+                for (int i = 0; i < param_names.Count; i++)
+                {
+                    for (int k = 0; k < ctx.Count; k++)
+                    {
+                        param_idx2name[i*ctx.Count + k] = param_names[i];
+                    }
+                }
+            }
+            kwargs["param_idx2name"] = param_idx2name;
+
+            //(TODO)init optmizer
+
+            _train_multi_device(this.symbol, this.ctx, arg_names, param_names, aux_names,
+                this.arg_params, this.aux_params,
+                begin_epoch: this.begin_epoch, end_epoch: this.num_epoch,
+                //epoch_size = this.epoch_size,
+                optimizer: optimizer,
+                train_data: data, eval_data: evalData,
+                eval_metric: eval_metric,
+                epoch_end_callback: epoch_end_callback,
+                batch_end_callback: batch_end_callback,
+                kvstore: kvstore, update_on_kvstore: update_on_kvstore,
+                logger: logger, work_load_list: work_load_list, monitor: monitor,
+                eval_batch_end_callback: eval_batch_end_callback,
+                sym_gen: this.sym_gen);
+
+
+        }
+
+        private void _train_multi_device(Symbol symbol1, List<Context> contexts, List<string> argNames,
+            List<string> paramNames, List<string> auxNames, Dictionary<string, NDArray> argParams,
+            Dictionary<string, NDArray> auxParams, int begin_epoch, int end_epoch, Optimizer optimizer,
+            IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, Action epoch_end_callback,
+            Action batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
+            object monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
+        {
+
+            if (logger == null)
+            {
+                logger = LogManager.GetLogger("");
+            }
+           var executor_manager = new DataParallelExecutorManager(symbol: symbol,
+                sym_gen: sym_gen,
+                ctx: ctx,
+                train_data: train_data,
+                param_names: paramNames,
+                arg_names: argNames,
+                aux_names: auxNames,
+                work_load_list: work_load_list,
+                logger: logger);
+        }
+
+        private static Tuple<KVStore, bool> _create_kvstore(string kvstore, int count, Dictionary<string, NDArray> argParams)
+        {
+            KVStore kv = null;
+            if (kvstore == null)
+            {
+                kv = null;
+            }
+            else
+            {
+                if (count == 1 && !kvstore.Contains("dist"))
+                {
+                    kv = null;
+                }
+                else
+                {
+                    if (kvstore == "local")
+                    {
+
+                        //automatically select a proper local
+                       var  max_size = argParams.Select(s =>Util.Prod(s.Value.GetShape())).Max();
+                        if (max_size < 1024*1024*16)
+                        {
+                            kvstore = "local_update_cpu";
+                        }
+                        else
+                        {
+                            kvstore = "local_allreduce_cpu";
+                        }
+                    }
+
+                }
+
+                kv = new KVStore(kvstore);
+            }
+
+            bool update_on_kvstore = !(kv==null  || kv.GetType().Contains("local_allreduce"));
+
+
+            return Tuple.Create(kv, update_on_kvstore);
         }
 
 

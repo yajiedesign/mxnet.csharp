@@ -272,6 +272,16 @@ namespace mxnet.csharp
             }
             return ret;
         }
+        private static int[] PtrToArrayInt32(IntPtr ptr, int size)
+        {
+            if (size == 0)
+            {
+                return null;
+            }
+            int[] array = new int[size];
+            Marshal.Copy(ptr, array, 0, size);
+            return array;
+        }
 
         private static uint[] PtrToArrayUint32(IntPtr ptr, int size)
         {
@@ -315,6 +325,58 @@ namespace mxnet.csharp
         {
             InferShape(argShapes.ToDictionary(x=>x.Key,y=> (uint[])y.Value) , inShape, auxShape, outShape);
         }
+
+
+        public void InferType(
+         Dictionary<string, Type> input_types,
+         [Out] List<Type> inType,
+         [Out] List<Type> auxType,
+         [Out] List<Type> outType)
+        {
+            var keys = new List<string>();
+            var arg_type_data = new List<int>();
+  
+
+            foreach (var arg in input_types)
+            {
+                keys.Add(arg.Key);
+                arg_type_data.Add( Util._DTYPE_NP_TO_MX[arg.Value]);
+            }
+
+
+            uint inTypeSize;
+            IntPtr inTypeDataPtr;
+    
+            uint outTypeSize;
+            IntPtr outTypeDataPtr;
+
+            uint auxTypeSize;
+            IntPtr auxTypeDataPtr;
+
+            int complete;
+
+            Debug.Assert(NativeMethods.MXSymbolInferType(GetHandle(), (uint)keys.Count, keys.ToArray(),
+                arg_type_data.ToArray(),
+                out inTypeSize, out inTypeDataPtr,
+                out outTypeSize, out outTypeDataPtr,
+                out auxTypeSize, out auxTypeDataPtr,
+                out complete) ==
+                         0, NativeMethods.MXGetLastError());
+
+            var inTypeData = PtrToArrayInt32(inTypeDataPtr, (int)inTypeSize);
+            var outTypeData = PtrToArrayInt32(outTypeDataPtr, (int)outTypeSize);
+            var auxTypeData = PtrToArrayInt32(auxTypeDataPtr, (int)auxTypeSize);
+
+            if (complete > 0)
+            {
+              if(inTypeSize!=0) {  inType?.AddRange(inTypeData.Select(s=>Util._DTYPE_MX_TO_NP[s]));}
+                if (outTypeSize != 0) { outType?.AddRange(outTypeData.Select(s => Util._DTYPE_MX_TO_NP[s]));}
+                if (auxTypeSize != 0) { auxType?.AddRange(auxTypeData.Select(s => Util._DTYPE_MX_TO_NP[s]));}
+            }
+        }
+
+    
+
         /// <summary>
         /// Infer the shape of outputs and arguments of given known shapes of arguments
         /// </summary>
@@ -373,9 +435,9 @@ namespace mxnet.csharp
 
             if (complete > 0)
             {
-                if (inShapeData != null) { inShape.AddRange(inShapeData); }
-                if (outShapeData != null) { outShape.AddRange(outShapeData); }
-                if (auxShapeData != null) { auxShape.AddRange(auxShapeData); }
+                if (inShapeSize != 0) { inShape?.AddRange(inShapeData); }
+                if (outShapeSize != 0) { outShape?.AddRange(outShapeData); }
+                if (auxShapeSize != 0) { auxShape?.AddRange(auxShapeData); }
             }
         }
 
@@ -527,17 +589,57 @@ namespace mxnet.csharp
                                 aux_arrays);
         }
 
-        private Executor Bind(Context context,
+        public Executor Bind(Context context,
             List<NDArray> arg_arrays,
             List<NDArray> grad_arrays,
             List<OpReqType> grad_reqs,
             List<NDArray> aux_arrays,
-            Dictionary<string, Context> group_to_ctx,
-            Executor shared_exec)
+            Dictionary<string, Context> group_to_ctx = null,
+            Executor shared_exec = null)
         {
             return new Executor(this, context, arg_arrays, grad_arrays, grad_reqs,
                                 aux_arrays, group_to_ctx, shared_exec);
         }
+
+        public Executor Bind(Context context,
+            List<NDArray> arg_arrays,
+            Dictionary<string, NDArray> grad_dict,
+            Dictionary<string, OpReqType> grad_reqs,
+            List<NDArray> aux_arrays,
+            Dictionary<string, Context> group_to_ctx = null,
+            Executor shared_exec = null)
+        {
+            var listed_arguments = this.ListArguments();
+            var grad_arrays = this._get_ndarray_inputs("args_grad", grad_dict, listed_arguments, true);
+           
+            return new Executor(this, context, arg_arrays, grad_arrays,
+                grad_reqs.Select(s => s.Value).ToList(), aux_arrays, group_to_ctx, shared_exec);
+        }
+
+        private List<NDArray> _get_ndarray_inputs(string arg_key, Dictionary<string, NDArray> args, IList<string> arg_names, bool allow_missing)
+        {
+            List<NDArray> arg_arrays = new List<NDArray>();
+            foreach (var name in arg_names)
+            {
+                if (args.ContainsKey(name))
+                {
+                    arg_arrays.Add(args[name]);
+                }
+                else
+                {
+                    if (allow_missing)
+                    {
+                        arg_arrays.Add(null);
+                    }
+                    else
+                    {
+                        throw new Exception($"Must specify all the arguments in {arg_key}" );
+                    }
+                }
+            }
+            return arg_arrays;
+        }
+
 
         public SymbolHandle GetHandle()
         {

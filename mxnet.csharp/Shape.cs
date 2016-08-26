@@ -253,7 +253,7 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="i">dimension index</param>
         /// <returns>the corresponding dimension size</returns>
-        uint this[int i]
+     public   uint this[int i]
         {
             get { return data()[i]; }
         }

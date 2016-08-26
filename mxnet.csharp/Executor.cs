@@ -39,7 +39,11 @@ namespace mxnet.csharp
         private readonly List<NDArray> outputs = new List<NDArray>();
         private readonly List<NDArray> arg_arrays;
         private readonly List<NDArray> grad_arrays;
-        private List<NDArray> aux_arrays;
+        public List<NDArray> aux_arrays { get; }
+
+        public Dictionary<string, NDArray> arg_dict { get; private set; }
+        public Dictionary<string, NDArray> grad_dict { get; private set; }
+
         private Symbol symbol_;
 
         public Executor(Symbol symbol, Context context,
@@ -59,6 +63,14 @@ namespace mxnet.csharp
             aux_arrays = auxArrays;
             symbol_ = symbol;
 
+
+            var arg_name = symbol.ListArguments();
+
+            arg_dict = arg_name.Zip(argArrays, (name, arg) => new { name, arg })
+                .ToDictionary(k => k.name, v => v.arg);
+            grad_dict = arg_name.Zip(gradArrays, (name, arg) => new { name, arg })
+                .ToDictionary(k => k.name, v => v.arg);
+
             var argHandles = new List<NDArrayHandle>();
             var gradHandles = new List<NDArrayHandle>();
             var auxHandles = new List<NDArrayHandle>();
@@ -69,7 +81,14 @@ namespace mxnet.csharp
             }
             foreach (var array in gradArrays)
             {
-                gradHandles.Add(array.GetHandle());
+                if (array == null)
+                {
+                    gradHandles.Add(IntPtr.Zero);
+                }
+                else
+                {
+                    gradHandles.Add(array.GetHandle());
+                }
             }
             foreach (var array in auxArrays)
             {

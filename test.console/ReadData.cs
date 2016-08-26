@@ -103,5 +103,7 @@ namespace test.console
         {
             {"softmax_label", new Shape((uint) 32, 4)}
         };
+
+        public int batch_size { get { return _batchSize; } }
     }
 }

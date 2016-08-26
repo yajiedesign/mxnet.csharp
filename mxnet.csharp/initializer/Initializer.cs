@@ -64,8 +64,8 @@ namespace mxnet.csharp.initializer
 
         private void _init_bilinear(string name, NDArray arr)
         {
-            var shape = arr.GetShape();
-            var prodShape = shape.Aggregate(1, (a, b) => (int) (a*b));
+            var shape = arr.GetShape().data();
+            var prodShape =Util.Prod(shape);
             float[] weight = new float[prodShape];
 
             var f = Math.Ceiling(shape[3] / 2.0);

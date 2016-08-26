@@ -364,7 +364,11 @@ namespace mxnet.csharp
         ///out: NDArrayHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArrayCreate")]
         public static extern int MXNDArrayCreate(
-              [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U4)]uint[] shape, uint ndim, DeviceType devType, int devId, int delayAlloc, out IntPtr @out);
+              [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U4)]uint[] shape, 
+              uint ndim, DeviceType devType,
+              int devId, 
+              int delayAlloc,
+              out IntPtr @out);
 
 
         /// Return Type: int
@@ -376,7 +380,14 @@ namespace mxnet.csharp
         ///dtype: int
         ///out: NDArrayHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArrayCreateEx")]
-        public static extern int MXNDArrayCreateEx(ref uint shape, uint ndim, int dev_type, int dev_id, int delay_alloc, int dtype, ref IntPtr @out);
+        public static extern int MXNDArrayCreateEx(
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)]uint[] shape,
+            uint ndim,
+            DeviceType dev_type,
+            int dev_id, 
+            int delay_alloc, 
+            int dtype,
+            out IntPtr @out);
 
 
         /// Return Type: int
@@ -476,7 +487,10 @@ namespace mxnet.csharp
         ///dims: int*
         ///out: NDArrayHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArrayReshape")]
-        public static extern int MXNDArrayReshape(IntPtr handle, int ndim, ref int dims, ref IntPtr @out);
+        public static extern int MXNDArrayReshape(IntPtr handle,
+            int ndim,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] dims,
+            out IntPtr @out);
 
 
         /// Return Type: int
@@ -498,7 +512,7 @@ namespace mxnet.csharp
         ///handle: NDArrayHandle->void*
         ///out_dtype: int*
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArrayGetDType")]
-        public static extern int MXNDArrayGetDType(IntPtr handle, ref int out_dtype);
+        public static extern int MXNDArrayGetDType(IntPtr handle, out int out_dtype);
 
 
         /// Return Type: int
@@ -864,7 +878,17 @@ namespace mxnet.csharp
         ///aux_type_data: int**
         ///complete: int*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXSymbolInferType")]
-        public static extern int MXSymbolInferType(System.IntPtr sym, uint num_args, ref System.IntPtr keys, ref int arg_type_data, ref uint in_type_size, ref System.IntPtr in_type_data, ref uint out_type_size, ref System.IntPtr out_type_data, ref uint aux_type_size, ref System.IntPtr aux_type_data, ref int complete);
+        public static extern int MXSymbolInferType(IntPtr sym,
+            uint num_args,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] arg_type_data,
+            out uint in_type_size,
+            out IntPtr in_type_data,
+            out uint out_type_size,
+            out System.IntPtr out_type_data,
+            out uint aux_type_size,
+            out System.IntPtr aux_type_data,
+            out int complete);
 
 
         /// Return Type: int

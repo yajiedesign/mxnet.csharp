@@ -17,6 +17,8 @@ namespace mxnet.csharp
         KGpu = 2,
         KCpuPinned = 3
     };
+
+
     public class Context
     {
         private readonly DeviceType _type;
@@ -143,6 +145,15 @@ namespace mxnet.csharp
                                context.GetDeviceId(), delayAlloc ? 1 : 0, out handle) == 0);
             _blobPtr = new NDBlob(handle);
         }
+
+        public NDArray(Shape shape, Context context, bool delayAlloc ,Type dtype)
+        {
+            NDArrayHandle handle;
+            Debug.Assert(NativeMethods.MXNDArrayCreateEx(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
+                               context.GetDeviceId(), delayAlloc ? 1 : 0, Util._DTYPE_NP_TO_MX[dtype],out handle) == 0);
+            _blobPtr = new NDBlob(handle);
+        }
+
         public NDArray(float[] data)
         {
             NDArrayHandle handle;
@@ -207,6 +218,14 @@ namespace mxnet.csharp
             return new NDArray(handle);
         }
 
+        public NDArray Reshape(Shape new_shape)
+        {
+            NDArrayHandle handle;
+            var dims = new_shape.data().Select(s => (int)s );
+            Debug.Assert(NativeMethods.MXNDArrayReshape(GetHandle(), (int)new_shape.ndim(), dims.ToArray(),out handle)==0);
+            return new NDArray(handle);
+        }
+
         public NDArray SetValue(float value)
         {
             FunctionHandle func_handle;
@@ -230,21 +249,34 @@ namespace mxnet.csharp
 
         public uint Size()
         {
-            uint ret = 1;
-            foreach (var i in GetShape()) { ret *= (uint)i; }
-            return ret;
+            return GetShape().Size();
         }
 
-        public uint[] GetShape()
+        public Shape GetShape()
         {
             IntPtr outPdata;
             uint outDim;
             NativeMethods.MXNDArrayGetShape(_blobPtr.Handle, out outDim, out outPdata);
             int[] ret = new int[outDim];
             Marshal.Copy(outPdata, ret, 0, (int)outDim);
-            return ret.Select(s => (uint)s).ToArray();
+            return new Shape(ret.Select(s => (uint)s).ToArray());
         }
 
+        public Type GetDtype()
+        {
+            int out_dtype;
+            Debug.Assert(NativeMethods.MXNDArrayGetDType(_blobPtr.Handle, out out_dtype) == 0);
+            return Util._DTYPE_MX_TO_NP[out_dtype];
+        }
+
+
         public NDArrayHandle GetHandle() { return _blobPtr.Handle; }
+
+        public static NDArray Zeros(Shape shape, Context ctx, Type dtype)
+        {
+            var array = new NDArray(shape, ctx, false, dtype);
+            array.SetValue(0);
+            return array;
+        }
     }
 }
