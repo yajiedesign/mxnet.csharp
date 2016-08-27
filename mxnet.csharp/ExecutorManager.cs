@@ -20,6 +20,10 @@ namespace mxnet.csharp
             ;
 
         private DataParallelExecutorGroup execgrp;
+        private Symbol symbol;
+        private Func<string, Symbol> sym_gen;
+        private object curr_execgrp;
+        private Dictionary<string, DataParallelExecutorGroup> execgrp_bucket;
 
 
         public DataParallelExecutorManager(Symbol symbol, Func<string, Symbol> sym_gen, List<Context> ctx,
@@ -53,6 +57,20 @@ namespace mxnet.csharp
             this.execgrp = new DataParallelExecutorGroup(symbol, this.arg_names, this.param_names, this.ctx,
                 this.slices, train_data);
 
+            this.symbol = symbol;
+
+            this.sym_gen = sym_gen;
+            this.curr_execgrp = null;
+            // this is set when data is loaded
+            if (this.sym_gen != null)
+            {
+                this.execgrp_bucket = new Dictionary<string, DataParallelExecutorGroup>()
+                {
+                    {train_data.default_bucket_key,  this.execgrp }
+                };
+            }
+
+
         }
 
         private List<Tuple<int, int>> _split_input_slice(int batch_size, List<int> work_load_list)
@@ -73,7 +91,7 @@ namespace mxnet.csharp
             foreach (var batch_num in batch_num_list)
             {
                 var begin = (int)Math.Min(end, batch_size);
-                end = (int) Math.Min(begin + batch_num, batch_size);
+                end = (int)Math.Min(begin + batch_num, batch_size);
 
                 if (begin >= end)
                     throw new Exception("Too many slices such that some splits are empty");
@@ -81,6 +99,27 @@ namespace mxnet.csharp
             }
 
             return slices;
+        }
+
+        public void install_monitor(Monitor monitor)
+        {
+            if (this.sym_gen != null)
+            {
+                throw new Exception("Monitoring is not implemented for bucketing");
+            }
+            foreach (var train_execs in this.execgrp.train_execs)
+            {
+                monitor.Install(train_execs);
+            }
+        }
+
+        public void set_params(Dictionary<string, NDArray> argParams, Dictionary<string, NDArray> auxParams)
+        {
+            foreach (var texec in execgrp.train_execs)
+            {
+                texec.copy_params_from(argParams, auxParams);
+            }
+     
         }
     }
 
@@ -92,7 +131,13 @@ namespace mxnet.csharp
         private IList<string> aux_names;
         private List<int> param_idx;
         private List<string> param_names;
-        private List<Executor> train_execs;
+        public List<Executor> train_execs { get; }
+        private List<List<Tuple<Tuple<int, int>, NDArray>>> data_arrays;
+        private List<List<Tuple<Tuple<int, int>, NDArray>>> label_arrays;
+        private List<List<NDArray>> param_arrays;
+        private List<List<NDArray>> grad_arrays;
+        private List<List<NDArray>> aux_arrays;
+        private List<Tuple<int, int>> slices;
 
         public DataParallelExecutorGroup(Symbol sym,
             List<string> arg_names,
@@ -100,7 +145,7 @@ namespace mxnet.csharp
             List<Context> ctx,
             List<Tuple<int, int>> slices,
             IDataIter train_data,
-            DataParallelExecutorGroup shared_group=null)
+            DataParallelExecutorGroup shared_group = null)
         {
             Util._check_arguments(sym);
 
@@ -116,7 +161,7 @@ namespace mxnet.csharp
             this.label_names = train_data.provide_label.Select(s => s.Key).ToList();
             this.aux_names = sym.ListAuxiliaryStates();
 
-            this.param_idx = arg_names.Select((x, i) => new {x = x, i = i}).Where(w => param_names.Contains(w.x)).Select(s => s.i).ToList();
+            this.param_idx = arg_names.Select((x, i) => new { x = x, i = i }).Where(w => param_names.Contains(w.x)).Select(s => s.i).ToList();
             this.param_names = param_idx.Select(s => arg_names[s]).ToList();
 
             this.train_execs = new List<Executor>();
@@ -141,11 +186,23 @@ namespace mxnet.csharp
 
                 this.train_execs.Add(train_exec);
             }
+
+
+            this.data_arrays = data_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.arg_dict[name])).ToList()).ToList();
+            this.label_arrays = label_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.arg_dict[name])).ToList()).ToList();
+
+            this.param_arrays = param_idx.Select(i => train_execs.Select((e) => e.arg_arrays[i]).ToList()).ToList();
+
+            this.grad_arrays = param_idx.Select(i => train_execs.Select((e) => e.grad_arrays[i]).ToList()).ToList();
+
+            this.aux_arrays = Enumerable.Range(0, this.aux_names.Count).Select(i => train_execs.Select((e) => e.aux_arrays[i]).ToList()).ToList();
+
+            this.slices = slices;
         }
 
         private Executor _bind_exec(Symbol sym, Context ctx, Dictionary<string, uint[]> input_shapes,
-            List<string> param_names, bool need_grad_input, Executor base_exec, 
-            Dictionary<string, NDArray> shared_data_arrays, Dictionary<string,Type> input_types= null, ILog logger= null)
+            List<string> param_names, bool need_grad_input, Executor base_exec,
+            Dictionary<string, NDArray> shared_data_arrays, Dictionary<string, Type> input_types = null, ILog logger = null)
         {
             if (logger == null)
             {
@@ -161,9 +218,9 @@ namespace mxnet.csharp
             var arg_types = new List<Type>();
             var aux_type = new List<Type>();
             var out_type = new List<Type>();
-            if(input_types==null)
+            if (input_types == null)
             {
-                input_types = input_shapes.ToDictionary(k => k.Key,v=> typeof(float));
+                input_types = input_shapes.ToDictionary(k => k.Key, v => typeof(float));
             }
             sym.InferType(input_types, arg_types, aux_type, out_type);
 
@@ -195,7 +252,7 @@ namespace mxnet.csharp
                     //data or label
                     if (shared_data_arrays != null && shared_data_arrays.ContainsKey(name))
                     {
-                         arg_arr = shared_data_arrays[name];
+                        arg_arr = shared_data_arrays[name];
 
                         if (Util.Prod(arg_arr.GetShape()) >= Util.Prod(arg_shapes[i]))
                         {
@@ -221,14 +278,14 @@ namespace mxnet.csharp
                     }
                     else
                     {
-                         arg_arr = NDArray.Zeros(new Shape(arg_shapes[i]), ctx, dtype: arg_types[i]);
+                        arg_arr = NDArray.Zeros(new Shape(arg_shapes[i]), ctx, dtype: arg_types[i]);
                         if (shared_data_arrays != null)
                         {
                             shared_data_arrays[name] = arg_arr;
                         }
-                       
+
                     }
-                  
+
                     arg_arrays.Add(arg_arr);
 
                 }
@@ -237,7 +294,7 @@ namespace mxnet.csharp
                     NDArray arg_arr = null;
                     if (base_exec == null)
                     {
-                         arg_arr = NDArray.Zeros(new Shape(arg_shapes[i]), ctx, dtype: arg_types[i]);
+                        arg_arr = NDArray.Zeros(new Shape(arg_shapes[i]), ctx, dtype: arg_types[i]);
 
                         if (need_grad_input && need_grad.Contains(name))
                         {
@@ -276,8 +333,8 @@ namespace mxnet.csharp
                 }
                 aux_arrays = base_exec.aux_arrays;
             }
-         var   executor = sym.Bind(ctx, arg_arrays, grad_arrays,
-                grad_req ,aux_arrays ,null, base_exec);
+            var executor = sym.Bind(ctx, arg_arrays, grad_arrays,
+                   grad_req, aux_arrays, null, base_exec);
             return executor;
         }
     }

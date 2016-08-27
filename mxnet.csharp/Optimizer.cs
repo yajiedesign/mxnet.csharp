@@ -50,7 +50,7 @@ namespace mxnet.csharp
                 learning_rate_, weight_decay_);
         }
 
-      public  void Update(int index, NDArray weight, NDArray grad)
+        public void Update(int index, NDArray weight, NDArray grad)
         {
             Update(index, weight, grad, learning_rate_, weight_decay_);
         }
@@ -80,6 +80,23 @@ namespace mxnet.csharp
             @params["learning_rate"] = Convert.ToString(learning_rate_);
             @params["weight_decay"] =  Convert.ToString(weight_decay_);
             return string.Join("\n", @params.Select(s => $"{s.Key}=={s.Value}"));
+        }
+
+        private static void Update(Optimizer optimizer , int index, NDArray weight, NDArray grad,Dictionary<int, NDArray> states)
+        {
+            if (!states.ContainsKey(index))
+            {
+                states[index] = optimizer.create_state(index, weight);
+            }
+
+            optimizer.update(index, weight, grad, states[index]);
+        }
+
+        public static Action<int, NDArray, NDArray> get_updater(Optimizer optimizer)
+        {
+            Dictionary<int, NDArray> states = new Dictionary<int, NDArray>();
+
+            return (int index, NDArray weight, NDArray grad) => { Update(optimizer, index, weight, grad, states); };
         }
     }
 }

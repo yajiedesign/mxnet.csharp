@@ -37,14 +37,15 @@ namespace mxnet.csharp
     {
         private readonly ExecutorHandle handle_;
         private readonly List<NDArray> outputs = new List<NDArray>();
-        private readonly List<NDArray> arg_arrays;
-        private readonly List<NDArray> grad_arrays;
-        public List<NDArray> aux_arrays { get; }
+        public List<NDArray> arg_arrays { get; }
+        public List<NDArray> grad_arrays{ get; }
+    public List<NDArray> aux_arrays { get; }
 
         public Dictionary<string, NDArray> arg_dict { get; private set; }
         public Dictionary<string, NDArray> grad_dict { get; private set; }
 
         private Symbol symbol_;
+        private Dictionary<string, NDArray> aux_dict;
 
         public Executor(Symbol symbol, Context context,
             List<NDArray> argArrays,
@@ -70,6 +71,9 @@ namespace mxnet.csharp
                 .ToDictionary(k => k.name, v => v.arg);
             grad_dict = arg_name.Zip(gradArrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
+
+            aux_dict = symbol.ListAuxiliaryStates().Zip(auxArrays, (name, arg) => new { name, arg })
+                 .ToDictionary(k => k.name, v => v.arg);
 
             var argHandles = new List<NDArrayHandle>();
             var gradHandles = new List<NDArrayHandle>();
@@ -216,6 +220,48 @@ namespace mxnet.csharp
             }
         }
 
+        public void set_monitor_callback(ExecutorMonitorCallback callback)
+        {
+            NativeMethods.MXExecutorSetMonitorCallback(handle_, callback,IntPtr.Zero);
+        }
+        public void copy_params_from(Dictionary<string, NDArray> argParams, Dictionary<string, NDArray> auxParams =null , bool allow_extra_params= false)
+        {
+            foreach (var kv in argParams)
+            {
+                if (arg_dict.ContainsKey(kv.Key))
+                {
+                    kv.Value.CopyTo(arg_dict[kv.Key]);
+                }
+                else
+                {
+                    if (!allow_extra_params)
+                    {
+                        throw new Exception($"Find name \"{kv.Key}\" that is not in the arguments");
+                    }
+             
+                }
+               
+            }
+            if (auxParams != null)
+            {
+                foreach (var kv in auxParams)
+                {
+                    if (aux_dict.ContainsKey(kv.Key))
+                    {
+                        kv.Value.CopyTo(aux_dict[kv.Key]);
+                    }
+                    else
+                    {
+                        if (!allow_extra_params)
+                        {
+                            throw new Exception($"Find name \"{kv.Key}\" that is not the auxiliary states");
+                        }
+
+                    }
+                }
+            }
+
+        }
 
         /// <summary>
         /// destructor, free the SymbolHandle
@@ -238,5 +284,8 @@ namespace mxnet.csharp
         {
             Dispose(true);
         }
+
+
+  
     }
 }

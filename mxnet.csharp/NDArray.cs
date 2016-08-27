@@ -120,7 +120,7 @@ namespace mxnet.csharp
             Debug.Assert(NativeMethods.MXNDArrayCreateNone(out handle) == 0);
             _blobPtr = new NDBlob(handle);
         }
-        public NDArray(NDArrayHandle handle)
+        public NDArray(NDArrayHandle handle,bool writable=true)
         {
             _blobPtr = new NDBlob(handle);
         }

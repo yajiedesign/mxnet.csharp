@@ -13,7 +13,7 @@ namespace mxnet.csharp
     public interface IDataIter
     {
         string default_bucket_key { get; set; }
-        Dictionary<string,Shape> provide_data { get; set; }
+        Dictionary<string, Shape> provide_data { get; set; }
         Dictionary<string, Shape> provide_label { get; set; }
         int batch_size { get; }
     }
@@ -25,24 +25,24 @@ namespace mxnet.csharp
         private Dictionary<string, NDArray> aux_params;
         private bool allow_extra_params;
         private bool argument_checked;
-        private Func<string,Symbol> sym_gen;
+        private Func<string, Symbol> sym_gen;
         private List<Context> ctx;
         private int num_epoch;
         private Optimizer optimizer;
         private Initializer initializer;
         private object _pred_exec;
         private int begin_epoch;
-        private Dictionary<string,object> kwargs;
+        private Dictionary<string, object> kwargs;
 
 
-        public FeedForward(Symbol symbol, 
+        public FeedForward(Symbol symbol,
             List<Context> ctx = null,
-            int num_epoch = 0, 
+            int num_epoch = 0,
             Optimizer optimizer = null,
-            Initializer initializer =  null,
+            Initializer initializer = null,
             Dictionary<string, NDArray> arg_params = null,
             Dictionary<string, NDArray> aux_params = null,
-            bool allow_extra_params =false,
+            bool allow_extra_params = false,
             int begin_epoch = 0)
         {
             this.symbol = symbol;
@@ -68,7 +68,7 @@ namespace mxnet.csharp
             }
 
             this.ctx = ctx;
-        // training parameters
+            // training parameters
             this.num_epoch = num_epoch;
 
             this.kwargs = new Dictionary<string, object>();
@@ -84,7 +84,7 @@ namespace mxnet.csharp
             }
 
             this.optimizer = optimizer;
-        // internal helper state;
+            // internal helper state;
             this._pred_exec = null;
             this.begin_epoch = begin_epoch;
 
@@ -125,7 +125,7 @@ namespace mxnet.csharp
             Action batch_end_callback = null,
             string kvstore_input = "local",
             ILog logger = null,
-            List<int> work_load_list = null, object monitor = null,
+            List<int> work_load_list = null, Monitor monitor = null,
             Action eval_batch_end_callback = null
             )
         {
@@ -157,7 +157,7 @@ namespace mxnet.csharp
             var kvstore = _create_kvstore_temp.Item1;
             var update_on_kvstore = _create_kvstore_temp.Item2;
 
-            var param_idx2name =new  Dictionary<int, string>();
+            var param_idx2name = new Dictionary<int, string>();
             if (update_on_kvstore)
             {
                 param_idx2name = param_names.Select((x, i) => new { i = i, x = x }).ToDictionary(k => k.i, v => v.x);
@@ -168,7 +168,7 @@ namespace mxnet.csharp
                 {
                     for (int k = 0; k < ctx.Count; k++)
                     {
-                        param_idx2name[i*ctx.Count + k] = param_names[i];
+                        param_idx2name[i * ctx.Count + k] = param_names[i];
                     }
                 }
             }
@@ -198,22 +198,37 @@ namespace mxnet.csharp
             Dictionary<string, NDArray> auxParams, int begin_epoch, int end_epoch, Optimizer optimizer,
             IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, Action epoch_end_callback,
             Action batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
-            object monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
+            Monitor monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
         {
 
             if (logger == null)
             {
                 logger = LogManager.GetLogger("");
             }
-           var executor_manager = new DataParallelExecutorManager(symbol: symbol,
-                sym_gen: sym_gen,
-                ctx: ctx,
-                train_data: train_data,
-                param_names: paramNames,
-                arg_names: argNames,
-                aux_names: auxNames,
-                work_load_list: work_load_list,
-                logger: logger);
+            var executor_manager = new DataParallelExecutorManager(symbol: symbol,
+                 sym_gen: sym_gen,
+                 ctx: ctx,
+                 train_data: train_data,
+                 param_names: paramNames,
+                 arg_names: argNames,
+                 aux_names: auxNames,
+                 work_load_list: work_load_list,
+                 logger: logger);
+
+
+            if (monitor != null)
+            {
+                executor_manager.install_monitor(monitor);
+
+            }
+
+            executor_manager.set_params(arg_params, aux_params);
+
+            if (!update_on_kvstore)
+            {
+                var updater = Optimizer.get_updater(optimizer);
+            }
+                
         }
 
         private static Tuple<KVStore, bool> _create_kvstore(string kvstore, int count, Dictionary<string, NDArray> argParams)
@@ -235,8 +250,8 @@ namespace mxnet.csharp
                     {
 
                         //automatically select a proper local
-                       var  max_size = argParams.Select(s =>Util.Prod(s.Value.GetShape())).Max();
-                        if (max_size < 1024*1024*16)
+                        var max_size = argParams.Select(s => Util.Prod(s.Value.GetShape())).Max();
+                        if (max_size < 1024 * 1024 * 16)
                         {
                             kvstore = "local_update_cpu";
                         }
@@ -251,14 +266,14 @@ namespace mxnet.csharp
                 kv = new KVStore(kvstore);
             }
 
-            bool update_on_kvstore = !(kv==null  || kv.GetType().Contains("local_allreduce"));
+            bool update_on_kvstore = !(kv == null || kv.GetType().Contains("local_allreduce"));
 
 
             return Tuple.Create(kv, update_on_kvstore);
         }
 
 
-        private Tuple<List<string>, List<string>, List<string>> _init_params(Dictionary<string, Shape> input_shapes ,bool overwrite =false)
+        private Tuple<List<string>, List<string>, List<string>> _init_params(Dictionary<string, Shape> input_shapes, bool overwrite = false)
         {
             List<uint[]> arg_shapes = new List<uint[]>();
             List<uint[]> aux_shapes = new List<uint[]>(); ;
@@ -274,7 +289,7 @@ namespace mxnet.csharp
 
             var param_name_shapes = arg_names.Zip(arg_shapes, Tuple.Create).Where(w => param_names.Contains(w.Item1));
 
-            var arg_params = param_name_shapes.ToDictionary(k=>k.Item1, s => new NDArray(s.Item2));
+            var arg_params = param_name_shapes.ToDictionary(k => k.Item1, s => new NDArray(s.Item2));
             var aux_params = aux_names.Zip(aux_shapes, Tuple.Create).ToDictionary(k => k.Item1, s => new NDArray(s.Item2));
 
             foreach (var kv in arg_params)
