@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using mxnet.csharp.optimizer;
 using NDArrayHandle = System.IntPtr;
 using ExecutorHandle = System.IntPtr;
 

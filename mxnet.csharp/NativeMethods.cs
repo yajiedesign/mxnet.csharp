@@ -729,7 +729,7 @@ namespace mxnet.csharp
         ///out_size: mx_uint*
         ///out: char***
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListAttr")]
-        public static extern int MXSymbolListAttr(IntPtr symbol, ref uint out_size, ref IntPtr @out);
+        public static extern int MXSymbolListAttr(IntPtr symbol, out uint out_size, out IntPtr @out);
 
 
         /// Return Type: int
@@ -737,7 +737,7 @@ namespace mxnet.csharp
         ///out_size: mx_uint*
         ///out: char***
         [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListAttrShallow")]
-        public static extern int MXSymbolListAttrShallow(IntPtr symbol, ref uint out_size, ref IntPtr @out);
+        public static extern int MXSymbolListAttrShallow(IntPtr symbol, out uint out_size, out IntPtr @out);
 
 
         /// Return Type: int

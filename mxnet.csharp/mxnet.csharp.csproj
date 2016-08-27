@@ -63,7 +63,7 @@
     <Compile Include="OperatorSupplement.cs" />
     <Compile Include="OperatorWarp.cs" />
     <Compile Include="OpMap.cs" />
-    <Compile Include="Optimizer.cs" />
+    <Compile Include="optimizer\Optimizer.cs" />
     <Compile Include="Shape.cs" />
     <Compile Include="Symbol.cs" />
     <Compile Include="NativeMethods.cs" />

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using mxnet.csharp;
+using mxnet.csharp.optimizer;
 
 namespace test.console
 {

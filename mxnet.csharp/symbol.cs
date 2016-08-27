@@ -640,12 +640,46 @@ namespace mxnet.csharp
             return arg_arrays;
         }
 
+        /// <summary>
+        /// Get all attributes from the symbol
+        /// </summary>
+        /// <param name="recursive">
+        /// Default `False`. When `recursive` is `True`, list recursively all the
+        /// attributes in the descendents. The attribute names are pre-pended with
+        /// the symbol names to avoid conflicts. If `False`, then only attributes
+        /// that belongs to this symbol is returned, and the attribute names will
+        /// **not** be pre-pended with the symbol name.
+        /// </param>
+        public Dictionary<string, string> list_attr(bool recursive = false)
+        {
+            uint out_size;
+            IntPtr out_ptr;
+            if (recursive)
+            {
+                NativeMethods.MXSymbolListAttr(GetHandle(), out out_size, out out_ptr);
+            }
+            else
+            {
+                NativeMethods.MXSymbolListAttrShallow(GetHandle(), out out_size, out out_ptr);
+            }
+            IntPtr[] out_ptr_array = new IntPtr[out_size*2];
+
+            Dictionary<string, string> attr = new Dictionary<string, string>();
+            for (int i = 0; i < out_size; i++)
+            {
+                attr.Add(Marshal.PtrToStringAnsi(out_ptr_array[i*2]), Marshal.PtrToStringAnsi(out_ptr_array[i*2] + 1));
+            }
+
+            return attr;
+
+        }
 
         public SymbolHandle GetHandle()
         {
             return _blobPtr.Handle;
         }
 
-    
+
+   
     }
 }

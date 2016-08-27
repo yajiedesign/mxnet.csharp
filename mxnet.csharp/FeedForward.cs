@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using log4net;
 using mxnet.csharp.initializer;
 using mxnet.csharp.metric;
+using mxnet.csharp.optimizer;
 
 namespace mxnet.csharp
 {
