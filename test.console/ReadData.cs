@@ -12,20 +12,27 @@ using OpenCvSharp;
 namespace test.console
 {
 
-    class DataBatch
+    class DataBatch: IDataBatch
     {
-        public List<float> Data { get; }
-        public List<float> Label { get; }
+        public string bucket_key { get; }
 
-        public DataBatch(List<float> datas, List<float> labels)
+        public List<NDArray> Data { get; }
+
+        public List<NDArray> Label{ get; }
+
+
+        public DataBatch(List<NDArray> datas, List<NDArray> labels)
         {
             this.Data = datas;
             this.Label = labels;
         }
+
+        public Dictionary<string, Shape> provide_data { get; }
+        public Dictionary<string, Shape> provide_label { get; }
     }
 
 
-    class ReadData : IEnumerable<DataBatch> , IDataIter
+    class ReadData : IDataIter
     {
         private readonly string _path;
         private readonly int _batchSize;
@@ -36,7 +43,7 @@ namespace test.console
             _batchSize = batchSize;
         }
 
-        public IEnumerator<DataBatch> GetEnumerator()
+        public IEnumerator<IDataBatch> GetEnumerator()
         {
             var files = System.IO.Directory.EnumerateFiles(_path).ToList();
 
@@ -52,14 +59,19 @@ namespace test.console
                     {
                         index = files.Count - 1;
                     }
-                    float[] data =   ReadFile(files[index]);
+                    float[] data = ReadFile(files[index]);
                     float[] label = ReadLabel(files[index]);
+
                     datas.AddRange(data);
                     labels.AddRange(label);
+                    //   datas.Add();
+                    // labels.Add(new NDArray(label, new Shape((uint)_batchSize, 4)));
 
                 }
+                var data_all = new List<NDArray> { new NDArray(datas.ToArray(), new Shape((uint)_batchSize, 3, 60, 20)) };
+                var label_all = new List<NDArray> { new NDArray(labels.ToArray(), new Shape((uint)_batchSize, 4)) };
 
-                yield return new DataBatch(datas, labels);
+                yield return new DataBatch(data_all, label_all);
             }
 
         }

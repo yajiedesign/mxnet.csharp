@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using log4net;
+using mxnet.csharp.metric;
 
 namespace mxnet.csharp
 {
@@ -14,7 +15,10 @@ namespace mxnet.csharp
         private ILog logger;
         private List<Tuple<int, int>> slices;
         private List<string> arg_names;
-        private List<string> param_names;
+        public List<string> param_names { get; }
+        public List<List<NDArray>> param_arrays => execgrp.param_arrays;
+        public List<List<NDArray>> grad_arrays => execgrp.grad_arrays;
+
         private List<string> aux_names;
         private List<Context> ctx
             ;
@@ -22,7 +26,7 @@ namespace mxnet.csharp
         private DataParallelExecutorGroup execgrp;
         private Symbol symbol;
         private Func<string, Symbol> sym_gen;
-        private object curr_execgrp;
+        private DataParallelExecutorGroup curr_execgrp;
         private Dictionary<string, DataParallelExecutorGroup> execgrp_bucket;
 
 
@@ -121,6 +125,51 @@ namespace mxnet.csharp
             }
      
         }
+
+        public void load_data_batch(IDataBatch data_batch)
+        {
+            if (this.sym_gen != null)
+            {
+                var key = data_batch.bucket_key;
+                if (!execgrp_bucket.ContainsKey(key))
+                {
+                    //create new bucket entry
+                    var symbol = sym_gen(key);
+                    var execgrp = new DataParallelExecutorGroup(symbol, this.arg_names,
+                        this.param_names, this.ctx,
+                        this.slices, data_batch,
+                        shared_group: this.execgrp);
+                    this.execgrp_bucket[key] = execgrp;
+                }
+                this.curr_execgrp = this.execgrp_bucket[key];
+            }
+            else
+            {
+                this.curr_execgrp = this.execgrp;
+            }
+
+            this.curr_execgrp.load_data_batch(data_batch);
+        }
+        /// <summary>
+        /// run forward on the current executor
+        /// </summary>
+        /// <param name="is_train"></param>
+        public void forward(bool is_train)
+        {
+            this.curr_execgrp.forward(is_train: is_train);
+        }
+        /// <summary>
+        /// run backward on the current executor
+        /// </summary>
+        public void backward()
+        {
+            this.curr_execgrp.backward();
+        }
+
+        public void update_metric(EvalMetric metric, List<NDArray> labels)
+        {
+            this.curr_execgrp.update_metric(metric, labels);
+        }
     }
 
     internal class DataParallelExecutorGroup
@@ -134,8 +183,8 @@ namespace mxnet.csharp
         public List<Executor> train_execs { get; }
         private List<List<Tuple<Tuple<int, int>, NDArray>>> data_arrays;
         private List<List<Tuple<Tuple<int, int>, NDArray>>> label_arrays;
-        private List<List<NDArray>> param_arrays;
-        private List<List<NDArray>> grad_arrays;
+        public List<List<NDArray>> param_arrays { get; }
+        public List<List<NDArray>> grad_arrays { get; }
         private List<List<NDArray>> aux_arrays;
         private List<Tuple<int, int>> slices;
 
@@ -144,7 +193,7 @@ namespace mxnet.csharp
             List<string> param_names,
             List<Context> ctx,
             List<Tuple<int, int>> slices,
-            IDataIter train_data,
+            IDataIProvide train_data,
             DataParallelExecutorGroup shared_group = null)
         {
             Util._check_arguments(sym);
@@ -337,5 +386,76 @@ namespace mxnet.csharp
                    grad_req, aux_arrays, null, base_exec);
             return executor;
         }
+
+        public void load_data_batch(IDataBatch data_batch)
+        {
+            _load_data(data_batch, this.data_arrays);
+            _load_label(data_batch, this.label_arrays);
+        }
+
+        /// <summary>
+        /// Perform a forward pass on each executor
+        /// </summary>
+        /// <param name="is_train"></param>
+        public void forward(bool is_train)
+        {
+            foreach (var texec in train_execs)
+            {
+                texec.Forward(is_train: is_train);
+            }
+
+
+        }
+        /// <summary>
+        /// Perform a backward pass on each executor
+        /// </summary>
+        public void backward()
+        {
+            foreach (var texec in train_execs)
+            {
+                texec.Backward();
+            }
+        }
+        public void update_metric(EvalMetric metric, List<NDArray> labels)
+        {
+            for (int index = 0; index < train_execs.Count; index++)
+            {
+                var texec = train_execs[index];
+                var islice = slices[index];
+                var labels_slice = labels.Select(s => s.Slice((uint) islice.Item1, (uint) islice.Item2)).ToList();
+                metric.update(labels_slice, texec.outputs);
+            }
+        }
+
+        private static void _load_general(List<NDArray> data, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        {
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                var d_src = data[i];
+                foreach (var dst in targets[i])
+                {
+                
+                    var slice_idx = dst.Item1;
+                    var d_dst = dst.Item2;
+                    d_src.Slice((uint) slice_idx.Item1, (uint) slice_idx.Item2).CopyTo(d_dst);
+                }
+              
+            }
+
+        }
+
+        private static void _load_data(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        {
+            _load_general(batch.Data, targets);
+        }
+
+        private static void _load_label(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        {
+            _load_general(batch.Label, targets);
+        }
+
+
+  
     }
 }

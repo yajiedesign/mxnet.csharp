@@ -35,6 +35,9 @@ namespace mxnet.csharp
             _type = type;
             _id = id;
         }
+
+        public static Context default_ctx { get; set; } = new Context(DeviceType.KCpu, 0);
+
         /// <summary>
         /// 
         /// </summary>
@@ -162,8 +165,14 @@ namespace mxnet.csharp
             _blobPtr = new NDBlob(handle);
         }
         public NDArray(float[] data, Shape shape,
-                         Context context)
+                         Context context =null)
+
         {
+            if (context == null)
+            {
+                context = Context.default_ctx;
+            }
+
             NDArrayHandle handle;
             Debug.Assert(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
                            context.GetDeviceId(), 0, out handle) == 0);

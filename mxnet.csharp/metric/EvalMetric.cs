@@ -20,9 +20,9 @@ namespace mxnet.csharp.metric
             reset();
         }
 
-        public abstract void update(object label, object pred);
+        public abstract void update(List<NDArray> label, List<NDArray> pred);
 
-        void reset()
+        public void reset()
         {
 
             if (this.num == 1)

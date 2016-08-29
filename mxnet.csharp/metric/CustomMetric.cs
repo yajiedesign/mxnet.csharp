@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace mxnet.csharp.metric
 {
@@ -14,7 +15,7 @@ namespace mxnet.csharp.metric
             return !string.IsNullOrWhiteSpace(name) ? name : $" Custom({eval.GetType().FullName})";
         }
 
-        public override void update(object label, object pred)
+        public override void update(List<NDArray> label, List<NDArray> pred)
         {
             throw new NotImplementedException();
         }

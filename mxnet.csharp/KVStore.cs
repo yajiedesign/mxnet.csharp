@@ -57,62 +57,17 @@ namespace mxnet.csharp
     class KVStore
     {
         private KVStoreBlob _blobPtr;
-        private Optimizer optimizer_;
         private static KVStore kvstore;
+        private string _kvtype;
+        private MXKVStoreUpdater _updater_func;
 
         public KVStore(string name)
         {
             KVStoreHandle handle_;
             Debug.Assert(NativeMethods. MXKVStoreCreate(name, out handle_)== 0);
+            _kvtype = name;
 
             _blobPtr = new KVStoreBlob(handle_);
-        }
-
-        public KVStore(KVStore kv)
-        {
-            optimizer_ = kv.optimizer_;
-            _blobPtr = kv._blobPtr;
-        }
-
-        public void RunServer()
-        {
-            Debug.Assert(GetRole()!= "worker");
-            kvstore = this;
-            Debug.Assert(NativeMethods.MXKVStoreRunServer(_blobPtr.Handle, controller, IntPtr.Zero)== 0);
-        }
-
-        private void controller(int head, string body, IntPtr controller_handle)
-        {
-
-            if (kvstore == null)
-            {
-                return;
-            }
-            if (head == 0)
-            {
-                SortedDictionary<string, string> @params = new SortedDictionary<string, string>();
-                var lines = body.Split('\n');
-                foreach (var line in lines)
-                {
-                    var sp = line.Split('=');
-                    @params.Add(sp[0], sp[1]);
-                }
-
-
-                float lr = Convert.ToSingle(@params["learning_rate"]);
-                float wd = Convert.ToSingle(@params["weight_decay"]);
-                var opt = new Optimizer(@params["opt_type"], lr, wd);
-                @params.Remove("opt_type");
-                @params.Remove("learning_rate");
-                @params.Remove("weight_decay");
-                foreach (var pair in @params)
-                {
-                    opt.SetParam(pair.Key, pair.Value);
-                }
-                kvstore.SetOptimizer(opt, true);
-
-            }
-
         }
 
 
@@ -136,6 +91,12 @@ namespace mxnet.csharp
             Debug.Assert(NativeMethods.MXKVStorePush(_blobPtr.Handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }, priority) == 0);
         }
 
+        public void Push(int key, List<NDArray> val, int priority)
+        {
+            var keys = Enumerable.Repeat(key, val.Count).ToList();
+            Push(keys, val, priority);
+        }
+
         public void Push(List<int> keys, List<NDArray> vals, int priority)
         {
             Debug.Assert(keys.Count== vals.Count);
@@ -151,46 +112,69 @@ namespace mxnet.csharp
             Debug.Assert(NativeMethods.MXKVStorePull(_blobPtr.Handle, 1,new[] { key}, new[] { out_handle}, priority)== 0);
         }
 
+        public void Pull(int key, List<NDArray> outs, int priority)
+        {
+            var keys = Enumerable.Repeat(key, outs.Count).ToList();
+            Pull(keys, outs, priority);
+        }
+
         public void Pull(List<int> keys, List<NDArray> outs, int priority)
         {
-            Debug.Assert(keys.Count== outs.Count);
+            Debug.Assert(keys.Count == outs.Count);
 
             List<NDArrayHandle> out_handles = new List<NDArrayHandle>(keys.Count);
             out_handles.AddRange(outs.Select(s => s.GetHandle()));
-
             Debug.Assert(NativeMethods.MXKVStorePull(_blobPtr.Handle, (uint)keys.Count, keys.ToArray(), out_handles.ToArray(), priority) == 0);
-          }
-
-        private void updater(int key, NDArrayHandle recv, NDArrayHandle local, IntPtr handle_)
-        {
-            GCHandle optgch = GCHandle.FromIntPtr(handle_);
-            Optimizer opt = (Optimizer) optgch.Target;
-
-            opt.Update(key, new NDArray(local), new NDArray(recv));
         }
 
-        public void SetOptimizer(Optimizer optimizer, bool local)
-        {
-            if (local)
-            {
-                optimizer_ = optimizer;
 
-                var optimizergch = GCHandle.Alloc(optimizer_);
-                Debug.Assert(NativeMethods.MXKVStoreSetUpdater(_blobPtr.Handle, updater, (IntPtr)optimizergch) == 0);
-                optimizergch.Free();
+
+        public void set_optimizer(Optimizer optimizer)
+        {
+
+
+            int is_worker;
+            Debug.Assert(NativeMethods.MXKVStoreIsWorkerNode(out is_worker) == 0);
+
+
+            if (_kvtype.Contains("dist") && is_worker!=0)
+            {
+                Debug.Assert(NativeMethods.MXKVStoreSendCommmandToServers(_blobPtr.Handle, 0, optimizer.Serialize()) == 0);
             }
             else
             {
-                Debug.Assert(NativeMethods.MXKVStoreSendCommmandToServers(_blobPtr.Handle, 0, optimizer.Serialize())== 0);
+                this._set_updater(Optimizer.get_updater(optimizer));
             }
         }
 
-        public string GetType()
+        private static MXKVStoreUpdater _updater_wrapper(Action<int, NDArray, NDArray> updater)
         {
-            IntPtr type_ptr;
-            Debug.Assert(NativeMethods.MXKVStoreGetType(_blobPtr.Handle, out type_ptr)== 0);
-            // type is managed by handle_, no need to free its memory.
-            return Marshal.PtrToStringAnsi(type_ptr);
+
+            return (int key, System.IntPtr recv, System.IntPtr local, System.IntPtr handle) =>
+            {
+                var lhs =new  NDArray(recv);
+                var rhs = new  NDArray(local);
+                updater(key, lhs, rhs);
+            };
+        }
+
+        private void _set_updater(Action<int, NDArray, NDArray> updater)
+        {
+            this._updater_func = _updater_wrapper(updater);
+
+            Debug.Assert(NativeMethods.MXKVStoreSetUpdater(_blobPtr.Handle, this._updater_func, IntPtr.Zero) == 0);
+
+        }
+
+        public string Type
+        {
+            get
+            {
+                IntPtr type_ptr;
+                Debug.Assert(NativeMethods.MXKVStoreGetType(_blobPtr.Handle, out type_ptr) == 0);
+                // type is managed by handle_, no need to free its memory.
+                return Marshal.PtrToStringAnsi(type_ptr);
+            }
         }
 
         public int GetRank()

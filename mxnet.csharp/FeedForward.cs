@@ -3,19 +3,33 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using log4net;
 using mxnet.csharp.initializer;
 using mxnet.csharp.metric;
 using mxnet.csharp.optimizer;
+using mxnet.csharp.util;
 
 namespace mxnet.csharp
 {
-    public interface IDataIter
+    public interface IDataIProvide
     {
-        string default_bucket_key { get; set; }
-        Dictionary<string, Shape> provide_data { get; set; }
-        Dictionary<string, Shape> provide_label { get; set; }
+        Dictionary<string, Shape> provide_data { get; }
+        Dictionary<string, Shape> provide_label { get; }
+
+    }
+    public interface IDataBatch:IDataIProvide
+    {
+        string bucket_key { get;  }
+        List<NDArray> Data { get; }
+        List<NDArray> Label { get; }
+    }
+
+    public interface IDataIter: IDataIProvide, IEnumerable<IDataBatch>
+    {
+        string default_bucket_key { get;  }
+
         int batch_size { get; }
     }
 
@@ -78,10 +92,7 @@ namespace mxnet.csharp
             {
                 float learning_rate = 1e-4f;
                 float weight_decay = 1e-4f;
-                optimizer = new Optimizer("ccsgd", learning_rate, weight_decay);
-                optimizer.SetParam("momentum", 0.9)
-                    .SetParam("rescale_grad", 1.0)
-                    .SetParam("clip_gradient", 10);
+                optimizer = "ccsgd";
             }
 
             this.optimizer = optimizer;
@@ -224,12 +235,159 @@ namespace mxnet.csharp
             }
 
             executor_manager.set_params(arg_params, aux_params);
-
+            Action<int, NDArray, NDArray> updater = null;
             if (!update_on_kvstore)
             {
-                var updater = Optimizer.get_updater(optimizer);
+                updater = Optimizer.get_updater(optimizer);
             }
-                
+            if (kvstore != null)
+            {
+
+                _initialize_kvstore(kvstore: kvstore,
+                    param_arrays: executor_manager.param_arrays,
+                    arg_params: arg_params,
+                    param_names: executor_manager.param_names,
+                    update_on_kvstore: update_on_kvstore);
+            }
+
+            if (update_on_kvstore)
+            {
+                kvstore.set_optimizer(optimizer);
+            }
+
+            //Now start training
+            for (int epoch = 0; epoch < end_epoch-begin_epoch; epoch++)
+            {
+                // Training phase
+                Stopwatch time = new Stopwatch();
+                time.Start();
+                eval_metric.reset();
+                var nbatch = 0;
+                // Iterate over training data.
+
+                while (true)
+                {
+                    var do_reset = true;
+                    foreach (var data_batch in train_data)
+                    {
+                        executor_manager.load_data_batch(data_batch);
+
+                        monitor?.tic();
+
+                        executor_manager.forward(is_train: true);
+                        executor_manager.backward();
+
+                        if (update_on_kvstore)
+                        {
+                            _update_params_on_kvstore(
+                                executor_manager.param_arrays,
+                                executor_manager.grad_arrays,
+                                kvstore);
+                        }
+                        else
+                        {
+                            _update_params(executor_manager.param_arrays,
+                                executor_manager.grad_arrays,
+                                updater: updater,
+                                num_device: ctx.Count,
+                                kvstore: kvstore);
+                        }
+                        monitor?.toc_print();
+                        // evaluate at end, so we can lazy copy
+                        executor_manager.update_metric(eval_metric, data_batch.Label);
+
+                        nbatch += 1;
+                        //batch callback (for print purpose)
+
+                        if (batch_end_callback != null)
+                        {
+                           var  batch_end_params = new BatchEndParam(epoch: epoch,
+                                nbatch: nbatch,
+                                eval_metric: eval_metric,
+                                locals: Thread.CurrentThread.CurrentCulture);
+                        }
+
+                    };
+
+
+                }
+
+            }
+        }
+
+        private void _update_params(
+            List<List<NDArray>> param_arrays,
+            List<List<NDArray>> grad_arrays,
+            Action<int, NDArray, NDArray> updater, 
+            int num_device, KVStore kvstore=null)
+        {
+
+            for (int index = 0; index < param_arrays.Count; index++)
+            {
+                var arg_list = param_arrays[index];
+                var grad_list = grad_arrays[index];
+                if (grad_list[0] == null)
+                {
+                    continue;
+                }
+                if (kvstore != null)
+                {
+                    //push gradient, priority is negative index
+                    kvstore.Push(index, grad_list, priority: -index);
+                    //pull back the weights
+                    kvstore.Pull(index, arg_list, priority: -index);
+                }
+
+                for (int k = 0; k < arg_list.Count; k++)
+                {
+                    var w = arg_list[k];
+                    var g = grad_list[k];
+                    updater(index * num_device + k, g, w);
+
+                }
+            }
+
+
+        }
+
+        private void _update_params_on_kvstore(
+            List<List<NDArray>> param_arrays, 
+            List<List<NDArray>> grad_arrays, 
+            KVStore kvstore)
+        {
+
+            for (int index = 0; index < param_arrays.Count; index++)
+            {
+                var arg_list = param_arrays[index];
+                var grad_list = grad_arrays[index];
+                if (grad_list[0] == null)
+                {
+                    continue;
+                }
+                //push gradient, priority is negative index
+                kvstore.Push(index, grad_list, priority: -index);
+                //pull back the weights
+                kvstore.Pull(index, arg_list, priority: -index);
+            }
+        }
+
+        private void _initialize_kvstore(KVStore kvstore,
+            List<List<NDArray>> param_arrays,
+            Dictionary<string, NDArray> arg_params,
+            List<string> param_names,
+            bool update_on_kvstore)
+        {
+            for (int idx = 0; idx < param_arrays.Count; idx++)
+            {
+                var param_on_devs = param_arrays[idx];
+                kvstore.Init(idx, arg_params[param_names[idx]]);
+
+                if (update_on_kvstore)
+                {
+                    kvstore.Pull(idx, param_on_devs, priority : -idx);
+                }
+
+            }
         }
 
         private static Tuple<KVStore, bool> _create_kvstore(string kvstore, int count, Dictionary<string, NDArray> argParams)
@@ -267,7 +425,7 @@ namespace mxnet.csharp
                 kv = new KVStore(kvstore);
             }
 
-            bool update_on_kvstore = !(kv == null || kv.GetType().Contains("local_allreduce"));
+            bool update_on_kvstore = !(kv == null || kv.Type.Contains("local_allreduce"));
 
 
             return Tuple.Create(kv, update_on_kvstore);

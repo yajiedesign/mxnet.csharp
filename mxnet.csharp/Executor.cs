@@ -37,10 +37,10 @@ namespace mxnet.csharp
     public class Executor : IDisposable
     {
         private readonly ExecutorHandle handle_;
-        private readonly List<NDArray> outputs = new List<NDArray>();
+        public List<NDArray> outputs { get; } = new List<NDArray>();
         public List<NDArray> arg_arrays { get; }
-        public List<NDArray> grad_arrays{ get; }
-    public List<NDArray> aux_arrays { get; }
+        public List<NDArray> grad_arrays { get; }
+        public List<NDArray> aux_arrays { get; }
 
         public Dictionary<string, NDArray> arg_dict { get; private set; }
         public Dictionary<string, NDArray> grad_dict { get; private set; }
@@ -53,7 +53,7 @@ namespace mxnet.csharp
             List<NDArray> gradArrays,
             List<OpReqType> gradReqs,
             List<NDArray> auxArrays,
-            Dictionary<string, Context> groupToCtx =null,
+            Dictionary<string, Context> groupToCtx = null,
             Executor sharedExec = null)
         {
             if (groupToCtx == null)
@@ -103,7 +103,7 @@ namespace mxnet.csharp
             var gradReqsUint = new List<uint>();
             foreach (var s in gradReqs)
             {
-                gradReqsUint.Add((uint) s);
+                gradReqsUint.Add((uint)s);
             }
 
             var mapKeys = new List<string>();
@@ -112,7 +112,7 @@ namespace mxnet.csharp
             foreach (var s in groupToCtx)
             {
                 mapKeys.Add(s.Key);
-                devTypes.Add((int) s.Value.GetDeviceType());
+                devTypes.Add((int)s.Value.GetDeviceType());
                 devIds.Add(s.Value.GetDeviceId());
             }
 
@@ -121,17 +121,17 @@ namespace mxnet.csharp
 
             Debug.Assert(NativeMethods.MXExecutorBindEX(
                 symbol.GetHandle(),
-                (int) context.GetDeviceType(),
+                (int)context.GetDeviceType(),
                 context.GetDeviceId(),
-                (uint) groupToCtx.Count,
+                (uint)groupToCtx.Count,
                 mapKeys.ToArray(),
                 devTypes.ToArray(),
                 devIds.ToArray(),
-                (uint) argHandles.Count,
+                (uint)argHandles.Count,
                 argHandles.ToArray(),
                 gradHandles.ToArray(),
                 gradReqsUint.ToArray(),
-                (uint) auxHandles.Count,
+                (uint)auxHandles.Count,
                 auxHandles.ToArray(),
                 sharedExecHandle,
                 out handle_) == 0);
@@ -142,7 +142,7 @@ namespace mxnet.csharp
             var outArray = new NDArrayHandle[outSize];
             if (outSize > 0)
             {
-                Marshal.Copy(outArrayPtr, outArray, 0, (int) outSize);
+                Marshal.Copy(outArrayPtr, outArray, 0, (int)outSize);
             }
             for (uint i = 0; i < outSize; ++i)
             {
@@ -158,16 +158,6 @@ namespace mxnet.csharp
         }
 
 
-        public void UpdateAll(Optimizer opt, float lr, float wd,
-            int argUpdateBegin = 1, int argUpdateEnd = -1)
-        {
-            argUpdateEnd = argUpdateEnd < 0 ? arg_arrays.Count - 1 : argUpdateEnd;
-            for (var i = argUpdateBegin; i < argUpdateEnd; ++i)
-            {
-                opt.Update(i, arg_arrays[i], grad_arrays[i], lr, wd);
-            }
-        }
-
 
         /// <summary>
         ///     Perform a Forward operation of Operator
@@ -182,7 +172,7 @@ namespace mxnet.csharp
             Debug.Assert(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) == 0);
             var out_array = new NDArrayHandle[out_size];
 
-            Marshal.Copy(out_array_ptr, out_array, 0, (int) out_size);
+            Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);
             for (var i = 0; i < out_size; ++i)
             {
                 outputs[i] = new NDArray(out_array[i]);
@@ -213,7 +203,7 @@ namespace mxnet.csharp
             {
                 var ptrs = newHeadGrads.Select(s => s.GetHandle()).ToArray();
 
-                NativeMethods.MXExecutorBackward(handle_, (uint) newHeadGrads.Count, ptrs);
+                NativeMethods.MXExecutorBackward(handle_, (uint)newHeadGrads.Count, ptrs);
             }
             else
             {
@@ -223,9 +213,9 @@ namespace mxnet.csharp
 
         public void set_monitor_callback(ExecutorMonitorCallback callback)
         {
-            NativeMethods.MXExecutorSetMonitorCallback(handle_, callback,IntPtr.Zero);
+            NativeMethods.MXExecutorSetMonitorCallback(handle_, callback, IntPtr.Zero);
         }
-        public void copy_params_from(Dictionary<string, NDArray> argParams, Dictionary<string, NDArray> auxParams =null , bool allow_extra_params= false)
+        public void copy_params_from(Dictionary<string, NDArray> argParams, Dictionary<string, NDArray> auxParams = null, bool allow_extra_params = false)
         {
             foreach (var kv in argParams)
             {
@@ -239,9 +229,9 @@ namespace mxnet.csharp
                     {
                         throw new Exception($"Find name \"{kv.Key}\" that is not in the arguments");
                     }
-             
+
                 }
-               
+
             }
             if (auxParams != null)
             {
@@ -287,6 +277,6 @@ namespace mxnet.csharp
         }
 
 
-  
+
     }
 }
