@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="int32\Int32NArray.cs" />
+    <Compile Include="single\Convert.cs" />
     <Compile Include="nbase\ICalculator.cs" />
     <Compile Include="nbase\NArray.cs" />
     <Compile Include="nbase\NArrayStorage.cs" />
@@ -48,9 +50,7 @@
     <Compile Include="nbase\Shape.cs" />
     <Compile Include="single\SingleNArray.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="int32\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

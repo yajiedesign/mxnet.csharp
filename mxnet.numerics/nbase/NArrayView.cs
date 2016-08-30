@@ -5,22 +5,17 @@ using System.Threading.Tasks;
 
 namespace mxnet.numerics.nbase
 {
-    public interface ICreateNArrayView<out TView, in TSrc>
-    {
-        TView Create(Shape shape, TSrc src);
-    }
-
-    public class NArrayView<T, TC, TView> : NArray<T, TC, TView>
+    public class NArrayView<T, TCalculator, TView> : NArray<T, TCalculator, TView>
         where T : new()
-        where TC : ICalculator<T>, new()
-        where TView : NArrayView<T, TC, TView>, new()
+        where TCalculator : ICalculator<T>, new()
+        where TView : NArrayView<T, TCalculator, TView>, new()
     {
         protected NArrayView()
         {
 
         }
 
-        public NArrayView(Shape shape, NArray<T, TC, TView> src)
+        public NArrayView(Shape shape, NArray<T, TCalculator, TView> src)
         {
             Shape = shape;
             Storage = src.Data;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using mxnet.numerics.single;
 
 namespace mxnet.csharp.metric
 {

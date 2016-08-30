@@ -15,13 +15,6 @@ namespace mxnet.numerics.single
         }
     }
 
-    public class SingleCreateNArrayView : ICreateNArrayView<SingleNArrayView, SingleNArray>
-    {
-        public SingleNArrayView Create(Shape shape, SingleNArray src)
-        {
-            return new SingleNArrayView(shape, src);
-        }
-    }
     public class SingleNArrayView : NArrayView<float, SingleCalculator, SingleNArrayView>
     {
         public SingleNArrayView()

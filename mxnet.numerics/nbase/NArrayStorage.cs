@@ -2,10 +2,10 @@ using System;
 
 namespace mxnet.numerics.nbase
 {
-    public class NArrayStorage<T, TC, TView> : NArray<T,TC,TView>
+    public class NArrayStorage<T, TCalculatorC, TView> : NArray<T,TCalculatorC,TView>
         where T : new()
-        where TC : ICalculator<T>, new() 
-        where TView : NArrayView<T, TC, TView>, new()
+        where TCalculatorC : ICalculator<T>, new() 
+        where TView : NArrayView<T, TCalculatorC, TView>, new()
     {
         public NArrayStorage(Shape shape)
         {

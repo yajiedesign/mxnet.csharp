@@ -12,7 +12,7 @@ namespace mxnet.numerics.nbase
     where TC : ICalculator<T>, new()
     where TView: NArrayView<T,TC, TView>, new()
     {
-        protected Shape Shape;
+        public Shape Shape { get; protected set; }
 
         protected T[] Storage;
 
@@ -23,7 +23,10 @@ namespace mxnet.numerics.nbase
 
         public TView Flat()
         {
-            return new TView();
+            var ret = new TView();
+            ret.Shape = new Shape(Shape.Size);
+            ret.Storage = Data;
+            return ret;
         }
 
         public NArray<T, TC, TView> Compare(NArray<T, TC, TView> other)
@@ -31,7 +34,7 @@ namespace mxnet.numerics.nbase
             NArray<T, TC, TView> ret = new NArray<T, TC, TView>
             {
                 Shape = Shape,
-                Storage = this.Storage
+                Storage = this.Data
                     .Select((x, i) => Calculator.Compare(x, other.Storage[i]))
                     .ToArray()
             };
