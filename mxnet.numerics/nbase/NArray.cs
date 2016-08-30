@@ -7,16 +7,18 @@ using System.Threading.Tasks;
 namespace mxnet.numerics.nbase
 {
 
-    public class NArray<T,TC,TView> 
-    where T : new()
-    where TC : ICalculator<T>, new()
-    where TView: NArrayView<T,TC, TView>, new()
+    public class NArray<T, TC, TView>
+        where T : new()
+        where TC : ICalculator<T>, new()
+        where TView : NArrayView<T, TC, TView>, new()
     {
+        private int _startIndex = 0;
         public Shape Shape { get; protected set; }
 
         protected T[] Storage;
+        protected IQueryable<T> QueryableStorage;
 
-        public T[] Data => Storage;
+        public IQueryable<T> Data => Storage?.AsQueryable().Skip(_startIndex).Take((int)Shape.Size) ?? QueryableStorage;
 
 
         private static readonly TC Calculator = new TC();
@@ -25,20 +27,25 @@ namespace mxnet.numerics.nbase
         {
             var ret = new TView();
             ret.Shape = new Shape(Shape.Size);
-            ret.Storage = Data;
+            ret.QueryableStorage = Data;
             return ret;
         }
 
-        public NArray<T, TC, TView> Compare(NArray<T, TC, TView> other)
+        public TView Compare(NArray<T, TC, TView> other)
         {
-            NArray<T, TC, TView> ret = new NArray<T, TC, TView>
+            TView ret = new TView
             {
                 Shape = Shape,
-                Storage = this.Data
-                    .Select((x, i) => Calculator.Compare(x, other.Storage[i]))
-                    .ToArray()
+                QueryableStorage = this.Data
+                    .Select((x, i) => Calculator.Compare(x, other.Data.Skip(i).First()))
+  
             };
             return ret;
+        }
+
+        public T Sum()
+        {
+           return Calculator.Sum( this.Data);
         }
 
     }

@@ -13,6 +13,11 @@ namespace mxnet.numerics.int32
         {
             return (a - b) < float.Epsilon ? 1 : 0;
         }
+
+        public int Sum(IQueryable<int> data)
+        {
+            return data.Sum();
+        }
     }
 
     public class Int32NArrayView : NArrayView<int, Int32Calculator, Int32NArrayView>

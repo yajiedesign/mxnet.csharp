@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="callback\Speedometer.cs" />
     <Compile Include="util\BatchEndParam.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="ExecutorManager.cs" />

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using mxnet.csharp;
+using mxnet.csharp.callback;
 using mxnet.csharp.optimizer;
 
 namespace test.console
@@ -68,11 +69,12 @@ namespace test.console
             //Symbol data1 = Symbol.Variable("data1");
             //Symbol data2 = Symbol.Variable("data2");
             var pnet = get_ocrnet(batchSize);
-
+            Speedometer speed = new Speedometer(batchSize,1);
 
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx } ,num_epoch:10);
 
-            model.Fit(rdtrain, rdval, "acc");
+
+            model.Fit(rdtrain, rdval, "acc",batch_end_callback:new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
             Console.WriteLine("");
 
         }

@@ -19,16 +19,16 @@ namespace mxnet.csharp
         Dictionary<string, Shape> provide_label { get; }
 
     }
-    public interface IDataBatch:IDataIProvide
+    public interface IDataBatch : IDataIProvide
     {
-        string bucket_key { get;  }
+        string bucket_key { get; }
         List<NDArray> Data { get; }
         List<NDArray> Label { get; }
     }
 
-    public interface IDataIter: IDataIProvide, IEnumerable<IDataBatch>
+    public interface IDataIter : IDataIProvide, IEnumerable<IDataBatch>
     {
-        string default_bucket_key { get;  }
+        string default_bucket_key { get; }
 
         int batch_size { get; }
     }
@@ -133,8 +133,8 @@ namespace mxnet.csharp
         public void Fit(IDataIter trainData,
             IDataIter evalData,
             metric.EvalMetric eval_metric = null,
-            Action epoch_end_callback = null,
-            Action batch_end_callback = null,
+            List<Action> epoch_end_callback = null,
+             List<Action<BatchEndParam>> batch_end_callback = null,
             string kvstore_input = "local",
             ILog logger = null,
             List<int> work_load_list = null, Monitor monitor = null,
@@ -208,8 +208,8 @@ namespace mxnet.csharp
         private void _train_multi_device(Symbol symbol1, List<Context> contexts, List<string> argNames,
             List<string> paramNames, List<string> auxNames, Dictionary<string, NDArray> argParams,
             Dictionary<string, NDArray> auxParams, int begin_epoch, int end_epoch, Optimizer optimizer,
-            IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, Action epoch_end_callback,
-            Action batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
+            IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, List<Action> epoch_end_callback,
+            List<Action<BatchEndParam>> batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
             Monitor monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
         {
 
@@ -256,7 +256,7 @@ namespace mxnet.csharp
             }
 
             //Now start training
-            for (int epoch = 0; epoch < end_epoch-begin_epoch; epoch++)
+            for (int epoch = 0; epoch < end_epoch - begin_epoch; epoch++)
             {
                 // Training phase
                 Stopwatch time = new Stopwatch();
@@ -301,11 +301,18 @@ namespace mxnet.csharp
 
                         if (batch_end_callback != null)
                         {
-                           var  batch_end_params = new BatchEndParam(epoch: epoch,
-                                nbatch: nbatch,
-                                eval_metric: eval_metric,
-                                locals: Thread.CurrentThread.CurrentCulture);
+                            var batch_end_params = new BatchEndParam(epoch: epoch,
+                                 nbatch: nbatch,
+                                 eval_metric: eval_metric,
+                                 locals: Thread.CurrentThread.CurrentCulture);
+
+                            foreach (var call in batch_end_callback)
+                            {
+                                call(batch_end_params);
+                            }
                         }
+
+
 
                     };
 
@@ -318,8 +325,8 @@ namespace mxnet.csharp
         private void _update_params(
             List<List<NDArray>> param_arrays,
             List<List<NDArray>> grad_arrays,
-            Action<int, NDArray, NDArray> updater, 
-            int num_device, KVStore kvstore=null)
+            Action<int, NDArray, NDArray> updater,
+            int num_device, KVStore kvstore = null)
         {
 
             for (int index = 0; index < param_arrays.Count; index++)
@@ -351,8 +358,8 @@ namespace mxnet.csharp
         }
 
         private void _update_params_on_kvstore(
-            List<List<NDArray>> param_arrays, 
-            List<List<NDArray>> grad_arrays, 
+            List<List<NDArray>> param_arrays,
+            List<List<NDArray>> grad_arrays,
             KVStore kvstore)
         {
 
@@ -384,7 +391,7 @@ namespace mxnet.csharp
 
                 if (update_on_kvstore)
                 {
-                    kvstore.Pull(idx, param_on_devs, priority : -idx);
+                    kvstore.Pull(idx, param_on_devs, priority: -idx);
                 }
 
             }

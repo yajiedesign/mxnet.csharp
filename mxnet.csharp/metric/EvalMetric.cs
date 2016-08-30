@@ -10,8 +10,8 @@ namespace mxnet.csharp.metric
     {
         private readonly string _name;
         private readonly int num;
-        private int[] num_inst;
-        private float[] sum_metric;
+        protected int[] num_inst;
+        protected float[] sum_metric;
 
         public EvalMetric(string name, int num = 1)
         {

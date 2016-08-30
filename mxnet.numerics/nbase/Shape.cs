@@ -149,7 +149,7 @@ namespace mxnet.numerics.nbase
         /// <returns>the corresponding dimension size</returns>
         public uint this[int i] => _dataHeap[i];
 
-
+        private uint? _szie = null;
         /// <summary>
         /// total number of elements in the tensor
         /// </summary>
@@ -158,12 +158,17 @@ namespace mxnet.numerics.nbase
         {
             get
             {
+                if (_szie != null)
+                {
+                    return _szie.Value;
+                }
                 uint size = 1;
                 var d = this.Data;
                 for (int i = 0; i < _ndim; ++i)
                 {
                     size *= d[i];
                 }
+                _szie = size;
                 return size;
             }
         }

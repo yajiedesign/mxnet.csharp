@@ -13,6 +13,11 @@ namespace mxnet.numerics.single
         {
             return (a - b) < float.Epsilon ? 1 : 0;
         }
+
+        public float Sum(IQueryable<float> data)
+        {
+            return data.Sum();
+        }
     }
 
     public class SingleNArrayView : NArrayView<float, SingleCalculator, SingleNArrayView>

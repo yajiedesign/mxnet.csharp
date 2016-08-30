@@ -1147,7 +1147,9 @@ namespace mxnet.csharp
         ///updater: MXKVStoreUpdater
         ///updater_handle: void*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreSetUpdater")]
-        public static extern int MXKVStoreSetUpdater(System.IntPtr handle, MXKVStoreUpdater updater, System.IntPtr updater_handle);
+        public static extern int MXKVStoreSetUpdater(System.IntPtr handle,
+            [MarshalAs(UnmanagedType.FunctionPtr)]MXKVStoreUpdater updater,
+            System.IntPtr updater_handle);
 
 
         /// Return Type: int

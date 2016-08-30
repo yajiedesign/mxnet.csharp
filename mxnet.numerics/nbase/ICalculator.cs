@@ -9,6 +9,6 @@ namespace mxnet.numerics.nbase
     public interface ICalculator<T>
     {
         T Compare(T a, T b);
-
+        T Sum(IQueryable<T> data);
     }
 }
