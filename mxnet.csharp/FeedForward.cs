@@ -31,6 +31,7 @@ namespace mxnet.csharp
         string default_bucket_key { get; }
 
         int batch_size { get; }
+        void reset();
     }
 
     public class FeedForward
@@ -48,11 +49,13 @@ namespace mxnet.csharp
         private object _pred_exec;
         private int begin_epoch;
         private Dictionary<string, object> kwargs;
+        private int? epoch_size;
 
 
         public FeedForward(Symbol symbol,
             List<Context> ctx = null,
             int num_epoch = 0,
+            int? epoch_size =null,
             Optimizer optimizer = null,
             Initializer initializer = null,
             Dictionary<string, NDArray> arg_params = null,
@@ -99,6 +102,7 @@ namespace mxnet.csharp
             // internal helper state;
             this._pred_exec = null;
             this.begin_epoch = begin_epoch;
+            this.epoch_size = epoch_size;
 
         }
 
@@ -191,7 +195,7 @@ namespace mxnet.csharp
             _train_multi_device(this.symbol, this.ctx, arg_names, param_names, aux_names,
                 this.arg_params, this.aux_params,
                 begin_epoch: this.begin_epoch, end_epoch: this.num_epoch,
-                //epoch_size = this.epoch_size,
+                epoch_size: this.epoch_size,
                 optimizer: optimizer,
                 train_data: data, eval_data: evalData,
                 eval_metric: eval_metric,
@@ -207,7 +211,7 @@ namespace mxnet.csharp
 
         private void _train_multi_device(Symbol symbol1, List<Context> contexts, List<string> argNames,
             List<string> paramNames, List<string> auxNames, Dictionary<string, NDArray> argParams,
-            Dictionary<string, NDArray> auxParams, int begin_epoch, int end_epoch, Optimizer optimizer,
+            Dictionary<string, NDArray> auxParams, int begin_epoch, int end_epoch,int? epoch_size, Optimizer optimizer,
             IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, List<Action> epoch_end_callback,
             List<Action<BatchEndParam>> batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
             Monitor monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
@@ -259,8 +263,8 @@ namespace mxnet.csharp
             for (int epoch = 0; epoch < end_epoch - begin_epoch; epoch++)
             {
                 // Training phase
-                Stopwatch time = new Stopwatch();
-                time.Start();
+                Stopwatch toc = new Stopwatch();
+                toc.Start();
                 eval_metric.reset();
                 var nbatch = 0;
                 // Iterate over training data.
@@ -311,13 +315,30 @@ namespace mxnet.csharp
                                 call(batch_end_params);
                             }
                         }
+                        if (epoch_size != null && nbatch >= epoch_size)
+                        {
+                            do_reset = false;
+                            break;
+                        }
 
 
+                    }
 
-                    };
+                    if (do_reset)
+                    {
+                        logger.Info($"Epoch[{epoch}] Resetting Data Iterator");
+                        train_data.reset();
+                    }
 
+                    if (epoch_size == null || nbatch >= epoch_size)
+                    {
+                        break;
+                    }
 
                 }
+
+
+                logger.Info($"Epoch[{epoch}] Time cost={(toc.ElapsedMilliseconds/1000):.000}");
 
             }
         }
@@ -426,10 +447,10 @@ namespace mxnet.csharp
                             kvstore = "local_allreduce_cpu";
                         }
                     }
-
+                    kv = new KVStore(kvstore);
                 }
 
-                kv = new KVStore(kvstore);
+            
             }
 
             bool update_on_kvstore = !(kv == null || kv.Type.Contains("local_allreduce"));

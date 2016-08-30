@@ -47,7 +47,7 @@ namespace mxnet.csharp.callback
             {
                 if ((count % this.frequent) == 0)
                 {
-                    var speed = this.frequent * this.batch_size / (this.tic.ElapsedMilliseconds * 1000);
+                    var speed = (double)this.frequent * this.batch_size / (this.tic.ElapsedMilliseconds / 1000f);
                     if (param.EvalMetric != null)
                     {
                         var name_value = param.EvalMetric.get_name_value();
@@ -55,12 +55,12 @@ namespace mxnet.csharp.callback
                         foreach (var nv in name_value)
                         {
                             log.Info(
-                                $"Epoch[{param.Epoch}] Batch [{count}]\tSpeed: {speed:0.2} samples/sec\tTrain-{nv.Name}={nv.Value}");
+                                $"Epoch[{param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.Name}={nv.Value}");
                         }
                     }
                     else
                     {
-                        log.Info($"Iter[{ param.Epoch}] Batch [{count}]\tSpeed: {speed:0.2} samples/sec");  
+                        log.Info($"Iter[{ param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
                     }
                     this.tic.Restart();
                 }

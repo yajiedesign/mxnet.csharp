@@ -48,7 +48,7 @@ namespace test.console
             var files = System.IO.Directory.EnumerateFiles(_path).ToList();
 
             var count = files.Count/_batchSize + 1;
-            for (int batchIndex = 0; batchIndex < count; batchIndex++)
+            for (int batchIndex = 0; batchIndex < 150; batchIndex++)
             {
                 List<float> datas = new List<float>();
                 List<float> labels = new List<float>();
@@ -117,5 +117,9 @@ namespace test.console
         };
 
         public int batch_size { get { return _batchSize; } }
+        public void reset()
+        {
+            
+        }
     }
 }

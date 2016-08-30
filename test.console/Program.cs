@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net.Config;
 using mxnet.csharp;
 using mxnet.csharp.callback;
 using mxnet.csharp.optimizer;
@@ -49,6 +51,10 @@ namespace test.console
         static void Main(string[] args)
         {
 
+            var log4net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
+            XmlConfigurator.Configure(new FileInfo(log4net_config));
+
+
             int batchSize = 32;
             uint W = 60;
             uint H = 20;
@@ -59,22 +65,22 @@ namespace test.console
             ReadData rdval = new ReadData("data\\val\\", batchSize);
 
 
-          //  var first = rdtrain.First();
+            //var first = rdtrain.First();
             Context ctx = new Context(DeviceType.KGpu, 0);
 
-          //  NDArray dataArray = new NDArray(new Shape((uint)batchSize, 3, W, H), ctx, false);
-           // NDArray labelArray = new NDArray(new Shape((uint)batchSize,4), ctx, false);
-;
+            //NDArray dataArray = new NDArray(new Shape((uint)batchSize, 3, W, H), ctx, false);
+            //NDArray labelArray = new NDArray(new Shape((uint)batchSize,4), ctx, false);
+
 
             //Symbol data1 = Symbol.Variable("data1");
             //Symbol data2 = Symbol.Variable("data2");
             var pnet = get_ocrnet(batchSize);
-            Speedometer speed = new Speedometer(batchSize,1);
+            Speedometer speed = new Speedometer(batchSize, 50);
 
-            FeedForward model = new FeedForward(pnet, new List<Context> { ctx } ,num_epoch:10);
+            FeedForward model = new FeedForward(pnet, new List<Context> { ctx }, num_epoch: 1);
 
 
-            model.Fit(rdtrain, rdval, "acc",batch_end_callback:new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
+            model.Fit(rdtrain, rdval, "acc", batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
             Console.WriteLine("");
 
         }

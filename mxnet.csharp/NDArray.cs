@@ -191,11 +191,8 @@ namespace mxnet.csharp
         {
             size = size > 0 ? size : Size();
             var data = new float[size];
-            var datagch = GCHandle.Alloc(data);
-            //  var dataPtr = Marshal.AllocHGlobal(sizeof(float) * (int)size);
-            NativeMethods.MXNDArraySyncCopyToCPU(_blobPtr.Handle, (IntPtr)datagch, size);
-            // Marshal.Copy(dataPtr, data, 0, (int)size);
-            // Marshal.FreeHGlobal(dataPtr);
+            var datagch = GCHandle.Alloc(data, GCHandleType.Pinned);
+            NativeMethods.MXNDArraySyncCopyToCPU(_blobPtr.Handle, datagch.AddrOfPinnedObject(), size);
             datagch.Free();
             return data;
         }
@@ -308,8 +305,10 @@ namespace mxnet.csharp
         {
             var shape = GetShape();
             SingleNArray data = new SingleNArray(new numerics.nbase.Shape(shape.data()));
-            var datagch = GCHandle.Alloc(data.Data);
-            NativeMethods.MXNDArraySyncCopyToCPU(_blobPtr.Handle, GCHandle.ToIntPtr(datagch), shape.Size());
+            var datagch = data.GetDataGcHandle();
+            IntPtr pointer = datagch.AddrOfPinnedObject();
+            var s = shape.Size();
+            NativeMethods.MXNDArraySyncCopyToCPU(_blobPtr.Handle, pointer, s);
             datagch.Free();
             return data;
         }
