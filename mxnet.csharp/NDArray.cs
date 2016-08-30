@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
+using mxnet.numerics.single;
 using NDArrayHandle = System.IntPtr;
 using FunctionHandle = System.IntPtr;
 
@@ -279,6 +280,20 @@ namespace mxnet.csharp
         }
 
 
+        public NDArray argmax_channel()
+        {
+            NDArray ret = new NDArray();
+            FunctionHandle func_handle;
+            NativeMethods.MXGetFunction("argmax_channel", out func_handle);
+            var input = _blobPtr.Handle;
+            var output = ret._blobPtr.Handle;
+            Debug.Assert(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output) == 0);
+
+            return ret;
+        }
+
+
+
         public NDArrayHandle GetHandle() { return _blobPtr.Handle; }
 
         public static NDArray Zeros(Shape shape, Context ctx, Type dtype)
@@ -287,5 +302,19 @@ namespace mxnet.csharp
             array.SetValue(0);
             return array;
         }
+
+        #region Numerics
+        public SingleNArray AsNumerics()
+        {
+            var shape = GetShape();
+            SingleNArray data = new SingleNArray(new numerics.nbase.Shape(shape.data()));
+            var datagch = GCHandle.Alloc(data.Data);
+            NativeMethods.MXNDArraySyncCopyToCPU(_blobPtr.Handle, GCHandle.ToIntPtr(datagch), shape.Size());
+            datagch.Free();
+            return data;
+        }
+        #endregion
+
+   
     }
 }

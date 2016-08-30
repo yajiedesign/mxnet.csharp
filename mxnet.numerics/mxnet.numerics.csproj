@@ -4,16 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AF42EB8C-BDF7-484C-80D0-57A74B0CF998}</ProjectGuid>
+    <ProjectGuid>{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mxnet.csharp</RootNamespace>
-    <AssemblyName>mxnet.csharp</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>mxnet.numerics</RootNamespace>
+    <AssemblyName>mxnet.numerics</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -23,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -48,39 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="util\BatchEndParam.cs" />
-    <Compile Include="Executor.cs" />
-    <Compile Include="ExecutorManager.cs" />
-    <Compile Include="FeedForward.cs" />
-    <Compile Include="initializer\Initializer.cs" />
-    <Compile Include="initializer\Uniform.cs" />
-    <Compile Include="KVStore.cs" />
-    <Compile Include="metric\Accuracy.cs" />
-    <Compile Include="metric\CustomMetric.cs" />
-    <Compile Include="metric\EvalMetric.cs" />
-    <Compile Include="metric\EvalMetricResult.cs" />
-    <Compile Include="Monitor.cs" />
-    <Compile Include="NameManager.cs" />
-    <Compile Include="NDArray.cs" />
-    <Compile Include="Operator.cs" />
-    <Compile Include="OperatorSupplement.cs" />
-    <Compile Include="OperatorWarp.cs" />
-    <Compile Include="OpMap.cs" />
-    <Compile Include="optimizer\Optimizer.cs" />
-    <Compile Include="Shape.cs" />
-    <Compile Include="Symbol.cs" />
-    <Compile Include="NativeMethods.cs" />
+    <Compile Include="nbase\ICalculator.cs" />
+    <Compile Include="nbase\NArray.cs" />
+    <Compile Include="nbase\NArrayStorage.cs" />
+    <Compile Include="nbase\NArrayView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util.cs" />
+    <Compile Include="nbase\Shape.cs" />
+    <Compile Include="single\SingleNArray.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\mxnet.numerics\mxnet.numerics.csproj">
-      <Project>{c6a7fe3a-8cbf-4bf2-a2cf-cf9f18da7e2f}</Project>
-      <Name>mxnet.numerics</Name>
-    </ProjectReference>
+    <Folder Include="int32\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

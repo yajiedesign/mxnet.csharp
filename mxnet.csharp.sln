@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.console", "test.consol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opwrappergenerator", "opwrappergenerator\opwrappergenerator.csproj", "{A4742CDE-ADB5-4F59-95F7-8A281C01323D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mxnet.numerics", "mxnet.numerics\mxnet.numerics.csproj", "{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{A4742CDE-ADB5-4F59-95F7-8A281C01323D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4742CDE-ADB5-4F59-95F7-8A281C01323D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4742CDE-ADB5-4F59-95F7-8A281C01323D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

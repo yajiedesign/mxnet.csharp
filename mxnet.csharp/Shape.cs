@@ -9,7 +9,7 @@ namespace mxnet.csharp
 {
     public class Shape
     {
-  
+
 
         // the shape will be stored in data_stack_
         // when dimension is smaller than kStackCache
@@ -144,7 +144,7 @@ namespace mxnet.csharp
                 data_heap_[2] = s3;
             }
         }
-  
+
         /// <summary>
         /// constructor four dimmension shape
         /// </summary>
@@ -229,7 +229,7 @@ namespace mxnet.csharp
         }
 
 
-  
+
         /// <summary>
         /// the data content of the shape
         /// </summary>
@@ -253,7 +253,7 @@ namespace mxnet.csharp
         /// </summary>
         /// <param name="i">dimension index</param>
         /// <returns>the corresponding dimension size</returns>
-     public   uint this[int i]
+        public uint this[int i]
         {
             get { return data()[i]; }
         }
@@ -263,7 +263,7 @@ namespace mxnet.csharp
         /// total number of elements in the tensor
         /// </summary>
         /// <returns></returns>
-       public uint Size()
+        public uint Size()
         {
             uint size = 1;
             var d = this.data();
@@ -287,7 +287,7 @@ namespace mxnet.csharp
             if (ReferenceEquals(l, r)) return true;
             if (ReferenceEquals(l, null)) return false;
             if (ReferenceEquals(r, null)) return false;
-          
+
             if (l.ndim_ != r.ndim_) return false;
             if (l.ndim_ <= kStackCache)
             {
@@ -312,7 +312,7 @@ namespace mxnet.csharp
         /// <param name="l"></param>
         /// <param name="r"></param>
         /// <returns></returns>
-        public static bool operator !=(Shape l, Shape r )
+        public static bool operator !=(Shape l, Shape r)
         {
             return !(l == r);
         }
@@ -384,7 +384,7 @@ namespace mxnet.csharp
         }
 
 
-        public static implicit operator uint[](Shape obj)
+        public static implicit operator uint[] (Shape obj)
         {
             return obj.data();
         }
