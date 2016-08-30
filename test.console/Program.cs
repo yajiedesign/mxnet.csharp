@@ -55,7 +55,7 @@ namespace test.console
             XmlConfigurator.Configure(new FileInfo(log4net_config));
 
 
-            int batchSize = 128;
+            int batchSize = 32;
             uint W = 60;
             uint H = 20;
             float learning_rate = 1e-4f;

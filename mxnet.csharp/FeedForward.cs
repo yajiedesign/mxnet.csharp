@@ -111,6 +111,7 @@ namespace mxnet.csharp
             if (this.argument_checked)
                 return;
 
+
             Debug.Assert(this.symbol != null);
             this.argument_checked = true;
 

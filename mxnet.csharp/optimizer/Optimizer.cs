@@ -221,14 +221,14 @@ namespace mxnet.csharp.optimizer
         protected static OptimizerHandle _init_cc_optimizer(string name, string[] param_keys, string[] param_vals)
         {
             IntPtr creator;
-            Debug.Assert(NativeMethods.MXOptimizerFindCreator(name,
-                out creator) == 0);
+            Util.CallCheck(NativeMethods.MXOptimizerFindCreator(name,
+                out creator));
             OptimizerHandle handle;
-            Debug.Assert(NativeMethods.MXOptimizerCreateOptimizer(
+            Util.CallCheck(NativeMethods.MXOptimizerCreateOptimizer(
                 creator,
                 (uint) param_keys.Count(),
                 param_keys, param_vals,
-                out handle) == 0);
+                out handle));
 
             return handle;
         }
@@ -315,12 +315,12 @@ namespace mxnet.csharp.optimizer
             var lr = this._get_lr(index);
             var wd = this._get_wd(index);
             this._update_count(index);
-            Debug.Assert(NativeMethods.MXOptimizerUpdate(this.handle,
+            Util.CallCheck(NativeMethods.MXOptimizerUpdate(this.handle,
                 index,
                 weight.GetHandle(),
                 grad.GetHandle(),
                 lr,
-                wd) == 0);
+                wd));
         }
     }
 }

@@ -119,7 +119,7 @@ namespace mxnet.csharp
             var sharedExecHandle =
                 sharedExec?.handle_ ?? NDArrayHandle.Zero;
 
-            Debug.Assert(NativeMethods.MXExecutorBindEX(
+            Util.CallCheck(NativeMethods.MXExecutorBindEX(
                 symbol.GetHandle(),
                 (int)context.GetDeviceType(),
                 context.GetDeviceId(),
@@ -134,11 +134,11 @@ namespace mxnet.csharp
                 (uint)auxHandles.Count,
                 auxHandles.ToArray(),
                 sharedExecHandle,
-                out handle_) == 0);
+                out handle_) );
 
             uint outSize;
             NDArrayHandle outArrayPtr;
-            Debug.Assert(NativeMethods.MXExecutorOutputs(handle_, out outSize, out outArrayPtr) == 0);
+            Util.CallCheck(NativeMethods.MXExecutorOutputs(handle_, out outSize, out outArrayPtr) );
             var outArray = new NDArrayHandle[outSize];
             if (outSize > 0)
             {
@@ -169,7 +169,7 @@ namespace mxnet.csharp
             NativeMethods.MXExecutorForward(handle_, is_train ? 1 : 0);
             uint out_size;
             NDArrayHandle out_array_ptr;
-            Debug.Assert(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) == 0);
+            Util.CallCheck(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) );
             var out_array = new NDArrayHandle[out_size];
 
             Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);

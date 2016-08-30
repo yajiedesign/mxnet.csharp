@@ -82,7 +82,7 @@ namespace mxnet.csharp.initializer
 
         private void _init_loc_bias(string name, NDArray arr)
         {
-            Debug.Assert(arr.GetShape()[0] == 6);
+            Util.Assert(arr.GetShape()[0] == 6);
             arr.SyncCopyFromCPU(new float[] {1.0f, 0, 0, 0, 1.0f, 0});
         }
 

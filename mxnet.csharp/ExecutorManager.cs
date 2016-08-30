@@ -47,7 +47,7 @@ namespace mxnet.csharp
             {
                 work_load_list = Enumerable.Repeat(1, num_device).ToList();
             }
-            Debug.Assert(work_load_list.Count == num_device, "Invalid settings for work load. ");
+            Util.Assert(work_load_list.Count == num_device, "Invalid settings for work load. ");
 
             var slices = _split_input_slice(train_data.batch_size, work_load_list);
 
@@ -305,7 +305,7 @@ namespace mxnet.csharp
 
                         if (Util.Prod(arg_arr.GetShape()) >= Util.Prod(arg_shapes[i]))
                         {
-                            Debug.Assert(arg_types[i] == arg_arr.GetDtype());
+                            Util.Assert(arg_types[i] == arg_arr.GetDtype());
 
                             arg_arr = arg_arr.Reshape(new Shape(arg_shapes[i]));
 
@@ -355,8 +355,8 @@ namespace mxnet.csharp
                     else
                     {
                         arg_arr = base_exec.arg_dict[name];
-                        Debug.Assert(arg_arr.GetShape() == new Shape(arg_shapes[i]));
-                        Debug.Assert(arg_arr.GetDtype() == arg_types[i]);
+                        Util.Assert(arg_arr.GetShape() == new Shape(arg_shapes[i]));
+                        Util.Assert(arg_arr.GetDtype() == arg_types[i]);
                         if (need_grad_input && need_grad.Contains(name))
                         {
                             grad_arrays[name] = base_exec.grad_dict[name];
@@ -377,8 +377,8 @@ namespace mxnet.csharp
                 for (int i = 0; i < base_exec.aux_arrays.Count; i++)
                 {
                     var a = base_exec.aux_arrays[i];
-                    Debug.Assert((new Shape(aux_shapes[i])) == a.GetShape());
-                    Debug.Assert(aux_type[i] == a.GetDtype());
+                    Util.Assert((new Shape(aux_shapes[i])) == a.GetShape());
+                    Util.Assert(aux_type[i] == a.GetDtype());
                 }
                 aux_arrays = base_exec.aux_arrays;
             }

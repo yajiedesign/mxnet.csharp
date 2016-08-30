@@ -53,9 +53,35 @@ namespace mxnet.csharp
             }
         }
 
+
         public static long Prod(uint[] shape)
         {
             return shape.Aggregate((long)1, (a, b) => (a * b));
+        }
+
+
+        public static void CallCheck(int ret)
+        {
+            if (ret != 0)
+            {
+                throw new Exception(NativeMethods.MXGetLastError());
+            }
+        }
+
+        public static void Assert(bool ret,string str=null)
+        {
+            if (!ret)
+            {
+                if (String.IsNullOrWhiteSpace(str))
+                {
+                    throw new Exception("Assert faild");
+                }
+                else
+                {
+                    throw new Exception(str);
+                }
+            }
+         
         }
     }
 }
