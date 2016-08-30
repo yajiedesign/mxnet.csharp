@@ -18,7 +18,7 @@ namespace mxnet.numerics.nbase
         public NArrayView(Shape shape, NArray<T, TCalculator, TView> src)
         {
             Shape = shape;
-            QueryableStorage  = src.Data;
+            Storage  = src.Data.ToArray();
         }
     }
 }

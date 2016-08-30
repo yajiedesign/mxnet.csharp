@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
-    public partial class OperatorWarp
+    public partial class Symbol
     {/// <summary>
      /// Activation function to be applied.
      /// </summary>

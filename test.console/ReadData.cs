@@ -37,10 +37,20 @@ namespace test.console
         private readonly string _path;
         private readonly int _batchSize;
 
-        public ReadData(string path,int batchSize)
+        public ReadData(string path, int batchSize)
         {
             _path = path;
             _batchSize = batchSize;
+
+            provide_data = new Dictionary<string, Shape>
+            {
+                {"data", new Shape((uint) _batchSize, 3, 60, 20)}
+            };
+
+            provide_label = new Dictionary<string, Shape>
+            {
+                {"softmax_label", new Shape((uint) _batchSize, 4)}
+            };
         }
 
         public IEnumerator<IDataBatch> GetEnumerator()
@@ -48,7 +58,7 @@ namespace test.console
             var files = System.IO.Directory.EnumerateFiles(_path).ToList();
 
             var count = files.Count/_batchSize + 1;
-            for (int batchIndex = 0; batchIndex < 150; batchIndex++)
+            for (int batchIndex = 0; batchIndex < 300; batchIndex++)
             {
                 List<float> datas = new List<float>();
                 List<float> labels = new List<float>();
@@ -107,14 +117,8 @@ namespace test.console
 
         public string default_bucket_key { get; set; }
 
-        public Dictionary<string, Shape> provide_data { get; set; } = new Dictionary<string, Shape>()
-        {
-            {"data", new Shape((uint) 32, 3, 60, 20)}
-        };
-        public Dictionary<string, Shape> provide_label { get; set; } = new Dictionary<string, Shape>()
-        {
-            {"softmax_label", new Shape((uint) 32, 4)}
-        };
+        public Dictionary<string, Shape> provide_data { get; set; }
+        public Dictionary<string, Shape> provide_label { get; set; }
 
         public int batch_size { get { return _batchSize; } }
         public void reset()

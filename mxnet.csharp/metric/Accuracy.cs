@@ -18,7 +18,7 @@ namespace mxnet.csharp.metric
             {
                 var pred_label = preds[i].argmax_channel().AsNumerics().ToInt32();
                 var label = labels[i].AsNumerics().ToInt32();
-
+                //var t = (pred_label.Flat().Compare(label.Flat())).Data.ToArray();
                 this.sum_metric[0] += (pred_label.Flat().Compare(label.Flat())).Sum();
                 this.num_inst[0] += pred_label.Flat().Data.Count();
             }

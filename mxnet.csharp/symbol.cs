@@ -54,7 +54,7 @@ namespace mxnet.csharp
         public SymbolHandle Handle { get; } = IntPtr.Zero;
     }
 
-    public class Symbol : OperatorWarp
+    public partial class Symbol 
     {
         private readonly SymBlob _blobPtr;
 
