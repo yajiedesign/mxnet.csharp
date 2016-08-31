@@ -19,9 +19,8 @@ namespace mxnet.numerics.nbase
         public Shape Shape { get; protected set; }
 
         protected T[] Storage;
-  
 
-        public IQueryable<T> Data => Storage?.AsQueryable().Skip(_startIndex).Take((int)Shape.Size);
+        public T[] Data => Storage;
 
         public GCHandle GetDataGcHandle()
         {
@@ -55,11 +54,30 @@ namespace mxnet.numerics.nbase
             }
         }
 
+        public TOut this[int d0]
+        {
+            get
+            {
+                var ret = new TOut();
+                ret.Shape = new Shape(Shape.Data.Skip(1).ToArray());
+                ret.Storage = new T[ret.Shape.Size];
+
+                int retindex = 0;
+                int d1 =(int) Shape.Data[1];
+                for (int i = 0; i < d1; i++)
+                {
+                    ret.Storage[retindex] = Storage[d0 * d1 + i];
+                    retindex++;
+                }
+                return ret;
+            }
+        }
+
         public TOut Flat()
         {
             var ret = new TOut();
             ret.Shape = new Shape(Shape.Size);
-            ret.Storage = Data.ToArray();
+            ret.Storage = Storage.ToArray();
             return ret;
         }
 
@@ -68,17 +86,25 @@ namespace mxnet.numerics.nbase
             TOut ret = new TOut
             {
                 Shape = Shape,
-                Storage = this.Data
+                Storage = this.Storage
                     .Select((x, i) => Calculator.Compare(x, other.Storage[i])).ToArray()
   
             };
             return ret;
         }
+        #region
 
         public T Sum()
         {
-           return Calculator.Sum( this.Data);
+           return Calculator.Sum( this.Storage);
+        }
+        public int Argmax()
+        {
+            return Calculator.Argmax(this.Storage);
         }
 
+        
+
+        #endregion
     }
 }

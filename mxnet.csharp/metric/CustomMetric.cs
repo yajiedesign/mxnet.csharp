@@ -22,7 +22,7 @@ namespace mxnet.csharp.metric
 
         private static string GetName(CustomMetricEval eval, string name)
         {
-            return !string.IsNullOrWhiteSpace(name) ? name : $" Custom({eval.GetType().FullName})";
+            return !string.IsNullOrWhiteSpace(name) ? name : $"Custom({eval.Method.Name})";
         }
 
         public override void update(List<NDArray> labels, List<NDArray> preds)

@@ -10,12 +10,7 @@ namespace mxnet.numerics.single
 {
     public static class SingleConvert
     {
-      public static  Int32NArray ToInt32(this SingleNArray input)
-      {
-          return new Int32NArray(input.Shape, input.Data.Select(s => (int) s).ToArray());
-
-
-      }
+     
 
     }
 }

@@ -211,7 +211,7 @@ namespace mxnet.csharp.optimizer
         {
             Dictionary<int, NDArray> states = new Dictionary<int, NDArray>();
 
-            return (int index, NDArray weight, NDArray grad) => { Update(optimizer, index, weight, grad, states); };
+            return (int index, NDArray grad , NDArray weight) => { Update(optimizer, index, weight, grad, states); };
         }
 
         public string Serialize()

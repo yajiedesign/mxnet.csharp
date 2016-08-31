@@ -378,7 +378,7 @@ namespace mxnet.csharp
                     var g = grad_list[k];
 
 
-                    updater(index * num_device + k, w,g);
+                    updater(index * num_device + k, g,w);
                   
                  
 

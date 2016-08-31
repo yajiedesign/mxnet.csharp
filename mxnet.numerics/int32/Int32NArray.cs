@@ -14,9 +14,19 @@ namespace mxnet.numerics.int32
             return a == b ? 1 : 0;
         }
 
-        public int Sum(IQueryable<int> data)
+        public int Sum(int[] data)
         {
             return data.Sum();
+        }
+
+        public int Argmax(int[] data)
+        {
+          return  !data.Any()
+                ? -1
+                : data
+                    .Select((value, index) => new { Value = value, Index = index })
+                    .Aggregate((a, b) => (a.Value > b.Value) ? a : b)
+                    .Index;
         }
     }
 

@@ -51,13 +51,27 @@ namespace test.console
             {
                 {"softmax_label", new Shape((uint) _batchSize, 4)}
             };
+            var files = System.IO.Directory.EnumerateFiles(_path).ToList();
+
+            data_s = new List<float[]>();
+            label_s = new List<float[]>();
+            foreach (var file in files)
+            {
+                float[] data = ReadFile(file);
+                float[] label = ReadLabel(file);
+
+                data_s.Add(data);
+                label_s.Add(label);
+            }
+             rnd = new Random();
+            reset();
         }
 
         public IEnumerator<IDataBatch> GetEnumerator()
         {
-            var files = System.IO.Directory.EnumerateFiles(_path).ToList();
+   
 
-            var count = files.Count/_batchSize + 1;
+            var count = data_s.Count / _batchSize + 1;
             for (int batchIndex = 0; batchIndex < count; batchIndex++)
             {
                 List<float> datas = new List<float>();
@@ -65,30 +79,35 @@ namespace test.console
                 for (int i = 0; i < _batchSize; i++)
                 {
                     var index = batchIndex * _batchSize + i;
-                    if (index >= files.Count)
+                    if (index >= data_s.Count)
                     {
-                        index = files.Count - 1;
+                        index = data_s.Count - 1;
                     }
-                    float[] data = ReadFile(files[index]);
-                    float[] label = ReadLabel(files[index]);
+    
 
-                    datas.AddRange(data);
-                    labels.AddRange(label);
+                    datas.AddRange(data_s[index]);
+                    labels.AddRange(label_s[index]);
                     //   datas.Add();
                     // labels.Add(new NDArray(label, new Shape((uint)_batchSize, 4)));
 
                 }
                 var data_all = new List<NDArray> { new NDArray(datas.ToArray(), new Shape((uint)_batchSize, 3, 60, 20)) };
                 var label_all = new List<NDArray> { new NDArray(labels.ToArray(), new Shape((uint)_batchSize, 4)) };
-
+                //   data_all.First().SetValue(3);
+                // label_all.First().SetValue(3);
                 yield return new DataBatch(data_all, label_all);
             }
 
         }
 
         private static readonly Regex Reg = new Regex("(\\d*)-.*", RegexOptions.Compiled);
+        private List<float[]> data_s;
+        private List<float[]> label_s;
+        private Random rnd;
+
         private float[] ReadLabel(string path)
         {
+            //return new float[] {9, 4, 3, 7};
             var m = Reg.Match(path);
             return m.Groups[1].Value.ToCharArray().Select(s => (float)((int)s - (int)'0')).ToArray();
         }
@@ -123,7 +142,10 @@ namespace test.console
         public int batch_size { get { return _batchSize; } }
         public void reset()
         {
-            
+      
+            int[] shuffle_indices = Enumerable.Range(0, data_s.Count).OrderBy(x => rnd.Next()).ToArray();
+            data_s = shuffle_indices.Select(s => data_s[s]).ToList();
+            label_s = shuffle_indices.Select(s => label_s[s]).ToList();
         }
     }
 }

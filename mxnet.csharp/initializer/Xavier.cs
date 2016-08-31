@@ -39,8 +39,8 @@ namespace mxnet.csharp.initializer
             {
                 hw_scale = Util.Prod(shape.data().Skip(2).ToArray());
             }
-            var fan_out = shape[1] * hw_scale;
-            var fan_in = shape[0] * hw_scale;
+            var fan_out = shape[0] * hw_scale;
+            var fan_in = shape[1] * hw_scale;
 
             float factor = 1.0f;
             switch (_factorType)

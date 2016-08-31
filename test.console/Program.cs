@@ -82,7 +82,7 @@ namespace test.console
 
             CustomMetric customMetric = new CustomMetric((l,p)=> Accuracy(l, p, batchSize));
 
-            Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.0001f, wd: 0.00001f);
+            Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.001f, wd: 0.00001f , rescale_grad:1.0f/batchSize);
    
 
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
@@ -93,19 +93,44 @@ namespace test.console
                 );
 
 
-            model.Fit(rdtrain, rdval, customMetric, 
+            model.Fit(rdtrain, rdval, 
+                customMetric, 
                 batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
             Console.WriteLine("");
 
         }
 
-        private static CustomMetricResult Accuracy(SingleNArray labels, SingleNArray preds, int batchSize)
+        private static CustomMetricResult Accuracy(SingleNArray label, SingleNArray pred, int batchSize)
         {
             int hit = 0;
             for (int i = 0; i < batchSize; i++)
             {
-                
+                var l = label[i];
 
+                List<int> p = new List<int>();
+                for (int k = 0; k < 4; k++)
+                {
+                    p.Add((int)pred[k* batchSize + i].Argmax());
+                }
+
+                if (l.Shape.Size == p.Count)
+                {
+
+                    var match = true;
+                    for (int k = 0; k < p.Count; k++)
+                    {
+                        if (p[k] != (int)(l.Data[k]))
+                        {
+                            match = false;
+                            break;
+                        }
+                    }
+                    if (match)
+                    {
+                        hit += 1;
+                    }
+
+                }
 
             }
 

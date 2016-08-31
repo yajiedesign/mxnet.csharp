@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using mxnet.numerics.int32;
 using mxnet.numerics.nbase;
 
 namespace mxnet.numerics.single
@@ -14,9 +15,19 @@ namespace mxnet.numerics.single
             return (Math.Abs (a - b)) < float.Epsilon ? 1 : 0;
         }
 
-        public float Sum(IQueryable<float> data)
+        public float Sum(float[] data)
         {
             return data.Sum();
+        }
+
+        public int Argmax(float[] data)
+        {
+            return !data.Any()
+                ? -1
+                : data
+                    .Select((value, index) => new {Value = value, Index = index})
+                    .Aggregate((a, b) => (a.Value > b.Value) ? a : b)
+                    .Index;
         }
     }
 
@@ -36,6 +47,10 @@ namespace mxnet.numerics.single
         {
         }
 
-   
+
+        public  Int32NArray ToInt32()
+        {
+            return new Int32NArray(Shape, Storage. Select(s => (int)s).ToArray());
+        }
     }
 }
