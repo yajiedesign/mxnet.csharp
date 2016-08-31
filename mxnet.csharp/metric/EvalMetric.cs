@@ -98,7 +98,7 @@ namespace mxnet.csharp.metric
             }
         }
 
-        public static implicit operator EvalMetric(Func<object,object, float> eval)
+        public static implicit operator EvalMetric(CustomMetricEval eval)
         {
             return new CustomMetric(eval);
         }

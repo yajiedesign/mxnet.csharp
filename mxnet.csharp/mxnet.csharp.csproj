@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="callback\Speedometer.cs" />
+    <Compile Include="initializer\Xavier.cs" />
     <Compile Include="util\BatchEndParam.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="ExecutorManager.cs" />
@@ -73,6 +74,7 @@
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="util\Random.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

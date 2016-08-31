@@ -20,19 +20,14 @@ namespace mxnet.numerics.single
         }
     }
 
-    public class SingleNArrayView : NArrayView<float, SingleCalculator, SingleNArrayView>
+ 
+
+    public class SingleNArray : NArray<float, SingleCalculator, SingleNArray>
     {
-        public SingleNArrayView()
+        public SingleNArray()
         {
 
         }
-        public SingleNArrayView(Shape shape, NArray<float, SingleCalculator, SingleNArrayView> src) : base(shape, src)
-        {
-        }
-    }
-
-    public class SingleNArray : NArrayStorage<float, SingleCalculator, SingleNArrayView>
-    {
         public SingleNArray(Shape shape) : base(shape)
         {
         }
@@ -41,6 +36,6 @@ namespace mxnet.numerics.single
         {
         }
 
- 
+   
     }
 }

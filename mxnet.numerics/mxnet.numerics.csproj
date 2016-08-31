@@ -41,11 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="int32\Int32NArray.cs" />
+    <Compile Include="nbase\Slice.cs" />
     <Compile Include="single\Convert.cs" />
     <Compile Include="nbase\ICalculator.cs" />
     <Compile Include="nbase\NArray.cs" />
-    <Compile Include="nbase\NArrayStorage.cs" />
-    <Compile Include="nbase\NArrayView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="nbase\Shape.cs" />
     <Compile Include="single\SingleNArray.cs" />

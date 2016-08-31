@@ -13,7 +13,14 @@ namespace mxnet.csharp.initializer
 
         protected override void _init_weight(string name, NDArray arr)
         {
-            arr.SetValue((float) (_rand.NextDouble()%(_scale*2) - _scale));
+            //float[] temp = new float[arr.Size()];
+            //for (int i = 0; i < temp.Length; i++)
+            //{
+            //    temp[i]= (float)_rand.NextDouble() % (_scale * 2) - _scale  ;
+            //}
+
+            //arr.SyncCopyFromCPU(temp);
+            util.Random.uniform(-_scale, _scale, arr);
         }
     }
 }

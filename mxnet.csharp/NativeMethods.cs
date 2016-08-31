@@ -581,7 +581,13 @@ namespace mxnet.csharp
         ///param_keys: char**
         ///param_vals: char**
         [DllImport("libmxnet.dll", EntryPoint = "MXFuncInvokeEx")]
-        public static extern int MXFuncInvokeEx(IntPtr fun, ref IntPtr use_vars, ref float scalar_args, ref IntPtr mutate_vars, int num_params, ref IntPtr param_keys, ref IntPtr param_vals);
+        public static extern int MXFuncInvokeEx(IntPtr fun,
+            ref IntPtr use_vars,
+             [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.R4)]  float[] scalar_args,
+            ref IntPtr mutate_vars,
+            int num_params,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] param_keys,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] param_vals);
 
 
         /// Return Type: int

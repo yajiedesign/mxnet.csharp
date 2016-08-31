@@ -88,6 +88,10 @@
       <Project>{af42eb8c-bdf7-484c-80d0-57a74b0cf998}</Project>
       <Name>mxnet.csharp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\mxnet.numerics\mxnet.numerics.csproj">
+      <Project>{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}</Project>
+      <Name>mxnet.numerics</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

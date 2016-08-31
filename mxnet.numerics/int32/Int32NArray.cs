@@ -20,19 +20,14 @@ namespace mxnet.numerics.int32
         }
     }
 
-    public class Int32NArrayView : NArrayView<int, Int32Calculator, Int32NArrayView>
+
+
+    public class Int32NArray : NArray<int, Int32Calculator, Int32NArray>
     {
-        public Int32NArrayView()
+        public Int32NArray()
         {
 
         }
-        public Int32NArrayView(Shape shape, NArray<int, Int32Calculator, Int32NArrayView> src) : base(shape, src)
-        {
-        }
-    }
-
-    public class Int32NArray : NArrayStorage<int, Int32Calculator, Int32NArrayView>
-    {
         public Int32NArray(Shape shape) : base(shape)
         {
         }
@@ -40,5 +35,7 @@ namespace mxnet.numerics.int32
         public Int32NArray(Shape shape, int[] data) : base(shape, data)
         {
         }
+
+     
     }
 }

@@ -238,13 +238,7 @@ namespace mxnet.csharp
                 executor_manager.install_monitor(monitor);
 
             }
-
-   
-
             executor_manager.set_params(arg_params, aux_params);
-
-            var temp2 = executor_manager.param_arrays.First().First().AsNumerics();
-            var temp1 = executor_manager.grad_arrays.First().First().AsNumerics();
 
             Action<int, NDArray, NDArray> updater = null;
             if (!update_on_kvstore)

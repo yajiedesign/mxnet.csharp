@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 using log4net.Config;
 using mxnet.csharp;
 using mxnet.csharp.callback;
+using mxnet.csharp.initializer;
+using mxnet.csharp.metric;
 using mxnet.csharp.optimizer;
+using mxnet.numerics.single;
 
 namespace test.console
 {
@@ -77,14 +80,36 @@ namespace test.console
             var pnet = get_ocrnet(batchSize);
             Speedometer speed = new Speedometer(batchSize, 50);
 
+            CustomMetric customMetric = new CustomMetric((l,p)=> Accuracy(l, p, batchSize));
+
             Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.0001f, wd: 0.00001f);
    
 
-            FeedForward model = new FeedForward(pnet, new List<Context> { ctx }, num_epoch: 10,optimizer: optimizer);
+            FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
+                num_epoch: 10,
+                optimizer: optimizer,
+                initializer:new Xavier(factor_type: Xavier.factor_type.In, magnitude:2.34f)
+
+                );
 
 
-            model.Fit(rdtrain, rdval, "acc", batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
+            model.Fit(rdtrain, rdval, customMetric, 
+                batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
             Console.WriteLine("");
+
+        }
+
+        private static CustomMetricResult Accuracy(SingleNArray labels, SingleNArray preds, int batchSize)
+        {
+            int hit = 0;
+            for (int i = 0; i < batchSize; i++)
+            {
+                
+
+
+            }
+
+            return new CustomMetricResult {sum_metric = hit, num_inst = batchSize};
 
         }
     }
