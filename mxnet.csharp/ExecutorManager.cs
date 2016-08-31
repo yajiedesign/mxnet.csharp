@@ -147,7 +147,6 @@ namespace mxnet.csharp
             {
                 this.curr_execgrp = this.execgrp;
             }
-
             this.curr_execgrp.load_data_batch(data_batch);
         }
         /// <summary>
@@ -249,7 +248,7 @@ namespace mxnet.csharp
             this.slices = slices;
         }
 
-        private Executor _bind_exec(Symbol sym, Context ctx, Dictionary<string, uint[]> input_shapes,
+        private  Executor _bind_exec(Symbol sym, Context ctx, Dictionary<string, uint[]> input_shapes,
             List<string> param_names, bool need_grad_input, Executor base_exec,
             Dictionary<string, NDArray> shared_data_arrays, Dictionary<string, Type> input_types = null, ILog logger = null)
         {
@@ -382,6 +381,8 @@ namespace mxnet.csharp
                 }
                 aux_arrays = base_exec.aux_arrays;
             }
+     
+
             var executor = sym.Bind(ctx, arg_arrays, grad_arrays,
                    grad_req, aux_arrays, null, base_exec);
             return executor;

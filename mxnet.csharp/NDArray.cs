@@ -43,12 +43,14 @@ namespace mxnet.csharp
         /// 
         /// </summary>
         /// <returns>the type of the device</returns>
+        [DebuggerHidden]
         public DeviceType GetDeviceType() { return _type; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns>the id of the device</returns>
+        [DebuggerHidden]
         public int GetDeviceId() { return _id; }
 
 
@@ -290,11 +292,20 @@ namespace mxnet.csharp
         }
 
 
-
+        [DebuggerHidden]
         public NDArrayHandle GetHandle() { return _blobPtr.Handle; }
 
-        public static NDArray Zeros(Shape shape, Context ctx, Type dtype)
+        public static NDArray Zeros(Shape shape, Context ctx =null, Type dtype=null)
         {
+            if (ctx == null)
+            {
+                ctx = Context.default_ctx;
+            }
+            if (dtype == null)
+            {
+                dtype = typeof(float);
+            }
+
             var array = new NDArray(shape, ctx, false, dtype);
             array.SetValue(0);
             return array;

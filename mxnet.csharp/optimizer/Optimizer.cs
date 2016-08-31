@@ -30,7 +30,8 @@ namespace mxnet.csharp.optimizer
 
 
         public Optimizer(float rescale_grad = 1.0f,
-            Dictionary<int, string> param_idx2name = null, float wd = 0f,
+            Dictionary<int, string> param_idx2name = null,
+            float wd = 0f,
             float? clip_gradient = null,
             float learning_rate = 0.01f,
             Func<int, float> lr_scheduler = null,
@@ -284,8 +285,11 @@ namespace mxnet.csharp.optimizer
         private float momentum;
         private IntPtr handle;
 
-        public CcSgd(float momentum= 0.0f, float rescale_grad= 1f, float  clip_gradient = -1f)
-            :base(rescale_grad: rescale_grad, clip_gradient: clip_gradient)
+
+        public CcSgd(float momentum = 0.0f,float rescale_grad = 1, Dictionary<int, string> param_idx2name = null, float wd = 0,
+            float clip_gradient = -1, float learning_rate = 0.01F, Func<int, float> lr_scheduler = null,
+            Symbol sym = null, int begin_num_update = 0)
+            : base(rescale_grad, param_idx2name, wd, clip_gradient, learning_rate, lr_scheduler, sym, begin_num_update)
         {
             this.momentum = momentum;
 
@@ -296,7 +300,7 @@ namespace mxnet.csharp.optimizer
                     "momentum",
                     "rescale_grad",
                     "clip_gradient"
-                } ,
+                },
                 new[]
                 {
                     momentum.ToString(CultureInfo.InvariantCulture),

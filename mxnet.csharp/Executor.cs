@@ -65,7 +65,6 @@ namespace mxnet.csharp
             aux_arrays = auxArrays;
             symbol_ = symbol;
 
-
             var arg_name = symbol.ListArguments();
 
             arg_dict = arg_name.Zip(argArrays, (name, arg) => new { name, arg })

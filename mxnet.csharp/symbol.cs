@@ -671,7 +671,7 @@ namespace mxnet.csharp
             return attr;
 
         }
-
+        [DebuggerHidden]
         public SymbolHandle GetHandle()
         {
             return _blobPtr.Handle;

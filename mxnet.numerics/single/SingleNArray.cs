@@ -11,7 +11,7 @@ namespace mxnet.numerics.single
     {
         public float Compare(float a, float b)
         {
-            return (a - b) < float.Epsilon ? 1 : 0;
+            return (Math.Abs (a - b)) < float.Epsilon ? 1 : 0;
         }
 
         public float Sum(IQueryable<float> data)

@@ -210,9 +210,9 @@ namespace mxnet.csharp
 
         }
 
-        private void _train_multi_device(Symbol symbol1, List<Context> contexts, List<string> argNames,
-            List<string> paramNames, List<string> auxNames, Dictionary<string, NDArray> argParams,
-            Dictionary<string, NDArray> auxParams, int begin_epoch, int end_epoch,int? epoch_size, Optimizer optimizer,
+        private static void _train_multi_device(Symbol symbol, List<Context> ctx, List<string> arg_names,
+            List<string> param_names, List<string> aux_names, Dictionary<string, NDArray> arg_params,
+            Dictionary<string, NDArray> aux_params, int begin_epoch, int end_epoch,int? epoch_size, Optimizer optimizer,
             IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, List<Action> epoch_end_callback,
             List<Action<BatchEndParam>> batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
             Monitor monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
@@ -226,9 +226,9 @@ namespace mxnet.csharp
                  sym_gen: sym_gen,
                  ctx: ctx,
                  train_data: train_data,
-                 param_names: paramNames,
-                 arg_names: argNames,
-                 aux_names: auxNames,
+                 param_names: param_names,
+                 arg_names: arg_names,
+                 aux_names: aux_names,
                  work_load_list: work_load_list,
                  logger: logger);
 
@@ -239,7 +239,13 @@ namespace mxnet.csharp
 
             }
 
+   
+
             executor_manager.set_params(arg_params, aux_params);
+
+            var temp2 = executor_manager.param_arrays.First().First().AsNumerics();
+            var temp1 = executor_manager.grad_arrays.First().First().AsNumerics();
+
             Action<int, NDArray, NDArray> updater = null;
             if (!update_on_kvstore)
             {
@@ -275,12 +281,17 @@ namespace mxnet.csharp
                     var do_reset = true;
                     foreach (var data_batch in train_data)
                     {
+              
+
                         executor_manager.load_data_batch(data_batch);
 
                         monitor?.tic();
 
+
                         executor_manager.forward(is_train: true);
                         executor_manager.backward();
+
+                        
 
                         if (update_on_kvstore)
                         {
@@ -344,7 +355,7 @@ namespace mxnet.csharp
             }
         }
 
-        private void _update_params(
+        private static void _update_params(
             List<List<NDArray>> param_arrays,
             List<List<NDArray>> grad_arrays,
             Action<int, NDArray, NDArray> updater,
@@ -371,7 +382,11 @@ namespace mxnet.csharp
                 {
                     var w = arg_list[k];
                     var g = grad_list[k];
-                    updater(index * num_device + k, g, w);
+
+
+                    updater(index * num_device + k, w,g);
+                  
+                 
 
                 }
             }
@@ -379,7 +394,7 @@ namespace mxnet.csharp
 
         }
 
-        private void _update_params_on_kvstore(
+        private static void _update_params_on_kvstore(
             List<List<NDArray>> param_arrays,
             List<List<NDArray>> grad_arrays,
             KVStore kvstore)
@@ -400,7 +415,7 @@ namespace mxnet.csharp
             }
         }
 
-        private void _initialize_kvstore(KVStore kvstore,
+        private static void _initialize_kvstore(KVStore kvstore,
             List<List<NDArray>> param_arrays,
             Dictionary<string, NDArray> arg_params,
             List<string> param_names,
@@ -477,15 +492,19 @@ namespace mxnet.csharp
 
             var param_name_shapes = arg_names.Zip(arg_shapes, Tuple.Create).Where(w => param_names.Contains(w.Item1));
 
-            var arg_params = param_name_shapes.ToDictionary(k => k.Item1, s => new NDArray(s.Item2));
-            var aux_params = aux_names.Zip(aux_shapes, Tuple.Create).ToDictionary(k => k.Item1, s => new NDArray(s.Item2));
+            var arg_params = param_name_shapes.ToDictionary(k => k.Item1, s => NDArray.Zeros(new Shape(s.Item2)));
+            var aux_params = aux_names.Zip(aux_shapes, Tuple.Create).ToDictionary(k => k.Item1, s => NDArray.Zeros(new Shape(s.Item2)));
 
             foreach (var kv in arg_params)
             {
                 var k = kv.Key;
                 if (this.arg_params != null && this.arg_params.ContainsKey(kv.Key) && !overwrite)
                 {
-                    arg_params[k].CopyTo(arg_params[k]);
+                    this.arg_params[k].CopyTo(arg_params[k]);
+                }
+                else
+                {
+                    this.initializer.Call(k, arg_params[k]);
                 }
             }
 
@@ -495,7 +514,11 @@ namespace mxnet.csharp
                 var k = kv.Key;
                 if (this.aux_params != null && this.aux_params.ContainsKey(kv.Key) && !overwrite)
                 {
-                    aux_params[k].CopyTo(aux_params[k]);
+                    this.aux_params[k].CopyTo(aux_params[k]);
+                }
+                else
+                {
+                    this.initializer.Call(k, arg_params[k]);
                 }
             }
 

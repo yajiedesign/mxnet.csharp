@@ -77,7 +77,10 @@ namespace test.console
             var pnet = get_ocrnet(batchSize);
             Speedometer speed = new Speedometer(batchSize, 50);
 
-            FeedForward model = new FeedForward(pnet, new List<Context> { ctx }, num_epoch: 1);
+            Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.0001f, wd: 0.00001f);
+   
+
+            FeedForward model = new FeedForward(pnet, new List<Context> { ctx }, num_epoch: 10,optimizer: optimizer);
 
 
             model.Fit(rdtrain, rdval, "acc", batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });

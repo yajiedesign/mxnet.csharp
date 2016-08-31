@@ -11,7 +11,7 @@ namespace mxnet.numerics.int32
     {
         public int Compare(int a, int b)
         {
-            return (a - b) < float.Epsilon ? 1 : 0;
+            return a == b ? 1 : 0;
         }
 
         public int Sum(IQueryable<int> data)
