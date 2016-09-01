@@ -11,7 +11,7 @@ namespace mxnet.csharp.metric
         {
         }
 
-        public override void update(List<NDArray> labels, List<NDArray> preds)
+        public override void Update(List<NDArray> labels, List<NDArray> preds)
         {
 
             for (int i = 0; i < labels.Count; i++)
@@ -20,7 +20,7 @@ namespace mxnet.csharp.metric
                 var label = labels[i].As_numerics().ToInt32();
                 //var t = (pred_label.Flat().Compare(label.Flat())).Data.ToArray();
                 this.sum_metric[0] += (pred_label.Flat().Compare(label.Flat())).Sum();
-                this.num_inst[0] += pred_label.Flat().Data.Count();
+                this.num_inst[0] += pred_label.Flat().data.Count();
             }
         }
     }

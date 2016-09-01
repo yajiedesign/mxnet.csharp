@@ -37,13 +37,13 @@ namespace mxnet.csharp
     public class Executor : IDisposable
     {
         private readonly ExecutorHandle _handle_;
-        public List<NDArray> Outputs { get; } = new List<NDArray>();
-        public List<NDArray> ArgArrays { get; }
-        public List<NDArray> GradArrays { get; }
-        public List<NDArray> AuxArrays { get; }
+        public List<NDArray> outputs { get; } = new List<NDArray>();
+        public List<NDArray> arg_arrays { get; }
+        public List<NDArray> grad_arrays { get; }
+        public List<NDArray> aux_arrays { get; }
 
-        public Dictionary<string, NDArray> ArgDict { get; private set; }
-        public Dictionary<string, NDArray> GradDict { get; private set; }
+        public Dictionary<string, NDArray> arg_dict { get; private set; }
+        public Dictionary<string, NDArray> grad_dict { get; private set; }
 
         private Symbol _symbol_;
         private readonly Dictionary<string, NDArray> _aux_dict;
@@ -60,16 +60,16 @@ namespace mxnet.csharp
             {
                 group_to_ctx = new Dictionary<string, Context>();
             }
-            this.ArgArrays = arg_arrays;
-            this.GradArrays = grad_arrays;
-            this.AuxArrays = aux_arrays;
+            this.arg_arrays = arg_arrays;
+            this.grad_arrays = grad_arrays;
+            this.aux_arrays = aux_arrays;
             this._symbol_ = symbol;
 
             var arg_name = symbol.ListArguments();
 
-            ArgDict = arg_name.Zip(arg_arrays, (name, arg) => new { name, arg })
+            arg_dict = arg_name.Zip(arg_arrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
-            GradDict = arg_name.Zip(grad_arrays, (name, arg) => new { name, arg })
+            grad_dict = arg_name.Zip(grad_arrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
 
             _aux_dict = symbol.ListAuxiliaryStates().Zip(aux_arrays, (name, arg) => new { name, arg })
@@ -145,7 +145,7 @@ namespace mxnet.csharp
             }
             for (uint i = 0; i < out_size; ++i)
             {
-                Outputs.Add(new NDArray(out_array[i]));
+                outputs.Add(new NDArray(out_array[i]));
             }
         }
 
@@ -174,7 +174,7 @@ namespace mxnet.csharp
             Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);
             for (var i = 0; i < out_size; ++i)
             {
-                Outputs[i] = new NDArray(out_array[i]);
+                outputs[i] = new NDArray(out_array[i]);
             }
         }
 
@@ -219,9 +219,9 @@ namespace mxnet.csharp
         {
             foreach (var kv in arg_params)
             {
-                if (ArgDict.ContainsKey(kv.Key))
+                if (arg_dict.ContainsKey(kv.Key))
                 {
-                    kv.Value.Copy_to(ArgDict[kv.Key]);
+                    kv.Value.Copy_to(arg_dict[kv.Key]);
                 }
                 else
                 {

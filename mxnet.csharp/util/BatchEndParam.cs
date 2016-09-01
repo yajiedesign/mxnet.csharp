@@ -5,17 +5,17 @@ namespace mxnet.csharp.util
 {
     public class BatchEndParam
     {
-        public int Epoch { get; set; }
-        public int Nbatch { get; set; }
-        public EvalMetric EvalMetric { get; set; }
-        public CultureInfo Locals { get; set; }
+        public int epoch { get; set; }
+        public int nbatch { get; set; }
+        public EvalMetric eval_metric { get; set; }
+        public CultureInfo locals { get; set; }
 
         public BatchEndParam(int epoch, int nbatch, EvalMetric eval_metric, CultureInfo locals)
         {
-            this.Epoch = epoch;
-            this.Nbatch = nbatch;
-            this.EvalMetric = eval_metric;
-            this.Locals = locals;
+            this.epoch = epoch;
+            this.nbatch = nbatch;
+            this.eval_metric = eval_metric;
+            this.locals = locals;
         }
     }
 }

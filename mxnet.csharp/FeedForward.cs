@@ -15,22 +15,22 @@ namespace mxnet.csharp
 {
     public interface IDataIProvide
     {
-        Dictionary<string, Shape> Provide_data { get; }
-        Dictionary<string, Shape> Provide_label { get; }
+        Dictionary<string, Shape> provide_data { get; }
+        Dictionary<string, Shape> provide_label { get; }
 
     }
     public interface IDataBatch : IDataIProvide
     {
-        string Bucket_key { get; }
-        List<NDArray> Data { get; }
-        List<NDArray> Label { get; }
+        string bucket_key { get; }
+        List<NDArray> data { get; }
+        List<NDArray> label { get; }
     }
 
     public interface IDataIter : IDataIProvide, IEnumerable<IDataBatch>
     {
-        string Default_bucket_key { get; }
+        string default_bucket_key { get; }
 
-        int Batch_size { get; }
+        int batch_size { get; }
         void Reset();
     }
 
@@ -152,12 +152,12 @@ namespace mxnet.csharp
             var data = train_data;
             if (this._sym_gen != null)
             {
-                this._symbol = this._sym_gen(data.Default_bucket_key);
+                this._symbol = this._sym_gen(data.default_bucket_key);
                 this._check_arguments();
             }
             this._kwargs["sym"] = this._symbol;
 
-            var init_params_temp = this._init_params(data.Provide_data.Concat(data.Provide_label).ToDictionary(x => x.Key, y => y.Value));
+            var init_params_temp = this._init_params(data.provide_data.Concat(data.provide_label).ToDictionary(x => x.Key, y => y.Value));
 
 
             var arg_names = init_params_temp.Item1;
@@ -249,9 +249,9 @@ namespace mxnet.csharp
             {
 
                 _initialize_kvstore(kvstore: kvstore,
-                    param_arrays: executor_manager.ParamArrays,
+                    param_arrays: executor_manager.param_arrays,
                     arg_params: arg_params,
-                    param_names: executor_manager.ParamNames,
+                    param_names: executor_manager.param_names,
                     update_on_kvstore: update_on_kvstore);
             }
 
@@ -266,7 +266,7 @@ namespace mxnet.csharp
                 // Training phase
                 Stopwatch toc = new Stopwatch();
                 toc.Start();
-                eval_metric.reset();
+                eval_metric.Reset();
                 var nbatch = 0;
                 // Iterate over training data.
 
@@ -279,7 +279,7 @@ namespace mxnet.csharp
 
                         executor_manager.load_data_batch(data_batch);
 
-                        monitor?.tic();
+                        monitor?.Tic();
 
 
                         executor_manager.Forward(is_train: true);
@@ -290,21 +290,21 @@ namespace mxnet.csharp
                         if (update_on_kvstore)
                         {
                             _update_params_on_kvstore(
-                                executor_manager.ParamArrays,
-                                executor_manager.GradArrays,
+                                executor_manager.param_arrays,
+                                executor_manager.grad_arrays,
                                 kvstore);
                         }
                         else
                         {
-                            _update_params(executor_manager.ParamArrays,
-                                executor_manager.GradArrays,
+                            _update_params(executor_manager.param_arrays,
+                                executor_manager.grad_arrays,
                                 updater: updater,
                                 num_device: ctx.Count,
                                 kvstore: kvstore);
                         }
                         monitor?.toc_print();
                         // evaluate at end, so we can lazy copy
-                        executor_manager.update_metric(eval_metric, data_batch.Label);
+                        executor_manager.update_metric(eval_metric, data_batch.label);
 
                         nbatch += 1;
                         //batch callback (for print purpose)
@@ -448,7 +448,7 @@ namespace mxnet.csharp
                     {
 
                         //automatically select a proper local
-                        var max_size = arg_params.Select(s => Util.prod(s.Value.Get_shape())).Max();
+                        var max_size = arg_params.Select(s => Util.Prod(s.Value.Get_shape())).Max();
                         if (max_size < 1024 * 1024 * 16)
                         {
                             kvstore = "local_update_cpu";
@@ -464,7 +464,7 @@ namespace mxnet.csharp
             
             }
 
-            bool update_on_kvstore = !(kv == null || kv.Type.Contains("local_allreduce"));
+            bool update_on_kvstore = !(kv == null || kv.type.Contains("local_allreduce"));
 
 
             return Tuple.Create(kv, update_on_kvstore);

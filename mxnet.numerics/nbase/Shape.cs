@@ -19,7 +19,7 @@ namespace mxnet.numerics.nbase
         /// <summary>
         /// space to store shape when dimension is big
         /// </summary>
-        readonly uint[] _dataHeap;
+        readonly uint[] _data_heap;
 
 
         /// <summary>
@@ -38,8 +38,8 @@ namespace mxnet.numerics.nbase
         public Shape(ICollection<uint> v)
         {
             _ndim = (uint)v.Count;
-            _dataHeap = new uint[_ndim];
-            Array.Copy(v.ToArray(), _dataHeap, v.Count); ;
+            _data_heap = new uint[_ndim];
+            Array.Copy(v.ToArray(), _data_heap, v.Count); ;
         }
 
         /// <summary>
@@ -49,8 +49,8 @@ namespace mxnet.numerics.nbase
         public Shape(uint s1)
         {
             _ndim = 1;
-            _dataHeap = new uint[_ndim];
-            _dataHeap[0] = s1;
+            _data_heap = new uint[_ndim];
+            _data_heap[0] = s1;
         }
 
         /// <summary>
@@ -62,9 +62,9 @@ namespace mxnet.numerics.nbase
 
         {
             _ndim = 2;
-            _dataHeap = new uint[_ndim];
-            _dataHeap[0] = s1;
-            _dataHeap[1] = s2;
+            _data_heap = new uint[_ndim];
+            _data_heap[0] = s1;
+            _data_heap[1] = s2;
 
         }
         /// <summary>
@@ -76,10 +76,10 @@ namespace mxnet.numerics.nbase
         public Shape(uint s1, uint s2, uint s3)
         {
             _ndim = 3;
-            _dataHeap = new uint[_ndim];
-            _dataHeap[0] = s1;
-            _dataHeap[1] = s2;
-            _dataHeap[2] = s3;
+            _data_heap = new uint[_ndim];
+            _data_heap[0] = s1;
+            _data_heap[1] = s2;
+            _data_heap[2] = s3;
         }
 
         /// <summary>
@@ -92,11 +92,11 @@ namespace mxnet.numerics.nbase
         public Shape(uint s1, uint s2, uint s3, uint s4)
         {
             _ndim = 4;
-            _dataHeap = new uint[_ndim];
-            _dataHeap[0] = s1;
-            _dataHeap[1] = s2;
-            _dataHeap[2] = s3;
-            _dataHeap[3] = s4;
+            _data_heap = new uint[_ndim];
+            _data_heap[0] = s1;
+            _data_heap[1] = s2;
+            _data_heap[2] = s3;
+            _data_heap[3] = s4;
         }
 
         /// <summary>
@@ -110,12 +110,12 @@ namespace mxnet.numerics.nbase
         public Shape(uint s1, uint s2, uint s3, uint s4, uint s5)
         {
             _ndim = 5;
-            _dataHeap = new uint[_ndim];
-            _dataHeap[0] = s1;
-            _dataHeap[1] = s2;
-            _dataHeap[2] = s3;
-            _dataHeap[3] = s4;
-            _dataHeap[5] = s5;
+            _data_heap = new uint[_ndim];
+            _data_heap[0] = s1;
+            _data_heap[1] = s2;
+            _data_heap[2] = s3;
+            _data_heap[3] = s4;
+            _data_heap[5] = s5;
         }
         /// <summary>
         /// constructor from Shape
@@ -124,8 +124,8 @@ namespace mxnet.numerics.nbase
         public Shape(Shape s)
         {
             _ndim = s._ndim;
-            _dataHeap = new uint[_ndim];
-            Array.Copy(s._dataHeap, _dataHeap, _ndim);
+            _data_heap = new uint[_ndim];
+            Array.Copy(s._data_heap, _data_heap, _ndim);
         }
 
 
@@ -134,27 +134,27 @@ namespace mxnet.numerics.nbase
         /// the data content of the shape
         /// </summary>
         /// <returns></returns>
-        public uint[] Data => _dataHeap;
+        public uint[] data => _data_heap;
 
         /// <summary>
         ///  return number of dimension of the tensor inside
         /// </summary>
         /// <returns></returns>
-        public uint Ndim => _ndim;
+        public uint ndim => _ndim;
 
         /// <summary>
         /// get corresponding index
         /// </summary>
         /// <param name="i">dimension index</param>
         /// <returns>the corresponding dimension size</returns>
-        public uint this[int i] => _dataHeap[i];
+        public uint this[int i] => _data_heap[i];
 
         private uint? _szie = null;
         /// <summary>
         /// total number of elements in the tensor
         /// </summary>
         /// <returns></returns>
-        public uint Size
+        public uint size
         {
             get
             {
@@ -163,7 +163,7 @@ namespace mxnet.numerics.nbase
                     return _szie.Value;
                 }
                 uint size = 1;
-                var d = this.Data;
+                var d = this.data;
                 for (int i = 0; i < _ndim; ++i)
                 {
                     size *= d[i];
@@ -213,7 +213,7 @@ namespace mxnet.numerics.nbase
             int hash = _ndim.GetHashCode();
             for (int i = 0; i < _ndim; ++i)
             {
-                hash ^= _dataHeap[i].GetHashCode();
+                hash ^= _data_heap[i].GetHashCode();
             }
             return hash;
         }
@@ -228,7 +228,7 @@ namespace mxnet.numerics.nbase
             if (l._ndim != r._ndim) return false;
             for (int i = 0; i < l._ndim; ++i)
             {
-                if (l._dataHeap[i] != r._dataHeap[i]) return false;
+                if (l._data_heap[i] != r._data_heap[i]) return false;
             }
             return true;
         }
@@ -238,13 +238,13 @@ namespace mxnet.numerics.nbase
         {
             string ret = "";
             ret += "(";
-            for (int i = 0; i < Ndim; ++i)
+            for (int i = 0; i < ndim; ++i)
             {
                 if (i != 0) ret += ",";
                 ret += this[i];
             }
             // python style tuple
-            if (Ndim == 1) ret += ",";
+            if (ndim == 1) ret += ",";
             ret += ")";
             return ret;
         }
@@ -252,7 +252,7 @@ namespace mxnet.numerics.nbase
 
         public static implicit operator uint[] (Shape obj)
         {
-            return obj.Data;
+            return obj.data;
         }
     }
 }

@@ -11,64 +11,64 @@ namespace mxnet.csharp.callback
 {
     public class Speedometer
     {
-        private readonly int batch_size;
-        private readonly int frequent;
-        private bool init;
-        private readonly Stopwatch tic;
-        private int last_count;
-        private readonly ILog log;
+        private readonly int _batch_size;
+        private readonly int _frequent;
+        private bool _init;
+        private readonly Stopwatch _tic;
+        private int _last_count;
+        private readonly ILog _log;
 
         public Speedometer(int batch_size, int frequent = 50, ILog log = null)
         {
-            this.batch_size = batch_size;
-            this.frequent = frequent;
-            this.init = false;
-            this.tic = new Stopwatch();
-            this.last_count = 0;
-            this.log = log;
+            this._batch_size = batch_size;
+            this._frequent = frequent;
+            this._init = false;
+            this._tic = new Stopwatch();
+            this._last_count = 0;
+            this._log = log;
             if (log == null)
             {
-                this.log = LogManager.GetLogger("");
+                this._log = LogManager.GetLogger("");
             }
         }
 
         public void Call(BatchEndParam param)
         {
 
-            var count = param.Nbatch;
-            if (this.last_count > count)
+            var count = param.nbatch;
+            if (this._last_count > count)
             {
-                this.init = false;
+                this._init = false;
             }
 
-            this.last_count = count;
+            this._last_count = count;
 
-            if (this.init)
+            if (this._init)
             {
-                if ((count % this.frequent) == 0)
+                if ((count % this._frequent) == 0)
                 {
-                    var speed = (double)this.frequent * this.batch_size / (this.tic.ElapsedMilliseconds / 1000f);
-                    if (param.EvalMetric != null)
+                    var speed = (double)this._frequent * this._batch_size / (this._tic.ElapsedMilliseconds / 1000f);
+                    if (param.eval_metric != null)
                     {
-                        var name_value = param.EvalMetric.get_name_value();
-                        param.EvalMetric.reset();
+                        var name_value = param.eval_metric.get_name_value();
+                        param.eval_metric.Reset();
                         foreach (var nv in name_value)
                         {
-                            log.Info(
-                                $"Epoch[{param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.Name}={nv.Value}");
+                            _log.Info(
+                                $"Epoch[{param.epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.name}={nv.value}");
                         }
                     }
                     else
                     {
-                        log.Info($"Iter[{ param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
+                        _log.Info($"Iter[{ param.epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
                     }
-                    this.tic.Restart();
+                    this._tic.Restart();
                 }
             }
             else
             {
-                this.init = true;
-                this.tic.Restart();
+                this._init = true;
+                this._tic.Restart();
             }
 
         }

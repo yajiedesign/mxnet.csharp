@@ -4,11 +4,11 @@ namespace mxnet.csharp.initializer
 {
     public class Uniform:Initializer
     {
-        private readonly float scale;
-        private readonly Random rand = new Random();
+        private readonly float _scale;
+        private readonly Random _rand = new Random();
         public Uniform(float  scale)
         {
-            this.scale = scale;
+            this._scale = scale;
         }
 
         protected override void _init_weight(string name, NDArray arr)
@@ -20,7 +20,7 @@ namespace mxnet.csharp.initializer
             //}
 
             //arr.SyncCopyFromCPU(temp);
-            util.Random.Uniform(-scale, scale, arr);
+            util.Random.Uniform(-_scale, _scale, arr);
         }
     }
 }

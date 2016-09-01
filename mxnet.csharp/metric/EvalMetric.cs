@@ -17,12 +17,12 @@ namespace mxnet.csharp.metric
         {
             this._name = name;
             this._num = num;
-            reset();
+            Reset();
         }
 
-        public abstract void update(List<NDArray> label, List<NDArray> pred);
+        public abstract void Update(List<NDArray> label, List<NDArray> pred);
 
-        public void reset()
+        public void Reset()
         {
 
             if (this._num == 1)

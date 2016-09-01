@@ -8,7 +8,7 @@ namespace mxnet.numerics.nbase
 {
     public class Slice
     {
-        public int Start { get; set; }
-        public int Stop { get; set; }
+        public int start { get; set; }
+        public int stop { get; set; }
     }
 }

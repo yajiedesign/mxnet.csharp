@@ -9,7 +9,7 @@ namespace mxnet.csharp
     public static class Util
     {
 
-        public static readonly Dictionary<Type, int> _DTYPE_NP_TO_MX = new Dictionary<Type, int>
+        public static readonly Dictionary<Type, int> DtypeNpToMX = new Dictionary<Type, int>
         {
             {typeof(float), 0},
             {typeof(double), 1},
@@ -19,7 +19,7 @@ namespace mxnet.csharp
         };
 
 
-        public static readonly Dictionary<int, Type> _DTYPE_MX_TO_NP = new Dictionary<int, Type>
+        public static readonly Dictionary<int, Type> DtypeMXToNp = new Dictionary<int, Type>
         {
             {0, typeof(float)},
             {1, typeof(double)},
@@ -54,7 +54,7 @@ namespace mxnet.csharp
         }
 
 
-        public static long prod(uint[] shape)
+        public static long Prod(uint[] shape)
         {
             return shape.Aggregate((long)1, (a, b) => (a * b));
         }
@@ -68,7 +68,7 @@ namespace mxnet.csharp
             }
         }
 
-        public static void assert(bool ret,string str=null)
+        public static void Assert(bool ret,string str=null)
         {
             if (!ret)
             {

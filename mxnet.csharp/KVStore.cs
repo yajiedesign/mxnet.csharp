@@ -24,7 +24,7 @@ namespace mxnet.csharp
         public KVStoreBlob(KVStoreHandle handle)
 
         {
-            Handle = handle;
+            this.handle = handle;
         }
         /// <summary>
         /// destructor, free the SymbolHandle
@@ -36,7 +36,7 @@ namespace mxnet.csharp
 
         private void Dispose(bool disposing)
         {
-            NativeMethods.MXKVStoreFree(Handle);
+            NativeMethods.MXKVStoreFree(handle);
             if (disposing)
             {
                 GC.SuppressFinalize(this);
@@ -52,7 +52,7 @@ namespace mxnet.csharp
         /// <summary>
         /// the SymbolHandle to store
         /// </summary>
-        public KVStoreHandle Handle { get; }
+        public KVStoreHandle handle { get; }
     }
     class KVStore
     {
@@ -73,21 +73,21 @@ namespace mxnet.csharp
         public void Init(int key, NDArray val)
         {
             NDArrayHandle val_handle = val.Get_handle();
-            Util.call_check(NativeMethods.MXKVStoreInit(_blob_ptr.Handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }));
+            Util.call_check(NativeMethods.MXKVStoreInit(_blob_ptr.handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }));
         }
 
         public void Init(List<int> keys, List<NDArray> vals)
         {
-            Util.assert(keys.Count == vals.Count);
+            Util.Assert(keys.Count == vals.Count);
             List<NDArrayHandle> val_handles = new List<NDArrayHandle>(vals.Count);
             val_handles.AddRange(vals.Select(s => s.Get_handle()));
-            Util.call_check(NativeMethods.MXKVStoreInit(_blob_ptr.Handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray()));
+            Util.call_check(NativeMethods.MXKVStoreInit(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray()));
         }
 
         public void Push(int key, NDArray val, int priority)
         {
             NDArrayHandle val_handle = val.Get_handle();
-            Util.call_check(NativeMethods.MXKVStorePush(_blob_ptr.Handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }, priority));
+            Util.call_check(NativeMethods.MXKVStorePush(_blob_ptr.handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }, priority));
         }
 
         public void Push(int key, List<NDArray> val, int priority)
@@ -98,17 +98,17 @@ namespace mxnet.csharp
 
         public void Push(List<int> keys, List<NDArray> vals, int priority)
         {
-            Util.assert(keys.Count == vals.Count);
+            Util.Assert(keys.Count == vals.Count);
             List<NDArrayHandle> val_handles = new List<NDArrayHandle>(vals.Count);
             val_handles.AddRange(vals.Select(s => s.Get_handle()));
 
-            Util.call_check(NativeMethods.MXKVStorePush(_blob_ptr.Handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray(), priority));
+            Util.call_check(NativeMethods.MXKVStorePush(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray(), priority));
         }
 
         public void Pull(int key, NDArray @out, int priority)
         {
             NDArrayHandle out_handle = @out.Get_handle();
-            Util.call_check(NativeMethods.MXKVStorePull(_blob_ptr.Handle, 1, new[] { key }, new[] { out_handle }, priority));
+            Util.call_check(NativeMethods.MXKVStorePull(_blob_ptr.handle, 1, new[] { key }, new[] { out_handle }, priority));
         }
 
         public void Pull(int key, List<NDArray> outs, int priority)
@@ -119,11 +119,11 @@ namespace mxnet.csharp
 
         public void Pull(List<int> keys, List<NDArray> outs, int priority)
         {
-            Util.assert(keys.Count == outs.Count);
+            Util.Assert(keys.Count == outs.Count);
 
             List<NDArrayHandle> out_handles = new List<NDArrayHandle>(keys.Count);
             out_handles.AddRange(outs.Select(s => s.Get_handle()));
-            Util.call_check(NativeMethods.MXKVStorePull(_blob_ptr.Handle, (uint)keys.Count, keys.ToArray(), out_handles.ToArray(), priority));
+            Util.call_check(NativeMethods.MXKVStorePull(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), out_handles.ToArray(), priority));
         }
 
 
@@ -138,7 +138,7 @@ namespace mxnet.csharp
 
             if (_kvtype.Contains("dist") && is_worker != 0)
             {
-                Util.call_check(NativeMethods.MXKVStoreSendCommmandToServers(_blob_ptr.Handle, 0, optimizer.Serialize()));
+                Util.call_check(NativeMethods.MXKVStoreSendCommmandToServers(_blob_ptr.handle, 0, optimizer.Serialize()));
             }
             else
             {
@@ -161,41 +161,41 @@ namespace mxnet.csharp
         {
             this._updater_func = _updater_wrapper(updater);
 
-            Util.call_check(NativeMethods.MXKVStoreSetUpdater(_blob_ptr.Handle, this._updater_func, IntPtr.Zero));
+            Util.call_check(NativeMethods.MXKVStoreSetUpdater(_blob_ptr.handle, this._updater_func, IntPtr.Zero));
 
         }
 
-        public string Type
+        public string type
         {
             get
             {
                 IntPtr type_ptr;
-                Util.call_check(NativeMethods.MXKVStoreGetType(_blob_ptr.Handle, out type_ptr));
+                Util.call_check(NativeMethods.MXKVStoreGetType(_blob_ptr.handle, out type_ptr));
                 // type is managed by handle_, no need to free its memory.
                 return Marshal.PtrToStringAnsi(type_ptr);
             }
         }
 
-        public int Get_rank()
+        public int GetRank()
         {
             int rank;
-            Util.call_check(NativeMethods.MXKVStoreGetRank(_blob_ptr.Handle, out rank));
+            Util.call_check(NativeMethods.MXKVStoreGetRank(_blob_ptr.handle, out rank));
             return rank;
         }
 
         public int Get_num_workers()
         {
             int num_workers;
-            Util.call_check(NativeMethods.MXKVStoreGetGroupSize(_blob_ptr.Handle, out num_workers));
+            Util.call_check(NativeMethods.MXKVStoreGetGroupSize(_blob_ptr.handle, out num_workers));
             return num_workers;
         }
 
         public void Barrier()
         {
-            Util.call_check(NativeMethods.MXKVStoreBarrier(_blob_ptr.Handle));
+            Util.call_check(NativeMethods.MXKVStoreBarrier(_blob_ptr.handle));
         }
 
-        public string Get_role()
+        public string GetRole()
         {
             int ret;
             Util.call_check(NativeMethods.MXKVStoreIsSchedulerNode(out ret));
@@ -209,7 +209,7 @@ namespace mxnet.csharp
                 return "server";
             }
             Util.call_check(NativeMethods.MXKVStoreIsWorkerNode(out ret));
-            Util.assert(ret != 0);
+            Util.Assert(ret != 0);
             return "worker";
         }
     }

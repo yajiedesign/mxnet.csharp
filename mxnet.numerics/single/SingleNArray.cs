@@ -50,7 +50,7 @@ namespace mxnet.numerics.single
 
         public  Int32NArray ToInt32()
         {
-            return new Int32NArray(Shape, Storage. Select(s => (int)s).ToArray());
+            return new Int32NArray(shape, storage. Select(s => (int)s).ToArray());
         }
     }
 }

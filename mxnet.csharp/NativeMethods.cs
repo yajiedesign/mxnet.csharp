@@ -366,8 +366,8 @@ namespace mxnet.csharp
         public static extern int MXNDArrayCreate(
               [MarshalAs(UnmanagedType.LPArray,ArraySubType = UnmanagedType.U4)]uint[] shape, 
               uint ndim, DeviceType devType,
-              int devId, 
-              int delayAlloc,
+              int dev_id, 
+              int delay_alloc,
               out IntPtr @out);
 
 
@@ -991,19 +991,19 @@ namespace mxnet.csharp
         ///out: ExecutorHandle*
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorBindEX")]
         public static extern int MXExecutorBindEX(System.IntPtr symbolHandle,
-            int devType,
-            int devId,
-            uint numMapKeys,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] mapKeys,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] mapDevTypes,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] mapDevIds,
+            int dev_type,
+            int dev_id,
+            uint num_map_keys,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] map_keys,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] map_dev_types,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[] map_dev_ids,
             uint len,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] inArgs,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] argGradStore,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] gradReqType,
-            uint auxStatesLen,
-            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] auxStates,
-            System.IntPtr sharedExec,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] in_args,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] arg_grad_store,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U4)] uint[] grad_req_type,
+            uint aux_states_len,
+            [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] aux_states,
+            System.IntPtr shared_exec,
             out System.IntPtr @out);
 
         /// Return Type: int
@@ -1319,7 +1319,7 @@ namespace mxnet.csharp
         ///blockDimY: mx_uint->unsigned int
         ///blockDimZ: mx_uint->unsigned int
         [System.Runtime.InteropServices.DllImportAttribute("libmxnet.dll", EntryPoint = "MXRtcPush")]
-        public static extern int MXRtcPush(System.IntPtr handle, uint num_input, uint num_output, ref System.IntPtr inputs, ref System.IntPtr outputs, uint gridDimX, uint gridDimY, uint gridDimZ, uint blockDimX, uint blockDimY, uint blockDimZ);
+        public static extern int MXRtcPush(System.IntPtr handle, uint num_input, uint num_output, ref System.IntPtr inputs, ref System.IntPtr outputs, uint gridDimX, uint grid_dim_y, uint grid_dim_z, uint block_dim_x, uint block_dim_y, uint block_dim_z);
 
 
         /// Return Type: int

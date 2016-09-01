@@ -15,16 +15,16 @@ namespace mxnet.numerics.nbase
     {
         private static readonly TC Calculator = new TC();
 
-        private int _startIndex = 0;
-        public Shape Shape { get; protected set; }
+        private int _start_index = 0;
+        public Shape shape { get; protected set; }
 
-        protected T[] Storage;
+        protected T[] storage;
 
-        public T[] Data => Storage;
+        public T[] data => storage;
 
         public GCHandle GetDataGcHandle()
         {
-          return  GCHandle.Alloc(Storage, GCHandleType.Pinned);
+          return  GCHandle.Alloc(storage, GCHandleType.Pinned);
         }
 
         public NArray()
@@ -34,14 +34,14 @@ namespace mxnet.numerics.nbase
 
         public NArray(Shape shape)
         {
-            Shape = new Shape(shape);
-            Storage = new T[Shape.Size];
+            this.shape = new Shape(shape);
+            storage = new T[this.shape.size];
         }
         public NArray(Shape shape, T[] data)
         {
-            Shape = new Shape(shape);
-            Storage = new T[Shape.Size];
-            Array.Copy(data, Storage, Math.Min(data.Length, Storage.Length));
+            this.shape = new Shape(shape);
+            storage = new T[this.shape.size];
+            Array.Copy(data, storage, Math.Min(data.Length, storage.Length));
         }
 
 
@@ -59,14 +59,14 @@ namespace mxnet.numerics.nbase
             get
             {
                 var ret = new TOut();
-                ret.Shape = new Shape(Shape.Data.Skip(1).ToArray());
-                ret.Storage = new T[ret.Shape.Size];
+                ret.shape = new Shape(shape.data.Skip(1).ToArray());
+                ret.storage = new T[ret.shape.size];
 
                 int retindex = 0;
-                int d1 =(int) Shape.Data[1];
+                int d1 =(int) shape.data[1];
                 for (int i = 0; i < d1; i++)
                 {
-                    ret.Storage[retindex] = Storage[d0 * d1 + i];
+                    ret.storage[retindex] = storage[d0 * d1 + i];
                     retindex++;
                 }
                 return ret;
@@ -76,8 +76,8 @@ namespace mxnet.numerics.nbase
         public TOut Flat()
         {
             var ret = new TOut();
-            ret.Shape = new Shape(Shape.Size);
-            ret.Storage = Storage.ToArray();
+            ret.shape = new Shape(shape.size);
+            ret.storage = storage.ToArray();
             return ret;
         }
 
@@ -85,9 +85,9 @@ namespace mxnet.numerics.nbase
         {
             TOut ret = new TOut
             {
-                Shape = Shape,
-                Storage = this.Storage
-                    .Select((x, i) => Calculator.Compare(x, other.Storage[i])).ToArray()
+                shape = shape,
+                storage = this.storage
+                    .Select((x, i) => Calculator.Compare(x, other.storage[i])).ToArray()
   
             };
             return ret;
@@ -96,11 +96,11 @@ namespace mxnet.numerics.nbase
 
         public T Sum()
         {
-           return Calculator.Sum( this.Storage);
+           return Calculator.Sum( this.storage);
         }
         public int Argmax()
         {
-            return Calculator.Argmax(this.Storage);
+            return Calculator.Argmax(this.storage);
         }
 
         

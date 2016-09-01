@@ -61,12 +61,12 @@ namespace mxnet.csharp
             this._exes.Add(exe);
         }
 
-        public void tic()
+        public void Tic()
         {
             //TODO tic
         }
 
-        public void toc()
+        public void Toc()
         {
             //TODO toc
         }

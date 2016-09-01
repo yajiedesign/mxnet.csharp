@@ -15,22 +15,22 @@ namespace mxnet.csharp.optimizer
     [Serializable]
     public abstract class Optimizer
     {
-        private float rescale_grad;
-        private readonly Func<int,float> lr_scheduler;
-        private readonly float lr;
-        private readonly float wd;
-        private Dictionary<string, float> lr_mult;
-        private Dictionary<string, float> wd_mult;
-        private readonly int begin_num_update;
-        private int num_update;
-        private readonly Dictionary<int, int> index_update_count;
-        private float? clip_gradient;
-        private readonly Dictionary<int, string> idx2_name;
-        private readonly Symbol sym;
+        private float _rescale_grad;
+        private readonly Func<int,float> _lr_scheduler;
+        private readonly float _lr;
+        private readonly float _wd;
+        private Dictionary<string, float> _lr_mult;
+        private Dictionary<string, float> _wd_mult;
+        private readonly int _begin_num_update;
+        private int _num_update;
+        private readonly Dictionary<int, int> _index_update_count;
+        private float? _clip_gradient;
+        private readonly Dictionary<int, string> _idx2_name;
+        private readonly Symbol _sym;
 
 
         public Optimizer(float rescale_grad = 1.0f,
-            Dictionary<int, string> param_idx2name = null,
+            Dictionary<int, string> param_idx2_name = null,
             float wd = 0f,
             float? clip_gradient = null,
             float learning_rate = 0.01f,
@@ -39,54 +39,54 @@ namespace mxnet.csharp.optimizer
             int begin_num_update = 0)
         {
 
-            this.rescale_grad = rescale_grad;
-            this.lr = learning_rate;
-            this.lr_scheduler = lr_scheduler;
+            this._rescale_grad = rescale_grad;
+            this._lr = learning_rate;
+            this._lr_scheduler = lr_scheduler;
             if (lr_scheduler != null)
             {
                 //TODO   this.lr_scheduler.base_lr = learning_rate;
             }
 
 
-            this.wd = wd;
-            this.lr_mult = new Dictionary<string, float>();
-            this.wd_mult = new Dictionary<string, float>();
-            this.begin_num_update = begin_num_update;
-            this.num_update = begin_num_update;
-            this.index_update_count = new Dictionary<int, int>();
-            this.clip_gradient = clip_gradient;
+            this._wd = wd;
+            this._lr_mult = new Dictionary<string, float>();
+            this._wd_mult = new Dictionary<string, float>();
+            this._begin_num_update = begin_num_update;
+            this._num_update = begin_num_update;
+            this._index_update_count = new Dictionary<int, int>();
+            this._clip_gradient = clip_gradient;
 
-            if (param_idx2name == null)
+            if (param_idx2_name == null)
             {
-                param_idx2name = new Dictionary<int, string>();
+                param_idx2_name = new Dictionary<int, string>();
             }
 
 
 
-            this.idx2_name = param_idx2name.ToDictionary(entry => entry.Key,
+            this._idx2_name = param_idx2_name.ToDictionary(entry => entry.Key,
                                                entry => entry.Value);
 
-            this.sym = sym;
+            this._sym = sym;
             this.set_lr_mult(new Dictionary<string, float>());
             this.set_wd_mult(new Dictionary<string, float>());
         }
         private void set_lr_mult(Dictionary<string, float> args_lr_mult)
         {
-            this.lr_mult = new Dictionary<string, float>();
-            if (sym != null)
+            this._lr_mult = new Dictionary<string, float>();
+            if (_sym != null)
             {
-               var attr=  sym.list_attr(true);
+               var attr=  _sym.list_attr(true);
                 foreach (var kv in attr)
                 {
                     if (kv.Key.EndsWith("_lr_mult"))
                     {
-                        lr_mult[kv.Key.Replace("_lr_mult", "")] = float.Parse(kv.Value);
+                        _lr_mult[kv.Key.Replace("_lr_mult", "")] = float.Parse(kv.Value);
                     }
                 }
             }
             foreach (var kv in args_lr_mult)
             {
-                this.lr_mult[kv.Key] = kv.Value;
+                this._lr_mult[kv.Key] = kv.Value;
             }
          
         }
@@ -94,28 +94,28 @@ namespace mxnet.csharp.optimizer
 
         private void set_wd_mult(Dictionary<string, float> args_wd_mult)
         {
-            this.wd_mult = new Dictionary<string, float>();
-            foreach (var n in idx2_name.Values)
+            this._wd_mult = new Dictionary<string, float>();
+            foreach (var n in _idx2_name.Values)
             {
                 if (!(n.EndsWith("_weight") || n.EndsWith("_gamma")))
                 {
-                    this.wd_mult[n] = 0.0f;
+                    this._wd_mult[n] = 0.0f;
                 }
             }
-            if (sym != null)
+            if (_sym != null)
             {
-                var attr = sym.list_attr(true);
+                var attr = _sym.list_attr(true);
                 foreach (var kv in attr)
                 {
                     if (kv.Key.EndsWith("_wd_mult"))
                     {
-                        this.wd_mult[kv.Key.Replace("_wd_mult", "")] = float.Parse(kv.Value);
+                        this._wd_mult[kv.Key.Replace("_wd_mult", "")] = float.Parse(kv.Value);
                     }
                 }
             }
             foreach (var kv in args_wd_mult)
             {
-                this.wd_mult[kv.Key] = kv.Value;
+                this._wd_mult[kv.Key] = kv.Value;
             }
 
         }
@@ -125,13 +125,13 @@ namespace mxnet.csharp.optimizer
         /// <param name="index">The index will be updated</param>
         public void _update_count(int index)
         {
-            if (!this.index_update_count.ContainsKey(index))
+            if (!this._index_update_count.ContainsKey(index))
             {
-                this.index_update_count[index] = this.begin_num_update;
+                this._index_update_count[index] = this._begin_num_update;
             }
 
-            this.index_update_count[index] += 1;
-            this.num_update = Math.Max(this.index_update_count[index], this.num_update);
+            this._index_update_count[index] += 1;
+            this._num_update = Math.Max(this._index_update_count[index], this._num_update);
 
         }
 
@@ -139,25 +139,25 @@ namespace mxnet.csharp.optimizer
         public float _get_lr(int index)
         {
             float lr;
-            if (this.lr_scheduler != null)
+            if (this._lr_scheduler != null)
             {
-                lr = this.lr_scheduler(this.num_update);
+                lr = this._lr_scheduler(this._num_update);
             }
 
             else
             {
-                lr = this.lr;
+                lr = this._lr;
             }
 
 
-            if (this.lr_mult.ContainsKey(index.ToString()))
+            if (this._lr_mult.ContainsKey(index.ToString()))
             {
-                lr *= this.lr_mult[index.ToString()];
+                lr *= this._lr_mult[index.ToString()];
             }
-            else if(this.idx2_name.ContainsKey(index))
+            else if(this._idx2_name.ContainsKey(index))
             {
                 float v;
-                if (!this.lr_mult.TryGetValue(this.idx2_name[index], out v))
+                if (!this._lr_mult.TryGetValue(this._idx2_name[index], out v))
                 {
                     v = 1.0f;
                 }
@@ -170,15 +170,15 @@ namespace mxnet.csharp.optimizer
 
         public float _get_wd(int index)
         {
-            var wd = this.wd;
-            if (this.wd_mult.ContainsKey(index.ToString()))
+            var wd = this._wd;
+            if (this._wd_mult.ContainsKey(index.ToString()))
             {
-                wd *= this.wd_mult[index.ToString()];
+                wd *= this._wd_mult[index.ToString()];
             }
-            else if (this.idx2_name.ContainsKey(index))
+            else if (this._idx2_name.ContainsKey(index))
             {
                 float w;
-                if (!this.wd_mult.TryGetValue(this.idx2_name[index], out w))
+                if (!this._wd_mult.TryGetValue(this._idx2_name[index], out w))
                 {
                     w = 1.0f;
                 }
@@ -266,7 +266,7 @@ namespace mxnet.csharp.optimizer
 
     }
 
-    public class SGD : Optimizer
+    public class Sgd : Optimizer
     {
         public override NDArray create_state(int index, NDArray weight)
         {

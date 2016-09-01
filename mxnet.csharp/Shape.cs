@@ -23,22 +23,22 @@ namespace mxnet.csharp
         /// <summary>
         /// number of dimnsion of the shape
         /// </summary>
-        uint ndim_;
+        uint _ndim_;
 
         /// <summary>
         /// number of cells allocated in data_heap_
         /// </summary>
-        uint num_heap_allocated_;
+        uint _num_heap_allocated_;
 
         /// <summary>
         /// in stack space used to store shape when it is small
         /// </summary>
-        readonly uint[] data_stack_ = new uint[KStackCache];
+        readonly uint[] _data_stack_ = new uint[KStackCache];
 
         /// <summary>
         /// space to store shape when dimension is big
         /// </summary>
-        uint[] data_heap_;
+        uint[] _data_heap_;
 
 
 
@@ -49,7 +49,7 @@ namespace mxnet.csharp
         public Shape()
 
         {
-            ndim_ = 0;
+            _ndim_ = 0;
         }
 
         /// <summary>
@@ -58,18 +58,18 @@ namespace mxnet.csharp
         /// <param name="v">the vector</param>
         public Shape(ICollection<uint> v)
         {
-            ndim_ = (uint)v.Count;
-            if (ndim_ <= KStackCache)
+            _ndim_ = (uint)v.Count;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                Array.Copy(v.ToArray(), data_stack_, v.Count);
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                Array.Copy(v.ToArray(), _data_stack_, v.Count);
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                Array.Copy(v.ToArray(), data_heap_, v.Count); ;
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                Array.Copy(v.ToArray(), _data_heap_, v.Count); ;
             }
         }
 
@@ -79,18 +79,18 @@ namespace mxnet.csharp
         /// <param name="s1">size of the first dimmension</param>
         public Shape(uint s1)
         {
-            ndim_ = 1;
-            if (ndim_ <= KStackCache)
+            _ndim_ = 1;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                data_stack_[0] = s1;
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                _data_stack_[0] = s1;
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                data_heap_[0] = s1;
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                _data_heap_[0] = s1;
             }
         }
 
@@ -102,20 +102,20 @@ namespace mxnet.csharp
         public Shape(uint s1, uint s2)
 
         {
-            ndim_ = 2;
-            if (ndim_ <= KStackCache)
+            _ndim_ = 2;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                data_stack_[0] = s1;
-                data_stack_[1] = s2;
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                _data_stack_[0] = s1;
+                _data_stack_[1] = s2;
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                data_heap_[0] = s1;
-                data_heap_[1] = s2;
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                _data_heap_[0] = s1;
+                _data_heap_[1] = s2;
             }
         }
         /// <summary>
@@ -126,22 +126,22 @@ namespace mxnet.csharp
         /// <param name="s3">size of the third dimmension</param>
         public Shape(uint s1, uint s2, uint s3)
         {
-            ndim_ = 3;
-            if (ndim_ <= KStackCache)
+            _ndim_ = 3;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                data_stack_[0] = s1;
-                data_stack_[1] = s2;
-                data_stack_[2] = s3;
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                _data_stack_[0] = s1;
+                _data_stack_[1] = s2;
+                _data_stack_[2] = s3;
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                data_heap_[0] = s1;
-                data_heap_[1] = s2;
-                data_heap_[2] = s3;
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                _data_heap_[0] = s1;
+                _data_heap_[1] = s2;
+                _data_heap_[2] = s3;
             }
         }
 
@@ -154,24 +154,24 @@ namespace mxnet.csharp
         /// <param name="s4">size of the fourth dimmension</param>
         public Shape(uint s1, uint s2, uint s3, uint s4)
         {
-            ndim_ = 4;
-            if (ndim_ <= KStackCache)
+            _ndim_ = 4;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                data_stack_[0] = s1;
-                data_stack_[1] = s2;
-                data_stack_[2] = s3;
-                data_stack_[3] = s4;
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                _data_stack_[0] = s1;
+                _data_stack_[1] = s2;
+                _data_stack_[2] = s3;
+                _data_stack_[3] = s4;
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                data_heap_[0] = s1;
-                data_heap_[1] = s2;
-                data_heap_[2] = s3;
-                data_heap_[3] = s4;
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                _data_heap_[0] = s1;
+                _data_heap_[1] = s2;
+                _data_heap_[2] = s3;
+                _data_heap_[3] = s4;
             }
         }
 
@@ -185,26 +185,26 @@ namespace mxnet.csharp
         /// <param name="s5">size of the fifth dimmension</param>
         public Shape(uint s1, uint s2, uint s3, uint s4, uint s5)
         {
-            ndim_ = 5;
-            if (ndim_ <= KStackCache)
+            _ndim_ = 5;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                data_stack_[0] = s1;
-                data_stack_[1] = s2;
-                data_stack_[2] = s3;
-                data_stack_[3] = s4;
-                data_stack_[4] = s5;
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                _data_stack_[0] = s1;
+                _data_stack_[1] = s2;
+                _data_stack_[2] = s3;
+                _data_stack_[3] = s4;
+                _data_stack_[4] = s5;
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                data_heap_[0] = s1;
-                data_heap_[1] = s2;
-                data_heap_[2] = s3;
-                data_heap_[3] = s4;
-                data_heap_[5] = s5;
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                _data_heap_[0] = s1;
+                _data_heap_[1] = s2;
+                _data_heap_[2] = s3;
+                _data_heap_[3] = s4;
+                _data_heap_[5] = s5;
             }
         }
         /// <summary>
@@ -213,18 +213,18 @@ namespace mxnet.csharp
         /// <param name="s">the source shape</param>
         public Shape(Shape s)
         {
-            ndim_ = s.ndim_;
-            if (ndim_ <= KStackCache)
+            _ndim_ = s._ndim_;
+            if (_ndim_ <= KStackCache)
             {
-                data_heap_ = null;
-                num_heap_allocated_ = 0;
-                Array.Copy(s.data_stack_, data_stack_, ndim_);
+                _data_heap_ = null;
+                _num_heap_allocated_ = 0;
+                Array.Copy(s._data_stack_, _data_stack_, _ndim_);
             }
             else
             {
-                data_heap_ = new uint[ndim_];
-                num_heap_allocated_ = ndim_;
-                Array.Copy(s.data_heap_, data_heap_, ndim_);
+                _data_heap_ = new uint[_ndim_];
+                _num_heap_allocated_ = _ndim_;
+                Array.Copy(s._data_heap_, _data_heap_, _ndim_);
             }
         }
 
@@ -234,18 +234,18 @@ namespace mxnet.csharp
         /// the data content of the shape
         /// </summary>
         /// <returns></returns>
-        public uint[] data()
+        public uint[] Data()
         {
-            return ((uint[])(ndim_ <= KStackCache ? data_stack_ : data_heap_)).Take((int)ndim_).ToArray();
+            return ((uint[])(_ndim_ <= KStackCache ? _data_stack_ : _data_heap_)).Take((int)_ndim_).ToArray();
         }
 
         /// <summary>
         ///  return number of dimension of the tensor inside
         /// </summary>
         /// <returns></returns>
-        public uint ndim()
+        public uint Ndim()
         {
-            return ndim_;
+            return _ndim_;
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace mxnet.csharp
         /// <returns>the corresponding dimension size</returns>
         public uint this[int i]
         {
-            get { return data()[i]; }
+            get { return Data()[i]; }
         }
 
 
@@ -266,8 +266,8 @@ namespace mxnet.csharp
         public uint Size()
         {
             uint size = 1;
-            var d = this.data();
-            for (int i = 0; i < ndim_; ++i)
+            var d = this.Data();
+            for (int i = 0; i < _ndim_; ++i)
             {
                 size *= d[i];
             }
@@ -288,19 +288,19 @@ namespace mxnet.csharp
             if (ReferenceEquals(l, null)) return false;
             if (ReferenceEquals(r, null)) return false;
 
-            if (l.ndim_ != r.ndim_) return false;
-            if (l.ndim_ <= KStackCache)
+            if (l._ndim_ != r._ndim_) return false;
+            if (l._ndim_ <= KStackCache)
             {
-                for (int i = 0; i < l.ndim_; ++i)
+                for (int i = 0; i < l._ndim_; ++i)
                 {
-                    if (l.data_stack_[i] != r.data_stack_[i]) return false;
+                    if (l._data_stack_[i] != r._data_stack_[i]) return false;
                 }
             }
             else
             {
-                for (int i = 0; i < l.ndim_; ++i)
+                for (int i = 0; i < l._ndim_; ++i)
                 {
-                    if (l.data_heap_[i] != r.data_heap_[i]) return false;
+                    if (l._data_heap_[i] != r._data_heap_[i]) return false;
                 }
             }
             return true;
@@ -328,19 +328,19 @@ namespace mxnet.csharp
         public override int GetHashCode()
         {
 
-            int hash = ndim_.GetHashCode();
-            if (ndim_ <= KStackCache)
+            int hash = _ndim_.GetHashCode();
+            if (_ndim_ <= KStackCache)
             {
-                for (int i = 0; i < ndim_; ++i)
+                for (int i = 0; i < _ndim_; ++i)
                 {
-                    hash ^= data_stack_[i].GetHashCode();
+                    hash ^= _data_stack_[i].GetHashCode();
                 }
             }
             else
             {
-                for (int i = 0; i < ndim_; ++i)
+                for (int i = 0; i < _ndim_; ++i)
                 {
-                    hash ^= data_heap_[i].GetHashCode();
+                    hash ^= _data_heap_[i].GetHashCode();
                 }
             }
             return hash;
@@ -359,26 +359,26 @@ namespace mxnet.csharp
         void SetDim(uint dim)
         {
             if (dim > KStackCache &&
-              dim > num_heap_allocated_)
+              dim > _num_heap_allocated_)
             {
                 // data_heap_ can be NULL
 
-                data_heap_ = new uint[dim];
-                num_heap_allocated_ = dim;
+                _data_heap_ = new uint[dim];
+                _num_heap_allocated_ = dim;
             }
-            ndim_ = dim;
+            _ndim_ = dim;
         }
         public override string ToString()
         {
             string ret = "";
             ret += "(";
-            for (int i = 0; i < ndim(); ++i)
+            for (int i = 0; i < Ndim(); ++i)
             {
                 if (i != 0) ret += ",";
                 ret += this[i];
             }
             // python style tuple
-            if (ndim() == 1) ret += ",";
+            if (Ndim() == 1) ret += ",";
             ret += ")";
             return ret;
         }
@@ -386,7 +386,7 @@ namespace mxnet.csharp
 
         public static implicit operator uint[] (Shape obj)
         {
-            return obj.data();
+            return obj.Data();
         }
     }
 }

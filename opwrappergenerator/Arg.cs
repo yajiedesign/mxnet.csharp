@@ -10,7 +10,7 @@ namespace opwrappergenerator
 {
     class Arg
     {
-        private Dictionary<string, string> typeDict = new Dictionary<string, string>
+        private Dictionary<string, string> _type_dict = new Dictionary<string, string>
         {
             {"boolean", "bool"},
             {"Shape(tuple)", "Shape"},
@@ -21,98 +21,98 @@ namespace opwrappergenerator
             {"long", "long"},
             {"string", "string"}
         };
-        public string OrginName { get; }
-        public string Name { get; }
-        public string Description { get; }
-        public bool IsEnum { get; } = false;
+        public string orgin_name { get; }
+        public string name { get; }
+        public string description { get; }
+        public bool is_enum { get; } = false;
         public EnumType Enum { get; }
-        public string TypeName { get; }
-        public bool HasDefault { get; } = false;
-        public string DefaultString { get; }
-        public string DefaultStringWithObject { get; } = "";
+        public string type_name { get; }
+        public bool has_default { get; } = false;
+        public string default_string { get; }
+        public string default_string_with_object { get; } = "";
 
-        public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
+        public Arg(string op_name = "", string arg_name = "", string type_string = "", string desc_string = "")
         {
-            if (argName == "src")
+            if (arg_name == "src")
             {
-                argName = "data";
+                arg_name = "data";
             }
-            this.OrginName = argName;
-            this.Name = GetName(argName);
-            this.Description = descString;
-            if (typeString.StartsWith("{"))
+            this.orgin_name = arg_name;
+            this.name = GetName(arg_name);
+            this.description = desc_string;
+            if (type_string.StartsWith("{"))
             {
-                IsEnum = true;
-                Enum = new EnumType(opName +"_" + argName, typeString);
-                TypeName = Enum.Name;
+                is_enum = true;
+                Enum = new EnumType(op_name +"_" + arg_name, type_string);
+                type_name = Enum.name;
             }
             else
             {
                 string typename;
 
-                if (typeDict.TryGetValue(typeString.Split(' ').First().Replace(",", ""), out typename))
+                if (_type_dict.TryGetValue(type_string.Split(' ').First().Replace(",", ""), out typename))
                 {
-                    TypeName = typename;
+                    type_name = typename;
                 }
                 else
                 {
-                    if (opName == "Reshape")
+                    if (op_name == "Reshape")
                     {
-                        TypeName = "Shape";
+                        type_name = "Shape";
                     }
                 }
 
              
             }
-            if (typeString.IndexOf("default", StringComparison.Ordinal) != -1)
+            if (type_string.IndexOf("default", StringComparison.Ordinal) != -1)
             {
-                HasDefault = true;
-                DefaultString = typeString.Split(new string[] { "default=" }, StringSplitOptions.None)[1].Trim()
+                has_default = true;
+                default_string = type_string.Split(new string[] { "default=" }, StringSplitOptions.None)[1].Trim()
                     .Trim('\'');
 
-                if (IsEnum)
+                if (is_enum)
                 {
-                    DefaultString = Enum.GetDefaultValueString(DefaultString);
+                    default_string = Enum.GetDefaultValueString(default_string);
                 }
-                else if (DefaultString == "False")
+                else if (default_string == "False")
                 {
-                    DefaultString = "false";
+                    default_string = "false";
                 }
-                else if (DefaultString == "True")
+                else if (default_string == "True")
                 {
-                    DefaultString = "true";
+                    default_string = "true";
                 }
-                else if (DefaultString.StartsWith("("))
+                else if (default_string.StartsWith("("))
                 {
-                    if (DefaultString != "()")
+                    if (default_string != "()")
                     {
-                        DefaultStringWithObject = $"if({Name}==null){{ {Name}= new Shape{DefaultString};}}\n";
+                        default_string_with_object = $"if({name}==null){{ {name}= new Shape{default_string};}}\n";
                     }
      
-                    DefaultString = "null";       
+                    default_string = "null";       
                 }
-                if (TypeName == "float")
+                if (type_name == "float")
                 {
-                    DefaultString = DefaultString + "f";
+                    default_string = default_string + "f";
                 }
             }
-            if (argName == "weight" || argName == "bias")
+            if (arg_name == "weight" || arg_name == "bias")
             {
-                HasDefault = true;
-                DefaultString = "null";
+                has_default = true;
+                default_string = "null";
             }
 
         }
 
-        private string GetName(string argName)
+        private string GetName(string arg_name)
         {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
+            CultureInfo culture_info = Thread.CurrentThread.CurrentCulture;
+            TextInfo text_info = culture_info.TextInfo;
 
-            var namesp = argName.Split('_');
+            var namesp = arg_name.Split('_');
 
 
-            return namesp.First()+ string.Join("", namesp.Skip(1).Select(s => textInfo.ToTitleCase(s)));
+            return namesp.First()+ string.Join("", namesp.Skip(1).Select(s => text_info.ToTitleCase(s)));
         }
     }
     

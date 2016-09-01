@@ -128,19 +128,19 @@ namespace mxnet.csharp
         /// Slice input equally along specified axis
         /// </summary>
         /// <param name="data"></param>
-        /// <param name="numOutputs">Number of outputs to be sliced.</param>
+        /// <param name="num_outputs">Number of outputs to be sliced.</param>
         /// <param name="axis">Dimension along which to slice.</param>
-        /// <param name="squeezeAxis">If true AND the sliced dimension becomes 1, squeeze that dimension.</param>
+        /// <param name="squeeze_axis">If true AND the sliced dimension becomes 1, squeeze that dimension.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol SliceChannel(Symbol data,
-                                  int numOutputs,
+                                  int num_outputs,
                                   int axis = 1,
-                                  bool squeezeAxis = false)
+                                  bool squeeze_axis = false)
         {
             return new Operator("SliceChannel")
-                     .SetParam("num_outputs", numOutputs)
+                     .SetParam("num_outputs", num_outputs)
                      .SetParam("axis", axis)
-                     .SetParam("squeeze_axis", squeezeAxis).
+                     .SetParam("squeeze_axis", squeeze_axis).
                      AddInput(data)
                      .CreateSymbol();
         }
@@ -149,23 +149,23 @@ namespace mxnet.csharp
         /// <summary>
         /// Slice input equally along specified axis
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data"></param>
-        /// <param name="numOutputs">Number of outputs to be sliced.</param>
+        /// <param name="num_outputs">Number of outputs to be sliced.</param>
         /// <param name="axis">Dimension along which to slice.</param>
-        /// <param name="squeezeAxis">If true AND the sliced dimension becomes 1, squeeze that dimension.</param>
+        /// <param name="squeeze_axis">If true AND the sliced dimension becomes 1, squeeze that dimension.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SliceChannel(string symbolName,
+        public static Symbol SliceChannel(string symbol_name,
                                Symbol data,
-                               int numOutputs,
+                               int num_outputs,
                                int axis = 1,
-                               bool squeezeAxis = false)
+                               bool squeeze_axis = false)
         {
             return new Operator("SliceChannel")
-                     .SetParam("num_outputs", numOutputs)
+                     .SetParam("num_outputs", num_outputs)
                      .SetParam("axis", axis)
-                     .SetParam("squeeze_axis", squeezeAxis).AddInput(data)
-                     .CreateSymbol(symbolName);
+                     .SetParam("squeeze_axis", squeeze_axis).AddInput(data)
+                     .CreateSymbol(symbol_name);
         }
 
         public static Symbol Max(Symbol lhs, float scalar)

@@ -23,12 +23,12 @@ namespace opwrappergenerator
             this._name = name;
             this._description = description;
 
-            var nameArg = new Arg(name,
+            var name_arg = new Arg(name,
                 "symbol_name",
                 "string",
                 "name of the resulting symbol");
-            args.Insert(0, nameArg);
-            this._args = args.Where(w => !w.HasDefault).Concat(args.Where(w => w.HasDefault)).ToList();
+            args.Insert(0, name_arg);
+            this._args = args.Where(w => !w.has_default).Concat(args.Where(w => w.has_default)).ToList();
 
         }
         /// <summary>
@@ -48,15 +48,15 @@ namespace opwrappergenerator
         {
   
             string ret = "";
-            var argsLocal = this._args.Skip(use_name ? 0 : 1).ToList();
+            var args_local = this._args.Skip(use_name ? 0 : 1).ToList();
 
 
             //enum
             if (use_name)
             {
-                foreach (var arg in argsLocal.Where(w => w.IsEnum))
+                foreach (var arg in args_local.Where(w => w.is_enum))
                 {
-                    ret += $"/// <summary>\n/// {arg.Description.Replace("\n","")}\n/// </summary>\n";
+                    ret += $"/// <summary>\n/// {arg.description.Replace("\n","")}\n/// </summary>\n";
                     ret += arg.Enum.GetDefinitionString() +"\n";
                     ret += arg.Enum.GetConvertString() + "\n";
                 }
@@ -69,54 +69,54 @@ namespace opwrappergenerator
             ret += $"/// <summary>\n/// {_description.Replace("\n", "")}\n/// </summary>\n";
 
 
-            foreach (var arg in argsLocal)
+            foreach (var arg in args_local)
             {
-                ret += $"/// <param name=\"{arg.Name}\">{arg.Description.Replace("\n", "")}</param>\n";
+                ret += $"/// <param name=\"{arg.name}\">{arg.description.Replace("\n", "")}</param>\n";
             }
             ret += $" /// <returns>returns new symbol</returns>\n";
 
 
             ret += $"public static Symbol {ConvertName(_name)}(";
-            foreach (var arg in argsLocal)
+            foreach (var arg in args_local)
             {
-                ret += $"{arg.TypeName} {arg.Name}";
-                if (arg.HasDefault)
+                ret += $"{arg.type_name} {arg.name}";
+                if (arg.has_default)
                 {
 
-                    ret += $"={arg.DefaultString}";
+                    ret += $"={arg.default_string}";
                 }
                 ret += ",\n";
             }
-            if (argsLocal.Count > 0)
+            if (args_local.Count > 0)
             {
                 ret = ret.Substring(0, ret.Length - 2);
             }
       
             ret += ")\n{";
 
-            foreach (var arg in argsLocal)
+            foreach (var arg in args_local)
             {
-                ret += arg.DefaultStringWithObject ;
+                ret += arg.default_string_with_object ;
             }
 
             ret += $"\nreturn new Operator(\"{_name}\")\n";
 
             foreach (var arg in _args)
             {
-                if (arg.TypeName == "Symbol" ||
-                    arg.TypeName == "Symbol[]" ||
-                    arg.Name == "symbolName")
+                if (arg.type_name == "Symbol" ||
+                    arg.type_name == "Symbol[]" ||
+                    arg.name == "symbolName")
                 {
                     continue;
                 }
 
-                if (arg.IsEnum)
+                if (arg.is_enum)
                 {
-                    ret += $".SetParam(\"{arg.OrginName}\", {arg.Enum.Name}Convert[(int){arg.Name}])\n";
+                    ret += $".SetParam(\"{arg.orgin_name}\", {arg.Enum.name}Convert[(int){arg.name}])\n";
                 }
                 else
                 {
-                    ret += $".SetParam(\"{arg.OrginName}\", {arg.Name})\n";
+                    ret += $".SetParam(\"{arg.orgin_name}\", {arg.name})\n";
                 }
         
 
@@ -125,20 +125,20 @@ namespace opwrappergenerator
 
             foreach (var arg in _args)
             {
-                if (arg.TypeName != "Symbol")
+                if (arg.type_name != "Symbol")
                 {
                     continue;
                 }
-                ret += $".SetInput(\"{arg.OrginName}\", {arg.Name})\n";
+                ret += $".SetInput(\"{arg.orgin_name}\", {arg.name})\n";
             }
 
             foreach (var arg in _args)
             {
-                if (arg.TypeName != "Symbol[]")
+                if (arg.type_name != "Symbol[]")
                 {
                     continue;
                 }
-                ret += $".AddInput({arg.Name})\n";
+                ret += $".AddInput({arg.name})\n";
             }
             if (use_name)
             {
@@ -155,13 +155,13 @@ namespace opwrappergenerator
 
         private string ConvertName(string name)
         {
-            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
-            TextInfo textInfo = cultureInfo.TextInfo;
+            CultureInfo culture_info = Thread.CurrentThread.CurrentCulture;
+            TextInfo text_info = culture_info.TextInfo;
 
 
 
             var ret = R.Replace(name, "_");
-            return textInfo.ToTitleCase(ret).Replace("_", "");
+            return text_info.ToTitleCase(ret).Replace("_", "");
         }
     }
 }

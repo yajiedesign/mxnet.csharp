@@ -106,7 +106,7 @@ namespace mxnet.csharp
         /// <returns>the operator Symbol</returns>
         public Symbol CreateSymbol(string name = "")
         {
-            string pname = name == "" ? NameManager.Instance.get_name(_operator_name) : name;
+            string pname = name == "" ? NameManager.instance.get_name(_operator_name) : name;
 
             SymbolHandle symbol_handle;
             List<string> input_keys = new List<string>();

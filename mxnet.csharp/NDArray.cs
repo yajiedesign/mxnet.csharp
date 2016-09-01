@@ -37,7 +37,7 @@ namespace mxnet.csharp
             _id = id;
         }
 
-        public static Context Default_ctx { get; set; } = new Context(DeviceType.KCpu, 0);
+        public static Context default_ctx { get; set; } = new Context(DeviceType.KCpu, 0);
 
         /// <summary>
         /// 
@@ -87,7 +87,7 @@ namespace mxnet.csharp
         public NDBlob(NDArrayHandle handle)
 
         {
-            Handle = handle;
+            this.handle = handle;
         }
         /// <summary>
         /// destructor, free the SymbolHandle
@@ -99,7 +99,7 @@ namespace mxnet.csharp
 
         private void Dispose(bool disposing)
         {
-            NativeMethods.MXNDArrayFree(Handle);
+            NativeMethods.MXNDArrayFree(handle);
             if (disposing)
             {
                 GC.SuppressFinalize(this);
@@ -115,7 +115,7 @@ namespace mxnet.csharp
         /// <summary>
         /// the SymbolHandle to store
         /// </summary>
-        public NDArrayHandle Handle { get; }
+        public NDArrayHandle handle { get; }
     }
     public class NDArray
     {
@@ -150,7 +150,7 @@ namespace mxnet.csharp
         public NDArray(Shape shape, Context context, bool delay_alloc)
         {
             NDArrayHandle handle;
-            Util.call_check(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.Get_device_type(),
+            Util.call_check(NativeMethods.MXNDArrayCreate(shape.Data().ToArray(), shape.Ndim(), context.Get_device_type(),
                                context.Get_device_id(), delay_alloc ? 1 : 0, out handle));
             _blob_ptr = new NDBlob(handle);
         }
@@ -158,8 +158,8 @@ namespace mxnet.csharp
         public NDArray(Shape shape, Context context, bool delay_alloc, Type dtype)
         {
             NDArrayHandle handle;
-            Util.call_check(NativeMethods.MXNDArrayCreateEx(shape.data().ToArray(), shape.ndim(), context.Get_device_type(),
-                               context.Get_device_id(), delay_alloc ? 1 : 0, Util._DTYPE_NP_TO_MX[dtype], out handle));
+            Util.call_check(NativeMethods.MXNDArrayCreateEx(shape.Data().ToArray(), shape.Ndim(), context.Get_device_type(),
+                               context.Get_device_id(), delay_alloc ? 1 : 0, Util.DtypeNpToMX[dtype], out handle));
             _blob_ptr = new NDBlob(handle);
         }
 
@@ -176,11 +176,11 @@ namespace mxnet.csharp
         {
             if (context == null)
             {
-                context = Context.Default_ctx;
+                context = Context.default_ctx;
             }
 
             NDArrayHandle handle;
-            Util.call_check(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.Get_device_type(),
+            Util.call_check(NativeMethods.MXNDArrayCreate(shape.Data().ToArray(), shape.Ndim(), context.Get_device_type(),
                            context.Get_device_id(), 0, out handle));
             NativeMethods.MXNDArraySyncCopyFromCPU(handle, data, shape.Size());
             _blob_ptr = new NDBlob(handle);
@@ -189,7 +189,7 @@ namespace mxnet.csharp
 
         public void Sync_copy_from_cpu(float[] data)
         {
-            NativeMethods.MXNDArraySyncCopyFromCPU(_blob_ptr.Handle, data, (uint)data.Length);
+            NativeMethods.MXNDArraySyncCopyFromCPU(_blob_ptr.handle, data, (uint)data.Length);
         }
 
         public float[] Sync_copy_to_cpu(uint size)
@@ -197,18 +197,18 @@ namespace mxnet.csharp
             size = size > 0 ? size : Size();
             var data = new float[size];
             var datagch = GCHandle.Alloc(data, GCHandleType.Pinned);
-            NativeMethods.MXNDArraySyncCopyToCPU(_blob_ptr.Handle, datagch.AddrOfPinnedObject(), size);
+            NativeMethods.MXNDArraySyncCopyToCPU(_blob_ptr.handle, datagch.AddrOfPinnedObject(), size);
             datagch.Free();
             return data;
         }
 
         public void Wait_to_read()
         {
-            Util.call_check(NativeMethods.MXNDArrayWaitToRead(_blob_ptr.Handle));
+            Util.call_check(NativeMethods.MXNDArrayWaitToRead(_blob_ptr.handle));
         }
         public void Wait_to_write()
         {
-            Util.call_check(NativeMethods.MXNDArrayWaitToWrite(_blob_ptr.Handle));
+            Util.call_check(NativeMethods.MXNDArrayWaitToWrite(_blob_ptr.handle));
         }
         public static void Wait_all() { Util.call_check(NativeMethods.MXNDArrayWaitAll()); }
 
@@ -217,8 +217,8 @@ namespace mxnet.csharp
             FunctionHandle func_handle;
             NativeMethods.MXGetFunction("_copyto", out func_handle);
 
-            var input = _blob_ptr.Handle;
-            var output = other._blob_ptr.Handle;
+            var input = _blob_ptr.handle;
+            var output = other._blob_ptr.handle;
             Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output));
             return other;
         }
@@ -233,8 +233,8 @@ namespace mxnet.csharp
         public NDArray Reshape(Shape new_shape)
         {
             NDArrayHandle handle;
-            var dims = new_shape.data().Select(s => (int)s);
-            Util.call_check(NativeMethods.MXNDArrayReshape(Get_handle(), (int)new_shape.ndim(), dims.ToArray(), out handle));
+            var dims = new_shape.Data().Select(s => (int)s);
+            Util.call_check(NativeMethods.MXNDArrayReshape(Get_handle(), (int)new_shape.Ndim(), dims.ToArray(), out handle));
             return new NDArray(handle);
         }
 
@@ -244,7 +244,7 @@ namespace mxnet.csharp
             NativeMethods.MXGetFunction("_set_value", out func_handle);
             float[] scalar = { value };
             IntPtr zero = IntPtr.Zero;
-            var handle = _blob_ptr.Handle;
+            var handle = _blob_ptr.handle;
             Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref zero, scalar, ref handle));
             return this;
         }
@@ -254,9 +254,9 @@ namespace mxnet.csharp
             FunctionHandle func_handle;
             NativeMethods.MXGetFunction("_random_gaussian", out func_handle);
             float[] scalar = { mu, sigma };
-            IntPtr Zero = IntPtr.Zero;
-            var handle = out_array._blob_ptr.Handle;
-            Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle));
+            IntPtr zero = IntPtr.Zero;
+            var handle = out_array._blob_ptr.handle;
+            Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref zero, scalar, ref handle));
         }
 
         public uint Size()
@@ -268,7 +268,7 @@ namespace mxnet.csharp
         {
             IntPtr out_pdata;
             uint out_dim;
-            NativeMethods.MXNDArrayGetShape(_blob_ptr.Handle, out out_dim, out out_pdata);
+            NativeMethods.MXNDArrayGetShape(_blob_ptr.handle, out out_dim, out out_pdata);
             int[] ret = new int[out_dim];
             Marshal.Copy(out_pdata, ret, 0, (int)out_dim);
             return new Shape(ret.Select(s => (uint)s).ToArray());
@@ -277,8 +277,8 @@ namespace mxnet.csharp
         public Type Get_dtype()
         {
             int out_dtype;
-            Util.call_check(NativeMethods.MXNDArrayGetDType(_blob_ptr.Handle, out out_dtype));
-            return Util._DTYPE_MX_TO_NP[out_dtype];
+            Util.call_check(NativeMethods.MXNDArrayGetDType(_blob_ptr.handle, out out_dtype));
+            return Util.DtypeMXToNp[out_dtype];
         }
 
 
@@ -287,8 +287,8 @@ namespace mxnet.csharp
             NDArray ret = new NDArray();
             FunctionHandle func_handle;
             NativeMethods.MXGetFunction("argmax_channel", out func_handle);
-            var input = _blob_ptr.Handle;
-            var output = ret._blob_ptr.Handle;
+            var input = _blob_ptr.handle;
+            var output = ret._blob_ptr.handle;
             Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output));
 
             return ret;
@@ -296,13 +296,13 @@ namespace mxnet.csharp
 
 
         [DebuggerHidden]
-        public NDArrayHandle Get_handle() { return _blob_ptr.Handle; }
+        public NDArrayHandle Get_handle() { return _blob_ptr.handle; }
 
         public static NDArray Zeros(Shape shape, Context ctx =null, Type dtype=null)
         {
             if (ctx == null)
             {
-                ctx = Context.Default_ctx;
+                ctx = Context.default_ctx;
             }
             if (dtype == null)
             {
@@ -318,11 +318,11 @@ namespace mxnet.csharp
         public SingleNArray As_numerics()
         {
             var shape = Get_shape();
-            SingleNArray data = new SingleNArray(new numerics.nbase.Shape(shape.data()));
+            SingleNArray data = new SingleNArray(new numerics.nbase.Shape(shape.Data()));
             var datagch = data.GetDataGcHandle();
             IntPtr pointer = datagch.AddrOfPinnedObject();
             var s = shape.Size();
-            NativeMethods.MXNDArraySyncCopyToCPU(_blob_ptr.Handle, pointer, s);
+            NativeMethods.MXNDArraySyncCopyToCPU(_blob_ptr.handle, pointer, s);
             datagch.Free();
             return data;
         }

@@ -54,18 +54,18 @@ namespace test.console
         static void Main(string[] args)
         {
 
-            var log4net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
-            XmlConfigurator.Configure(new FileInfo(log4net_config));
+            var log4_net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
+            XmlConfigurator.Configure(new FileInfo(log4_net_config));
 
 
-            int batchSize = 32;
-            uint W = 60;
-            uint H = 20;
+            int batch_size = 32;
+            uint w = 60;
+            uint h = 20;
             float learning_rate = 1e-4f;
             float weight_decay = 1e-4f;
 
-            ReadData rdtrain = new ReadData("data\\train\\", batchSize);
-            ReadData rdval = new ReadData("data\\val\\", batchSize);
+            ReadData rdtrain = new ReadData("data\\train\\", batch_size);
+            ReadData rdval = new ReadData("data\\val\\", batch_size);
 
 
             //var first = rdtrain.First();
@@ -77,12 +77,12 @@ namespace test.console
 
             //Symbol data1 = Symbol.Variable("data1");
             //Symbol data2 = Symbol.Variable("data2");
-            var pnet = get_ocrnet(batchSize);
-            Speedometer speed = new Speedometer(batchSize, 50);
+            var pnet = get_ocrnet(batch_size);
+            Speedometer speed = new Speedometer(batch_size, 50);
 
-            CustomMetric customMetric = new CustomMetric((l,p)=> Accuracy(l, p, batchSize));
+            CustomMetric custom_metric = new CustomMetric((l,p)=> Accuracy(l, p, batch_size));
 
-            Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.001f, wd: 0.00001f , rescale_grad:1.0f/batchSize);
+            Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.001f, wd: 0.00001f , rescale_grad:1.0f/batch_size);
    
 
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
@@ -94,32 +94,32 @@ namespace test.console
 
 
             model.Fit(rdtrain, rdval, 
-                customMetric, 
+                custom_metric, 
                 batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
             Console.WriteLine("");
 
         }
 
-        private static CustomMetricResult Accuracy(SingleNArray label, SingleNArray pred, int batchSize)
+        private static CustomMetricResult Accuracy(SingleNArray label, SingleNArray pred, int batch_size)
         {
             int hit = 0;
-            for (int i = 0; i < batchSize; i++)
+            for (int i = 0; i < batch_size; i++)
             {
                 var l = label[i];
 
                 List<int> p = new List<int>();
                 for (int k = 0; k < 4; k++)
                 {
-                    p.Add((int)pred[k* batchSize + i].Argmax());
+                    p.Add((int)pred[k* batch_size + i].Argmax());
                 }
 
-                if (l.Shape.Size == p.Count)
+                if (l.shape.size == p.Count)
                 {
 
                     var match = true;
                     for (int k = 0; k < p.Count; k++)
                     {
-                        if (p[k] != (int)(l.Data[k]))
+                        if (p[k] != (int)(l.data[k]))
                         {
                             match = false;
                             break;
@@ -134,7 +134,7 @@ namespace test.console
 
             }
 
-            return new CustomMetricResult {SumMetric = hit, NumInst = batchSize};
+            return new CustomMetricResult {sum_metric = hit, num_inst = batch_size};
 
         }
     }

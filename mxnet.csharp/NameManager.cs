@@ -13,14 +13,14 @@ namespace mxnet.csharp
         private bool _is_dispose = false;
         public NameScop()
         {
-            NameManager.Instance.Push();
+            NameManager.instance.Push();
         }
 
         public void Dispose()
         {
             if (_is_dispose == false)
             {
-                NameManager.Instance.Pop();
+                NameManager.instance.Pop();
                 _is_dispose = true;
             }
         }
@@ -45,7 +45,7 @@ namespace mxnet.csharp
     class NameManager
     {
         private static readonly ThreadLocal<NameManager> Instancetls = new ThreadLocal<NameManager>(() => new NameManager());
-        public static NameManager Instance => Instancetls.Value;
+        public static NameManager instance => Instancetls.Value;
 
         private static readonly NameUnit Default = new NameUnit();
         private readonly Stack<NameUnit> _stack = new Stack<NameUnit>();

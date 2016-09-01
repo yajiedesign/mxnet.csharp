@@ -11,7 +11,7 @@ namespace opwrappergenerator
     {
         static void Main(string[] args)
         {
-            OpWrapperGenerator opWrapperGenerator = new OpWrapperGenerator();
+            OpWrapperGenerator op_wrapper_generator = new OpWrapperGenerator();
            
 
             string str = @"using System;
@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 namespace mxnet.csharp
 {
     public partial class Symbol
-    {" + opWrapperGenerator.ParseAllOps().Replace("\n","\r\n") + 
+    {" + op_wrapper_generator.ParseAllOps().Replace("\n","\r\n") + 
     @"}
 }
 ";

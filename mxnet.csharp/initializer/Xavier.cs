@@ -23,7 +23,7 @@ namespace mxnet.csharp.initializer
             float hw_scale = 1.0f;
             if (shape.Size() > 2)
             {
-                hw_scale = Util.prod(shape.data().Skip(2).ToArray());
+                hw_scale = Util.Prod(shape.Data().Skip(2).ToArray());
             }
             var fan_out = shape[0] * hw_scale;
             var fan_in = shape[1] * hw_scale;
