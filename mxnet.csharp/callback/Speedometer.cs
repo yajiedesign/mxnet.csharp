@@ -11,12 +11,12 @@ namespace mxnet.csharp.callback
 {
     public class Speedometer
     {
-        private int batch_size;
-        private int frequent;
+        private readonly int batch_size;
+        private readonly int frequent;
         private bool init;
-        private Stopwatch tic;
+        private readonly Stopwatch tic;
         private int last_count;
-        private ILog log;
+        private readonly ILog log;
 
         public Speedometer(int batch_size, int frequent = 50, ILog log = null)
         {
@@ -35,7 +35,7 @@ namespace mxnet.csharp.callback
         public void Call(BatchEndParam param)
         {
 
-            var count = param.nbatch;
+            var count = param.Nbatch;
             if (this.last_count > count)
             {
                 this.init = false;
@@ -48,19 +48,19 @@ namespace mxnet.csharp.callback
                 if ((count % this.frequent) == 0)
                 {
                     var speed = (double)this.frequent * this.batch_size / (this.tic.ElapsedMilliseconds / 1000f);
-                    if (param.eval_metric != null)
+                    if (param.EvalMetric != null)
                     {
-                        var name_value = param.eval_metric.get_name_value();
-                        param.eval_metric.reset();
+                        var name_value = param.EvalMetric.get_name_value();
+                        param.EvalMetric.reset();
                         foreach (var nv in name_value)
                         {
                             log.Info(
-                                $"Epoch[{param.epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.name}={nv.value}");
+                                $"Epoch[{param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.Name}={nv.Value}");
                         }
                     }
                     else
                     {
-                        log.Info($"Iter[{ param.epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
+                        log.Info($"Iter[{ param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
                     }
                     this.tic.Restart();
                 }

@@ -20,7 +20,7 @@ namespace mxnet.csharp.initializer
             //}
 
             //arr.SyncCopyFromCPU(temp);
-            util.Random.uniform(-scale, scale, arr);
+            util.Random.Uniform(-scale, scale, arr);
         }
     }
 }

@@ -249,9 +249,9 @@ namespace mxnet.csharp
             {
 
                 _initialize_kvstore(kvstore: kvstore,
-                    param_arrays: executor_manager.param_arrays,
+                    param_arrays: executor_manager.ParamArrays,
                     arg_params: arg_params,
-                    param_names: executor_manager.param_names,
+                    param_names: executor_manager.ParamNames,
                     update_on_kvstore: update_on_kvstore);
             }
 
@@ -282,22 +282,22 @@ namespace mxnet.csharp
                         monitor?.tic();
 
 
-                        executor_manager.forward(is_train: true);
-                        executor_manager.backward();
+                        executor_manager.Forward(is_train: true);
+                        executor_manager.Backward();
 
                         
 
                         if (update_on_kvstore)
                         {
                             _update_params_on_kvstore(
-                                executor_manager.param_arrays,
-                                executor_manager.grad_arrays,
+                                executor_manager.ParamArrays,
+                                executor_manager.GradArrays,
                                 kvstore);
                         }
                         else
                         {
-                            _update_params(executor_manager.param_arrays,
-                                executor_manager.grad_arrays,
+                            _update_params(executor_manager.ParamArrays,
+                                executor_manager.GradArrays,
                                 updater: updater,
                                 num_device: ctx.Count,
                                 kvstore: kvstore);

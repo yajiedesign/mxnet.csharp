@@ -36,14 +36,14 @@ namespace mxnet.csharp
 
     public class Executor : IDisposable
     {
-        private readonly ExecutorHandle handle_;
+        private readonly ExecutorHandle _handle_;
         public List<NDArray> Outputs { get; } = new List<NDArray>();
-        public List<NDArray> Arg_arrays { get; }
-        public List<NDArray> Grad_arrays { get; }
-        public List<NDArray> Aux_arrays { get; }
+        public List<NDArray> ArgArrays { get; }
+        public List<NDArray> GradArrays { get; }
+        public List<NDArray> AuxArrays { get; }
 
-        public Dictionary<string, NDArray> Arg_dict { get; private set; }
-        public Dictionary<string, NDArray> Grad_dict { get; private set; }
+        public Dictionary<string, NDArray> ArgDict { get; private set; }
+        public Dictionary<string, NDArray> GradDict { get; private set; }
 
         private Symbol _symbol_;
         private readonly Dictionary<string, NDArray> _aux_dict;
@@ -60,16 +60,16 @@ namespace mxnet.csharp
             {
                 group_to_ctx = new Dictionary<string, Context>();
             }
-            this.Arg_arrays = arg_arrays;
-            this.Grad_arrays = grad_arrays;
-            this.Aux_arrays = aux_arrays;
+            this.ArgArrays = arg_arrays;
+            this.GradArrays = grad_arrays;
+            this.AuxArrays = aux_arrays;
             this._symbol_ = symbol;
 
             var arg_name = symbol.ListArguments();
 
-            Arg_dict = arg_name.Zip(arg_arrays, (name, arg) => new { name, arg })
+            ArgDict = arg_name.Zip(arg_arrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
-            Grad_dict = arg_name.Zip(grad_arrays, (name, arg) => new { name, arg })
+            GradDict = arg_name.Zip(grad_arrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
 
             _aux_dict = symbol.ListAuxiliaryStates().Zip(aux_arrays, (name, arg) => new { name, arg })
@@ -116,7 +116,7 @@ namespace mxnet.csharp
             }
 
             var shared_exec_handle =
-                shared_exec?.handle_ ?? NDArrayHandle.Zero;
+                shared_exec?._handle_ ?? NDArrayHandle.Zero;
 
             Util.call_check(NativeMethods.MXExecutorBindEX(
                 symbol.GetHandle(),
@@ -133,11 +133,11 @@ namespace mxnet.csharp
                 (uint)aux_handles.Count,
                 aux_handles.ToArray(),
                 shared_exec_handle,
-                out handle_) );
+                out _handle_) );
 
             uint out_size;
             NDArrayHandle out_array_ptr;
-            Util.call_check(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) );
+            Util.call_check(NativeMethods.MXExecutorOutputs(_handle_, out out_size, out out_array_ptr) );
             var out_array = new NDArrayHandle[out_size];
             if (out_size > 0)
             {
@@ -152,7 +152,7 @@ namespace mxnet.csharp
         public string Debug_str()
         {
             NDArrayHandle output_ptr;
-            NativeMethods.MXExecutorPrint(handle_, out output_ptr);
+            NativeMethods.MXExecutorPrint(_handle_, out output_ptr);
             return Marshal.PtrToStringAnsi(output_ptr);
         }
 
@@ -165,10 +165,10 @@ namespace mxnet.csharp
         /// <param name="is_train"></param>
         public void Forward(bool is_train)
         {
-            NativeMethods.MXExecutorForward(handle_, is_train ? 1 : 0);
+            NativeMethods.MXExecutorForward(_handle_, is_train ? 1 : 0);
             uint out_size;
             NDArrayHandle out_array_ptr;
-            Util.call_check(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) );
+            Util.call_check(NativeMethods.MXExecutorOutputs(_handle_, out out_size, out out_array_ptr) );
             var out_array = new NDArrayHandle[out_size];
 
             Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);
@@ -186,15 +186,15 @@ namespace mxnet.csharp
         ///     User is allowed to pass in an empty Array if the head node is
         ///     loss function and head gradeitn is not needed.
         /// </summary>
-        /// <param name="headGrads">the gradient of head nodes to be backproped.</param>
-        public void Backward(List<NDArray> headGrads = null)
+        /// <param name="head_grads">the gradient of head nodes to be backproped.</param>
+        public void Backward(List<NDArray> head_grads = null)
         {
-            if (headGrads == null)
+            if (head_grads == null)
             {
-                headGrads = new List<NDArray>();
+                head_grads = new List<NDArray>();
             }
             var new_head_grads = new List<NDArray>();
-            foreach (var d in headGrads)
+            foreach (var d in head_grads)
             {
                 new_head_grads.Add(new NDArray(d.Get_handle()));
             }
@@ -202,25 +202,26 @@ namespace mxnet.csharp
             {
                 var ptrs = new_head_grads.Select(s => s.Get_handle()).ToArray();
 
-                NativeMethods.MXExecutorBackward(handle_, (uint)new_head_grads.Count, ptrs);
+                NativeMethods.MXExecutorBackward(_handle_, (uint)new_head_grads.Count, ptrs);
             }
             else
             {
-                NativeMethods.MXExecutorBackward(handle_, 0, NDArrayHandle.Zero);
+                NativeMethods.MXExecutorBackward(_handle_, 0, NDArrayHandle.Zero);
             }
         }
 
         public void set_monitor_callback(ExecutorMonitorCallback callback)
         {
-            NativeMethods.MXExecutorSetMonitorCallback(handle_, callback, IntPtr.Zero);
+            NativeMethods.MXExecutorSetMonitorCallback(_handle_, callback, IntPtr.Zero);
         }
-        public void copy_params_from(Dictionary<string, NDArray> argParams, Dictionary<string, NDArray> auxParams = null, bool allow_extra_params = false)
+        public void copy_params_from(Dictionary<string, NDArray> arg_params,
+            Dictionary<string, NDArray> aux_params = null, bool allow_extra_params = false)
         {
-            foreach (var kv in argParams)
+            foreach (var kv in arg_params)
             {
-                if (Arg_dict.ContainsKey(kv.Key))
+                if (ArgDict.ContainsKey(kv.Key))
                 {
-                    kv.Value.Copy_to(Arg_dict[kv.Key]);
+                    kv.Value.Copy_to(ArgDict[kv.Key]);
                 }
                 else
                 {
@@ -232,9 +233,9 @@ namespace mxnet.csharp
                 }
 
             }
-            if (auxParams != null)
+            if (aux_params != null)
             {
-                foreach (var kv in auxParams)
+                foreach (var kv in aux_params)
                 {
                     if (_aux_dict.ContainsKey(kv.Key))
                     {
@@ -263,7 +264,7 @@ namespace mxnet.csharp
 
         private void Dispose(bool disposing)
         {
-            NativeMethods.MXExecutorFree(handle_);
+            NativeMethods.MXExecutorFree(_handle_);
             if (disposing)
             {
                 GC.SuppressFinalize(this);

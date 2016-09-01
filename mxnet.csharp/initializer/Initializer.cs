@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace mxnet.csharp.initializer
 {
@@ -65,12 +60,12 @@ namespace mxnet.csharp.initializer
         private void _init_bilinear(string name, NDArray arr)
         {
             var shape = arr.Get_shape().data();
-            var prodShape =Util.prod(shape);
-            float[] weight = new float[prodShape];
+            var prod_shape =Util.prod(shape);
+            float[] weight = new float[prod_shape];
 
             var f = Math.Ceiling(shape[3] / 2.0);
             var c = (2 * f - 1 - f % 2) / (2.0 * f);
-            for (int i = 0; i < prodShape; i++)
+            for (int i = 0; i < prod_shape; i++)
             {
                 var x = i % shape[3];
                 var y = (i / shape[3]) % shape[2];
@@ -83,7 +78,7 @@ namespace mxnet.csharp.initializer
         private void _init_loc_bias(string name, NDArray arr)
         {
             Util.assert(arr.Get_shape()[0] == 6);
-            arr.Sync_copy_from_cpu(new float[] {1.0f, 0, 0, 0, 1.0f, 0});
+            arr.Sync_copy_from_cpu(new[] {1.0f, 0, 0, 0, 1.0f, 0});
         }
 
         private void _init_bias(string name, NDArray arr)

@@ -6,8 +6,8 @@ namespace mxnet.csharp.metric
 {
     public class CustomMetricResult
     {
-        public float sum_metric { get; set; }
-        public int num_inst { get; set; }
+        public float SumMetric { get; set; }
+        public int NumInst { get; set; }
     }
     public delegate CustomMetricResult CustomMetricEval(SingleNArray labels, SingleNArray preds);
     public class CustomMetric : EvalMetric
@@ -37,8 +37,8 @@ namespace mxnet.csharp.metric
                     //TODO pred = pred[:, 1]
                 }
                 var reval = this._feval(label, pred);
-                this.sum_metric[0] += reval.sum_metric;
-                this.num_inst[0] += reval.num_inst;
+                this.sum_metric[0] += reval.SumMetric;
+                this.num_inst[0] += reval.NumInst;
             }
         }
     }

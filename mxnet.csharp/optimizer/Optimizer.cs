@@ -16,17 +16,17 @@ namespace mxnet.csharp.optimizer
     public abstract class Optimizer
     {
         private float rescale_grad;
-        private Func<int,float> lr_scheduler;
-        private float lr;
-        private float wd;
+        private readonly Func<int,float> lr_scheduler;
+        private readonly float lr;
+        private readonly float wd;
         private Dictionary<string, float> lr_mult;
         private Dictionary<string, float> wd_mult;
-        private int begin_num_update;
+        private readonly int begin_num_update;
         private int num_update;
-        private Dictionary<int, int> index_update_count;
+        private readonly Dictionary<int, int> index_update_count;
         private float? clip_gradient;
-        private Dictionary<int, string> idx2_name;
-        private Symbol sym;
+        private readonly Dictionary<int, string> idx2_name;
+        private readonly Symbol sym;
 
 
         public Optimizer(float rescale_grad = 1.0f,
@@ -282,18 +282,18 @@ namespace mxnet.csharp.optimizer
  
     public class CcSgd : Optimizer
     {
-        private float momentum;
-        private IntPtr handle;
+        private float _momentum;
+        private readonly IntPtr _handle;
 
 
-        public CcSgd(float momentum = 0.0f,float rescale_grad = 1, Dictionary<int, string> param_idx2name = null, float wd = 0,
+        public CcSgd(float momentum = 0.0f,float rescale_grad = 1, Dictionary<int, string> param_idx2_name = null, float wd = 0,
             float clip_gradient = -1, float learning_rate = 0.01F, Func<int, float> lr_scheduler = null,
             Symbol sym = null, int begin_num_update = 0)
-            : base(rescale_grad, param_idx2name, wd, clip_gradient, learning_rate, lr_scheduler, sym, begin_num_update)
+            : base(rescale_grad, param_idx2_name, wd, clip_gradient, learning_rate, lr_scheduler, sym, begin_num_update)
         {
-            this.momentum = momentum;
+            this._momentum = momentum;
 
-            this.handle = Optimizer._init_cc_optimizer(
+            this._handle = Optimizer._init_cc_optimizer(
                 "ccsgd",
                 new[]
                 {
@@ -319,7 +319,7 @@ namespace mxnet.csharp.optimizer
             var lr = this._get_lr(index);
             var wd = this._get_wd(index);
             this._update_count(index);
-            Util.call_check(NativeMethods.MXOptimizerUpdate(this.handle,
+            Util.call_check(NativeMethods.MXOptimizerUpdate(this._handle,
                 index,
                 weight.Get_handle(),
                 grad.Get_handle(),

@@ -8,15 +8,15 @@ namespace mxnet.csharp.metric
 {
     public abstract class EvalMetric
     {
-        private readonly string name;
-        private readonly int num;
+        private readonly string _name;
+        private readonly int _num;
         protected int[] num_inst;
         protected float[] sum_metric;
 
         public EvalMetric(string name, int num = 1)
         {
-            this.name = name;
-            this.num = num;
+            this._name = name;
+            this._num = num;
             reset();
         }
 
@@ -25,7 +25,7 @@ namespace mxnet.csharp.metric
         public void reset()
         {
 
-            if (this.num == 1)
+            if (this._num == 1)
             {
                 this.num_inst = new int[1];
                 this.sum_metric = new float[1];
@@ -33,8 +33,8 @@ namespace mxnet.csharp.metric
 
             else
             {
-                this.num_inst = new int[num];
-                this.sum_metric = new float[num];
+                this.num_inst = new int[_num];
+                this.sum_metric = new float[_num];
             }
 
 
@@ -42,15 +42,15 @@ namespace mxnet.csharp.metric
 
         public EvalMetricResult[] get_name_value()
         {
-            if (num == 1)
+            if (_num == 1)
             {
                 if (this.num_inst[0] == 0)
                 {
-                    return new[] {new EvalMetricResult(name, float.NaN)};
+                    return new[] {new EvalMetricResult(_name, float.NaN)};
                 }
                 else
                 {
-                    return new[] {new EvalMetricResult(name, sum_metric[0]/num_inst[0])};
+                    return new[] {new EvalMetricResult(_name, sum_metric[0]/num_inst[0])};
                 }
             }
             else
@@ -59,11 +59,11 @@ namespace mxnet.csharp.metric
                 {
                     if (i == 0)
                     {
-                        return new EvalMetricResult(name, float.NaN);
+                        return new EvalMetricResult(_name, float.NaN);
                     }
                     else
                     {
-                        return new EvalMetricResult(name, m/i);
+                        return new EvalMetricResult(_name, m/i);
                     }
 
                 });

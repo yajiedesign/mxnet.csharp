@@ -1,22 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Random = mxnet.csharp.util.Random;
 
 namespace mxnet.csharp.initializer
 {
-    public class xavier:Initializer
+    public class Xavier:Initializer
     {
-        private readonly rnd_type rnd_type;
-        private readonly factor_type factor_type;
-        private readonly float magnitude;
+        private readonly RndType _rnd_type;
+        private readonly FactorType _factor_type;
+        private readonly float _magnitude;
 
-        public xavier(rnd_type rnd_type = rnd_type.Uniform, factor_type factor_type =  factor_type.Avg, float magnitude= 3)
+        public Xavier(RndType rnd_type = RndType.Uniform, FactorType factor_type =  FactorType.Avg, float magnitude= 3)
         {
-            this.rnd_type = rnd_type;
-            this.factor_type = factor_type;
-            this.magnitude = magnitude;
+            this._rnd_type = rnd_type;
+            this._factor_type = factor_type;
+            this._magnitude = magnitude;
         }
 
         protected override void _init_weight(string name, NDArray arr)
@@ -31,45 +29,45 @@ namespace mxnet.csharp.initializer
             var fan_in = shape[1] * hw_scale;
 
             float factor = 1.0f;
-            switch (factor_type)
+            switch (_factor_type)
             {
-                case factor_type.Avg:
+                case FactorType.Avg:
                     factor = (fan_in + fan_out)/2.0f;
                     break;
-                case factor_type.In:
+                case FactorType.In:
                     factor = fan_in;
                     break;
-                case factor_type.Out:
+                case FactorType.Out:
                     factor = fan_out;
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(initializer.factor_type));
+                    throw new ArgumentOutOfRangeException(nameof(FactorType));
             }
 
-            var scale = (float)Math.Sqrt(this.magnitude/factor);
+            var scale = (float)Math.Sqrt(this._magnitude/factor);
 
-            switch (rnd_type)
+            switch (_rnd_type)
             {
-                case rnd_type.Uniform:
-                    util.Random.uniform(-scale, scale, arr);
+                case RndType.Uniform:
+                    Random.Uniform(-scale, scale, arr);
                     break;
-                case rnd_type.Gaussian:
-                    util.Random.normal(-scale, scale, arr);
+                case RndType.Gaussian:
+                    Random.Normal(-scale, scale, arr);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(initializer.rnd_type));
+                    throw new ArgumentOutOfRangeException(nameof(RndType));
             }
         }
     }
 
-    public enum rnd_type
+    public enum RndType
 
     {
         Uniform,
         Gaussian
     }
 
-    public enum factor_type
+    public enum FactorType
 
     {
         Avg,In,Out

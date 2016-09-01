@@ -10,7 +10,7 @@ namespace mxnet.csharp.util
 {
     class Random
     {
-        public static void uniform(float low, float high,NDArray @out)
+        public static void Uniform(float low, float high,NDArray @out)
         {
 
             FunctionHandle func_handle;
@@ -38,7 +38,7 @@ namespace mxnet.csharp.util
             ));
         }
 
-        public static void normal(float loc, float scale, NDArray @out)
+        public static void Normal(float loc, float scale, NDArray @out)
         {
 
             FunctionHandle func_handle;

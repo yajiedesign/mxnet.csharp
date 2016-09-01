@@ -12,22 +12,22 @@ namespace mxnet.csharp
     class DataParallelExecutorManager
     {
 
-        private ILog logger;
-        private List<Tuple<int, int>> slices;
-        private List<string> arg_names;
-        public List<string> param_names { get; }
-        public List<List<NDArray>> param_arrays => execgrp.param_arrays;
-        public List<List<NDArray>> grad_arrays => execgrp.grad_arrays;
+        private ILog _logger;
+        private readonly List<Tuple<int, int>> _slices;
+        private readonly List<string> _arg_names;
+        public List<string> ParamNames { get; }
+        public List<List<NDArray>> ParamArrays => _execgrp.ParamArrays;
+        public List<List<NDArray>> GradArrays => _execgrp.GradArrays;
 
-        private List<string> aux_names;
-        private List<Context> ctx
+        private List<string> _aux_names;
+        private readonly List<Context> _ctx
             ;
 
-        private DataParallelExecutorGroup execgrp;
-        private Symbol symbol;
-        private Func<string, Symbol> sym_gen;
-        private DataParallelExecutorGroup curr_execgrp;
-        private Dictionary<string, DataParallelExecutorGroup> execgrp_bucket;
+        private readonly DataParallelExecutorGroup _execgrp;
+        private Symbol _symbol;
+        private readonly Func<string, Symbol> _sym_gen;
+        private DataParallelExecutorGroup _curr_execgrp;
+        private readonly Dictionary<string, DataParallelExecutorGroup> _execgrp_bucket;
 
 
         public DataParallelExecutorManager(Symbol symbol, Func<string, Symbol> sym_gen, List<Context> ctx,
@@ -38,7 +38,7 @@ namespace mxnet.csharp
             {
                 logger = LogManager.GetLogger("");
             }
-            this.logger = logger;
+            this._logger = logger;
 
             var num_device = ctx.Count;
             logger.Info("Start training with " + string.Join("", ctx));
@@ -51,26 +51,26 @@ namespace mxnet.csharp
 
             var slices = _split_input_slice(train_data.Batch_size, work_load_list);
 
-            this.slices = slices;
+            this._slices = slices;
 
-            this.arg_names = arg_names;
-            this.param_names = param_names;
-            this.aux_names = aux_names;
-            this.ctx = ctx;
+            this._arg_names = arg_names;
+            this.ParamNames = param_names;
+            this._aux_names = aux_names;
+            this._ctx = ctx;
 
-            this.execgrp = new DataParallelExecutorGroup(symbol, this.arg_names, this.param_names, this.ctx,
-                this.slices, train_data);
+            this._execgrp = new DataParallelExecutorGroup(symbol, this._arg_names, this.ParamNames, this._ctx,
+                this._slices, train_data);
 
-            this.symbol = symbol;
+            this._symbol = symbol;
 
-            this.sym_gen = sym_gen;
-            this.curr_execgrp = null;
+            this._sym_gen = sym_gen;
+            this._curr_execgrp = null;
             // this is set when data is loaded
-            if (this.sym_gen != null)
+            if (this._sym_gen != null)
             {
-                this.execgrp_bucket = new Dictionary<string, DataParallelExecutorGroup>()
+                this._execgrp_bucket = new Dictionary<string, DataParallelExecutorGroup>()
                 {
-                    {train_data.Default_bucket_key,  this.execgrp }
+                    {train_data.Default_bucket_key,  this._execgrp }
                 };
             }
 
@@ -107,85 +107,85 @@ namespace mxnet.csharp
 
         public void install_monitor(Monitor monitor)
         {
-            if (this.sym_gen != null)
+            if (this._sym_gen != null)
             {
                 throw new Exception("Monitoring is not implemented for bucketing");
             }
-            foreach (var train_execs in this.execgrp.train_execs)
+            foreach (var train_execs in this._execgrp.TrainExecs)
             {
                 monitor.Install(train_execs);
             }
         }
 
-        public void set_params(Dictionary<string, NDArray> argParams, Dictionary<string, NDArray> auxParams)
+        public void set_params(Dictionary<string, NDArray> arg_params, Dictionary<string, NDArray> aux_params)
         {
-            foreach (var texec in execgrp.train_execs)
+            foreach (var texec in _execgrp.TrainExecs)
             {
-                texec.copy_params_from(argParams, auxParams);
+                texec.copy_params_from(arg_params, aux_params);
             }
      
         }
 
         public void load_data_batch(IDataBatch data_batch)
         {
-            if (this.sym_gen != null)
+            if (this._sym_gen != null)
             {
                 var key = data_batch.Bucket_key;
-                if (!execgrp_bucket.ContainsKey(key))
+                if (!_execgrp_bucket.ContainsKey(key))
                 {
                     //create new bucket entry
-                    var symbol = sym_gen(key);
-                    var execgrp = new DataParallelExecutorGroup(symbol, this.arg_names,
-                        this.param_names, this.ctx,
-                        this.slices, data_batch,
-                        shared_group: this.execgrp);
-                    this.execgrp_bucket[key] = execgrp;
+                    var symbol = _sym_gen(key);
+                    var execgrp = new DataParallelExecutorGroup(symbol, this._arg_names,
+                        this.ParamNames, this._ctx,
+                        this._slices, data_batch,
+                        shared_group: this._execgrp);
+                    this._execgrp_bucket[key] = execgrp;
                 }
-                this.curr_execgrp = this.execgrp_bucket[key];
+                this._curr_execgrp = this._execgrp_bucket[key];
             }
             else
             {
-                this.curr_execgrp = this.execgrp;
+                this._curr_execgrp = this._execgrp;
             }
-            this.curr_execgrp.load_data_batch(data_batch);
+            this._curr_execgrp.load_data_batch(data_batch);
         }
         /// <summary>
         /// run forward on the current executor
         /// </summary>
         /// <param name="is_train"></param>
-        public void forward(bool is_train)
+        public void Forward(bool is_train)
         {
-            this.curr_execgrp.forward(is_train: is_train);
+            this._curr_execgrp.Forward(is_train: is_train);
         }
         /// <summary>
         /// run backward on the current executor
         /// </summary>
-        public void backward()
+        public void Backward()
         {
-            this.curr_execgrp.backward();
+            this._curr_execgrp.Backward();
         }
 
         public void update_metric(EvalMetric metric, List<NDArray> labels)
         {
-            this.curr_execgrp.update_metric(metric, labels);
+            this._curr_execgrp.update_metric(metric, labels);
         }
     }
 
     internal class DataParallelExecutorGroup
     {
-        private List<Dictionary<string, NDArray>> shared_data_arrays;
-        private List<string> data_names;
-        private List<string> label_names;
-        private IList<string> aux_names;
-        private List<int> param_idx;
-        private List<string> param_names;
-        public List<Executor> train_execs { get; }
-        private List<List<Tuple<Tuple<int, int>, NDArray>>> data_arrays;
-        private List<List<Tuple<Tuple<int, int>, NDArray>>> label_arrays;
-        public List<List<NDArray>> param_arrays { get; }
-        public List<List<NDArray>> grad_arrays { get; }
-        private List<List<NDArray>> aux_arrays;
-        private List<Tuple<int, int>> slices;
+        private readonly List<Dictionary<string, NDArray>> _shared_data_arrays;
+        private readonly List<string> _data_names;
+        private readonly List<string> _label_names;
+        private readonly IList<string> _aux_names;
+        private readonly List<int> _param_idx;
+        private readonly List<string> _param_names;
+        public List<Executor> TrainExecs { get; }
+        private readonly List<List<Tuple<Tuple<int, int>, NDArray>>> _data_arrays;
+        private readonly List<List<Tuple<Tuple<int, int>, NDArray>>> _label_arrays;
+        public List<List<NDArray>> ParamArrays { get; }
+        public List<List<NDArray>> GradArrays { get; }
+        private List<List<NDArray>> _aux_arrays;
+        private readonly List<Tuple<int, int>> _slices;
 
         public DataParallelExecutorGroup(Symbol sym,
             List<string> arg_names,
@@ -199,20 +199,20 @@ namespace mxnet.csharp
 
             if (shared_group == null)
             {
-                this.shared_data_arrays = ctx.Select(s => new Dictionary<string, NDArray>()).ToList();
+                this._shared_data_arrays = ctx.Select(s => new Dictionary<string, NDArray>()).ToList();
             }
             else
             {
-                this.shared_data_arrays = shared_group.shared_data_arrays;
+                this._shared_data_arrays = shared_group._shared_data_arrays;
             }
-            this.data_names = train_data.Provide_data.Select(s => s.Key).ToList();
-            this.label_names = train_data.Provide_label.Select(s => s.Key).ToList();
-            this.aux_names = sym.ListAuxiliaryStates();
+            this._data_names = train_data.Provide_data.Select(s => s.Key).ToList();
+            this._label_names = train_data.Provide_label.Select(s => s.Key).ToList();
+            this._aux_names = sym.ListAuxiliaryStates();
 
-            this.param_idx = arg_names.Select((x, i) => new { x = x, i = i }).Where(w => param_names.Contains(w.x)).Select(s => s.i).ToList();
-            this.param_names = param_idx.Select(s => arg_names[s]).ToList();
+            this._param_idx = arg_names.Select((x, i) => new { x = x, i = i }).Where(w => param_names.Contains(w.x)).Select(s => s.i).ToList();
+            this._param_names = _param_idx.Select(s => arg_names[s]).ToList();
 
-            this.train_execs = new List<Executor>();
+            this.TrainExecs = new List<Executor>();
             for (int i = 0; i < ctx.Count; i++)
             {
                 var concat = train_data.Provide_data.Concat(train_data.Provide_label);
@@ -226,26 +226,26 @@ namespace mxnet.csharp
                            return tuple.ToArray();
                        });
 
-                var shared_exec = shared_group == null ? null : shared_group.train_execs[i];
+                var shared_exec = shared_group == null ? null : shared_group.TrainExecs[i];
 
-                var train_exec = _bind_exec(sym, ctx[i], data_shapes, this.param_names,
+                var train_exec = _bind_exec(sym, ctx[i], data_shapes, this._param_names,
                     need_grad_input: true, base_exec: shared_exec,
-                    shared_data_arrays: this.shared_data_arrays[i]);
+                    shared_data_arrays: this._shared_data_arrays[i]);
 
-                this.train_execs.Add(train_exec);
+                this.TrainExecs.Add(train_exec);
             }
 
 
-            this.data_arrays = data_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.Arg_dict[name])).ToList()).ToList();
-            this.label_arrays = label_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.Arg_dict[name])).ToList()).ToList();
+            this._data_arrays = _data_names.Select(name => TrainExecs.Select((e, i) => Tuple.Create(slices[i], e.ArgDict[name])).ToList()).ToList();
+            this._label_arrays = _label_names.Select(name => TrainExecs.Select((e, i) => Tuple.Create(slices[i], e.ArgDict[name])).ToList()).ToList();
 
-            this.param_arrays = param_idx.Select(i => train_execs.Select((e) => e.Arg_arrays[i]).ToList()).ToList();
+            this.ParamArrays = _param_idx.Select(i => TrainExecs.Select((e) => e.ArgArrays[i]).ToList()).ToList();
 
-            this.grad_arrays = param_idx.Select(i => train_execs.Select((e) => e.Grad_arrays[i]).ToList()).ToList();
+            this.GradArrays = _param_idx.Select(i => TrainExecs.Select((e) => e.GradArrays[i]).ToList()).ToList();
 
-            this.aux_arrays = Enumerable.Range(0, this.aux_names.Count).Select(i => train_execs.Select((e) => e.Aux_arrays[i]).ToList()).ToList();
+            this._aux_arrays = Enumerable.Range(0, this._aux_names.Count).Select(i => TrainExecs.Select((e) => e.AuxArrays[i]).ToList()).ToList();
 
-            this.slices = slices;
+            this._slices = slices;
         }
 
         private  Executor _bind_exec(Symbol sym, Context ctx, Dictionary<string, uint[]> input_shapes,
@@ -275,7 +275,7 @@ namespace mxnet.csharp
             var grad_arrays = need_grad_input ? new Dictionary<string, NDArray>() : null;
 
             var arg_names = sym.ListArguments();
-            HashSet<string> need_grad = null;
+            HashSet<string> need_grad;
             if (need_grad_input == false)
             {
                 need_grad = new HashSet<string>();
@@ -296,7 +296,7 @@ namespace mxnet.csharp
                 var name = arg_names[i];
                 if (!param_names.Contains(name))
                 {
-                    NDArray arg_arr = null;
+                    NDArray arg_arr;
                     //data or label
                     if (shared_data_arrays != null && shared_data_arrays.ContainsKey(name))
                     {
@@ -339,7 +339,7 @@ namespace mxnet.csharp
                 }
                 else
                 {
-                    NDArray arg_arr = null;
+                    NDArray arg_arr;
                     if (base_exec == null)
                     {
                         arg_arr = NDArray.Zeros(new Shape(arg_shapes[i]), ctx, dtype: arg_types[i]);
@@ -353,12 +353,12 @@ namespace mxnet.csharp
                     }
                     else
                     {
-                        arg_arr = base_exec.Arg_dict[name];
+                        arg_arr = base_exec.ArgDict[name];
                         Util.assert(arg_arr.Get_shape() == new Shape(arg_shapes[i]));
                         Util.assert(arg_arr.Get_dtype() == arg_types[i]);
                         if (need_grad_input && need_grad.Contains(name))
                         {
-                            grad_arrays[name] = base_exec.Grad_dict[name];
+                            grad_arrays[name] = base_exec.GradDict[name];
                         }
                     }
                     arg_arrays.Add(arg_arr);
@@ -373,13 +373,13 @@ namespace mxnet.csharp
             }
             else
             {
-                for (int i = 0; i < base_exec.Aux_arrays.Count; i++)
+                for (int i = 0; i < base_exec.AuxArrays.Count; i++)
                 {
-                    var a = base_exec.Aux_arrays[i];
+                    var a = base_exec.AuxArrays[i];
                     Util.assert((new Shape(aux_shapes[i])) == a.Get_shape());
                     Util.assert(aux_type[i] == a.Get_dtype());
                 }
-                aux_arrays = base_exec.Aux_arrays;
+                aux_arrays = base_exec.AuxArrays;
             }
      
 
@@ -390,17 +390,17 @@ namespace mxnet.csharp
 
         public void load_data_batch(IDataBatch data_batch)
         {
-            _load_data(data_batch, this.data_arrays);
-            _load_label(data_batch, this.label_arrays);
+            _load_data(data_batch, this._data_arrays);
+            _load_label(data_batch, this._label_arrays);
         }
 
         /// <summary>
         /// Perform a forward pass on each executor
         /// </summary>
         /// <param name="is_train"></param>
-        public void forward(bool is_train)
+        public void Forward(bool is_train)
         {
-            foreach (var texec in train_execs)
+            foreach (var texec in TrainExecs)
             {
                 texec.Forward(is_train: is_train);
             }
@@ -410,19 +410,19 @@ namespace mxnet.csharp
         /// <summary>
         /// Perform a backward pass on each executor
         /// </summary>
-        public void backward()
+        public void Backward()
         {
-            foreach (var texec in train_execs)
+            foreach (var texec in TrainExecs)
             {
                 texec.Backward();
             }
         }
         public void update_metric(EvalMetric metric, List<NDArray> labels)
         {
-            for (int index = 0; index < train_execs.Count; index++)
+            for (int index = 0; index < TrainExecs.Count; index++)
             {
-                var texec = train_execs[index];
-                var islice = slices[index];
+                var texec = TrainExecs[index];
+                var islice = _slices[index];
                 var labels_slice = labels.Select(s => s.Slice((uint) islice.Item1, (uint) islice.Item2)).ToList();
                 metric.update(labels_slice, texec.Outputs);
             }

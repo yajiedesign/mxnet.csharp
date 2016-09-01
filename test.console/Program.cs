@@ -88,7 +88,7 @@ namespace test.console
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
                 num_epoch: 10,
                 optimizer: optimizer,
-                initializer:new xavier(factor_type: factor_type.In, magnitude:2.34f)
+                initializer:new Xavier(factor_type: FactorType.In, magnitude:2.34f)
 
                 );
 
@@ -134,7 +134,7 @@ namespace test.console
 
             }
 
-            return new CustomMetricResult {sum_metric = hit, num_inst = batchSize};
+            return new CustomMetricResult {SumMetric = hit, NumInst = batchSize};
 
         }
     }
