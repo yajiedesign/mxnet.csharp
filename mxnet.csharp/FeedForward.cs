@@ -13,6 +13,8 @@ using mxnet.csharp.util;
 
 namespace mxnet.csharp
 {
+    public delegate Symbol SymbolGenerate(string key);
+
     public interface IDataIProvide
     {
         Dictionary<string, Shape> provide_data { get; }
@@ -41,7 +43,7 @@ namespace mxnet.csharp
         private Dictionary<string, NDArray> _aux_params;
         private readonly bool _allow_extra_params;
         private bool _argument_checked;
-        private Func<string, Symbol> _sym_gen;
+        private readonly SymbolGenerate _sym_gen;
         private readonly List<Context> _ctx;
         private readonly int _num_epoch;
         private readonly Optimizer _optimizer;
@@ -51,11 +53,59 @@ namespace mxnet.csharp
         private readonly Dictionary<string, object> _kwargs;
         private readonly int? _epoch_size;
 
-
-        public FeedForward(Symbol symbol,
+        public FeedForward(Symbol symbol = null,
             List<Context> ctx = null,
             int num_epoch = 0,
-            int? epoch_size =null,
+            int? epoch_size = null,
+            Optimizer optimizer = null,
+            Initializer initializer = null,
+            Dictionary<string, NDArray> arg_params = null,
+            Dictionary<string, NDArray> aux_params = null,
+            bool allow_extra_params = false,
+            int begin_epoch = 0)
+            : this(symbol,
+                null,
+                ctx,
+                num_epoch,
+                epoch_size,
+                optimizer,
+                initializer,
+                arg_params,
+                aux_params,
+                allow_extra_params,
+                begin_epoch)
+        {
+        }
+
+        public FeedForward(SymbolGenerate symbol_generate = null,
+        List<Context> ctx = null,
+        int num_epoch = 0,
+        int? epoch_size = null,
+        Optimizer optimizer = null,
+        Initializer initializer = null,
+        Dictionary<string, NDArray> arg_params = null,
+        Dictionary<string, NDArray> aux_params = null,
+        bool allow_extra_params = false,
+        int begin_epoch = 0)
+        : this(null,
+            symbol_generate,
+            ctx,
+            num_epoch,
+            epoch_size,
+            optimizer,
+            initializer,
+            arg_params,
+            aux_params,
+            allow_extra_params,
+            begin_epoch)
+        {
+        }
+
+        private FeedForward(Symbol symbol = null,
+            SymbolGenerate symbol_generate = null,
+            List<Context> ctx = null,
+            int num_epoch = 0,
+            int? epoch_size = null,
             Optimizer optimizer = null,
             Initializer initializer = null,
             Dictionary<string, NDArray> arg_params = null,
@@ -64,6 +114,7 @@ namespace mxnet.csharp
             int begin_epoch = 0)
         {
             this._symbol = symbol;
+            this._sym_gen = symbol_generate;
 
             if (initializer == null)
             {
@@ -213,7 +264,7 @@ namespace mxnet.csharp
             Dictionary<string, NDArray> aux_params, int begin_epoch, int end_epoch,int? epoch_size, Optimizer optimizer,
             IDataIter train_data, IDataIter eval_data, EvalMetric eval_metric, List<Action> epoch_end_callback,
             List<Action<BatchEndParam>> batch_end_callback, KVStore kvstore, bool update_on_kvstore, ILog logger, List<int> work_load_list,
-            Monitor monitor, Action eval_batch_end_callback, Func<string, Symbol> sym_gen)
+            Monitor monitor, Action eval_batch_end_callback, SymbolGenerate sym_gen)
         {
 
             if (logger == null)

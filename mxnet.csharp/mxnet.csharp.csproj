@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="callback\Speedometer.cs" />
+    <Compile Include="Context.cs" />
     <Compile Include="initializer\Xavier.cs" />
     <Compile Include="lr_scheduler\FactorScheduler.cs" />
     <Compile Include="lr_scheduler\LRScheduler.cs" />

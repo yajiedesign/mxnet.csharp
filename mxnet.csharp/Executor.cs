@@ -111,8 +111,8 @@ namespace mxnet.csharp
             foreach (var s in group_to_ctx)
             {
                 map_keys.Add(s.Key);
-                dev_types.Add((int)s.Value.Get_device_type());
-                dev_ids.Add(s.Value.Get_device_id());
+                dev_types.Add((int)s.Value.device_type);
+                dev_ids.Add(s.Value.device_id);
             }
 
             var shared_exec_handle =
@@ -120,8 +120,8 @@ namespace mxnet.csharp
 
             Util.CallCheck(NativeMethods.MXExecutorBindEX(
                 symbol.GetHandle(),
-                (int)context.Get_device_type(),
-                context.Get_device_id(),
+                (int)context.device_type,
+                context.device_id,
                 (uint)group_to_ctx.Count,
                 map_keys.ToArray(),
                 dev_types.ToArray(),

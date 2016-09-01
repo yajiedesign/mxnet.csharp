@@ -12,8 +12,6 @@ namespace mxnet.csharp
     {
         private readonly string _operator_name;
         static readonly OpMap OpMap = new OpMap();
-        Dictionary<string, string> _params_desc_ = new Dictionary<string, string>();
-        bool _variable_params_ = false;
         readonly Dictionary<string, string> _params_ = new Dictionary<string, string>();
         readonly List<SymbolHandle> _input_values = new List<SymbolHandle>();
         private readonly List<string> _input_keys = new List<string>();

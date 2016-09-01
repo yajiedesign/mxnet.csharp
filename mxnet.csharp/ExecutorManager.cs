@@ -25,12 +25,12 @@ namespace mxnet.csharp
 
         private readonly DataParallelExecutorGroup _execgrp;
         private Symbol _symbol;
-        private readonly Func<string, Symbol> _sym_gen;
+        private readonly SymbolGenerate _sym_gen;
         private DataParallelExecutorGroup _curr_execgrp;
         private readonly Dictionary<string, DataParallelExecutorGroup> _execgrp_bucket;
 
 
-        public DataParallelExecutorManager(Symbol symbol, Func<string, Symbol> sym_gen, List<Context> ctx,
+        public DataParallelExecutorManager(Symbol symbol, SymbolGenerate sym_gen, List<Context> ctx,
             IDataIter train_data, List<string> param_names, List<string> arg_names,
             List<string> aux_names, List<int> work_load_list, ILog logger)
         {
