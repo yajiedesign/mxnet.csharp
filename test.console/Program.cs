@@ -12,7 +12,9 @@ using mxnet.csharp.callback;
 using mxnet.csharp.initializer;
 using mxnet.csharp.metric;
 using mxnet.csharp.optimizer;
+using mxnet.numerics.nbase;
 using mxnet.numerics.single;
+using Shape = mxnet.csharp.Shape;
 
 namespace test.console
 {
@@ -53,6 +55,10 @@ namespace test.console
 
         static void Main(string[] args)
         {
+            //test Slice
+            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(32, 3, 20, 60));
+            var t2 = testsingle["2:5","1:3"];
+
 
             var log4_net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
             XmlConfigurator.Configure(new FileInfo(log4_net_config));
@@ -80,21 +86,21 @@ namespace test.console
             var pnet = get_ocrnet(batch_size);
             Speedometer speed = new Speedometer(batch_size, 50);
 
-            CustomMetric custom_metric = new CustomMetric((l,p)=> Accuracy(l, p, batch_size));
+            CustomMetric custom_metric = new CustomMetric((l, p) => Accuracy(l, p, batch_size));
 
-            Optimizer optimizer = new CcSgd(momentum:0.9f, learning_rate: 0.001f, wd: 0.00001f , rescale_grad:1.0f/batch_size);
-   
+            Optimizer optimizer = new CcSgd(momentum: 0.9f, learning_rate: 0.001f, wd: 0.00001f, rescale_grad: 1.0f / batch_size);
+
 
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
                 num_epoch: 10,
                 optimizer: optimizer,
-                initializer:new Xavier(factor_type: FactorType.In, magnitude:2.34f)
+                initializer: new Xavier(factor_type: FactorType.In, magnitude: 2.34f)
 
                 );
 
 
-            model.Fit(rdtrain, rdval, 
-                custom_metric, 
+            model.Fit(rdtrain, rdval,
+                custom_metric,
                 batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
             Console.WriteLine("");
 
@@ -110,7 +116,7 @@ namespace test.console
                 List<int> p = new List<int>();
                 for (int k = 0; k < 4; k++)
                 {
-                    p.Add((int)pred[k* batch_size + i].Argmax());
+                    p.Add((int)pred[k * batch_size + i].Argmax());
                 }
 
                 if (l.shape.size == p.Count)
@@ -134,7 +140,7 @@ namespace test.console
 
             }
 
-            return new CustomMetricResult {sum_metric = hit, num_inst = batch_size};
+            return new CustomMetricResult { sum_metric = hit, num_inst = batch_size };
 
         }
     }

@@ -43,13 +43,57 @@ namespace mxnet.numerics.nbase
             Array.Copy(data, storage, Math.Min(data.Length, storage.Length));
         }
 
+        static void ArrayCopy(T[] src, T[] dst, int src_start, int src_end, int dst_start, int dst_end,
+            Slice[] slice, uint[] src_dim,uint[] dst_dim
+            )
+        {
+            var first_slice = slice.FirstOrDefault();
+            if (first_slice != null)
+            {
+                int src_pad = CalcPad(src_dim.Skip(1).ToArray());
+                var dst_index = 0;
+                var dst_pad = CalcPad(dst_dim.Skip(1).ToArray());
+                for (var i = first_slice.start; i < first_slice.stop; i++)
+                {
+                    ArrayCopy(src, dst,
+                        src_start + i*src_pad,
+                        src_start + (i + 1)*src_pad,
+                        dst_start + dst_index*dst_pad,
+                        dst_start + (dst_index + 1)*dst_pad,
+                        slice.Skip(1).ToArray(),
+                        src_dim.Skip(1).ToArray(),
+                        dst_dim.Skip(1).ToArray());
+                    dst_index++;
+                }
+            }
+            else
+            {
+                Array.Copy(src, src_start, dst, dst_start, dst_end - dst_start);
+            }
+        }
 
-        public TOut this[Slice d1]
+        private static int CalcPad(uint[] src_dim)
+        {
+            return (int)src_dim.Aggregate((long)1, (l, r) => l * r);
+        }
+
+        public TOut this[params Slice[] slice]
         {
             get
             {
+                var src_dim = shape.data;
+                var tslice = slice.Select((x, i) => x.Translate(src_dim[i])).ToArray();
+                var dst_dim_temp = tslice.Select(s => (uint) s.size).ToArray();
+                var dst_dim = (uint[])src_dim.Clone();
+                Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
 
-                return null;
+                var ret = new TOut();
+                ret.shape = new Shape(dst_dim);
+                ret.storage = new T[ret.shape.size];
+
+                ArrayCopy(storage, ret.storage, 0, storage.Length, 0, ret.storage.Length, tslice, shape.data, dst_dim);
+
+                return ret;
             }
         }
 
