@@ -123,7 +123,7 @@ namespace mxnet.csharp
         public NDArray()
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreateNone(out handle));
+            Util.call_check(NativeMethods.MXNDArrayCreateNone(out handle));
             _blobPtr = new NDBlob(handle);
         }
         public NDArray(NDArrayHandle handle, bool writable = true)
@@ -134,20 +134,20 @@ namespace mxnet.csharp
                         bool delayAlloc)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreate(shape, (uint)shape.Length, context.GetDeviceType(),
+            Util.call_check(NativeMethods.MXNDArrayCreate(shape, (uint)shape.Length, context.GetDeviceType(),
                            context.GetDeviceId(), delayAlloc ? 1 : 0, out handle));
             _blobPtr = new NDBlob(handle);
         }
         public NDArray(uint[] shape)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreate(shape, (uint)shape.Length, DeviceType.KCpu, 0, 0, out handle));
+            Util.call_check(NativeMethods.MXNDArrayCreate(shape, (uint)shape.Length, DeviceType.KCpu, 0, 0, out handle));
             _blobPtr = new NDBlob(handle);
         }
         public NDArray(Shape shape, Context context, bool delayAlloc)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
+            Util.call_check(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
                                context.GetDeviceId(), delayAlloc ? 1 : 0, out handle));
             _blobPtr = new NDBlob(handle);
         }
@@ -155,7 +155,7 @@ namespace mxnet.csharp
         public NDArray(Shape shape, Context context, bool delayAlloc, Type dtype)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreateEx(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
+            Util.call_check(NativeMethods.MXNDArrayCreateEx(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
                                context.GetDeviceId(), delayAlloc ? 1 : 0, Util._DTYPE_NP_TO_MX[dtype], out handle));
             _blobPtr = new NDBlob(handle);
         }
@@ -163,7 +163,7 @@ namespace mxnet.csharp
         public NDArray(float[] data)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreateNone(out handle));
+            Util.call_check(NativeMethods.MXNDArrayCreateNone(out handle));
             NativeMethods.MXNDArraySyncCopyFromCPU(handle, data, (uint)data.Length);
             _blobPtr = new NDBlob(handle);
         }
@@ -177,7 +177,7 @@ namespace mxnet.csharp
             }
 
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
+            Util.call_check(NativeMethods.MXNDArrayCreate(shape.data().ToArray(), shape.ndim(), context.GetDeviceType(),
                            context.GetDeviceId(), 0, out handle));
             NativeMethods.MXNDArraySyncCopyFromCPU(handle, data, shape.Size());
             _blobPtr = new NDBlob(handle);
@@ -201,13 +201,13 @@ namespace mxnet.csharp
 
         public void WaitToRead()
         {
-            Util.CallCheck(NativeMethods.MXNDArrayWaitToRead(_blobPtr.Handle));
+            Util.call_check(NativeMethods.MXNDArrayWaitToRead(_blobPtr.Handle));
         }
         public void WaitToWrite()
         {
-            Util.CallCheck(NativeMethods.MXNDArrayWaitToWrite(_blobPtr.Handle));
+            Util.call_check(NativeMethods.MXNDArrayWaitToWrite(_blobPtr.Handle));
         }
-        public static void WaitAll() { Util.CallCheck(NativeMethods.MXNDArrayWaitAll()); }
+        public static void WaitAll() { Util.call_check(NativeMethods.MXNDArrayWaitAll()); }
 
         public NDArray CopyTo(NDArray other)
         {
@@ -216,14 +216,14 @@ namespace mxnet.csharp
 
             var input = _blobPtr.Handle;
             var output = other._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output));
+            Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output));
             return other;
         }
 
         public NDArray Slice(uint begin, uint end)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArraySlice(GetHandle(), begin, end, out handle));
+            Util.call_check(NativeMethods.MXNDArraySlice(GetHandle(), begin, end, out handle));
             return new NDArray(handle);
         }
 
@@ -231,7 +231,7 @@ namespace mxnet.csharp
         {
             NDArrayHandle handle;
             var dims = new_shape.data().Select(s => (int)s);
-            Util.CallCheck(NativeMethods.MXNDArrayReshape(GetHandle(), (int)new_shape.ndim(), dims.ToArray(), out handle));
+            Util.call_check(NativeMethods.MXNDArrayReshape(GetHandle(), (int)new_shape.ndim(), dims.ToArray(), out handle));
             return new NDArray(handle);
         }
 
@@ -242,7 +242,7 @@ namespace mxnet.csharp
             float[] scalar = { value };
             IntPtr Zero = IntPtr.Zero;
             var handle = _blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle));
+            Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle));
             return this;
         }
 
@@ -253,7 +253,7 @@ namespace mxnet.csharp
             float[] scalar = { mu, sigma };
             IntPtr Zero = IntPtr.Zero;
             var handle = outArray._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle));
+            Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref Zero, scalar, ref handle));
         }
 
         public uint Size()
@@ -274,7 +274,7 @@ namespace mxnet.csharp
         public Type GetDtype()
         {
             int out_dtype;
-            Util.CallCheck(NativeMethods.MXNDArrayGetDType(_blobPtr.Handle, out out_dtype));
+            Util.call_check(NativeMethods.MXNDArrayGetDType(_blobPtr.Handle, out out_dtype));
             return Util._DTYPE_MX_TO_NP[out_dtype];
         }
 
@@ -286,7 +286,7 @@ namespace mxnet.csharp
             NativeMethods.MXGetFunction("argmax_channel", out func_handle);
             var input = _blobPtr.Handle;
             var output = ret._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output));
+            Util.call_check(NativeMethods.MXFuncInvoke(func_handle, ref input, new float[0], ref output));
 
             return ret;
         }

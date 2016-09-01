@@ -47,7 +47,7 @@ namespace mxnet.csharp
             {
                 work_load_list = Enumerable.Repeat(1, num_device).ToList();
             }
-            Util.Assert(work_load_list.Count == num_device, "Invalid settings for work load. ");
+            Util.assert(work_load_list.Count == num_device, "Invalid settings for work load. ");
 
             var slices = _split_input_slice(train_data.batch_size, work_load_list);
 
@@ -302,9 +302,9 @@ namespace mxnet.csharp
                     {
                         arg_arr = shared_data_arrays[name];
 
-                        if (Util.Prod(arg_arr.GetShape()) >= Util.Prod(arg_shapes[i]))
+                        if (Util.prod(arg_arr.GetShape()) >= Util.prod(arg_shapes[i]))
                         {
-                            Util.Assert(arg_types[i] == arg_arr.GetDtype());
+                            Util.assert(arg_types[i] == arg_arr.GetDtype());
 
                             arg_arr = arg_arr.Reshape(new Shape(arg_shapes[i]));
 
@@ -354,8 +354,8 @@ namespace mxnet.csharp
                     else
                     {
                         arg_arr = base_exec.arg_dict[name];
-                        Util.Assert(arg_arr.GetShape() == new Shape(arg_shapes[i]));
-                        Util.Assert(arg_arr.GetDtype() == arg_types[i]);
+                        Util.assert(arg_arr.GetShape() == new Shape(arg_shapes[i]));
+                        Util.assert(arg_arr.GetDtype() == arg_types[i]);
                         if (need_grad_input && need_grad.Contains(name))
                         {
                             grad_arrays[name] = base_exec.grad_dict[name];
@@ -376,8 +376,8 @@ namespace mxnet.csharp
                 for (int i = 0; i < base_exec.aux_arrays.Count; i++)
                 {
                     var a = base_exec.aux_arrays[i];
-                    Util.Assert((new Shape(aux_shapes[i])) == a.GetShape());
-                    Util.Assert(aux_type[i] == a.GetDtype());
+                    Util.assert((new Shape(aux_shapes[i])) == a.GetShape());
+                    Util.assert(aux_type[i] == a.GetDtype());
                 }
                 aux_arrays = base_exec.aux_arrays;
             }
@@ -448,12 +448,12 @@ namespace mxnet.csharp
 
         private static void _load_data(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
         {
-            _load_general(batch.Data, targets);
+            _load_general(batch.data, targets);
         }
 
         private static void _load_label(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
         {
-            _load_general(batch.Label, targets);
+            _load_general(batch.label, targets);
         }
 
 

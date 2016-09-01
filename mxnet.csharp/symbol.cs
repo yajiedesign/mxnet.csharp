@@ -179,40 +179,40 @@ namespace mxnet.csharp
         public Symbol Load(string fileName)
         {
             SymbolHandle handle;
-            Util.CallCheck(NativeMethods.MXSymbolCreateFromFile(fileName, out handle));
+            Util.call_check(NativeMethods.MXSymbolCreateFromFile(fileName, out handle));
             return new Symbol(handle);
         }
 
         public Symbol LoadJson(string jsonStr)
         {
             SymbolHandle handle;
-            Util.CallCheck(NativeMethods.MXSymbolCreateFromJSON(jsonStr, out handle));
+            Util.call_check(NativeMethods.MXSymbolCreateFromJSON(jsonStr, out handle));
             return new Symbol(handle);
         }
 
         private void Save(string fileName)
         {
-            Util.CallCheck(NativeMethods.MXSymbolSaveToFile(GetHandle(), fileName));
+            Util.call_check(NativeMethods.MXSymbolSaveToFile(GetHandle(), fileName));
         }
 
         public string ToJson()
         {
             IntPtr outJson;
-            Util.CallCheck(NativeMethods.MXSymbolSaveToJSON(GetHandle(), out outJson));
+            Util.call_check(NativeMethods.MXSymbolSaveToJSON(GetHandle(), out outJson));
             return Marshal.PtrToStringAnsi(outJson);
         }
 
         public Symbol GetInternals()
         {
             SymbolHandle handle;
-            Util.CallCheck(NativeMethods.MXSymbolGetInternals(GetHandle(), out handle));
+            Util.call_check(NativeMethods.MXSymbolGetInternals(GetHandle(), out handle));
             return new Symbol(handle);
         }
 
         public Symbol Copy()
         {
             SymbolHandle handle;
-            Util.CallCheck(NativeMethods.MXSymbolCopy(GetHandle(), out handle));
+            Util.call_check(NativeMethods.MXSymbolCopy(GetHandle(), out handle));
             return new Symbol(handle);
         }
 
@@ -355,7 +355,7 @@ namespace mxnet.csharp
 
             int complete;
 
-            Util.CallCheck(NativeMethods.MXSymbolInferType(GetHandle(), (uint)keys.Count, keys.ToArray(),
+            Util.call_check(NativeMethods.MXSymbolInferType(GetHandle(), (uint)keys.Count, keys.ToArray(),
                 arg_type_data.ToArray(),
                 out inTypeSize, out inTypeDataPtr,
                 out outTypeSize, out outTypeDataPtr,
@@ -415,7 +415,7 @@ namespace mxnet.csharp
             IntPtr auxShapeDataPtr;
             int complete;
 
-            Util.CallCheck(NativeMethods.MXSymbolInferShape(GetHandle(), (uint)keys.Count, keys.ToArray(),
+            Util.call_check(NativeMethods.MXSymbolInferShape(GetHandle(), (uint)keys.Count, keys.ToArray(),
                 argIndPtr.ToArray(), argShapeData.ToArray(),
                 out inShapeSize, out inShapeNdimPtr, out inShapeDataPtr,
                 out outShapeSize, out outShapeNdimPtr, out outShapeDataPtr,

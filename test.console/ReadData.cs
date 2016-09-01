@@ -16,15 +16,15 @@ namespace test.console
     {
         public string bucket_key { get; }
 
-        public List<NDArray> Data { get; }
+        public List<NDArray> data { get; }
 
-        public List<NDArray> Label{ get; }
+        public List<NDArray> label{ get; }
 
 
         public DataBatch(List<NDArray> datas, List<NDArray> labels)
         {
-            this.Data = datas;
-            this.Label = labels;
+            this.data = datas;
+            this.label = labels;
         }
 
         public Dictionary<string, Shape> provide_data { get; }

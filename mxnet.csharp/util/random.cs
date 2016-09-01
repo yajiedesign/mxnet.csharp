@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,12 @@ namespace mxnet.csharp.util
             var param_keys = new string[] {"low", "high", "shape"};
             var param_vals = new string[]
             {
-                low.ToString(),
-                high.ToString(),
+                low.ToString(CultureInfo.InvariantCulture),
+                high.ToString(CultureInfo.InvariantCulture),
                 @out.GetShape().ToString()
             };
 
-            Util.CallCheck(NativeMethods.MXFuncInvokeEx(
+            Util.call_check(NativeMethods.MXFuncInvokeEx(
             func_handle,
             ref input,
             new float[0],
@@ -54,7 +55,7 @@ namespace mxnet.csharp.util
                 @out.GetShape().ToString()
             };
 
-            Util.CallCheck(NativeMethods.MXFuncInvokeEx(
+            Util.call_check(NativeMethods.MXFuncInvokeEx(
             func_handle,
             ref input,
             new float[0],

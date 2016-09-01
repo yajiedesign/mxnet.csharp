@@ -60,10 +60,10 @@ namespace mxnet.csharp
             {
                 groupToCtx = new Dictionary<string, Context>();
             }
-            arg_arrays = argArrays;
-            grad_arrays = gradArrays;
-            aux_arrays = auxArrays;
-            symbol_ = symbol;
+            this.arg_arrays = argArrays;
+            this.grad_arrays = gradArrays;
+            this.aux_arrays = auxArrays;
+            this.symbol_ = symbol;
 
             var arg_name = symbol.ListArguments();
 
@@ -118,7 +118,7 @@ namespace mxnet.csharp
             var sharedExecHandle =
                 sharedExec?.handle_ ?? NDArrayHandle.Zero;
 
-            Util.CallCheck(NativeMethods.MXExecutorBindEX(
+            Util.call_check(NativeMethods.MXExecutorBindEX(
                 symbol.GetHandle(),
                 (int)context.GetDeviceType(),
                 context.GetDeviceId(),
@@ -137,7 +137,7 @@ namespace mxnet.csharp
 
             uint outSize;
             NDArrayHandle outArrayPtr;
-            Util.CallCheck(NativeMethods.MXExecutorOutputs(handle_, out outSize, out outArrayPtr) );
+            Util.call_check(NativeMethods.MXExecutorOutputs(handle_, out outSize, out outArrayPtr) );
             var outArray = new NDArrayHandle[outSize];
             if (outSize > 0)
             {
@@ -168,7 +168,7 @@ namespace mxnet.csharp
             NativeMethods.MXExecutorForward(handle_, is_train ? 1 : 0);
             uint out_size;
             NDArrayHandle out_array_ptr;
-            Util.CallCheck(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) );
+            Util.call_check(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) );
             var out_array = new NDArrayHandle[out_size];
 
             Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);

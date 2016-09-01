@@ -30,37 +30,37 @@ namespace mxnet.csharp
 
         public static void _check_arguments(Symbol symbol)
         {
-            var argNames = symbol.ListArguments();
-            var argNamesDuplicate = argNames.GroupBy(i => i)
+            var arg_names = symbol.ListArguments();
+            var arg_names_duplicate = arg_names.GroupBy(i => i)
                 .Where(g => g.Count() > 1)
                 .Select(g => g.ElementAt(0));
-            foreach (var name in argNamesDuplicate)
+            foreach (var name in arg_names_duplicate)
             {
                 throw new Exception($"Find duplicated argument name \"{name}\"," +
                                     $"please make the weight name non-duplicated(using name arguments)," +
-                                    $"arguments are {String.Join(" ", argNames)}");
+                                    $"arguments are {String.Join(" ", arg_names)}");
             }
-            var auxNames = symbol.ListAuxiliaryStates();
-            var auxNamesDuplicate = auxNames.GroupBy(i => i)
+            var aux_names = symbol.ListAuxiliaryStates();
+            var aux_names_duplicate = aux_names.GroupBy(i => i)
                 .Where(g => g.Count() > 1)
                 .Select(g => g.ElementAt(0));
 
-            foreach (var name in auxNamesDuplicate)
+            foreach (var name in aux_names_duplicate)
             {
                 throw new Exception($"Find duplicated auxiliary name \"{name}\"," +
                                     $"please make the weight name non-duplicated(using name arguments)," +
-                                    $"arguments are {String.Join(" ", argNames)}");
+                                    $"arguments are {String.Join(" ", arg_names)}");
             }
         }
 
 
-        public static long Prod(uint[] shape)
+        public static long prod(uint[] shape)
         {
             return shape.Aggregate((long)1, (a, b) => (a * b));
         }
 
 
-        public static void CallCheck(int ret)
+        public static void call_check(int ret)
         {
             if (ret != 0)
             {
@@ -68,7 +68,7 @@ namespace mxnet.csharp
             }
         }
 
-        public static void Assert(bool ret,string str=null)
+        public static void assert(bool ret,string str=null)
         {
             if (!ret)
             {

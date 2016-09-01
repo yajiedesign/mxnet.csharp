@@ -88,7 +88,7 @@ namespace test.console
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
                 num_epoch: 10,
                 optimizer: optimizer,
-                initializer:new Xavier(factor_type: Xavier.factor_type.In, magnitude:2.34f)
+                initializer:new xavier(factor_type: factor_type.In, magnitude:2.34f)
 
                 );
 

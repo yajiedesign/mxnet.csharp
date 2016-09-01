@@ -20,7 +20,7 @@ namespace mxnet.csharp
             IntPtr symbol_creators_ptr = IntPtr.Zero;
      
             int r =  NativeMethods.MXSymbolListAtomicSymbolCreators(out num_symbol_creators,out symbol_creators_ptr);
-            Util.Assert(r == 0);
+            Util.assert(r == 0);
             AtomicSymbolCreator[] symbol_creators = new AtomicSymbolCreator[num_symbol_creators];
             Marshal.Copy(symbol_creators_ptr, symbol_creators, 0, (int)num_symbol_creators);
 
@@ -43,7 +43,7 @@ namespace mxnet.csharp
                 out arg_descriptions_ptr,
                 out key_var_num_args_ptr,
                 out return_type_ptr);
-                Util.Assert(r == 0);
+                Util.assert(r == 0);
 
                 string name = Marshal.PtrToStringAnsi(name_ptr);
                 symbol_creators_[name] = symbol_creators[i];

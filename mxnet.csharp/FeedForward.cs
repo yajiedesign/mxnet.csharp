@@ -22,8 +22,8 @@ namespace mxnet.csharp
     public interface IDataBatch : IDataIProvide
     {
         string bucket_key { get; }
-        List<NDArray> Data { get; }
-        List<NDArray> Label { get; }
+        List<NDArray> data { get; }
+        List<NDArray> label { get; }
     }
 
     public interface IDataIter : IDataIProvide, IEnumerable<IDataBatch>
@@ -46,7 +46,7 @@ namespace mxnet.csharp
         private int num_epoch;
         private Optimizer optimizer;
         private Initializer initializer;
-        private object _pred_exec;
+        private object pred_exec;
         private int begin_epoch;
         private Dictionary<string, object> kwargs;
         private int? epoch_size;
@@ -100,7 +100,7 @@ namespace mxnet.csharp
 
             this.optimizer = optimizer;
             // internal helper state;
-            this._pred_exec = null;
+            this.pred_exec = null;
             this.begin_epoch = begin_epoch;
             this.epoch_size = epoch_size;
 
@@ -122,21 +122,21 @@ namespace mxnet.csharp
             {
                 if (this.arg_params != null)
                 {
-                    var argNames = new HashSet<string>(this.symbol.ListArguments());
-                    this.arg_params = this.arg_params.Where(w => argNames.Contains(w.Key))
+                    var arg_names = new HashSet<string>(this.symbol.ListArguments());
+                    this.arg_params = this.arg_params.Where(w => arg_names.Contains(w.Key))
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
                 if (this.aux_params != null)
                 {
-                    var auxNames = new HashSet<string>(this.symbol.ListAuxiliaryStates());
-                    this.aux_params = this.aux_params.Where(w => auxNames.Contains(w.Key))
+                    var aux_names = new HashSet<string>(this.symbol.ListAuxiliaryStates());
+                    this.aux_params = this.aux_params.Where(w => aux_names.Contains(w.Key))
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
             }
         }
 
-        public void Fit(IDataIter trainData,
-            IDataIter evalData,
+        public void Fit(IDataIter train_data,
+            IDataIter eval_data,
             metric.EvalMetric eval_metric = null,
             List<Action> epoch_end_callback = null,
              List<Action<BatchEndParam>> batch_end_callback = null,
@@ -149,7 +149,7 @@ namespace mxnet.csharp
 
 
 
-            var data = trainData;
+            var data = train_data;
             if (this.sym_gen != null)
             {
                 this.symbol = this.sym_gen(data.default_bucket_key);
@@ -157,12 +157,12 @@ namespace mxnet.csharp
             }
             this.kwargs["sym"] = this.symbol;
 
-            var _init_params_temp = this._init_params(data.provide_data.Concat(data.provide_label).ToDictionary(x => x.Key, y => y.Value));
+            var init_params_temp = this._init_params(data.provide_data.Concat(data.provide_label).ToDictionary(x => x.Key, y => y.Value));
 
 
-            var arg_names = _init_params_temp.Item1;
-            var param_names = _init_params_temp.Item2;
-            var aux_names = _init_params_temp.Item3;
+            var arg_names = init_params_temp.Item1;
+            var param_names = init_params_temp.Item2;
+            var aux_names = init_params_temp.Item3;
 
             if (eval_metric == null)
             {
@@ -198,7 +198,7 @@ namespace mxnet.csharp
                 begin_epoch: this.begin_epoch, end_epoch: this.num_epoch,
                 epoch_size: this.epoch_size,
                 optimizer: optimizer,
-                train_data: data, eval_data: evalData,
+                train_data: data, eval_data: eval_data,
                 eval_metric: eval_metric,
                 epoch_end_callback: epoch_end_callback,
                 batch_end_callback: batch_end_callback,
@@ -304,7 +304,7 @@ namespace mxnet.csharp
                         }
                         monitor?.toc_print();
                         // evaluate at end, so we can lazy copy
-                        executor_manager.update_metric(eval_metric, data_batch.Label);
+                        executor_manager.update_metric(eval_metric, data_batch.label);
 
                         nbatch += 1;
                         //batch callback (for print purpose)
@@ -447,7 +447,7 @@ namespace mxnet.csharp
                     {
 
                         //automatically select a proper local
-                        var max_size = argParams.Select(s => Util.Prod(s.Value.GetShape())).Max();
+                        var max_size = argParams.Select(s => Util.prod(s.Value.GetShape())).Max();
                         if (max_size < 1024 * 1024 * 16)
                         {
                             kvstore = "local_update_cpu";
@@ -470,7 +470,9 @@ namespace mxnet.csharp
         }
 
 
-        private Tuple<List<string>, List<string>, List<string>> _init_params(Dictionary<string, Shape> input_shapes, bool overwrite = false)
+        private Tuple<List<string>, List<string>, List<string>> _init_params(
+            Dictionary<string, Shape> input_shapes,
+            bool overwrite = false)
         {
             List<uint[]> arg_shapes = new List<uint[]>();
             List<uint[]> aux_shapes = new List<uint[]>(); ;

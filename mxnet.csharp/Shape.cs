@@ -18,7 +18,7 @@ namespace mxnet.csharp
         /// <summary>
         ///  size of in stack space 
         /// </summary>
-        const int kStackCache = 4;
+        const int KStackCache = 4;
 
         /// <summary>
         /// number of dimnsion of the shape
@@ -33,7 +33,7 @@ namespace mxnet.csharp
         /// <summary>
         /// in stack space used to store shape when it is small
         /// </summary>
-        uint[] data_stack_ = new uint[kStackCache];
+        readonly uint[] data_stack_ = new uint[KStackCache];
 
         /// <summary>
         /// space to store shape when dimension is big
@@ -59,7 +59,7 @@ namespace mxnet.csharp
         public Shape(ICollection<uint> v)
         {
             ndim_ = (uint)v.Count;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -80,7 +80,7 @@ namespace mxnet.csharp
         public Shape(uint s1)
         {
             ndim_ = 1;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -103,7 +103,7 @@ namespace mxnet.csharp
 
         {
             ndim_ = 2;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -127,7 +127,7 @@ namespace mxnet.csharp
         public Shape(uint s1, uint s2, uint s3)
         {
             ndim_ = 3;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -155,7 +155,7 @@ namespace mxnet.csharp
         public Shape(uint s1, uint s2, uint s3, uint s4)
         {
             ndim_ = 4;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -186,7 +186,7 @@ namespace mxnet.csharp
         public Shape(uint s1, uint s2, uint s3, uint s4, uint s5)
         {
             ndim_ = 5;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -214,7 +214,7 @@ namespace mxnet.csharp
         public Shape(Shape s)
         {
             ndim_ = s.ndim_;
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 data_heap_ = null;
                 num_heap_allocated_ = 0;
@@ -236,7 +236,7 @@ namespace mxnet.csharp
         /// <returns></returns>
         public uint[] data()
         {
-            return ((uint[])(ndim_ <= kStackCache ? data_stack_ : data_heap_)).Take((int)ndim_).ToArray();
+            return ((uint[])(ndim_ <= KStackCache ? data_stack_ : data_heap_)).Take((int)ndim_).ToArray();
         }
 
         /// <summary>
@@ -289,7 +289,7 @@ namespace mxnet.csharp
             if (ReferenceEquals(r, null)) return false;
 
             if (l.ndim_ != r.ndim_) return false;
-            if (l.ndim_ <= kStackCache)
+            if (l.ndim_ <= KStackCache)
             {
                 for (int i = 0; i < l.ndim_; ++i)
                 {
@@ -329,7 +329,7 @@ namespace mxnet.csharp
         {
 
             int hash = ndim_.GetHashCode();
-            if (ndim_ <= kStackCache)
+            if (ndim_ <= KStackCache)
             {
                 for (int i = 0; i < ndim_; ++i)
                 {
@@ -358,7 +358,7 @@ namespace mxnet.csharp
         /// <param name="dim">dim the dimension of the shape</param>
         void SetDim(uint dim)
         {
-            if (dim > kStackCache &&
+            if (dim > KStackCache &&
               dim > num_heap_allocated_)
             {
                 // data_heap_ can be NULL

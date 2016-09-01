@@ -8,14 +8,14 @@ namespace mxnet.csharp.metric
 {
     public abstract class EvalMetric
     {
-        private readonly string _name;
+        private readonly string name;
         private readonly int num;
         protected int[] num_inst;
         protected float[] sum_metric;
 
         public EvalMetric(string name, int num = 1)
         {
-            _name = name;
+            this.name = name;
             this.num = num;
             reset();
         }
@@ -46,11 +46,11 @@ namespace mxnet.csharp.metric
             {
                 if (this.num_inst[0] == 0)
                 {
-                    return new[] {new EvalMetricResult(_name, float.NaN)};
+                    return new[] {new EvalMetricResult(name, float.NaN)};
                 }
                 else
                 {
-                    return new[] {new EvalMetricResult(_name, sum_metric[0]/num_inst[0])};
+                    return new[] {new EvalMetricResult(name, sum_metric[0]/num_inst[0])};
                 }
             }
             else
@@ -59,11 +59,11 @@ namespace mxnet.csharp.metric
                 {
                     if (i == 0)
                     {
-                        return new EvalMetricResult(_name, float.NaN);
+                        return new EvalMetricResult(name, float.NaN);
                     }
                     else
                     {
-                        return new EvalMetricResult(_name, m/i);
+                        return new EvalMetricResult(name, m/i);
                     }
 
                 });

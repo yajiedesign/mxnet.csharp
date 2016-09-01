@@ -65,7 +65,7 @@ namespace mxnet.csharp.initializer
         private void _init_bilinear(string name, NDArray arr)
         {
             var shape = arr.GetShape().data();
-            var prodShape =Util.Prod(shape);
+            var prodShape =Util.prod(shape);
             float[] weight = new float[prodShape];
 
             var f = Math.Ceiling(shape[3] / 2.0);
@@ -82,7 +82,7 @@ namespace mxnet.csharp.initializer
 
         private void _init_loc_bias(string name, NDArray arr)
         {
-            Util.Assert(arr.GetShape()[0] == 6);
+            Util.assert(arr.GetShape()[0] == 6);
             arr.SyncCopyFromCPU(new float[] {1.0f, 0, 0, 0, 1.0f, 0});
         }
 

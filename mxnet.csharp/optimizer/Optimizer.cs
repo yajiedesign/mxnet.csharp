@@ -23,9 +23,9 @@ namespace mxnet.csharp.optimizer
         private Dictionary<string, float> wd_mult;
         private int begin_num_update;
         private int num_update;
-        private Dictionary<int, int> _index_update_count;
+        private Dictionary<int, int> index_update_count;
         private float? clip_gradient;
-        private Dictionary<int, string> idx2name;
+        private Dictionary<int, string> idx2_name;
         private Symbol sym;
 
 
@@ -53,7 +53,7 @@ namespace mxnet.csharp.optimizer
             this.wd_mult = new Dictionary<string, float>();
             this.begin_num_update = begin_num_update;
             this.num_update = begin_num_update;
-            this._index_update_count = new Dictionary<int, int>();
+            this.index_update_count = new Dictionary<int, int>();
             this.clip_gradient = clip_gradient;
 
             if (param_idx2name == null)
@@ -63,7 +63,7 @@ namespace mxnet.csharp.optimizer
 
 
 
-            this.idx2name = param_idx2name.ToDictionary(entry => entry.Key,
+            this.idx2_name = param_idx2name.ToDictionary(entry => entry.Key,
                                                entry => entry.Value);
 
             this.sym = sym;
@@ -95,7 +95,7 @@ namespace mxnet.csharp.optimizer
         private void set_wd_mult(Dictionary<string, float> args_wd_mult)
         {
             this.wd_mult = new Dictionary<string, float>();
-            foreach (var n in idx2name.Values)
+            foreach (var n in idx2_name.Values)
             {
                 if (!(n.EndsWith("_weight") || n.EndsWith("_gamma")))
                 {
@@ -125,13 +125,13 @@ namespace mxnet.csharp.optimizer
         /// <param name="index">The index will be updated</param>
         public void _update_count(int index)
         {
-            if (!this._index_update_count.ContainsKey(index))
+            if (!this.index_update_count.ContainsKey(index))
             {
-                this._index_update_count[index] = this.begin_num_update;
+                this.index_update_count[index] = this.begin_num_update;
             }
 
-            this._index_update_count[index] += 1;
-            this.num_update = Math.Max(this._index_update_count[index], this.num_update);
+            this.index_update_count[index] += 1;
+            this.num_update = Math.Max(this.index_update_count[index], this.num_update);
 
         }
 
@@ -154,10 +154,10 @@ namespace mxnet.csharp.optimizer
             {
                 lr *= this.lr_mult[index.ToString()];
             }
-            else if(this.idx2name.ContainsKey(index))
+            else if(this.idx2_name.ContainsKey(index))
             {
                 float v;
-                if (!this.lr_mult.TryGetValue(this.idx2name[index], out v))
+                if (!this.lr_mult.TryGetValue(this.idx2_name[index], out v))
                 {
                     v = 1.0f;
                 }
@@ -175,10 +175,10 @@ namespace mxnet.csharp.optimizer
             {
                 wd *= this.wd_mult[index.ToString()];
             }
-            else if (this.idx2name.ContainsKey(index))
+            else if (this.idx2_name.ContainsKey(index))
             {
                 float w;
-                if (!this.wd_mult.TryGetValue(this.idx2name[index], out w))
+                if (!this.wd_mult.TryGetValue(this.idx2_name[index], out w))
                 {
                     w = 1.0f;
                 }
@@ -222,10 +222,10 @@ namespace mxnet.csharp.optimizer
         protected static OptimizerHandle _init_cc_optimizer(string name, string[] param_keys, string[] param_vals)
         {
             IntPtr creator;
-            Util.CallCheck(NativeMethods.MXOptimizerFindCreator(name,
+            Util.call_check(NativeMethods.MXOptimizerFindCreator(name,
                 out creator));
             OptimizerHandle handle;
-            Util.CallCheck(NativeMethods.MXOptimizerCreateOptimizer(
+            Util.call_check(NativeMethods.MXOptimizerCreateOptimizer(
                 creator,
                 (uint) param_keys.Count(),
                 param_keys, param_vals,
@@ -319,7 +319,7 @@ namespace mxnet.csharp.optimizer
             var lr = this._get_lr(index);
             var wd = this._get_wd(index);
             this._update_count(index);
-            Util.CallCheck(NativeMethods.MXOptimizerUpdate(this.handle,
+            Util.call_check(NativeMethods.MXOptimizerUpdate(this.handle,
                 index,
                 weight.GetHandle(),
                 grad.GetHandle(),

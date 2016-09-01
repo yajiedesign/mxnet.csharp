@@ -35,7 +35,7 @@ namespace mxnet.csharp.callback
         public void Call(BatchEndParam param)
         {
 
-            var count = param.Nbatch;
+            var count = param.nbatch;
             if (this.last_count > count)
             {
                 this.init = false;
@@ -48,19 +48,19 @@ namespace mxnet.csharp.callback
                 if ((count % this.frequent) == 0)
                 {
                     var speed = (double)this.frequent * this.batch_size / (this.tic.ElapsedMilliseconds / 1000f);
-                    if (param.EvalMetric != null)
+                    if (param.eval_metric != null)
                     {
-                        var name_value = param.EvalMetric.get_name_value();
-                        param.EvalMetric.reset();
+                        var name_value = param.eval_metric.get_name_value();
+                        param.eval_metric.reset();
                         foreach (var nv in name_value)
                         {
                             log.Info(
-                                $"Epoch[{param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.Name}={nv.Value}");
+                                $"Epoch[{param.epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec\tTrain-{nv.name}={nv.value}");
                         }
                     }
                     else
                     {
-                        log.Info($"Iter[{ param.Epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
+                        log.Info($"Iter[{ param.epoch}] Batch [{count}]\tSpeed: {speed:.00} samples/sec");  
                     }
                     this.tic.Restart();
                 }
