@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using mxnet.csharp.lr_scheduler;
 using OptimizerCreator = System.IntPtr;
 using OptimizerHandle = System.IntPtr;
 
@@ -16,7 +16,7 @@ namespace mxnet.csharp.optimizer
     public abstract class Optimizer
     {
         private float _rescale_grad;
-        private readonly Func<int,float> _lr_scheduler;
+        private readonly LRScheduler _lr_scheduler;
         private readonly float _lr;
         private readonly float _wd;
         private Dictionary<string, float> _lr_mult;
@@ -34,7 +34,7 @@ namespace mxnet.csharp.optimizer
             float wd = 0f,
             float? clip_gradient = null,
             float learning_rate = 0.01f,
-            Func<int, float> lr_scheduler = null,
+            LRScheduler lr_scheduler = null,
             Symbol sym = null,
             int begin_num_update = 0)
         {
@@ -44,7 +44,7 @@ namespace mxnet.csharp.optimizer
             this._lr_scheduler = lr_scheduler;
             if (lr_scheduler != null)
             {
-                //TODO   this.lr_scheduler.base_lr = learning_rate;
+                 this._lr_scheduler.base_lr = learning_rate;
             }
 
 
@@ -141,7 +141,7 @@ namespace mxnet.csharp.optimizer
             float lr;
             if (this._lr_scheduler != null)
             {
-                lr = this._lr_scheduler(this._num_update);
+                lr = this._lr_scheduler.Call(this._num_update);
             }
 
             else
@@ -264,67 +264,5 @@ namespace mxnet.csharp.optimizer
         }
 
 
-    }
-
-    public class Sgd : Optimizer
-    {
-        public override NDArray create_state(int index, NDArray weight)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void update(int index, NDArray weight, NDArray grad, NDArray state)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
- 
-    public class CcSgd : Optimizer
-    {
-        private float _momentum;
-        private readonly IntPtr _handle;
-
-
-        public CcSgd(float momentum = 0.0f,float rescale_grad = 1, Dictionary<int, string> param_idx2_name = null, float wd = 0,
-            float clip_gradient = -1, float learning_rate = 0.01F, Func<int, float> lr_scheduler = null,
-            Symbol sym = null, int begin_num_update = 0)
-            : base(rescale_grad, param_idx2_name, wd, clip_gradient, learning_rate, lr_scheduler, sym, begin_num_update)
-        {
-            this._momentum = momentum;
-
-            this._handle = Optimizer._init_cc_optimizer(
-                "ccsgd",
-                new[]
-                {
-                    "momentum",
-                    "rescale_grad",
-                    "clip_gradient"
-                },
-                new[]
-                {
-                    momentum.ToString(CultureInfo.InvariantCulture),
-                    rescale_grad.ToString(CultureInfo.InvariantCulture),
-                    clip_gradient.ToString(CultureInfo.InvariantCulture)
-                });
-        }
-
-        public override NDArray create_state(int index, NDArray weight)
-        {
-            return null;
-        }
-
-        public override void update(int index, NDArray weight, NDArray grad, NDArray state)
-        {
-            var lr = this._get_lr(index);
-            var wd = this._get_wd(index);
-            this._update_count(index);
-            Util.CallCheck(NativeMethods.MXOptimizerUpdate(this._handle,
-                index,
-                weight.Get_handle(),
-                grad.Get_handle(),
-                lr,
-                wd));
-        }
     }
 }

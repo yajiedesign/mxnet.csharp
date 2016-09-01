@@ -91,9 +91,8 @@ namespace mxnet.csharp.metric
                 object o = Activator.CreateInstance(Metrics[name.ToLower()], name ,1);
                 return (EvalMetric) o;
             }
-            catch (Exception e)
+            catch (Exception)
             {
-
                 throw new Exception($"Metric must be either callable or in {string.Join(" ", Metrics.Keys) }");
             }
         }

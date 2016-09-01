@@ -15,7 +15,6 @@ namespace mxnet.numerics.nbase
     {
         private static readonly TC Calculator = new TC();
 
-        private int _start_index = 0;
         public Shape shape { get; protected set; }
 
         protected T[] storage;

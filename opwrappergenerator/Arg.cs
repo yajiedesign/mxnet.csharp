@@ -107,13 +107,6 @@ namespace opwrappergenerator
         private string GetName(string arg_name)
         {
             return arg_name;
-            CultureInfo culture_info = Thread.CurrentThread.CurrentCulture;
-            TextInfo text_info = culture_info.TextInfo;
-
-            var namesp = arg_name.Split('_');
-
-
-            return namesp.First()+ string.Join("", namesp.Skip(1).Select(s => text_info.ToTitleCase(s)));
         }
     }
     

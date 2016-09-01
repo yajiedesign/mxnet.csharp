@@ -93,8 +93,6 @@ namespace mxnet.csharp
 
             if (optimizer == null)
             {
-                float learning_rate = 1e-4f;
-                float weight_decay = 1e-4f;
                 optimizer = "ccsgd";
             }
 
