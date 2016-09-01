@@ -106,6 +106,7 @@ namespace opwrappergenerator
 
         private string GetName(string arg_name)
         {
+            return arg_name;
             CultureInfo culture_info = Thread.CurrentThread.CurrentCulture;
             TextInfo text_info = culture_info.TextInfo;
 

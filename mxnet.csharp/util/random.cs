@@ -27,7 +27,7 @@ namespace mxnet.csharp.util
                 @out.Get_shape().ToString()
             };
 
-            Util.call_check(NativeMethods.MXFuncInvokeEx(
+            Util.CallCheck(NativeMethods.MXFuncInvokeEx(
             func_handle,
             ref input,
             new float[0],
@@ -55,7 +55,7 @@ namespace mxnet.csharp.util
                 @out.Get_shape().ToString()
             };
 
-            Util.call_check(NativeMethods.MXFuncInvokeEx(
+            Util.CallCheck(NativeMethods.MXFuncInvokeEx(
             func_handle,
             ref input,
             new float[0],

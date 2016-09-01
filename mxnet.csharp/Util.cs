@@ -60,7 +60,7 @@ namespace mxnet.csharp
         }
 
 
-        public static void call_check(int ret)
+        public static void CallCheck(int ret)
         {
             if (ret != 0)
             {

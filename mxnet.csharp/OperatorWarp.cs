@@ -22,44 +22,44 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply activation function to input.Softmax Activation is only available with CUDNN on GPUand will be computed at each location across channel if input is 4D.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to activation function.</param>
         /// <param name="act_type">Activation function to be applied.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Activation(string symbolName,
+        public static Symbol Activation(string symbol_name,
         Symbol data,
         ActivationActType act_type)
         {
             return new Operator("Activation")
             .SetParam("act_type", ActivationActTypeConvert[(int)act_type])
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply activation function to input.Softmax Activation is only available with CUDNN on GPUand will be computed at each location across channel if input is 4D.
         /// </summary>
         /// <param name="data">Input data to activation function.</param>
-        /// <param name="actType">Activation function to be applied.</param>
+        /// <param name="act_type">Activation function to be applied.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Activation(Symbol data,
-        ActivationActType actType)
+        ActivationActType act_type)
         {
             return new Operator("Activation")
-            .SetParam("act_type", ActivationActTypeConvert[(int)actType])
+            .SetParam("act_type", ActivationActTypeConvert[(int)act_type])
             .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Apply batch normalization to input.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to batch normalization</param>
         /// <param name="eps">Epsilon to prevent div 0</param>
         /// <param name="momentum">Momentum for moving average</param>
         /// <param name="fix_gamma">Fix gamma while training</param>
         /// <param name="use_global_stats">Whether use global moving statistics instead of local batch-norm. This will force change batch-norm into a scale shift operator.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BatchNorm(string symbolName,
+        public static Symbol BatchNorm(string symbol_name,
         Symbol data,
         float eps = 0.001f,
         float momentum = 0.9f,
@@ -72,7 +72,7 @@ namespace mxnet.csharp
             .SetParam("fix_gamma", fix_gamma)
             .SetParam("use_global_stats", use_global_stats)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply batch normalization to input.
@@ -80,19 +80,19 @@ namespace mxnet.csharp
         /// <param name="data">Input data to batch normalization</param>
         /// <param name="eps">Epsilon to prevent div 0</param>
         /// <param name="momentum">Momentum for moving average</param>
-        /// <param name="fixGamma">Fix gamma while training</param>
+        /// <param name="fix_gamma">Fix gamma while training</param>
         /// <param name="use_global_stats">Whether use global moving statistics instead of local batch-norm. This will force change batch-norm into a scale shift operator.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol BatchNorm(Symbol data,
         float eps = 0.001f,
         float momentum = 0.9f,
-        bool fixGamma = true,
+        bool fix_gamma = true,
         bool use_global_stats = false)
         {
             return new Operator("BatchNorm")
             .SetParam("eps", eps)
             .SetParam("momentum", momentum)
-            .SetParam("fix_gamma", fixGamma)
+            .SetParam("fix_gamma", fix_gamma)
             .SetParam("use_global_stats", use_global_stats)
             .SetInput("data", data)
             .CreateSymbol();
@@ -100,15 +100,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Get output from a symbol and pass 0 gradient back
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BlockGrad(string symbolName,
+        public static Symbol BlockGrad(string symbol_name,
         Symbol data)
         {
             return new Operator("BlockGrad")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Get output from a symbol and pass 0 gradient back
@@ -124,12 +124,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Same as Numpy. The axes to perform the reduction.If left empty, a global reduction will be performed.</param>
         /// <param name="keepdims">Same as Numpy. If keepdims is set to true, the axis which is reduced is left in the result as dimension with size one.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sum(string symbolName,
+        public static Symbol Sum(string symbol_name,
         Symbol data,
         Shape axis = null,
         bool keepdims = false)
@@ -138,7 +138,7 @@ namespace mxnet.csharp
             .SetParam("axis", axis)
             .SetParam("keepdims", keepdims)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
@@ -160,12 +160,12 @@ namespace mxnet.csharp
         /// <summary>
         /// (Depreciated! Use sum instead!) Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Same as Numpy. The axes to perform the reduction.If left empty, a global reduction will be performed.</param>
         /// <param name="keepdims">Same as Numpy. If keepdims is set to true, the axis which is reduced is left in the result as dimension with size one.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SumAxis(string symbolName,
+        public static Symbol SumAxis(string symbol_name,
         Symbol data,
         Shape axis = null,
         bool keepdims = false)
@@ -174,7 +174,7 @@ namespace mxnet.csharp
             .SetParam("axis", axis)
             .SetParam("keepdims", keepdims)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// (Depreciated! Use sum instead!) Take sum of the src in the given axis and returns a NDArray. Follows numpy semantics.
@@ -196,12 +196,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Broadcast data in the given axis to the given size. The original size of the broadcasting axis must be 1.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">The axes to perform the broadcasting.</param>
         /// <param name="size">Target sizes of the broadcasting axes.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastAxis(string symbolName,
+        public static Symbol BroadcastAxis(string symbol_name,
         Symbol data,
         Shape axis = null,
         Shape size = null)
@@ -210,7 +210,7 @@ namespace mxnet.csharp
             .SetParam("axis", axis)
             .SetParam("size", size)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Broadcast data in the given axis to the given size. The original size of the broadcasting axis must be 1.
@@ -232,18 +232,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Broadcast data to the target shape. The original size of the broadcasting axis must be 1.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="shape">The shape of the desired array. We can set the dim to zero if it's same as the original. E.g `A = broadcast_to(B, shape=(10, 0, 0))` has the same meaning as `A = broadcast_axis(B, axis=0, size=10)`.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastTo(string symbolName,
+        public static Symbol BroadcastTo(string symbol_name,
         Symbol data,
         Shape shape = null)
         {
             return new Operator("broadcast_to")
             .SetParam("shape", shape)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Broadcast data to the target shape. The original size of the broadcasting axis must be 1.
@@ -274,18 +274,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Cast array to a different data type.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to cast function.</param>
         /// <param name="dtype">Target data type.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Cast(string symbolName,
+        public static Symbol Cast(string symbol_name,
         Symbol data,
         CastDtype dtype)
         {
             return new Operator("Cast")
             .SetParam("dtype", CastDtypeConvert[(int)dtype])
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Cast array to a different data type.
@@ -304,12 +304,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Perform an feature concat on channel dim (defaut is 1) over all
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">List of tensors to concatenate</param>
         /// <param name="num_args">Number of inputs to be concated.</param>
         /// <param name="dim">the dimension to be concated.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Concat(string symbolName,
+        public static Symbol Concat(string symbol_name,
         Symbol[] data,
         int num_args,
         int dim = 1)
@@ -318,21 +318,21 @@ namespace mxnet.csharp
             .SetParam("num_args", num_args)
             .SetParam("dim", dim)
             .AddInput(data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Perform an feature concat on channel dim (defaut is 1) over all
         /// </summary>
         /// <param name="data">List of tensors to concatenate</param>
-        /// <param name="numArgs">Number of inputs to be concated.</param>
+        /// <param name="num_args">Number of inputs to be concated.</param>
         /// <param name="dim">the dimension to be concated.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Concat(Symbol[] data,
-        int numArgs,
+        int num_args,
         int dim = 1)
         {
             return new Operator("Concat")
-            .SetParam("num_args", numArgs)
+            .SetParam("num_args", num_args)
             .SetParam("dim", dim)
             .AddInput(data)
             .CreateSymbol();
@@ -350,7 +350,7 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply convolution to input then add a bias.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the ConvolutionOp.</param>
         /// <param name="kernel">convolution kernel size: (y, x) or (d, y, x)</param>
         /// <param name="num_filter">convolution filter(channel) number</param>
@@ -364,7 +364,7 @@ namespace mxnet.csharp
         /// <param name="no_bias">Whether to disable bias parameter.</param>
         /// <param name="cudnn_tune">Whether to find convolution algo by running performance test.Leads to higher startup time but may give better speed.auto tune is turned off by default.Set environment varialbe MXNET_CUDNN_AUTOTUNE_DEFAULT=1 to turn on by default.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Convolution(string symbolName,
+        public static Symbol Convolution(string symbol_name,
         Symbol data,
         Shape kernel,
         int num_filter,
@@ -395,14 +395,14 @@ namespace mxnet.csharp
             .SetInput("data", data)
             .SetInput("weight", weight)
             .SetInput("bias", bias)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply convolution to input then add a bias.
         /// </summary>
         /// <param name="data">Input data to the ConvolutionOp.</param>
         /// <param name="kernel">convolution kernel size: (y, x) or (d, y, x)</param>
-        /// <param name="numFilter">convolution filter(channel) number</param>
+        /// <param name="num_filter">convolution filter(channel) number</param>
         /// <param name="weight">Weight matrix.</param>
         /// <param name="bias">Bias parameter.</param>
         /// <param name="stride">convolution stride: (y, x) or (d, y, x)</param>
@@ -415,7 +415,7 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol Convolution(Symbol data,
         Shape kernel,
-        int numFilter,
+        int num_filter,
         Symbol weight = null,
         Symbol bias = null,
         Shape stride = null,
@@ -432,7 +432,7 @@ namespace mxnet.csharp
 
             return new Operator("Convolution")
             .SetParam("kernel", kernel)
-            .SetParam("num_filter", numFilter)
+            .SetParam("num_filter", num_filter)
             .SetParam("stride", stride)
             .SetParam("dilate", dilate)
             .SetParam("pad", pad)
@@ -448,7 +448,7 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply correlation to inputs
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data1">Input data1 to the correlation.</param>
         /// <param name="data2">Input data2 to the correlation.</param>
         /// <param name="kernel_size">kernel size for Correlation must be an odd number</param>
@@ -458,7 +458,7 @@ namespace mxnet.csharp
         /// <param name="pad_size">pad for Correlation</param>
         /// <param name="is_multiply">operation type is either multiplication or subduction</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Correlation(string symbolName,
+        public static Symbol Correlation(string symbol_name,
         Symbol data1,
         Symbol data2,
         int kernel_size = 1,
@@ -477,14 +477,14 @@ namespace mxnet.csharp
             .SetParam("is_multiply", is_multiply)
             .SetInput("data1", data1)
             .SetInput("data2", data2)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply correlation to inputs
         /// </summary>
         /// <param name="data1">Input data1 to the correlation.</param>
         /// <param name="data2">Input data2 to the correlation.</param>
-        /// <param name="kernelSize">kernel size for Correlation must be an odd number</param>
+        /// <param name="kernel_size">kernel size for Correlation must be an odd number</param>
         /// <param name="max_displacement">Max displacement of Correlation </param>
         /// <param name="stride1">stride1 quantize data1 globally</param>
         /// <param name="stride2">stride2 quantize data2 within the neighborhood centered around data1</param>
@@ -493,7 +493,7 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol Correlation(Symbol data1,
         Symbol data2,
-        int kernelSize = 1,
+        int kernel_size = 1,
         int max_displacement = 1,
         int stride1 = 1,
         int stride2 = 1,
@@ -501,7 +501,7 @@ namespace mxnet.csharp
         bool is_multiply = true)
         {
             return new Operator("Correlation")
-            .SetParam("kernel_size", kernelSize)
+            .SetParam("kernel_size", kernel_size)
             .SetParam("max_displacement", max_displacement)
             .SetParam("stride1", stride1)
             .SetParam("stride2", stride2)
@@ -514,14 +514,14 @@ namespace mxnet.csharp
         /// <summary>
         /// Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or with width and height of the second input symbol, i.e., with one input, we need h_w to specify the crop height and width, otherwise the second input symbol's size will be used
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Tensor or List of Tensors, the second input will be used as crop_like shape reference</param>
         /// <param name="num_args">Number of inputs for crop, if equals one, then we will use the h_wfor crop height and width, else if equals two, then we will use the heightand width of the second input symbol, we name crop_like here</param>
         /// <param name="offset">crop offset coordinate: (y, x)</param>
         /// <param name="h_w">crop height and weight: (h, w)</param>
         /// <param name="center_crop">If set to true, then it will use be the center_crop,or it will crop using the shape of crop_like</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Crop(string symbolName,
+        public static Symbol Crop(string symbol_name,
         Symbol data,
         int num_args,
         Shape offset = null,
@@ -537,19 +537,19 @@ namespace mxnet.csharp
             .SetParam("h_w", h_w)
             .SetParam("center_crop", center_crop)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w or with width and height of the second input symbol, i.e., with one input, we need h_w to specify the crop height and width, otherwise the second input symbol's size will be used
         /// </summary>
         /// <param name="data">Tensor or List of Tensors, the second input will be used as crop_like shape reference</param>
-        /// <param name="numArgs">Number of inputs for crop, if equals one, then we will use the h_wfor crop height and width, else if equals two, then we will use the heightand width of the second input symbol, we name crop_like here</param>
+        /// <param name="num_args">Number of inputs for crop, if equals one, then we will use the h_wfor crop height and width, else if equals two, then we will use the heightand width of the second input symbol, we name crop_like here</param>
         /// <param name="offset">crop offset coordinate: (y, x)</param>
         /// <param name="h_w">crop height and weight: (h, w)</param>
         /// <param name="center_crop">If set to true, then it will use be the center_crop,or it will crop using the shape of crop_like</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Crop(Symbol data,
-        int numArgs,
+        int num_args,
         Shape offset = null,
         Shape h_w = null,
         bool center_crop = false)
@@ -558,7 +558,7 @@ namespace mxnet.csharp
             if (h_w == null) { h_w = new Shape(0, 0); }
 
             return new Operator("Crop")
-            .SetParam("num_args", numArgs)
+            .SetParam("num_args", num_args)
             .SetParam("offset", offset)
             .SetParam("h_w", h_w)
             .SetParam("center_crop", center_crop)
@@ -616,31 +616,31 @@ namespace mxnet.csharp
         /// <summary>
         /// Custom operator implemented in frontend.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="op_type">Type of custom operator. Must be registered first.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Custom(string symbolName,
+        public static Symbol Custom(string symbol_name,
         string op_type)
         {
             return new Operator("Custom")
             .SetParam("op_type", op_type)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Custom operator implemented in frontend.
         /// </summary>
-        /// <param name="opType">Type of custom operator. Must be registered first.</param>
+        /// <param name="op_type">Type of custom operator. Must be registered first.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Custom(string opType)
+        public static Symbol Custom(string op_type)
         {
             return new Operator("Custom")
-            .SetParam("op_type", opType)
+            .SetParam("op_type", op_type)
             .CreateSymbol();
         }
         /// <summary>
         /// Apply deconvolution to input then add a bias.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the DeconvolutionOp.</param>
         /// <param name="kernel">deconvolution kernel size: (y, x)</param>
         /// <param name="num_filter">deconvolution filter(channel) number</param>
@@ -654,7 +654,7 @@ namespace mxnet.csharp
         /// <param name="workspace">Tmp workspace for deconvolution (MB)</param>
         /// <param name="no_bias">Whether to disable bias parameter.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Deconvolution(string symbolName,
+        public static Symbol Deconvolution(string symbol_name,
         Symbol data,
         Shape kernel,
         int num_filter,
@@ -686,14 +686,14 @@ namespace mxnet.csharp
             .SetInput("data", data)
             .SetInput("weight", weight)
             .SetInput("bias", bias)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply deconvolution to input then add a bias.
         /// </summary>
         /// <param name="data">Input data to the DeconvolutionOp.</param>
         /// <param name="kernel">deconvolution kernel size: (y, x)</param>
-        /// <param name="numFilter">deconvolution filter(channel) number</param>
+        /// <param name="num_filter">deconvolution filter(channel) number</param>
         /// <param name="weight">Weight matrix.</param>
         /// <param name="bias">Bias parameter.</param>
         /// <param name="stride">deconvolution stride: (y, x)</param>
@@ -706,7 +706,7 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol Deconvolution(Symbol data,
         Shape kernel,
-        int numFilter,
+        int num_filter,
         Symbol weight = null,
         Symbol bias = null,
         Shape stride = null,
@@ -724,7 +724,7 @@ namespace mxnet.csharp
 
             return new Operator("Deconvolution")
             .SetParam("kernel", kernel)
-            .SetParam("num_filter", numFilter)
+            .SetParam("num_filter", num_filter)
             .SetParam("stride", stride)
             .SetParam("pad", pad)
             .SetParam("adj", adj)
@@ -740,18 +740,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply dropout to input
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to dropout.</param>
         /// <param name="p">Fraction of the input that gets dropped out at training time</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Dropout(string symbolName,
+        public static Symbol Dropout(string symbol_name,
         Symbol data,
         float p = 0.5f)
         {
             return new Operator("Dropout")
             .SetParam("p", p)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply dropout to input
@@ -770,18 +770,18 @@ namespace mxnet.csharp
         /// <summary>
         /// lhs add rhs with broadcast
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastPlus(string symbolName,
+        public static Symbol BroadcastPlus(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("broadcast_plus")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// lhs add rhs with broadcast
@@ -800,18 +800,18 @@ namespace mxnet.csharp
         /// <summary>
         /// lhs minus rhs with broadcast
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastMinus(string symbolName,
+        public static Symbol BroadcastMinus(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("broadcast_minus")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// lhs minus rhs with broadcast
@@ -830,18 +830,18 @@ namespace mxnet.csharp
         /// <summary>
         /// lhs multiple rhs with broadcast
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastMul(string symbolName,
+        public static Symbol BroadcastMul(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("broadcast_mul")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// lhs multiple rhs with broadcast
@@ -860,18 +860,18 @@ namespace mxnet.csharp
         /// <summary>
         /// lhs divide rhs with broadcast
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastDiv(string symbolName,
+        public static Symbol BroadcastDiv(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("broadcast_div")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// lhs divide rhs with broadcast
@@ -890,18 +890,18 @@ namespace mxnet.csharp
         /// <summary>
         /// lhs power rhs with broadcast
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BroadcastPower(string symbolName,
+        public static Symbol BroadcastPower(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("broadcast_power")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// lhs power rhs with broadcast
@@ -920,39 +920,39 @@ namespace mxnet.csharp
         /// <summary>
         /// Perform an elementwise sum over all the inputs.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="num_args">Number of inputs to be summed.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol ElementWiseSum(string symbolName,
+        public static Symbol ElementWiseSum(string symbol_name,
         int num_args)
         {
             return new Operator("ElementWiseSum")
             .SetParam("num_args", num_args)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Perform an elementwise sum over all the inputs.
         /// </summary>
-        /// <param name="numArgs">Number of inputs to be summed.</param>
+        /// <param name="num_args">Number of inputs to be summed.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol ElementWiseSum(int numArgs)
+        public static Symbol ElementWiseSum(int num_args)
         {
             return new Operator("ElementWiseSum")
-            .SetParam("num_args", numArgs)
+            .SetParam("num_args", num_args)
             .CreateSymbol();
         }
         /// <summary>
         /// Take absolute value of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Abs(string symbolName,
+        public static Symbol Abs(string symbol_name,
         Symbol data)
         {
             return new Operator("abs")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take absolute value of the src
@@ -968,15 +968,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take sign value of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sign(string symbolName,
+        public static Symbol Sign(string symbol_name,
         Symbol data)
         {
             return new Operator("sign")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take sign value of the src
@@ -992,15 +992,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take round value of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Round(string symbolName,
+        public static Symbol Round(string symbol_name,
         Symbol data)
         {
             return new Operator("round")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take round value of the src
@@ -1016,15 +1016,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take ceil value of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Ceil(string symbolName,
+        public static Symbol Ceil(string symbol_name,
         Symbol data)
         {
             return new Operator("ceil")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take ceil value of the src
@@ -1040,15 +1040,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take floor value of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Floor(string symbolName,
+        public static Symbol Floor(string symbol_name,
         Symbol data)
         {
             return new Operator("floor")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take floor value of the src
@@ -1064,15 +1064,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take square of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Square(string symbolName,
+        public static Symbol Square(string symbol_name,
         Symbol data)
         {
             return new Operator("square")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take square of the src
@@ -1088,15 +1088,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take sqrt of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sqrt(string symbolName,
+        public static Symbol Sqrt(string symbol_name,
         Symbol data)
         {
             return new Operator("sqrt")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take sqrt of the src
@@ -1112,15 +1112,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take rsqrt of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Rsqrt(string symbolName,
+        public static Symbol Rsqrt(string symbol_name,
         Symbol data)
         {
             return new Operator("rsqrt")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take rsqrt of the src
@@ -1136,15 +1136,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take exp of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Exp(string symbolName,
+        public static Symbol Exp(string symbol_name,
         Symbol data)
         {
             return new Operator("exp")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take exp of the src
@@ -1160,15 +1160,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take log of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Log(string symbolName,
+        public static Symbol Log(string symbol_name,
         Symbol data)
         {
             return new Operator("log")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take log of the src
@@ -1184,15 +1184,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take cos of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Cos(string symbolName,
+        public static Symbol Cos(string symbol_name,
         Symbol data)
         {
             return new Operator("cos")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take cos of the src
@@ -1208,15 +1208,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Take sin of the src
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Sin(string symbolName,
+        public static Symbol Sin(string symbol_name,
         Symbol data)
         {
             return new Operator("sin")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Take sin of the src
@@ -1232,13 +1232,13 @@ namespace mxnet.csharp
         /// <summary>
         /// Get embedding for one-hot input. A n-dimensional input tensor will be trainsformed into a (n+1)-dimensional tensor, where a new dimension is added for the embedding results.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the EmbeddingOp.</param>
         /// <param name="input_dim">input dim of one-hot encoding</param>
         /// <param name="output_dim">output dim of embedding</param>
         /// <param name="weight">Enbedding weight matrix.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Embedding(string symbolName,
+        public static Symbol Embedding(string symbol_name,
         Symbol data,
         int input_dim,
         int output_dim,
@@ -1249,23 +1249,23 @@ namespace mxnet.csharp
             .SetParam("output_dim", output_dim)
             .SetInput("data", data)
             .SetInput("weight", weight)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Get embedding for one-hot input. A n-dimensional input tensor will be trainsformed into a (n+1)-dimensional tensor, where a new dimension is added for the embedding results.
         /// </summary>
         /// <param name="data">Input data to the EmbeddingOp.</param>
-        /// <param name="inputDim">input dim of one-hot encoding</param>
+        /// <param name="input_dim">input dim of one-hot encoding</param>
         /// <param name="output_dim">output dim of embedding</param>
         /// <param name="weight">Enbedding weight matrix.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Embedding(Symbol data,
-        int inputDim,
+        int input_dim,
         int output_dim,
         Symbol weight = null)
         {
             return new Operator("Embedding")
-            .SetParam("input_dim", inputDim)
+            .SetParam("input_dim", input_dim)
             .SetParam("output_dim", output_dim)
             .SetInput("data", data)
             .SetInput("weight", weight)
@@ -1274,14 +1274,14 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply matrix multiplication to input then add a bias.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the FullyConnectedOp.</param>
         /// <param name="num_hidden">Number of hidden nodes of the output.</param>
         /// <param name="weight">Weight matrix.</param>
         /// <param name="bias">Bias parameter.</param>
         /// <param name="no_bias">Whether to disable bias parameter.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol FullyConnected(string symbolName,
+        public static Symbol FullyConnected(string symbol_name,
         Symbol data,
         int num_hidden,
         Symbol weight = null,
@@ -1294,25 +1294,25 @@ namespace mxnet.csharp
             .SetInput("data", data)
             .SetInput("weight", weight)
             .SetInput("bias", bias)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply matrix multiplication to input then add a bias.
         /// </summary>
         /// <param name="data">Input data to the FullyConnectedOp.</param>
-        /// <param name="numHidden">Number of hidden nodes of the output.</param>
+        /// <param name="num_hidden">Number of hidden nodes of the output.</param>
         /// <param name="weight">Weight matrix.</param>
         /// <param name="bias">Bias parameter.</param>
         /// <param name="no_bias">Whether to disable bias parameter.</param>
         /// <returns>returns new symbol</returns>
         public static Symbol FullyConnected(Symbol data,
-        int numHidden,
+        int num_hidden,
         Symbol weight = null,
         Symbol bias = null,
         bool no_bias = false)
         {
             return new Operator("FullyConnected")
-            .SetParam("num_hidden", numHidden)
+            .SetParam("num_hidden", num_hidden)
             .SetParam("no_bias", no_bias)
             .SetInput("data", data)
             .SetInput("weight", weight)
@@ -1364,18 +1364,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Set the l2 norm of each instance to a constant.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the L2NormalizationOp.</param>
         /// <param name="eps">Epsilon to prevent div 0</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol L2Normalization(string symbolName,
+        public static Symbol L2Normalization(string symbol_name,
         Symbol data,
         float eps = 1e-010f)
         {
             return new Operator("L2Normalization")
             .SetParam("eps", eps)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Set the l2 norm of each instance to a constant.
@@ -1453,18 +1453,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Calculate cross_entropy(lhs, one_hot(rhs))
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SoftmaxCrossEntropy(string symbolName,
+        public static Symbol SoftmaxCrossEntropy(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("softmax_cross_entropy")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Calculate cross_entropy(lhs, one_hot(rhs))
@@ -1531,48 +1531,48 @@ namespace mxnet.csharp
         /// <summary>
         /// Get output from a symbol and pass 1 gradient back. This is used as a terminal loss if unary and binary operator are used to composite a loss with no declaration of backward dependency
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data.</param>
         /// <param name="grad_scale">gradient scale as a supplement to unary and binary operators</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol MakeLoss(string symbolName,
+        public static Symbol MakeLoss(string symbol_name,
         Symbol data,
         float grad_scale = 1f)
         {
             return new Operator("MakeLoss")
             .SetParam("grad_scale", grad_scale)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Get output from a symbol and pass 1 gradient back. This is used as a terminal loss if unary and binary operator are used to composite a loss with no declaration of backward dependency
         /// </summary>
         /// <param name="data">Input data.</param>
-        /// <param name="gradScale">gradient scale as a supplement to unary and binary operators</param>
+        /// <param name="grad_scale">gradient scale as a supplement to unary and binary operators</param>
         /// <returns>returns new symbol</returns>
         public static Symbol MakeLoss(Symbol data,
-        float gradScale = 1f)
+        float grad_scale = 1f)
         {
             return new Operator("MakeLoss")
-            .SetParam("grad_scale", gradScale)
+            .SetParam("grad_scale", grad_scale)
             .SetInput("data", data)
             .CreateSymbol();
         }
         /// <summary>
         /// Transpose the input matrix and return a new one
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axes">Target axis order. By default the axes will be inverted.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Transpose(string symbolName,
+        public static Symbol Transpose(string symbol_name,
         Symbol data,
         Shape axes = null)
         {
             return new Operator("transpose")
             .SetParam("axes", axes)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Transpose the input matrix and return a new one
@@ -1591,18 +1591,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Expand the shape of array by inserting a new axis.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">Position (amongst axes) where new axis is to be inserted.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol ExpandDims(string symbolName,
+        public static Symbol ExpandDims(string symbol_name,
         Symbol data,
         int axis)
         {
             return new Operator("expand_dims")
             .SetParam("axis", axis)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Expand the shape of array by inserting a new axis.
@@ -1621,13 +1621,13 @@ namespace mxnet.csharp
         /// <summary>
         /// Slice the input along certain axis and return a sliced array.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <param name="axis">The axis to be sliced</param>
         /// <param name="begin">The beginning index to be sliced</param>
         /// <param name="end">The end index to be sliced</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SliceAxis(string symbolName,
+        public static Symbol SliceAxis(string symbol_name,
         Symbol data,
         int axis,
         int begin,
@@ -1638,7 +1638,7 @@ namespace mxnet.csharp
             .SetParam("begin", begin)
             .SetParam("end", end)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Slice the input along certain axis and return a sliced array.
@@ -1663,18 +1663,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Calculate dot product of two matrices or two vectors
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Dot(string symbolName,
+        public static Symbol Dot(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("dot")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Calculate dot product of two matrices or two vectors
@@ -1693,18 +1693,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Calculate batched dot product of two matrices. (batch, M, K) batch_dot (batch, K, N) --> (batch, M, N)
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="lhs">Left symbolic input to the function</param>
         /// <param name="rhs">Right symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol BatchDot(string symbolName,
+        public static Symbol BatchDot(string symbol_name,
         Symbol lhs,
         Symbol rhs)
         {
             return new Operator("batch_dot")
             .SetInput("lhs", lhs)
             .SetInput("rhs", rhs)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Calculate batched dot product of two matrices. (batch, M, K) batch_dot (batch, K, N) --> (batch, M, N)
@@ -1733,7 +1733,7 @@ namespace mxnet.csharp
         /// <summary>
         /// Perform spatial pooling on inputs.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the pooling operator.</param>
         /// <param name="kernel">pooling kernel size: (y, x) or (d, y, x)</param>
         /// <param name="pool_type">Pooling type to be applied.</param>
@@ -1741,7 +1741,7 @@ namespace mxnet.csharp
         /// <param name="stride">stride: for pooling (y, x) or (d, y, x)</param>
         /// <param name="pad">pad for pooling: (y, x) or (d, y, x)</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Pooling(string symbolName,
+        public static Symbol Pooling(string symbol_name,
         Symbol data,
         Shape kernel,
         PoolingPoolType pool_type,
@@ -1759,21 +1759,21 @@ namespace mxnet.csharp
             .SetParam("stride", stride)
             .SetParam("pad", pad)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Perform spatial pooling on inputs.
         /// </summary>
         /// <param name="data">Input data to the pooling operator.</param>
         /// <param name="kernel">pooling kernel size: (y, x) or (d, y, x)</param>
-        /// <param name="poolType">Pooling type to be applied.</param>
+        /// <param name="pool_type">Pooling type to be applied.</param>
         /// <param name="global_pool">Ignore kernel size, do global pooling based on current input feature map. This is useful for input with different shape</param>
         /// <param name="stride">stride: for pooling (y, x) or (d, y, x)</param>
         /// <param name="pad">pad for pooling: (y, x) or (d, y, x)</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Pooling(Symbol data,
         Shape kernel,
-        PoolingPoolType poolType,
+        PoolingPoolType pool_type,
         bool global_pool = false,
         Shape stride = null,
         Shape pad = null)
@@ -1783,7 +1783,7 @@ namespace mxnet.csharp
 
             return new Operator("Pooling")
             .SetParam("kernel", kernel)
-            .SetParam("pool_type", PoolingPoolTypeConvert[(int)poolType])
+            .SetParam("pool_type", PoolingPoolTypeConvert[(int)pool_type])
             .SetParam("global_pool", global_pool)
             .SetParam("stride", stride)
             .SetParam("pad", pad)
@@ -1793,12 +1793,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Use linear regression for final output, this is used on final output of a net.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to function.</param>
         /// <param name="label">Input label to function.</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol LinearRegressionOutput(string symbolName,
+        public static Symbol LinearRegressionOutput(string symbol_name,
         Symbol data,
         Symbol label,
         float grad_scale = 1f)
@@ -1807,21 +1807,21 @@ namespace mxnet.csharp
             .SetParam("grad_scale", grad_scale)
             .SetInput("data", data)
             .SetInput("label", label)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Use linear regression for final output, this is used on final output of a net.
         /// </summary>
         /// <param name="data">Input data to function.</param>
         /// <param name="label">Input label to function.</param>
-        /// <param name="gradScale">Scale the gradient by a float factor</param>
+        /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <returns>returns new symbol</returns>
         public static Symbol LinearRegressionOutput(Symbol data,
         Symbol label,
-        float gradScale = 1f)
+        float grad_scale = 1f)
         {
             return new Operator("LinearRegressionOutput")
-            .SetParam("grad_scale", gradScale)
+            .SetParam("grad_scale", grad_scale)
             .SetInput("data", data)
             .SetInput("label", label)
             .CreateSymbol();
@@ -1865,12 +1865,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Use Logistic regression for final output, this is used on final output of a net.Logistic regression is suitable for binary classification or probability prediction tasks.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to function.</param>
         /// <param name="label">Input label to function.</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol LogisticRegressionOutput(string symbolName,
+        public static Symbol LogisticRegressionOutput(string symbol_name,
         Symbol data,
         Symbol label,
         float grad_scale = 1f)
@@ -1879,21 +1879,21 @@ namespace mxnet.csharp
             .SetParam("grad_scale", grad_scale)
             .SetInput("data", data)
             .SetInput("label", label)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Use Logistic regression for final output, this is used on final output of a net.Logistic regression is suitable for binary classification or probability prediction tasks.
         /// </summary>
         /// <param name="data">Input data to function.</param>
         /// <param name="label">Input label to function.</param>
-        /// <param name="gradScale">Scale the gradient by a float factor</param>
+        /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <returns>returns new symbol</returns>
         public static Symbol LogisticRegressionOutput(Symbol data,
         Symbol label,
-        float gradScale = 1f)
+        float grad_scale = 1f)
         {
             return new Operator("LogisticRegressionOutput")
-            .SetParam("grad_scale", gradScale)
+            .SetParam("grad_scale", grad_scale)
             .SetInput("data", data)
             .SetInput("label", label)
             .CreateSymbol();
@@ -1901,18 +1901,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Reshape input to target shape
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to reshape.</param>
         /// <param name="shape">Target new shape. If the dim is same, set it to 0. If the dim is set to be -1, it will be inferred from the rest of dims. One and only one dim can be -1</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Reshape(string symbolName,
+        public static Symbol Reshape(string symbol_name,
         Symbol data,
         Shape shape = null)
         {
             return new Operator("Reshape")
             .SetParam("shape", shape)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Reshape input to target shape
@@ -1931,15 +1931,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Flatten input
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to flatten.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Flatten(string symbolName,
+        public static Symbol Flatten(string symbol_name,
         Symbol data)
         {
             return new Operator("Flatten")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Flatten input
@@ -2086,12 +2086,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Sample a uniform distribution
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="shape">The shape of the output</param>
         /// <param name="low">The lower bound of distribution</param>
         /// <param name="high">The upper bound of distribution</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Uniform(string symbolName,
+        public static Symbol Uniform(string symbol_name,
         Shape shape,
         float low = 0f,
         float high = 1f)
@@ -2100,7 +2100,7 @@ namespace mxnet.csharp
             .SetParam("shape", shape)
             .SetParam("low", low)
             .SetParam("high", high)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Sample a uniform distribution
@@ -2122,12 +2122,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Sample a normal distribution
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="shape">The shape of the output</param>
         /// <param name="loc">Mean of the distribution.</param>
         /// <param name="scale">Standard deviation of the distribution.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Normal(string symbolName,
+        public static Symbol Normal(string symbol_name,
         Shape shape,
         float loc = 0f,
         float scale = 1f)
@@ -2136,7 +2136,7 @@ namespace mxnet.csharp
             .SetParam("shape", shape)
             .SetParam("loc", loc)
             .SetParam("scale", scale)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Sample a normal distribution
@@ -2158,12 +2158,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Slice input equally along specified axis
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="num_outputs">Number of outputs to be sliced.</param>
         /// <param name="axis">Dimension along which to slice.</param>
         /// <param name="squeeze_axis">If true AND the sliced dimension becomes 1, squeeze that dimension.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SliceChannel(string symbolName,
+        public static Symbol SliceChannel(string symbol_name,
         int num_outputs,
         int axis = 1,
         bool squeeze_axis = false)
@@ -2172,21 +2172,21 @@ namespace mxnet.csharp
             .SetParam("num_outputs", num_outputs)
             .SetParam("axis", axis)
             .SetParam("squeeze_axis", squeeze_axis)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Slice input equally along specified axis
         /// </summary>
-        /// <param name="numOutputs">Number of outputs to be sliced.</param>
+        /// <param name="num_outputs">Number of outputs to be sliced.</param>
         /// <param name="axis">Dimension along which to slice.</param>
         /// <param name="squeeze_axis">If true AND the sliced dimension becomes 1, squeeze that dimension.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SliceChannel(int numOutputs,
+        public static Symbol SliceChannel(int num_outputs,
         int axis = 1,
         bool squeeze_axis = false)
         {
             return new Operator("SliceChannel")
-            .SetParam("num_outputs", numOutputs)
+            .SetParam("num_outputs", num_outputs)
             .SetParam("axis", axis)
             .SetParam("squeeze_axis", squeeze_axis)
             .CreateSymbol();
@@ -2194,15 +2194,15 @@ namespace mxnet.csharp
         /// <summary>
         /// Calculate Smooth L1 Loss(lhs, scalar)
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Left symbolic input to the function</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SmoothL1(string symbolName,
+        public static Symbol SmoothL1(string symbol_name,
         Symbol data)
         {
             return new Operator("smooth_l1")
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Calculate Smooth L1 Loss(lhs, scalar)
@@ -2227,18 +2227,18 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply softmax activation to input. This is intended for internal layers. For output (loss layer) please use SoftmaxOutput. If mode=instance, this operator will compute a softmax for each instance in the batch; this is the default mode. If mode=channel, this operator will compute a num_channel-class softmax at each position of each instance; this can be used for fully convolutional network, image segmentation, etc.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to activation function.</param>
         /// <param name="mode">Softmax Mode. If set to instance, this operator will compute a softmax for each instance in the batch; this is the default mode. If set to channel, this operator will compute a num_channel-class softmax at each position of each instance; this can be used for fully convolutional network, image segmentation, etc.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SoftmaxActivation(string symbolName,
+        public static Symbol SoftmaxActivation(string symbol_name,
         Symbol data,
         SoftmaxactivationMode mode = SoftmaxactivationMode.Instance)
         {
             return new Operator("SoftmaxActivation")
             .SetParam("mode", SoftmaxactivationModeConvert[(int)mode])
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply softmax activation to input. This is intended for internal layers. For output (loss layer) please use SoftmaxOutput. If mode=instance, this operator will compute a softmax for each instance in the batch; this is the default mode. If mode=channel, this operator will compute a num_channel-class softmax at each position of each instance; this can be used for fully convolutional network, image segmentation, etc.
@@ -2267,7 +2267,7 @@ namespace mxnet.csharp
         /// <summary>
         /// Perform a softmax transformation on input, backprop with logloss.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to softmax.</param>
         /// <param name="label">Label data, can also be probability value with same shape as data</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
@@ -2276,7 +2276,7 @@ namespace mxnet.csharp
         /// <param name="use_ignore">If set to true, the ignore_label value will not contribute to the backward gradient</param>
         /// <param name="normalization">If set to null, op will do nothing on output gradient.If set to batch, op will normalize gradient by divide batch sizeIf set to valid, op will normalize gradient by divide sample not ignored</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SoftmaxOutput(string symbolName,
+        public static Symbol SoftmaxOutput(string symbol_name,
         Symbol data,
         Symbol label,
         float grad_scale = 1f,
@@ -2293,14 +2293,14 @@ namespace mxnet.csharp
             .SetParam("normalization", SoftmaxoutputNormalizationConvert[(int)normalization])
             .SetInput("data", data)
             .SetInput("label", label)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Perform a softmax transformation on input, backprop with logloss.
         /// </summary>
         /// <param name="data">Input data to softmax.</param>
         /// <param name="label">Label data, can also be probability value with same shape as data</param>
-        /// <param name="gradScale">Scale the gradient by a float factor</param>
+        /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <param name="ignore_label">the label value will be ignored during backward (only works if use_ignore is set to be true).</param>
         /// <param name="multi_output">If set to true, for a (n,k,x_1,..,x_n) dimensional input tensor, softmax will generate n*x_1*...*x_n output, each has k classes</param>
         /// <param name="use_ignore">If set to true, the ignore_label value will not contribute to the backward gradient</param>
@@ -2308,14 +2308,14 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol SoftmaxOutput(Symbol data,
         Symbol label,
-        float gradScale = 1f,
+        float grad_scale = 1f,
         float ignore_label = -1f,
         bool multi_output = false,
         bool use_ignore = false,
         SoftmaxoutputNormalization normalization = SoftmaxoutputNormalization.Null)
         {
             return new Operator("SoftmaxOutput")
-            .SetParam("grad_scale", gradScale)
+            .SetParam("grad_scale", grad_scale)
             .SetParam("ignore_label", ignore_label)
             .SetParam("multi_output", multi_output)
             .SetParam("use_ignore", use_ignore)
@@ -2337,7 +2337,7 @@ namespace mxnet.csharp
         /// <summary>
         /// DEPRECATED: Perform a softmax transformation on input. Please use SoftmaxOutput
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to softmax.</param>
         /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <param name="ignore_label">the label value will be ignored during backward (only works if use_ignore is set to be true).</param>
@@ -2345,7 +2345,7 @@ namespace mxnet.csharp
         /// <param name="use_ignore">If set to true, the ignore_label value will not contribute to the backward gradient</param>
         /// <param name="normalization">If set to null, op will do nothing on output gradient.If set to batch, op will normalize gradient by divide batch sizeIf set to valid, op will normalize gradient by divide sample not ignored</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol Softmax(string symbolName,
+        public static Symbol Softmax(string symbol_name,
         Symbol data,
         float grad_scale = 1f,
         float ignore_label = -1f,
@@ -2360,27 +2360,27 @@ namespace mxnet.csharp
             .SetParam("use_ignore", use_ignore)
             .SetParam("normalization", SoftmaxNormalizationConvert[(int)normalization])
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// DEPRECATED: Perform a softmax transformation on input. Please use SoftmaxOutput
         /// </summary>
         /// <param name="data">Input data to softmax.</param>
-        /// <param name="gradScale">Scale the gradient by a float factor</param>
+        /// <param name="grad_scale">Scale the gradient by a float factor</param>
         /// <param name="ignore_label">the label value will be ignored during backward (only works if use_ignore is set to be true).</param>
         /// <param name="multi_output">If set to true, for a (n,k,x_1,..,x_n) dimensional input tensor, softmax will generate n*x_1*...*x_n output, each has k classes</param>
         /// <param name="use_ignore">If set to true, the ignore_label value will not contribute to the backward gradient</param>
         /// <param name="normalization">If set to null, op will do nothing on output gradient.If set to batch, op will normalize gradient by divide batch sizeIf set to valid, op will normalize gradient by divide sample not ignored</param>
         /// <returns>returns new symbol</returns>
         public static Symbol Softmax(Symbol data,
-        float gradScale = 1f,
+        float grad_scale = 1f,
         float ignore_label = -1f,
         bool multi_output = false,
         bool use_ignore = false,
         SoftmaxNormalization normalization = SoftmaxNormalization.Null)
         {
             return new Operator("Softmax")
-            .SetParam("grad_scale", gradScale)
+            .SetParam("grad_scale", grad_scale)
             .SetParam("ignore_label", ignore_label)
             .SetParam("multi_output", multi_output)
             .SetParam("use_ignore", use_ignore)
@@ -2407,14 +2407,14 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply spatial transformer to input feature map.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the SpatialTransformerOp.</param>
         /// <param name="loc">localisation net, the output dim should be 6 when transform_type is affine, and the name of loc symbol should better starts with 'stn_loc', so that initialization it with iddentify tranform, or you shold initialize the weight and bias by yourself.</param>
         /// <param name="transform_type">transformation type</param>
         /// <param name="sampler_type">sampling type</param>
         /// <param name="target_shape">output shape(h, w) of spatial transformer: (y, x)</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SpatialTransformer(string symbolName,
+        public static Symbol SpatialTransformer(string symbol_name,
         Symbol data,
         Symbol loc,
         SpatialtransformerTransformType transform_type,
@@ -2429,27 +2429,27 @@ namespace mxnet.csharp
             .SetParam("target_shape", target_shape)
             .SetInput("data", data)
             .SetInput("loc", loc)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply spatial transformer to input feature map.
         /// </summary>
         /// <param name="data">Input data to the SpatialTransformerOp.</param>
         /// <param name="loc">localisation net, the output dim should be 6 when transform_type is affine, and the name of loc symbol should better starts with 'stn_loc', so that initialization it with iddentify tranform, or you shold initialize the weight and bias by yourself.</param>
-        /// <param name="transformType">transformation type</param>
+        /// <param name="transform_type">transformation type</param>
         /// <param name="sampler_type">sampling type</param>
         /// <param name="target_shape">output shape(h, w) of spatial transformer: (y, x)</param>
         /// <returns>returns new symbol</returns>
         public static Symbol SpatialTransformer(Symbol data,
         Symbol loc,
-        SpatialtransformerTransformType transformType,
+        SpatialtransformerTransformType transform_type,
         SpatialtransformerSamplerType sampler_type,
         Shape target_shape = null)
         {
             if (target_shape == null) { target_shape = new Shape(0, 0); }
 
             return new Operator("SpatialTransformer")
-            .SetParam("transform_type", SpatialtransformerTransformTypeConvert[(int)transformType])
+            .SetParam("transform_type", SpatialtransformerTransformTypeConvert[(int)transform_type])
             .SetParam("sampler_type", SpatialtransformerSamplerTypeConvert[(int)sampler_type])
             .SetParam("target_shape", target_shape)
             .SetInput("data", data)
@@ -2507,12 +2507,12 @@ namespace mxnet.csharp
         /// <summary>
         /// Apply swapaxis to input.
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Input data to the SwapAxisOp.</param>
         /// <param name="dim1">the first axis to be swapped.</param>
         /// <param name="dim2">the second axis to be swapped.</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol SwapAxis(string symbolName,
+        public static Symbol SwapAxis(string symbol_name,
         Symbol data,
         int dim1 = 0,
         int dim2 = 0)
@@ -2521,7 +2521,7 @@ namespace mxnet.csharp
             .SetParam("dim1", dim1)
             .SetParam("dim2", dim2)
             .SetInput("data", data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Apply swapaxis to input.
@@ -2561,7 +2561,7 @@ namespace mxnet.csharp
         /// <summary>
         /// Perform nearest neighboor/bilinear up sampling to inputs
         /// </summary>
-        /// <param name="symbolName">name of the resulting symbol</param>
+        /// <param name="symbol_name">name of the resulting symbol</param>
         /// <param name="data">Array of tensors to upsample</param>
         /// <param name="scale">Up sampling scale</param>
         /// <param name="sample_type">upsampling method</param>
@@ -2570,7 +2570,7 @@ namespace mxnet.csharp
         /// <param name="multi_input_mode">How to handle multiple input. concat means concatenate upsampled images along the channel dimension. sum means add all images together, only available for nearest neighbor upsampling.</param>
         /// <param name="workspace">Tmp workspace for deconvolution (MB)</param>
         /// <returns>returns new symbol</returns>
-        public static Symbol UpSampling(string symbolName,
+        public static Symbol UpSampling(string symbol_name,
         Symbol[] data,
         int scale,
         UpsamplingSampleType sample_type,
@@ -2587,14 +2587,14 @@ namespace mxnet.csharp
             .SetParam("multi_input_mode", UpsamplingMultiInputModeConvert[(int)multi_input_mode])
             .SetParam("workspace", workspace)
             .AddInput(data)
-            .CreateSymbol(symbolName);
+            .CreateSymbol(symbol_name);
         }
         /// <summary>
         /// Perform nearest neighboor/bilinear up sampling to inputs
         /// </summary>
         /// <param name="data">Array of tensors to upsample</param>
         /// <param name="scale">Up sampling scale</param>
-        /// <param name="sampleType">upsampling method</param>
+        /// <param name="sample_type">upsampling method</param>
         /// <param name="num_args">Number of inputs to be upsampled. For nearest neighbor upsampling, this can be 1-N; the size of output will be(scale*h_0,scale*w_0) and all other inputs will be upsampled to thesame size. For bilinear upsampling this must be 2; 1 input and 1 weight.</param>
         /// <param name="num_filter">Input filter. Only used by bilinear sample_type.</param>
         /// <param name="multi_input_mode">How to handle multiple input. concat means concatenate upsampled images along the channel dimension. sum means add all images together, only available for nearest neighbor upsampling.</param>
@@ -2602,7 +2602,7 @@ namespace mxnet.csharp
         /// <returns>returns new symbol</returns>
         public static Symbol UpSampling(Symbol[] data,
         int scale,
-        UpsamplingSampleType sampleType,
+        UpsamplingSampleType sample_type,
         int num_args,
         int num_filter = 0,
         UpsamplingMultiInputMode multi_input_mode = UpsamplingMultiInputMode.Concat,
@@ -2610,7 +2610,7 @@ namespace mxnet.csharp
         {
             return new Operator("UpSampling")
             .SetParam("scale", scale)
-            .SetParam("sample_type", UpsamplingSampleTypeConvert[(int)sampleType])
+            .SetParam("sample_type", UpsamplingSampleTypeConvert[(int)sample_type])
             .SetParam("num_args", num_args)
             .SetParam("num_filter", num_filter)
             .SetParam("multi_input_mode", UpsamplingMultiInputModeConvert[(int)multi_input_mode])

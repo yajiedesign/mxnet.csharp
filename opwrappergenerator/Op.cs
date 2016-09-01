@@ -105,7 +105,7 @@ namespace opwrappergenerator
             {
                 if (arg.type_name == "Symbol" ||
                     arg.type_name == "Symbol[]" ||
-                    arg.name == "symbolName")
+                    arg.name == "symbol_name")
                 {
                     continue;
                 }
@@ -142,7 +142,7 @@ namespace opwrappergenerator
             }
             if (use_name)
             {
-                ret += ".CreateSymbol(symbolName);\n";
+                ret += ".CreateSymbol(symbol_name);\n";
             }
             else
             {
