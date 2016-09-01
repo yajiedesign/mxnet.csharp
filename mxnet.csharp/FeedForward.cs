@@ -15,41 +15,41 @@ namespace mxnet.csharp
 {
     public interface IDataIProvide
     {
-        Dictionary<string, Shape> provide_data { get; }
-        Dictionary<string, Shape> provide_label { get; }
+        Dictionary<string, Shape> Provide_data { get; }
+        Dictionary<string, Shape> Provide_label { get; }
 
     }
     public interface IDataBatch : IDataIProvide
     {
-        string bucket_key { get; }
-        List<NDArray> data { get; }
-        List<NDArray> label { get; }
+        string Bucket_key { get; }
+        List<NDArray> Data { get; }
+        List<NDArray> Label { get; }
     }
 
     public interface IDataIter : IDataIProvide, IEnumerable<IDataBatch>
     {
-        string default_bucket_key { get; }
+        string Default_bucket_key { get; }
 
-        int batch_size { get; }
-        void reset();
+        int Batch_size { get; }
+        void Reset();
     }
 
     public class FeedForward
     {
-        private Symbol symbol;
-        private Dictionary<string, NDArray> arg_params;
-        private Dictionary<string, NDArray> aux_params;
-        private bool allow_extra_params;
-        private bool argument_checked;
-        private Func<string, Symbol> sym_gen;
-        private List<Context> ctx;
-        private int num_epoch;
-        private Optimizer optimizer;
-        private Initializer initializer;
-        private object pred_exec;
-        private int begin_epoch;
-        private Dictionary<string, object> kwargs;
-        private int? epoch_size;
+        private Symbol _symbol;
+        private Dictionary<string, NDArray> _arg_params;
+        private Dictionary<string, NDArray> _aux_params;
+        private readonly bool _allow_extra_params;
+        private bool _argument_checked;
+        private Func<string, Symbol> _sym_gen;
+        private readonly List<Context> _ctx;
+        private readonly int _num_epoch;
+        private readonly Optimizer _optimizer;
+        private readonly Initializer _initializer;
+        private object _pred_exec;
+        private readonly int _begin_epoch;
+        private readonly Dictionary<string, object> _kwargs;
+        private readonly int? _epoch_size;
 
 
         public FeedForward(Symbol symbol,
@@ -63,19 +63,19 @@ namespace mxnet.csharp
             bool allow_extra_params = false,
             int begin_epoch = 0)
         {
-            this.symbol = symbol;
+            this._symbol = symbol;
 
             if (initializer == null)
             {
                 initializer = new Uniform(0.01f);
             }
-            this.initializer = initializer;
-            this.arg_params = arg_params;
-            this.aux_params = aux_params;
-            this.allow_extra_params = allow_extra_params;
+            this._initializer = initializer;
+            this._arg_params = arg_params;
+            this._aux_params = aux_params;
+            this._allow_extra_params = allow_extra_params;
 
-            this.argument_checked = false;
-            if (this.sym_gen == null)
+            this._argument_checked = false;
+            if (this._sym_gen == null)
             {
                 this._check_arguments();
             }
@@ -85,11 +85,11 @@ namespace mxnet.csharp
                 ctx = new List<mxnet.csharp.Context>() { new Context(DeviceType.KCpu, 0) };
             }
 
-            this.ctx = ctx;
+            this._ctx = ctx;
             // training parameters
-            this.num_epoch = num_epoch;
+            this._num_epoch = num_epoch;
 
-            this.kwargs = new Dictionary<string, object>();
+            this._kwargs = new Dictionary<string, object>();
 
             if (optimizer == null)
             {
@@ -98,38 +98,38 @@ namespace mxnet.csharp
                 optimizer = "ccsgd";
             }
 
-            this.optimizer = optimizer;
+            this._optimizer = optimizer;
             // internal helper state;
-            this.pred_exec = null;
-            this.begin_epoch = begin_epoch;
-            this.epoch_size = epoch_size;
+            this._pred_exec = null;
+            this._begin_epoch = begin_epoch;
+            this._epoch_size = epoch_size;
 
         }
 
         private void _check_arguments()
         {
-            if (this.argument_checked)
+            if (this._argument_checked)
                 return;
 
 
-            Debug.Assert(this.symbol != null);
-            this.argument_checked = true;
+            Debug.Assert(this._symbol != null);
+            this._argument_checked = true;
 
             //check if symbol contain duplicated names.
-            Util._check_arguments(this.symbol);
+            Util._check_arguments(this._symbol);
             //rematch parameters to delete useless ones
-            if (this.allow_extra_params)
+            if (this._allow_extra_params)
             {
-                if (this.arg_params != null)
+                if (this._arg_params != null)
                 {
-                    var arg_names = new HashSet<string>(this.symbol.ListArguments());
-                    this.arg_params = this.arg_params.Where(w => arg_names.Contains(w.Key))
+                    var arg_names = new HashSet<string>(this._symbol.ListArguments());
+                    this._arg_params = this._arg_params.Where(w => arg_names.Contains(w.Key))
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
-                if (this.aux_params != null)
+                if (this._aux_params != null)
                 {
-                    var aux_names = new HashSet<string>(this.symbol.ListAuxiliaryStates());
-                    this.aux_params = this.aux_params.Where(w => aux_names.Contains(w.Key))
+                    var aux_names = new HashSet<string>(this._symbol.ListAuxiliaryStates());
+                    this._aux_params = this._aux_params.Where(w => aux_names.Contains(w.Key))
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
             }
@@ -150,14 +150,14 @@ namespace mxnet.csharp
 
 
             var data = train_data;
-            if (this.sym_gen != null)
+            if (this._sym_gen != null)
             {
-                this.symbol = this.sym_gen(data.default_bucket_key);
+                this._symbol = this._sym_gen(data.Default_bucket_key);
                 this._check_arguments();
             }
-            this.kwargs["sym"] = this.symbol;
+            this._kwargs["sym"] = this._symbol;
 
-            var init_params_temp = this._init_params(data.provide_data.Concat(data.provide_label).ToDictionary(x => x.Key, y => y.Value));
+            var init_params_temp = this._init_params(data.Provide_data.Concat(data.Provide_label).ToDictionary(x => x.Key, y => y.Value));
 
 
             var arg_names = init_params_temp.Item1;
@@ -170,34 +170,34 @@ namespace mxnet.csharp
             }
 
             //create kvstore
-            var _create_kvstore_temp = _create_kvstore(kvstore_input, ctx.Count, arg_params);
-            var kvstore = _create_kvstore_temp.Item1;
-            var update_on_kvstore = _create_kvstore_temp.Item2;
+            var create_kvstore_temp = _create_kvstore(kvstore_input, _ctx.Count, _arg_params);
+            var kvstore = create_kvstore_temp.Item1;
+            var update_on_kvstore = create_kvstore_temp.Item2;
 
-            var param_idx2name = new Dictionary<int, string>();
+            var param_idx2_name = new Dictionary<int, string>();
             if (update_on_kvstore)
             {
-                param_idx2name = param_names.Select((x, i) => new { i = i, x = x }).ToDictionary(k => k.i, v => v.x);
+                param_idx2_name = param_names.Select((x, i) => new { i = i, x = x }).ToDictionary(k => k.i, v => v.x);
             }
             else
             {
                 for (int i = 0; i < param_names.Count; i++)
                 {
-                    for (int k = 0; k < ctx.Count; k++)
+                    for (int k = 0; k < _ctx.Count; k++)
                     {
-                        param_idx2name[i * ctx.Count + k] = param_names[i];
+                        param_idx2_name[i * _ctx.Count + k] = param_names[i];
                     }
                 }
             }
-            kwargs["param_idx2name"] = param_idx2name;
+            _kwargs["param_idx2name"] = param_idx2_name;
 
             //(TODO)init optmizer
 
-            _train_multi_device(this.symbol, this.ctx, arg_names, param_names, aux_names,
-                this.arg_params, this.aux_params,
-                begin_epoch: this.begin_epoch, end_epoch: this.num_epoch,
-                epoch_size: this.epoch_size,
-                optimizer: optimizer,
+            _train_multi_device(this._symbol, this._ctx, arg_names, param_names, aux_names,
+                this._arg_params, this._aux_params,
+                begin_epoch: this._begin_epoch, end_epoch: this._num_epoch,
+                epoch_size: this._epoch_size,
+                optimizer: _optimizer,
                 train_data: data, eval_data: eval_data,
                 eval_metric: eval_metric,
                 epoch_end_callback: epoch_end_callback,
@@ -205,7 +205,7 @@ namespace mxnet.csharp
                 kvstore: kvstore, update_on_kvstore: update_on_kvstore,
                 logger: logger, work_load_list: work_load_list, monitor: monitor,
                 eval_batch_end_callback: eval_batch_end_callback,
-                sym_gen: this.sym_gen);
+                sym_gen: this._sym_gen);
 
 
         }
@@ -304,7 +304,7 @@ namespace mxnet.csharp
                         }
                         monitor?.toc_print();
                         // evaluate at end, so we can lazy copy
-                        executor_manager.update_metric(eval_metric, data_batch.label);
+                        executor_manager.update_metric(eval_metric, data_batch.Label);
 
                         nbatch += 1;
                         //batch callback (for print purpose)
@@ -333,7 +333,7 @@ namespace mxnet.csharp
                     if (do_reset)
                     {
                         logger.Info($"Epoch[{epoch}] Resetting Data Iterator");
-                        train_data.reset();
+                        train_data.Reset();
                     }
 
                     if (epoch_size == null || nbatch >= epoch_size)
@@ -428,9 +428,10 @@ namespace mxnet.csharp
             }
         }
 
-        private static Tuple<KVStore, bool> _create_kvstore(string kvstore, int count, Dictionary<string, NDArray> argParams)
+        private static Tuple<KVStore, bool> _create_kvstore(
+            string kvstore, int count, Dictionary<string, NDArray> arg_params)
         {
-            KVStore kv = null;
+            KVStore kv;
             if (kvstore == null)
             {
                 kv = null;
@@ -447,7 +448,7 @@ namespace mxnet.csharp
                     {
 
                         //automatically select a proper local
-                        var max_size = argParams.Select(s => Util.prod(s.Value.GetShape())).Max();
+                        var max_size = arg_params.Select(s => Util.prod(s.Value.Get_shape())).Max();
                         if (max_size < 1024 * 1024 * 16)
                         {
                             kvstore = "local_update_cpu";
@@ -475,16 +476,16 @@ namespace mxnet.csharp
             bool overwrite = false)
         {
             List<uint[]> arg_shapes = new List<uint[]>();
-            List<uint[]> aux_shapes = new List<uint[]>(); ;
+            List<uint[]> aux_shapes = new List<uint[]>();
 
-            this.symbol.InferShape(input_shapes, arg_shapes, null, aux_shapes);
+            this._symbol.InferShape(input_shapes, arg_shapes, null, aux_shapes);
 
-            var arg_names = this.symbol.ListArguments();
+            var arg_names = this._symbol.ListArguments();
             var input_names = input_shapes.Keys;
 
             var param_names = arg_names.Except(input_names);
 
-            var aux_names = this.symbol.ListAuxiliaryStates();
+            var aux_names = this._symbol.ListAuxiliaryStates();
 
             var param_name_shapes = arg_names.Zip(arg_shapes, Tuple.Create).Where(w => param_names.Contains(w.Item1));
 
@@ -494,13 +495,13 @@ namespace mxnet.csharp
             foreach (var kv in arg_params)
             {
                 var k = kv.Key;
-                if (this.arg_params != null && this.arg_params.ContainsKey(kv.Key) && !overwrite)
+                if (this._arg_params != null && this._arg_params.ContainsKey(kv.Key) && !overwrite)
                 {
-                    this.arg_params[k].CopyTo(arg_params[k]);
+                    this._arg_params[k].Copy_to(arg_params[k]);
                 }
                 else
                 {
-                    this.initializer.Call(k, arg_params[k]);
+                    this._initializer.Call(k, arg_params[k]);
                 }
             }
 
@@ -508,18 +509,18 @@ namespace mxnet.csharp
             foreach (var kv in aux_params)
             {
                 var k = kv.Key;
-                if (this.aux_params != null && this.aux_params.ContainsKey(kv.Key) && !overwrite)
+                if (this._aux_params != null && this._aux_params.ContainsKey(kv.Key) && !overwrite)
                 {
-                    this.aux_params[k].CopyTo(aux_params[k]);
+                    this._aux_params[k].Copy_to(aux_params[k]);
                 }
                 else
                 {
-                    this.initializer.Call(k, arg_params[k]);
+                    this._initializer.Call(k, arg_params[k]);
                 }
             }
 
-            this.arg_params = arg_params;
-            this.aux_params = aux_params;
+            this._arg_params = arg_params;
+            this._aux_params = aux_params;
 
             return Tuple.Create(arg_names.ToList(), param_names.ToList(), aux_names.ToList());
         }

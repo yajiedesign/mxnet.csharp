@@ -49,7 +49,7 @@ namespace mxnet.csharp
             }
             Util.assert(work_load_list.Count == num_device, "Invalid settings for work load. ");
 
-            var slices = _split_input_slice(train_data.batch_size, work_load_list);
+            var slices = _split_input_slice(train_data.Batch_size, work_load_list);
 
             this.slices = slices;
 
@@ -70,7 +70,7 @@ namespace mxnet.csharp
             {
                 this.execgrp_bucket = new Dictionary<string, DataParallelExecutorGroup>()
                 {
-                    {train_data.default_bucket_key,  this.execgrp }
+                    {train_data.Default_bucket_key,  this.execgrp }
                 };
             }
 
@@ -130,7 +130,7 @@ namespace mxnet.csharp
         {
             if (this.sym_gen != null)
             {
-                var key = data_batch.bucket_key;
+                var key = data_batch.Bucket_key;
                 if (!execgrp_bucket.ContainsKey(key))
                 {
                     //create new bucket entry
@@ -205,8 +205,8 @@ namespace mxnet.csharp
             {
                 this.shared_data_arrays = shared_group.shared_data_arrays;
             }
-            this.data_names = train_data.provide_data.Select(s => s.Key).ToList();
-            this.label_names = train_data.provide_label.Select(s => s.Key).ToList();
+            this.data_names = train_data.Provide_data.Select(s => s.Key).ToList();
+            this.label_names = train_data.Provide_label.Select(s => s.Key).ToList();
             this.aux_names = sym.ListAuxiliaryStates();
 
             this.param_idx = arg_names.Select((x, i) => new { x = x, i = i }).Where(w => param_names.Contains(w.x)).Select(s => s.i).ToList();
@@ -215,7 +215,7 @@ namespace mxnet.csharp
             this.train_execs = new List<Executor>();
             for (int i = 0; i < ctx.Count; i++)
             {
-                var concat = train_data.provide_data.Concat(train_data.provide_label);
+                var concat = train_data.Provide_data.Concat(train_data.Provide_label);
 
                 var data_shapes = concat.ToDictionary(kv_k => kv_k.Key,
                        kv_v =>
@@ -236,14 +236,14 @@ namespace mxnet.csharp
             }
 
 
-            this.data_arrays = data_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.arg_dict[name])).ToList()).ToList();
-            this.label_arrays = label_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.arg_dict[name])).ToList()).ToList();
+            this.data_arrays = data_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.Arg_dict[name])).ToList()).ToList();
+            this.label_arrays = label_names.Select(name => train_execs.Select((e, i) => Tuple.Create(slices[i], e.Arg_dict[name])).ToList()).ToList();
 
-            this.param_arrays = param_idx.Select(i => train_execs.Select((e) => e.arg_arrays[i]).ToList()).ToList();
+            this.param_arrays = param_idx.Select(i => train_execs.Select((e) => e.Arg_arrays[i]).ToList()).ToList();
 
-            this.grad_arrays = param_idx.Select(i => train_execs.Select((e) => e.grad_arrays[i]).ToList()).ToList();
+            this.grad_arrays = param_idx.Select(i => train_execs.Select((e) => e.Grad_arrays[i]).ToList()).ToList();
 
-            this.aux_arrays = Enumerable.Range(0, this.aux_names.Count).Select(i => train_execs.Select((e) => e.aux_arrays[i]).ToList()).ToList();
+            this.aux_arrays = Enumerable.Range(0, this.aux_names.Count).Select(i => train_execs.Select((e) => e.Aux_arrays[i]).ToList()).ToList();
 
             this.slices = slices;
         }
@@ -302,9 +302,9 @@ namespace mxnet.csharp
                     {
                         arg_arr = shared_data_arrays[name];
 
-                        if (Util.prod(arg_arr.GetShape()) >= Util.prod(arg_shapes[i]))
+                        if (Util.prod(arg_arr.Get_shape()) >= Util.prod(arg_shapes[i]))
                         {
-                            Util.assert(arg_types[i] == arg_arr.GetDtype());
+                            Util.assert(arg_types[i] == arg_arr.Get_dtype());
 
                             arg_arr = arg_arr.Reshape(new Shape(arg_shapes[i]));
 
@@ -313,7 +313,7 @@ namespace mxnet.csharp
                         {
                             logger.Warn($"bucketing: data \"{name}\" has a shape {new Shape(arg_shapes[i])}" +
                                         ", which is larger than already allocated " +
-                                        $"shape {arg_arr.GetShape()}" +
+                                        $"shape {arg_arr.Get_shape()}" +
                                         ". Need to re-allocate. Consider putting " +
                                         "default_bucket_key to be the bucket taking the largest " +
                                         "input for better memory sharing.");
@@ -353,12 +353,12 @@ namespace mxnet.csharp
                     }
                     else
                     {
-                        arg_arr = base_exec.arg_dict[name];
-                        Util.assert(arg_arr.GetShape() == new Shape(arg_shapes[i]));
-                        Util.assert(arg_arr.GetDtype() == arg_types[i]);
+                        arg_arr = base_exec.Arg_dict[name];
+                        Util.assert(arg_arr.Get_shape() == new Shape(arg_shapes[i]));
+                        Util.assert(arg_arr.Get_dtype() == arg_types[i]);
                         if (need_grad_input && need_grad.Contains(name))
                         {
-                            grad_arrays[name] = base_exec.grad_dict[name];
+                            grad_arrays[name] = base_exec.Grad_dict[name];
                         }
                     }
                     arg_arrays.Add(arg_arr);
@@ -373,13 +373,13 @@ namespace mxnet.csharp
             }
             else
             {
-                for (int i = 0; i < base_exec.aux_arrays.Count; i++)
+                for (int i = 0; i < base_exec.Aux_arrays.Count; i++)
                 {
-                    var a = base_exec.aux_arrays[i];
-                    Util.assert((new Shape(aux_shapes[i])) == a.GetShape());
-                    Util.assert(aux_type[i] == a.GetDtype());
+                    var a = base_exec.Aux_arrays[i];
+                    Util.assert((new Shape(aux_shapes[i])) == a.Get_shape());
+                    Util.assert(aux_type[i] == a.Get_dtype());
                 }
-                aux_arrays = base_exec.aux_arrays;
+                aux_arrays = base_exec.Aux_arrays;
             }
      
 
@@ -424,7 +424,7 @@ namespace mxnet.csharp
                 var texec = train_execs[index];
                 var islice = slices[index];
                 var labels_slice = labels.Select(s => s.Slice((uint) islice.Item1, (uint) islice.Item2)).ToList();
-                metric.update(labels_slice, texec.outputs);
+                metric.update(labels_slice, texec.Outputs);
             }
         }
 
@@ -439,7 +439,7 @@ namespace mxnet.csharp
                 
                     var slice_idx = dst.Item1;
                     var d_dst = dst.Item2;
-                    d_src.Slice((uint) slice_idx.Item1, (uint) slice_idx.Item2).CopyTo(d_dst);
+                    d_src.Slice((uint) slice_idx.Item1, (uint) slice_idx.Item2).Copy_to(d_dst);
                 }
               
             }
@@ -448,12 +448,12 @@ namespace mxnet.csharp
 
         private static void _load_data(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
         {
-            _load_general(batch.data, targets);
+            _load_general(batch.Data, targets);
         }
 
         private static void _load_label(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
         {
-            _load_general(batch.label, targets);
+            _load_general(batch.Label, targets);
         }
 
 

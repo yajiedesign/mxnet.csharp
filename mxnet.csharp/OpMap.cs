@@ -17,7 +17,7 @@ namespace mxnet.csharp
         public OpMap()
         {
             uint num_symbol_creators = 0;
-            IntPtr symbol_creators_ptr = IntPtr.Zero;
+            IntPtr symbol_creators_ptr;
      
             int r =  NativeMethods.MXSymbolListAtomicSymbolCreators(out num_symbol_creators,out symbol_creators_ptr);
             Util.assert(r == 0);
@@ -26,14 +26,14 @@ namespace mxnet.csharp
 
             for (int i = 0; i < num_symbol_creators; i++)
             {
-                IntPtr name_ptr = IntPtr.Zero;
-                IntPtr description_ptr = IntPtr.Zero;
+                IntPtr name_ptr;
+                IntPtr description_ptr;
                 uint num_args = 0;
-                IntPtr arg_names_ptr = IntPtr.Zero;
-                IntPtr arg_type_infos_ptr = IntPtr.Zero;
-                IntPtr arg_descriptions_ptr = IntPtr.Zero;
-                IntPtr key_var_num_args_ptr = IntPtr.Zero;
-                IntPtr return_type_ptr = IntPtr.Zero;
+                IntPtr arg_names_ptr;
+                IntPtr arg_type_infos_ptr;
+                IntPtr arg_descriptions_ptr;
+                IntPtr key_var_num_args_ptr;
+                IntPtr return_type_ptr;
                 r = NativeMethods.MXSymbolGetAtomicSymbolInfo(symbol_creators[i],
                 out name_ptr,
                 out description_ptr,
@@ -46,7 +46,7 @@ namespace mxnet.csharp
                 Util.assert(r == 0);
 
                 string name = Marshal.PtrToStringAnsi(name_ptr);
-                symbol_creators_[name] = symbol_creators[i];
+                _symbol_creators_[name] = symbol_creators[i];
             }
         }
 
@@ -58,10 +58,10 @@ namespace mxnet.csharp
         */
         public AtomicSymbolCreator GetSymbolCreator(string name)
         {
-            return symbol_creators_[name];
+            return _symbol_creators_[name];
         }
 
 
-        Dictionary<string, AtomicSymbolCreator> symbol_creators_ = new Dictionary<string, AtomicSymbolCreator>();
+        readonly Dictionary<string, AtomicSymbolCreator> _symbol_creators_ = new Dictionary<string, AtomicSymbolCreator>();
     }
 }

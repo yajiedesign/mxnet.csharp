@@ -17,14 +17,14 @@ namespace mxnet.csharp.util
             NativeMethods.MXGetFunction("_sample_uniform", out func_handle);
 
             var input = IntPtr.Zero;
-            var output = @out.GetHandle();
+            var output = @out.Get_handle();
 
             var param_keys = new string[] {"low", "high", "shape"};
             var param_vals = new string[]
             {
                 low.ToString(CultureInfo.InvariantCulture),
                 high.ToString(CultureInfo.InvariantCulture),
-                @out.GetShape().ToString()
+                @out.Get_shape().ToString()
             };
 
             Util.call_check(NativeMethods.MXFuncInvokeEx(
@@ -45,14 +45,14 @@ namespace mxnet.csharp.util
             NativeMethods.MXGetFunction("_sample_normal", out func_handle);
 
             var input = IntPtr.Zero;
-            var output = @out.GetHandle();
+            var output = @out.Get_handle();
 
             var param_keys = new string[] { "loc", "scale", "shape" };
             var param_vals = new string[]
             {
                 loc.ToString(),
                 scale.ToString(),
-                @out.GetShape().ToString()
+                @out.Get_shape().ToString()
             };
 
             Util.call_check(NativeMethods.MXFuncInvokeEx(

@@ -64,7 +64,7 @@ namespace mxnet.csharp.initializer
 
         private void _init_bilinear(string name, NDArray arr)
         {
-            var shape = arr.GetShape().data();
+            var shape = arr.Get_shape().data();
             var prodShape =Util.prod(shape);
             float[] weight = new float[prodShape];
 
@@ -77,40 +77,40 @@ namespace mxnet.csharp.initializer
                 weight[i] = (float)((1 - Math.Abs(x / f - c)) * (1 - Math.Abs(y / f - c)));
             }
 
-            arr.SyncCopyFromCPU(weight);
+            arr.Sync_copy_from_cpu(weight);
         }
 
         private void _init_loc_bias(string name, NDArray arr)
         {
-            Util.assert(arr.GetShape()[0] == 6);
-            arr.SyncCopyFromCPU(new float[] {1.0f, 0, 0, 0, 1.0f, 0});
+            Util.assert(arr.Get_shape()[0] == 6);
+            arr.Sync_copy_from_cpu(new float[] {1.0f, 0, 0, 0, 1.0f, 0});
         }
 
         private void _init_bias(string name, NDArray arr)
         {
-            arr.SetValue(0);
+            arr.Set_value(0);
         }
 
         private void _init_gamma(string name, NDArray arr)
         {
-            arr.SetValue(1);
+            arr.Set_value(1);
         }
 
         private void _init_beta(string name, NDArray arr)
         {
-            arr.SetValue(0);
+            arr.Set_value(0);
         }
 
         protected abstract void _init_weight(string name, NDArray arr);
 
         private void _init_one(string name, NDArray arr)
         {
-            arr.SetValue(1);
+            arr.Set_value(1);
         }
 
         private void _init_zero(string name, NDArray arr)
         {
-            arr.SetValue(0);
+            arr.Set_value(0);
         }
 
         private void _init_default(string name, NDArray arr)

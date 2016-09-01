@@ -29,8 +29,8 @@ namespace mxnet.csharp.metric
         {
             for (int i = 0; i < labels.Count; i++)
             {
-                var label = labels[i].AsNumerics();
-                var pred = preds[i].AsNumerics();
+                var label = labels[i].As_numerics();
+                var pred = preds[i].As_numerics();
 
                 if (pred.Shape[1] == 2)
                 {

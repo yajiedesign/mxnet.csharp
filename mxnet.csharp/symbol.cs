@@ -460,7 +460,7 @@ namespace mxnet.csharp
             {
                 if (args_map.ContainsKey(arg_name))
                 {
-                    arg_shapes[arg_name] = args_map[arg_name].GetShape();
+                    arg_shapes[arg_name] = args_map[arg_name].Get_shape();
                 }
             }
 
@@ -480,7 +480,7 @@ namespace mxnet.csharp
                 {
                     var temp = new NDArray(shape, context, false);
                     arg_arrays.Add(temp);
-                    NDArray.SampleGaussian(0, 1, temp);
+                    NDArray.Sample_gaussian(0, 1, temp);
                 }
 
                 if (arg_grad_store.ContainsKey(arg_name))
@@ -514,7 +514,7 @@ namespace mxnet.csharp
                 {
                     var temp = new NDArray(shape, context, false);
                     aux_arrays.Add(temp);
-                    csharp.NDArray.SampleGaussian(0, 1, temp);
+                    csharp.NDArray.Sample_gaussian(0, 1, temp);
                 }
             }
         }
@@ -533,7 +533,7 @@ namespace mxnet.csharp
             {
                 if (knownArgs.ContainsKey(argName))
                 {
-                    argShapes[argName] = knownArgs[argName].GetShape();
+                    argShapes[argName] = knownArgs[argName].Get_shape();
                 }
             }
 
@@ -550,7 +550,7 @@ namespace mxnet.csharp
                 else
                 {
                     argsMap[argName] = new NDArray(shape, context, false);
-                    NDArray.SampleGaussian(0, 1, argsMap[argName]);
+                    NDArray.Sample_gaussian(0, 1, argsMap[argName]);
                 }
             }
         }

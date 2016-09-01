@@ -10,45 +10,45 @@ namespace mxnet.csharp
 
     public class NameScop : IDisposable
     {
-        private bool is_dispose = false;
+        private bool _is_dispose = false;
         public NameScop()
         {
-            NameManager.instance.push();
+            NameManager.Instance.Push();
         }
 
         public void Dispose()
         {
-            if (is_dispose == false)
+            if (_is_dispose == false)
             {
-                NameManager.instance.pop();
-                is_dispose = true;
+                NameManager.Instance.Pop();
+                _is_dispose = true;
             }
         }
     }
 
     class NameUnit
     {
-        private readonly Dictionary<string, int> namedict = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _namedict = new Dictionary<string, int>();
         public string get_name(string op_name)
         {
             op_name = op_name.ToLower();
-            if (!namedict.ContainsKey(op_name))
+            if (!_namedict.ContainsKey(op_name))
             {
-                namedict.Add(op_name, 0);
+                _namedict.Add(op_name, 0);
             }
-            namedict[op_name]++;
+            _namedict[op_name]++;
 
-            return $"{op_name}{namedict[op_name]:D2}";
+            return $"{op_name}{_namedict[op_name]:D2}";
         }
     }
 
     class NameManager
     {
         private static readonly ThreadLocal<NameManager> Instancetls = new ThreadLocal<NameManager>(() => new NameManager());
-        public static NameManager instance => Instancetls.Value;
+        public static NameManager Instance => Instancetls.Value;
 
         private static readonly NameUnit Default = new NameUnit();
-        private readonly Stack<NameUnit> stack = new Stack<NameUnit>();
+        private readonly Stack<NameUnit> _stack = new Stack<NameUnit>();
 
         private NameManager()
         {
@@ -57,24 +57,24 @@ namespace mxnet.csharp
 
         public string get_name(string op_name)
         {
-            if (stack.Count == 0)
+            if (_stack.Count == 0)
             {
                 lock (Default)
                 {
                     return Default.get_name(op_name);
                 }
             }
-            return stack.Peek().get_name(op_name);
+            return _stack.Peek().get_name(op_name);
         }
 
-        public void push()
+        public void Push()
         {
-            stack.Push(new NameUnit());
+            _stack.Push(new NameUnit());
         }
 
-        public void pop()
+        public void Pop()
         {
-            stack.Pop();
+            _stack.Pop();
         }
     }
 }

@@ -321,8 +321,8 @@ namespace mxnet.csharp.optimizer
             this._update_count(index);
             Util.call_check(NativeMethods.MXOptimizerUpdate(this.handle,
                 index,
-                weight.GetHandle(),
-                grad.GetHandle(),
+                weight.Get_handle(),
+                grad.Get_handle(),
                 lr,
                 wd));
         }

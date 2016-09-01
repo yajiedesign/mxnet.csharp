@@ -37,123 +37,123 @@ namespace mxnet.csharp
     public class Executor : IDisposable
     {
         private readonly ExecutorHandle handle_;
-        public List<NDArray> outputs { get; } = new List<NDArray>();
-        public List<NDArray> arg_arrays { get; }
-        public List<NDArray> grad_arrays { get; }
-        public List<NDArray> aux_arrays { get; }
+        public List<NDArray> Outputs { get; } = new List<NDArray>();
+        public List<NDArray> Arg_arrays { get; }
+        public List<NDArray> Grad_arrays { get; }
+        public List<NDArray> Aux_arrays { get; }
 
-        public Dictionary<string, NDArray> arg_dict { get; private set; }
-        public Dictionary<string, NDArray> grad_dict { get; private set; }
+        public Dictionary<string, NDArray> Arg_dict { get; private set; }
+        public Dictionary<string, NDArray> Grad_dict { get; private set; }
 
-        private Symbol symbol_;
-        private Dictionary<string, NDArray> aux_dict;
+        private Symbol _symbol_;
+        private readonly Dictionary<string, NDArray> _aux_dict;
 
         public Executor(Symbol symbol, Context context,
-            List<NDArray> argArrays,
-            List<NDArray> gradArrays,
-            List<OpReqType> gradReqs,
-            List<NDArray> auxArrays,
-            Dictionary<string, Context> groupToCtx = null,
-            Executor sharedExec = null)
+            List<NDArray> arg_arrays,
+            List<NDArray> grad_arrays,
+            List<OpReqType> grad_reqs,
+            List<NDArray> aux_arrays,
+            Dictionary<string, Context> group_to_ctx = null,
+            Executor shared_exec = null)
         {
-            if (groupToCtx == null)
+            if (group_to_ctx == null)
             {
-                groupToCtx = new Dictionary<string, Context>();
+                group_to_ctx = new Dictionary<string, Context>();
             }
-            this.arg_arrays = argArrays;
-            this.grad_arrays = gradArrays;
-            this.aux_arrays = auxArrays;
-            this.symbol_ = symbol;
+            this.Arg_arrays = arg_arrays;
+            this.Grad_arrays = grad_arrays;
+            this.Aux_arrays = aux_arrays;
+            this._symbol_ = symbol;
 
             var arg_name = symbol.ListArguments();
 
-            arg_dict = arg_name.Zip(argArrays, (name, arg) => new { name, arg })
+            Arg_dict = arg_name.Zip(arg_arrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
-            grad_dict = arg_name.Zip(gradArrays, (name, arg) => new { name, arg })
+            Grad_dict = arg_name.Zip(grad_arrays, (name, arg) => new { name, arg })
                 .ToDictionary(k => k.name, v => v.arg);
 
-            aux_dict = symbol.ListAuxiliaryStates().Zip(auxArrays, (name, arg) => new { name, arg })
+            _aux_dict = symbol.ListAuxiliaryStates().Zip(aux_arrays, (name, arg) => new { name, arg })
                  .ToDictionary(k => k.name, v => v.arg);
 
-            var argHandles = new List<NDArrayHandle>();
-            var gradHandles = new List<NDArrayHandle>();
-            var auxHandles = new List<NDArrayHandle>();
+            var arg_handles = new List<NDArrayHandle>();
+            var grad_handles = new List<NDArrayHandle>();
+            var aux_handles = new List<NDArrayHandle>();
 
-            foreach (var array in argArrays)
+            foreach (var array in arg_arrays)
             {
-                argHandles.Add(array.GetHandle());
+                arg_handles.Add(array.Get_handle());
             }
-            foreach (var array in gradArrays)
+            foreach (var array in grad_arrays)
             {
                 if (array == null)
                 {
-                    gradHandles.Add(IntPtr.Zero);
+                    grad_handles.Add(IntPtr.Zero);
                 }
                 else
                 {
-                    gradHandles.Add(array.GetHandle());
+                    grad_handles.Add(array.Get_handle());
                 }
             }
-            foreach (var array in auxArrays)
+            foreach (var array in aux_arrays)
             {
-                auxHandles.Add(array.GetHandle());
+                aux_handles.Add(array.Get_handle());
             }
 
-            var gradReqsUint = new List<uint>();
-            foreach (var s in gradReqs)
+            var grad_reqs_uint = new List<uint>();
+            foreach (var s in grad_reqs)
             {
-                gradReqsUint.Add((uint)s);
+                grad_reqs_uint.Add((uint)s);
             }
 
-            var mapKeys = new List<string>();
-            var devTypes = new List<int>();
-            var devIds = new List<int>();
-            foreach (var s in groupToCtx)
+            var map_keys = new List<string>();
+            var dev_types = new List<int>();
+            var dev_ids = new List<int>();
+            foreach (var s in group_to_ctx)
             {
-                mapKeys.Add(s.Key);
-                devTypes.Add((int)s.Value.GetDeviceType());
-                devIds.Add(s.Value.GetDeviceId());
+                map_keys.Add(s.Key);
+                dev_types.Add((int)s.Value.Get_device_type());
+                dev_ids.Add(s.Value.Get_device_id());
             }
 
-            var sharedExecHandle =
-                sharedExec?.handle_ ?? NDArrayHandle.Zero;
+            var shared_exec_handle =
+                shared_exec?.handle_ ?? NDArrayHandle.Zero;
 
             Util.call_check(NativeMethods.MXExecutorBindEX(
                 symbol.GetHandle(),
-                (int)context.GetDeviceType(),
-                context.GetDeviceId(),
-                (uint)groupToCtx.Count,
-                mapKeys.ToArray(),
-                devTypes.ToArray(),
-                devIds.ToArray(),
-                (uint)argHandles.Count,
-                argHandles.ToArray(),
-                gradHandles.ToArray(),
-                gradReqsUint.ToArray(),
-                (uint)auxHandles.Count,
-                auxHandles.ToArray(),
-                sharedExecHandle,
+                (int)context.Get_device_type(),
+                context.Get_device_id(),
+                (uint)group_to_ctx.Count,
+                map_keys.ToArray(),
+                dev_types.ToArray(),
+                dev_ids.ToArray(),
+                (uint)arg_handles.Count,
+                arg_handles.ToArray(),
+                grad_handles.ToArray(),
+                grad_reqs_uint.ToArray(),
+                (uint)aux_handles.Count,
+                aux_handles.ToArray(),
+                shared_exec_handle,
                 out handle_) );
 
-            uint outSize;
-            NDArrayHandle outArrayPtr;
-            Util.call_check(NativeMethods.MXExecutorOutputs(handle_, out outSize, out outArrayPtr) );
-            var outArray = new NDArrayHandle[outSize];
-            if (outSize > 0)
+            uint out_size;
+            NDArrayHandle out_array_ptr;
+            Util.call_check(NativeMethods.MXExecutorOutputs(handle_, out out_size, out out_array_ptr) );
+            var out_array = new NDArrayHandle[out_size];
+            if (out_size > 0)
             {
-                Marshal.Copy(outArrayPtr, outArray, 0, (int)outSize);
+                Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);
             }
-            for (uint i = 0; i < outSize; ++i)
+            for (uint i = 0; i < out_size; ++i)
             {
-                outputs.Add(new NDArray(outArray[i]));
+                Outputs.Add(new NDArray(out_array[i]));
             }
         }
 
-        public string DebugStr()
+        public string Debug_str()
         {
-            NDArrayHandle outputPtr;
-            NativeMethods.MXExecutorPrint(handle_, out outputPtr);
-            return Marshal.PtrToStringAnsi(outputPtr);
+            NDArrayHandle output_ptr;
+            NativeMethods.MXExecutorPrint(handle_, out output_ptr);
+            return Marshal.PtrToStringAnsi(output_ptr);
         }
 
 
@@ -174,7 +174,7 @@ namespace mxnet.csharp
             Marshal.Copy(out_array_ptr, out_array, 0, (int)out_size);
             for (var i = 0; i < out_size; ++i)
             {
-                outputs[i] = new NDArray(out_array[i]);
+                Outputs[i] = new NDArray(out_array[i]);
             }
         }
 
@@ -193,16 +193,16 @@ namespace mxnet.csharp
             {
                 headGrads = new List<NDArray>();
             }
-            var newHeadGrads = new List<NDArray>();
+            var new_head_grads = new List<NDArray>();
             foreach (var d in headGrads)
             {
-                newHeadGrads.Add(new NDArray(d.GetHandle()));
+                new_head_grads.Add(new NDArray(d.Get_handle()));
             }
-            if (newHeadGrads.Count > 0)
+            if (new_head_grads.Count > 0)
             {
-                var ptrs = newHeadGrads.Select(s => s.GetHandle()).ToArray();
+                var ptrs = new_head_grads.Select(s => s.Get_handle()).ToArray();
 
-                NativeMethods.MXExecutorBackward(handle_, (uint)newHeadGrads.Count, ptrs);
+                NativeMethods.MXExecutorBackward(handle_, (uint)new_head_grads.Count, ptrs);
             }
             else
             {
@@ -218,9 +218,9 @@ namespace mxnet.csharp
         {
             foreach (var kv in argParams)
             {
-                if (arg_dict.ContainsKey(kv.Key))
+                if (Arg_dict.ContainsKey(kv.Key))
                 {
-                    kv.Value.CopyTo(arg_dict[kv.Key]);
+                    kv.Value.Copy_to(Arg_dict[kv.Key]);
                 }
                 else
                 {
@@ -236,9 +236,9 @@ namespace mxnet.csharp
             {
                 foreach (var kv in auxParams)
                 {
-                    if (aux_dict.ContainsKey(kv.Key))
+                    if (_aux_dict.ContainsKey(kv.Key))
                     {
-                        kv.Value.CopyTo(aux_dict[kv.Key]);
+                        kv.Value.Copy_to(_aux_dict[kv.Key]);
                     }
                     else
                     {

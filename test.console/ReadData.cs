@@ -14,21 +14,21 @@ namespace test.console
 
     class DataBatch: IDataBatch
     {
-        public string bucket_key { get; }
+        public string Bucket_key { get; }
 
-        public List<NDArray> data { get; }
+        public List<NDArray> Data { get; }
 
-        public List<NDArray> label{ get; }
+        public List<NDArray> Label{ get; }
 
 
         public DataBatch(List<NDArray> datas, List<NDArray> labels)
         {
-            this.data = datas;
-            this.label = labels;
+            this.Data = datas;
+            this.Label = labels;
         }
 
-        public Dictionary<string, Shape> provide_data { get; }
-        public Dictionary<string, Shape> provide_label { get; }
+        public Dictionary<string, Shape> Provide_data { get; }
+        public Dictionary<string, Shape> Provide_label { get; }
     }
 
 
@@ -42,12 +42,12 @@ namespace test.console
             _path = path;
             _batchSize = batchSize;
 
-            provide_data = new Dictionary<string, Shape>
+            Provide_data = new Dictionary<string, Shape>
             {
                 {"data", new Shape((uint) _batchSize, 3, 60, 20)}
             };
 
-            provide_label = new Dictionary<string, Shape>
+            Provide_label = new Dictionary<string, Shape>
             {
                 {"softmax_label", new Shape((uint) _batchSize, 4)}
             };
@@ -64,7 +64,7 @@ namespace test.console
                 label_s.Add(label);
             }
              rnd = new Random();
-            reset();
+            Reset();
         }
 
         public IEnumerator<IDataBatch> GetEnumerator()
@@ -134,13 +134,13 @@ namespace test.console
             return GetEnumerator();
         }
 
-        public string default_bucket_key { get; set; }
+        public string Default_bucket_key { get; set; }
 
-        public Dictionary<string, Shape> provide_data { get; set; }
-        public Dictionary<string, Shape> provide_label { get; set; }
+        public Dictionary<string, Shape> Provide_data { get; set; }
+        public Dictionary<string, Shape> Provide_label { get; set; }
 
-        public int batch_size { get { return _batchSize; } }
-        public void reset()
+        public int Batch_size { get { return _batchSize; } }
+        public void Reset()
         {
       
             int[] shuffle_indices = Enumerable.Range(0, data_s.Count).OrderBy(x => rnd.Next()).ToArray();
