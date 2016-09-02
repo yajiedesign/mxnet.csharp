@@ -57,7 +57,7 @@ namespace test.console
         {
             //test Slice
             SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(32, 3, 20, 60));
-            var t2 = testsingle["2:5","1:3"];
+            var t2 = testsingle["2:5:2",":3"];
 
 
             var log4_net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");

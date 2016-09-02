@@ -51,15 +51,15 @@ namespace mxnet.numerics.nbase
             if (first_slice != null)
             {
                 int src_pad = CalcPad(src_dim.Skip(1).ToArray());
-                var dst_index = 0;
+                int dst_index = 0;
                 var dst_pad = CalcPad(dst_dim.Skip(1).ToArray());
-                for (var i = first_slice.start; i < first_slice.stop; i++)
+                for (var i = first_slice.start; i < first_slice.end; i += first_slice.step)
                 {
                     ArrayCopy(src, dst,
-                        src_start + i*src_pad,
-                        src_start + (i + 1)*src_pad,
-                        dst_start + dst_index*dst_pad,
-                        dst_start + (dst_index + 1)*dst_pad,
+                        src_start + i * src_pad,
+                        src_start + (i + 1) * src_pad,
+                        dst_start + dst_index * dst_pad,
+                        dst_start + (dst_index + 1) * dst_pad,
                         slice.Skip(1).ToArray(),
                         src_dim.Skip(1).ToArray(),
                         dst_dim.Skip(1).ToArray());
