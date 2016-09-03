@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "opwrappergenerator", "opwra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mxnet.numerics", "mxnet.numerics\mxnet.numerics.csproj", "{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestProject", "UnitTestProject\UnitTestProject.csproj", "{6BD8F3DB-19EC-42F3-B9B5-DCB79C2DBABF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6A7FE3A-8CBF-4BF2-A2CF-CF9F18DA7E2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BD8F3DB-19EC-42F3-B9B5-DCB79C2DBABF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BD8F3DB-19EC-42F3-B9B5-DCB79C2DBABF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BD8F3DB-19EC-42F3-B9B5-DCB79C2DBABF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BD8F3DB-19EC-42F3-B9B5-DCB79C2DBABF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
