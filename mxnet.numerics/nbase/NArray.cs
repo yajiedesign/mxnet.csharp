@@ -15,9 +15,12 @@ namespace mxnet.numerics.nbase
     {
         private static readonly TC Calculator = new TC();
 
+        private bool _is_view = false;
+
         public Shape shape { get; protected set; }
 
         protected T[] storage;
+        private Slice[] _slice;
 
         public T[] data => storage;
 
@@ -53,7 +56,10 @@ namespace mxnet.numerics.nbase
                 int src_pad = CalcPad(src_dim.Skip(1).ToArray());
                 int dst_index = 0;
                 var dst_pad = CalcPad(dst_dim.Skip(1).ToArray());
-                for (var i = first_slice.start; i < first_slice.end; i += first_slice.step)
+                for (var i = first_slice.start;
+        
+                    ((first_slice.step > 0) ? (i < first_slice.end) : (i > first_slice.end));
+                    i += first_slice.step)
                 {
                     ArrayCopy(src, dst,
                         src_start + i * src_pad,
@@ -77,24 +83,55 @@ namespace mxnet.numerics.nbase
             return (int)src_dim.Aggregate((long)1, (l, r) => l * r);
         }
 
-        public TOut this[params Slice[] slice]
+        public virtual TOut this[params Slice[] slice]
         {
             get
             {
+                return SilceData(slice);
+
                 var src_dim = shape.data;
                 var tslice = slice.Select((x, i) => x.Translate(src_dim[i])).ToArray();
-                var dst_dim_temp = tslice.Select(s => (uint) s.size).ToArray();
+                var dst_dim_temp = tslice.Select(s => (uint)s.size).ToArray();
                 var dst_dim = (uint[])src_dim.Clone();
                 Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
 
                 var ret = new TOut();
                 ret.shape = new Shape(dst_dim);
-                ret.storage = new T[ret.shape.size];
+                ret.storage = storage;
+             
+                ret._is_view = true;
 
-                ArrayCopy(storage, ret.storage, 0, storage.Length, 0, ret.storage.Length, tslice, shape.data, dst_dim);
 
-                return ret;
+                if (_is_view)
+                {
+               
+
+                    return ret;
+                }
+                else
+                {
+                    ret._slice = tslice;
+
+                    return ret;
+                }
             }
+        }
+
+        private TOut SilceData(params Slice[] slice)
+        {
+            var src_dim = shape.data;
+            var tslice = slice.Select((x, i) => x.Translate(src_dim[i])).ToArray();
+            var dst_dim_temp = tslice.Select(s => (uint)s.size).ToArray();
+            var dst_dim = (uint[])src_dim.Clone();
+            Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
+
+            var ret = new TOut();
+            ret.shape = new Shape(dst_dim);
+            ret.storage = new T[ret.shape.size];
+            ArrayCopy(storage, ret.storage, 0, storage.Length, 0, ret.storage.Length,
+                tslice, shape.data,
+                dst_dim);
+            return ret;
         }
 
         public TOut this[int d0]

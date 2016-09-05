@@ -22,28 +22,28 @@ namespace mxnet.numerics.nbase
             {
                 throw new ArgumentException($"{nameof(step)} can not be equal to 0");
             }
-            if (step > 0)
-            {
-                if (start > 0 && end > 0 && start >= end)
-                {
-                    throw new ArgumentException($"{nameof(start)} must be greater than {nameof(end)} when {nameof(step)} is positive");
-                }
-                else  if (start < 0 && end < 0 && start >= end)
-                {
-                    throw new ArgumentException($"{nameof(start)} must be greater than {nameof(end)} when {nameof(step)} is positive");
-                }
-            }
-            else
-            {
-                if (start > 0 && end > 0 && end >= start)
-                {
-                    throw new ArgumentException($"{nameof(end)} must be greater than {nameof(start)} when {nameof(step)} is negative");
-                }
-                else if (start < 0 && end < 0 && end >= start)
-                {
-                    throw new ArgumentException($"{nameof(end)} must be greater than {nameof(start)} when {nameof(step)} is negative");
-                }
-            }
+            //if (step > 0)
+            //{
+            //    if (start > 0 && end > 0 && start >= end)
+            //    {
+            //        throw new ArgumentException($"{nameof(start)} must be greater than {nameof(end)} when {nameof(step)} is positive");
+            //    }
+            //    else  if (start < 0 && end < 0 && start >= end)
+            //    {
+            //        throw new ArgumentException($"{nameof(start)} must be greater than {nameof(end)} when {nameof(step)} is positive");
+            //    }
+            //}
+            //else
+            //{
+            //    if (start > 0 && end > 0 && end >= start)
+            //    {
+            //        throw new ArgumentException($"{nameof(end)} must be greater than {nameof(start)} when {nameof(step)} is negative");
+            //    }
+            //    else if (start < 0 && end < 0 && end >= start)
+            //    {
+            //        throw new ArgumentException($"{nameof(end)} must be greater than {nameof(start)} when {nameof(step)} is negative");
+            //    }
+            //}
 
             this.start = start;
             this.end = end;
@@ -53,9 +53,9 @@ namespace mxnet.numerics.nbase
         public int start { get; private set; }
         public int end { get; private set; }
 
-        public int step { get; private set; } 
+        public int step { get; private set; }
 
-        public int size => (end - start) / step;
+        public int size => (int)Math.Ceiling( (end  - start) / (double)step);
         /// <summary>
         /// transformed slice size absolute to relative
         /// </summary>
@@ -70,14 +70,26 @@ namespace mxnet.numerics.nbase
             {
                 ret_start = SetStart(start, dim);
                 ret_end = SetEnd(end, dim);
+
+                if (ret_end >= dim)
+                {
+                    ret_end = (int)dim;
+                }
                 ret_step = step;
             }
             else
             {
                 ret_start = SetEnd(start, dim);
                 ret_end = SetStart(end, dim);
+
+                if (ret_start >= dim)
+                {
+                    ret_start = (int)dim -1;
+                }
                 ret_step = step;
             }
+          
+
             Slice ret = new Slice(ret_start, ret_end, ret_step);
             return ret;
         }
@@ -89,7 +101,7 @@ namespace mxnet.numerics.nbase
             }
             return start;
         }
-        private static int SetEnd( int end, uint dim)
+        private static int SetEnd(int end, uint dim)
         {
             if (end == 0)
             {
@@ -97,7 +109,7 @@ namespace mxnet.numerics.nbase
             }
             else if (end < 0)
             {
-                end = (int)dim + end;
+                end = (int)dim + end ;
             }
             return end;
         }
@@ -108,6 +120,12 @@ namespace mxnet.numerics.nbase
         private static readonly Regex RegWithStep = new Regex("(.*):(.*):(.*)");
         public static implicit operator Slice(string slice)
         {
+            int start = 0;
+            if (int.TryParse(slice, out start))
+            {
+                return new Slice(start, start + 1, 1);
+            }
+
             bool withstep = false;
             var m = RegWithStep.Match(slice);
             if (!m.Success)
@@ -120,7 +138,7 @@ namespace mxnet.numerics.nbase
             }
 
             if (!m.Success) { throw new ArgumentException(nameof(slice));}
-            int start = 0;
+          
             string str_start = m.Groups[1].Value;
             if (!string.IsNullOrWhiteSpace(str_start) && !int.TryParse(str_start, out start))
             {
@@ -128,11 +146,10 @@ namespace mxnet.numerics.nbase
             }
             int end = 0;
             string str_end = m.Groups[2].Value;
-            if (!string.IsNullOrWhiteSpace(str_end) &&!int.TryParse(str_end, out end))
+            if (!string.IsNullOrWhiteSpace(str_end) && !int.TryParse(str_end, out end))
             {
                 throw new ArgumentException($"{nameof(end)} must be number");
             }
-
             int step = 1;
             if (withstep)
             {
@@ -143,6 +160,73 @@ namespace mxnet.numerics.nbase
                 }
             }
             return new Slice(start, end, step);
+        }
+
+        public Slice SubSlice(Slice sub)
+        {
+            int local_start = 0;
+            int local_end = 0;
+            int local_step = 0;
+            if (this.step > 0 && sub.step > 0)
+            {
+                local_start = this.start + sub.start;
+                local_end = this.start + sub.end;
+                local_step = this.step * sub.step;
+                if (local_start > this.end)
+                {
+                    local_start = this.end;
+                }
+                if (local_end > this.end)
+                {
+                    local_end = this.end;
+                }
+            }
+
+            if (this.step > 0 && sub.step < 0)
+            {
+                local_start = this.start + sub.start;
+                local_end = this.start + sub.end;
+                local_step = this.step * sub.step;
+                if (local_start >= this.end)
+                {
+                    local_start = this.end - 1;
+                }
+                if (local_end >= this.end)
+                {
+                    local_end = this.end - 1;
+                }
+            }
+
+            if (this.step < 0 && sub.step > 0)
+            {
+                local_start = this.start - sub.end;
+                local_end = this.start - sub.start;
+                local_step = this.step * sub.step;
+                if (local_start < this.end)
+                {
+                    local_start = this.end;
+                }
+                if (local_end < this.end)
+                {
+                    local_end = this.end;
+                }
+            }
+
+
+            if (this.step < 0 && sub.step < 0)
+            {
+                local_end = this.start - sub.start;
+                local_start = this.start - sub.end;
+                local_step = this.step * sub.step;
+                if (local_start <= this.end)
+                {
+                    local_start = this.end;
+                }
+            }
+
+       
+      
+            return new Slice(local_start, local_end, local_step);
         }
     }
 }

@@ -64,13 +64,29 @@ namespace UnitTestProject
         [TestMethod]
         public void TestSlice()
         {
-            var rand_num = new Random();
-            var test = Enumerable.Range(0, 32 * 3 * 3 * 3).Select(s => (float)s).ToArray();
+            var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)s).ToArray();
+            string testshape = "(10,3,4,5)";
+            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
 
-            List<float> result = eval_array<float>("arr[1:5:2,2:3]", new Parameter<float>("arr", "(32,3,3,3)", test));
-            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(32, 3, 3, 3), test);
-            var result2 = testsingle["1:5:2","2:3"];
-            CollectionAssert.AreEqual(result, result2.data);
+            List<float> test1_np_result = eval_array<float>("arr[1:5:2,2]", new Parameter<float>("arr", testshape, test));
+            var test1_result = testsingle["1:5:2", "2"];
+            CollectionAssert.AreEqual(test1_np_result, test1_result.data, "1");
+
+            List<float> test2_np_result = eval_array<float>("arr[1:5:6,1:3]", new Parameter<float>("arr", testshape, test));
+            var test2_result = testsingle["1:5:6", "1:3"];
+            CollectionAssert.AreEqual(test2_np_result, test2_result.data, "2");
+
+            List<float> test3_np_result = eval_array<float>("arr[1:-1,3:1:-1,:]", new Parameter<float>("arr", testshape, test));
+            var test3_result = testsingle["1:-1", "3:1:-1",":"];
+            CollectionAssert.AreEqual(test3_np_result, test3_result.data, "3");
+
+            List<float> test4_np_result = eval_array<float>("arr[-1:-1:3,:1:-1]", new Parameter<float>("arr", testshape, test));
+            var test4_result = testsingle["-1:-1:3", ":1:-1"];
+            CollectionAssert.AreEqual(test4_np_result, test4_result.data, "3");
+
+            List<float> test5_np_result = eval_array<float>("arr[-3:-1:3,:1:-1,:10]", new Parameter<float>("arr", testshape, test));
+            var test5_result = testsingle["-3:-1:3", ":1:-1",":10"];
+            CollectionAssert.AreEqual(test5_np_result, test5_result.data, "3");
         }
 
 

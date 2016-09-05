@@ -54,6 +54,7 @@
     <Compile Include="lr_scheduler\FactorScheduler.cs" />
     <Compile Include="lr_scheduler\LRScheduler.cs" />
     <Compile Include="lr_scheduler\MultiFactorScheduler.cs" />
+    <Compile Include="metric\CrossEntropy.cs" />
     <Compile Include="optimizer\CcSgd.cs" />
     <Compile Include="optimizer\Sgd.cs" />
     <Compile Include="util\BatchEndParam.cs" />

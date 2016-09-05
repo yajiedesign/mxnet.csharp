@@ -7,7 +7,7 @@ namespace mxnet.csharp.metric
 {
     class Accuracy : EvalMetric
     {
-        public Accuracy(string name, int num) : base("accuracy")
+        public Accuracy() : base("accuracy")
         {
         }
 

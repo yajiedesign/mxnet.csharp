@@ -13,5 +13,6 @@ class UnitTestPythonWarp(object):
             dic[key] = np.array(value["value"])
             dic[key].shape = shape
         eval_ret = eval(code, globals(), dic)
+        print(eval_ret.shape)
         return eval_ret.flat[:].tolist()
         pass

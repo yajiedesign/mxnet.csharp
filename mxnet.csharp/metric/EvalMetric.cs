@@ -20,7 +20,7 @@ namespace mxnet.csharp.metric
             Reset();
         }
 
-        public abstract void Update(List<NDArray> label, List<NDArray> pred);
+        public abstract void Update(List<NDArray> labels, List<NDArray> preds);
 
         public void Reset()
         {
@@ -88,7 +88,7 @@ namespace mxnet.csharp.metric
 
             try
             {
-                object o = Activator.CreateInstance(Metrics[name.ToLower()], name ,1);
+                object o = Activator.CreateInstance(Metrics[name.ToLower()]);
                 return (EvalMetric) o;
             }
             catch (Exception)

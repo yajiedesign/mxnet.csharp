@@ -1,0 +1,1 @@
+python -m Pyro4.naming
