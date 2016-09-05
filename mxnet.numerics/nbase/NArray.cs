@@ -97,62 +97,6 @@ namespace mxnet.numerics.nbase
         }
 
 
-        private IEnumerable<T> SilceDataYield(params Slice[] slice)
-        {
-            var src_dim = _storage_shape.data;
-            var tslice = slice;
-            var dst_dim = shape.data;
-
-
-            var dst_shape = new Shape(dst_dim);
-
-            var ret1 = ArrayYield(storage, 0, 0, (int)dst_shape.size,
-                 tslice, src_dim, dst_dim);
-            return ret1;
-        }
-
-
-        static IEnumerable<T> ArrayYield(T[] src, int src_start, int dst_start, int dst_end,Slice[] slice, uint[] src_dim, uint[] dst_dim )
-        {
-            var first_slice = slice.FirstOrDefault();
-            if (first_slice != null)
-            {
-                int src_pad = CalcPad(src_dim.Skip(1).ToArray());
-                int dst_index = 0;
-                var dst_pad = CalcPad(dst_dim.Skip(1).ToArray());
-                for (var i = first_slice.start;
-
-                    ((first_slice.step > 0) ? (i < first_slice.end) : (i > first_slice.end));
-                    i += first_slice.step)
-                {
-                    var ay = ArrayYield(src,
-                       src_start + i * src_pad,
-                       dst_start + dst_index * dst_pad,
-                       dst_start + (dst_index + 1) * dst_pad,
-                       slice.Skip(1).ToArray(),
-                       src_dim.Skip(1).ToArray(),
-                       dst_dim.Skip(1).ToArray());
-
-                    foreach (var item in ay)
-                    {
-                        yield return item;
-                    }
-
-                    dst_index++;
-                }
-            }
-            else
-            {
-                var count = src_start + (dst_end - dst_start);
-                for (int i = src_start; i < count; i++)
-                {
-                    yield return src[i];
-                }
-        
-            }
-        }
-
-
         private static int CalcPad(uint[] src_dim)
         {
             return (int)src_dim.Aggregate((long)1, (l, r) => l * r);
@@ -208,14 +152,6 @@ namespace mxnet.numerics.nbase
             ret.shape = new Shape(shape.size);
             var temp = SilceData(_slice);
             ret.storage = temp.storage;
-            return ret;
-        }
-
-        public TOut Flat2()
-        {
-            var ret = new TOut();
-            ret.shape = new Shape(shape.size);
-            ret.storage = SilceDataYield(_slice).ToArray();
             return ret;
         }
 
