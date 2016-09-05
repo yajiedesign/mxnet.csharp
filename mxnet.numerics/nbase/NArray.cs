@@ -99,11 +99,12 @@ namespace mxnet.numerics.nbase
                 Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
 
                 var ret = new TOut();
-                ret._storage_shape = this.shape;
+                ret._storage_shape = this._storage_shape;
                 ret.shape = new Shape(dst_dim);
                 ret.storage = storage;
 
-                ret._slice = _slice.Zip(tslice, (l, r) => r != null ? l.SubSlice(r) : l).ToArray();
+                ret._slice = _slice.Zip(tslice, (l, r) => l.SubSlice(r))
+                    .Concat(_slice.Skip(tslice.Count())).ToArray();
                 return ret;
             }
         }

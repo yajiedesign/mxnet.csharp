@@ -14,5 +14,6 @@ class UnitTestPythonWarp(object):
             dic[key].shape = shape
         eval_ret = eval(code, globals(), dic)
         print(eval_ret.shape)
+        print(eval_ret)
         return eval_ret.flat[:].tolist()
         pass
