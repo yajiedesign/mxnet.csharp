@@ -15,8 +15,7 @@ namespace mxnet.numerics.nbase
     {
         private static readonly TC Calculator = new TC();
 
-        private bool _is_view = false;
-
+        private Shape _storage_shape;
         public Shape shape { get; protected set; }
 
         protected T[] storage;
@@ -37,13 +36,17 @@ namespace mxnet.numerics.nbase
         public NArray(Shape shape)
         {
             this.shape = new Shape(shape);
+            this._storage_shape = this.shape;
             storage = new T[this.shape.size];
+            _slice = Slice.FromShape(this.shape.data);
         }
         public NArray(Shape shape, T[] data)
         {
             this.shape = new Shape(shape);
+            this._storage_shape = this.shape;
             storage = new T[this.shape.size];
             Array.Copy(data, storage, Math.Min(data.Length, storage.Length));
+            _slice = Slice.FromShape(this.shape.data);
         }
 
         static void ArrayCopy(T[] src, T[] dst, int src_start, int src_end, int dst_start, int dst_end,
@@ -87,7 +90,7 @@ namespace mxnet.numerics.nbase
         {
             get
             {
-                return SilceData(slice);
+               // return SilceData(slice);
 
                 var src_dim = shape.data;
                 var tslice = slice.Select((x, i) => x.Translate(src_dim[i])).ToArray();
@@ -96,40 +99,26 @@ namespace mxnet.numerics.nbase
                 Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
 
                 var ret = new TOut();
+                ret._storage_shape = this.shape;
                 ret.shape = new Shape(dst_dim);
                 ret.storage = storage;
-             
-                ret._is_view = true;
 
-
-                if (_is_view)
-                {
-               
-
-                    return ret;
-                }
-                else
-                {
-                    ret._slice = tslice;
-
-                    return ret;
-                }
+                ret._slice = _slice.Zip(tslice, (l, r) => r != null ? l.SubSlice(r) : l).ToArray();
+                return ret;
             }
         }
 
         private TOut SilceData(params Slice[] slice)
         {
-            var src_dim = shape.data;
-            var tslice = slice.Select((x, i) => x.Translate(src_dim[i])).ToArray();
-            var dst_dim_temp = tslice.Select(s => (uint)s.size).ToArray();
-            var dst_dim = (uint[])src_dim.Clone();
-            Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
+            var src_dim = _storage_shape.data;
+            var tslice = slice;
+            var dst_dim = shape.data;
 
             var ret = new TOut();
             ret.shape = new Shape(dst_dim);
             ret.storage = new T[ret.shape.size];
             ArrayCopy(storage, ret.storage, 0, storage.Length, 0, ret.storage.Length,
-                tslice, shape.data,
+                tslice, src_dim,
                 dst_dim);
             return ret;
         }
@@ -157,7 +146,8 @@ namespace mxnet.numerics.nbase
         {
             var ret = new TOut();
             ret.shape = new Shape(shape.size);
-            ret.storage = storage.ToArray();
+            var temp =SilceData(_slice);
+            ret.storage = temp.storage;
             return ret;
         }
 

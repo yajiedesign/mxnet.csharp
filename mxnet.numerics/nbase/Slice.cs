@@ -55,7 +55,15 @@ namespace mxnet.numerics.nbase
 
         public int step { get; private set; }
 
-        public int size => (int)Math.Ceiling( (end  - start) / (double)step);
+        public int size
+        {
+            get
+            {
+                var temp = (int) Math.Ceiling((end - start)/(double) step);
+                return temp > 0 ? temp : 0;
+            }
+        }
+
         /// <summary>
         /// transformed slice size absolute to relative
         /// </summary>
@@ -68,8 +76,8 @@ namespace mxnet.numerics.nbase
             int ret_step;
             if (step > 0)
             {
-                ret_start = SetStart(start, dim);
-                ret_end = SetEnd(end, dim);
+                ret_start = SetStart(start, dim , step);
+                ret_end = SetEnd(end, dim, step);
 
                 if (ret_end >= dim)
                 {
@@ -79,37 +87,51 @@ namespace mxnet.numerics.nbase
             }
             else
             {
-                ret_start = SetEnd(start, dim);
-                ret_end = SetStart(end, dim);
+                ret_start = SetEnd(start, dim, step);
+                ret_end = SetStart(end, dim, step);
 
                 if (ret_start >= dim)
                 {
-                    ret_start = (int)dim -1;
+                    ret_start = (int)dim - 1;
                 }
                 ret_step = step;
             }
-          
+
 
             Slice ret = new Slice(ret_start, ret_end, ret_step);
             return ret;
         }
-        private static int SetStart(int start, uint dim)
+        private static int SetStart(int start, uint dim, int step)
         {
-            if (start < 0)
+            if (start ==  int.MinValue)
+            {
+                start = 0;
+            }
+            else if (start ==  int.MaxValue)
+            {
+                start = -1;
+            }
+            else if (start < 0)
             {
                 start = (int)dim + start;
             }
+
             return start;
         }
-        private static int SetEnd(int end, uint dim)
+
+        private static int SetEnd(int end, uint dim, int step)
         {
-            if (end == 0)
+            if (end ==  int.MaxValue)
+            {
+                end = (int)dim; 
+            }
+            else if (end == int.MinValue)
             {
                 end = (int)dim;
             }
             else if (end < 0)
             {
-                end = (int)dim + end ;
+                end = (int) dim + end;
             }
             return end;
         }
@@ -159,6 +181,14 @@ namespace mxnet.numerics.nbase
                     throw new ArgumentException($"{nameof(step)} must be number");
                 }
             }
+            if (string.IsNullOrWhiteSpace(str_start))
+            {
+                start = int.MinValue;
+            }
+            if (string.IsNullOrWhiteSpace(str_end))
+            {
+                end = int.MaxValue;
+            }
             return new Slice(start, end, step);
         }
 
@@ -189,11 +219,11 @@ namespace mxnet.numerics.nbase
                 local_step = this.step * sub.step;
                 if (local_start >= this.end)
                 {
-                    local_start = this.end - 1;
+                    local_start = this.end ;
                 }
                 if (local_end >= this.end)
                 {
-                    local_end = this.end - 1;
+                    local_end = this.end;
                 }
             }
 
@@ -227,6 +257,11 @@ namespace mxnet.numerics.nbase
        
       
             return new Slice(local_start, local_end, local_step);
+        }
+
+        public static Slice[] FromShape(uint[] data)
+        {
+            return data.Select(s => new Slice(0, (int) s, 1)).ToArray();
         }
     }
 }

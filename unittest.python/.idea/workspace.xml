@@ -2,14 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="45d13690-27a4-480d-8243-b5dfc96b38ea" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../UnitTestProject/NArrayUnitTest.cs" afterPath="$PROJECT_DIR$/../UnitTestProject/NArrayUnitTest.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.numerics/nbase/NArray.cs" afterPath="$PROJECT_DIR$/../mxnet.numerics/nbase/NArray.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.numerics/nbase/Slice.cs" afterPath="$PROJECT_DIR$/../mxnet.numerics/nbase/Slice.cs" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../test.console/numericstest.cs" afterPath="$PROJECT_DIR$/../test.console/numericstest.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/unittestpythonwarp.py" afterPath="$PROJECT_DIR$/unittestpythonwarp.py" />
     </list>
     <ignored path="unittest.python.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -423,7 +419,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-6" y="1" width="1292" height="989" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.21003135" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />

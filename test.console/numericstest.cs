@@ -16,7 +16,8 @@ namespace test.console
             var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)s).ToArray();
             SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
 
-            var test3_result = testsingle["1:-1", "3:1:-1"];
+            var test3_result = testsingle["1:-1", "3:1:-1", ":"];
+            var t = test3_result.Flat();
 
             //Slice[] t1 = new Slice[] {"1:5", "4:6", "0:9"};
             //Slice[] t2 = new Slice[] { "1:2", "1:2", "0:7" ,"3:6"};
