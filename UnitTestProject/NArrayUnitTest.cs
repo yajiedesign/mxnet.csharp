@@ -92,6 +92,11 @@ namespace UnitTestProject
             List<float> test6_np_result = eval_array<float>("arr[1:5:2,10::-1,2]", new Parameter<float>("arr", testshape, test));
             var test6_result = testsingle["1:5:2", "10::-1","2"];
             CollectionAssert.AreEqual(test6_np_result, test6_result.Flat().data, "6");
+
+
+            AssertExtension.Throws<ArgumentException>(() => testsingle["::0"].Flat());
+            AssertExtension.Throws<ArgumentException>(() => testsingle["xx::0"].Flat());
+            AssertExtension.Throws<ArgumentException>(() => testsingle[":xx:0"].Flat());
         }
 
         [TestMethod]
@@ -105,20 +110,21 @@ namespace UnitTestProject
             var test1_result = testsingle["1::1", "1:3"];
             CollectionAssert.AreEqual(test1_np_result, test1_result.Flat().data, "1");
 
-            List<float> test2_np_result = eval_array<float>("arr[1::1,1:3][:2]", new Parameter<float>("arr", testshape, test));
-            var test2_result = testsingle["1::1", "1:3"][":2"];
+            List<float> test2_np_result = eval_array<float>("arr[1::1,1:3][:2,:100,::-1]", new Parameter<float>("arr", testshape, test));
+            var test2_result = testsingle["1::1", "1:3"][":2",":100","::-1"];
             CollectionAssert.AreEqual(test2_np_result, test2_result.Flat().data, "2");
 
             List<float> test3_np_result = eval_array<float>("arr[1::1,1:3][1:-1,3:1:-1,:]", new Parameter<float>("arr", testshape, test));
             var test3_result = testsingle["1::1", "1:3"]["1:-1", "3:1:-1", ":"];
             CollectionAssert.AreEqual(test3_np_result, test3_result.Flat().data, "3");
 
-            List<float> test4_np_result = eval_array<float>("arr[1::1,1:3][-1:-1:3,:1:-1]", new Parameter<float>("arr", testshape, test));
-            var test4_result = testsingle["1::1", "1:3"]["-1:-1:3", ":1:-1"];
+            List<float> test4_np_result = eval_array<float>("arr[::-1,3:1:-1][-3:-1:1,:100:1]", new Parameter<float>("arr", testshape, test));
+            var test4_result = testsingle["::-1", "3:1:-1"]["-3:-1:1", ":100:1"];
             CollectionAssert.AreEqual(test4_np_result, test4_result.Flat().data, "4");
+            Assert.AreNotEqual(test4_result.Flat().data.Count(), 0);
 
-            List<float> test5_np_result = eval_array<float>("arr[1::1,1:3][-3:-1:3,:1:-1,:10]", new Parameter<float>("arr", testshape, test));
-            var test5_result = testsingle["1::1", "1:3"]["-3:-1:3", ":1:-1", ":10"];
+            List<float> test5_np_result = eval_array<float>("arr[::-1,3:1:-1][5:1:-1,100::-1,:10]", new Parameter<float>("arr", testshape, test));
+            var test5_result = testsingle["::-1", "3:1:-1"]["5:1:-1", "100::-1", ":10"];
             CollectionAssert.AreEqual(test5_np_result, test5_result.Flat().data, "5");
         }
 

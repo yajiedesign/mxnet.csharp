@@ -229,8 +229,8 @@ namespace mxnet.numerics.nbase
 
             if (this.step < 0 && sub.step > 0)
             {
-                local_start = this.start - sub.end;
-                local_end = this.start - sub.start;
+                local_start = this.start - sub.start;
+                local_end = this.start - sub.end;
                 local_step = this.step * sub.step;
                 if (local_start < this.end)
                 {
@@ -245,12 +245,16 @@ namespace mxnet.numerics.nbase
 
             if (this.step < 0 && sub.step < 0)
             {
-                local_end = this.start - sub.start;
-                local_start = this.start - sub.end;
+                local_end = this.start - sub.end ;
+                local_start = this.start - sub.start;
                 local_step = this.step * sub.step;
                 if (local_start <= this.end)
                 {
                     local_start = this.end;
+                }
+                if (local_end < this.end)
+                {
+                    local_end = this.end;
                 }
             }
 

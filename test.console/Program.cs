@@ -58,7 +58,7 @@ namespace test.console
 
             NumericsTest test = new NumericsTest();
             test.Test();
-
+            return;
             var log4_net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
             XmlConfigurator.Configure(new FileInfo(log4_net_config));
 

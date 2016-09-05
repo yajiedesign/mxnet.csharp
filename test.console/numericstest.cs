@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,18 +14,34 @@ namespace test.console
     {
         public void Test()
         {
-            var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)s).ToArray();
-            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
+            var test = Enumerable.Range(0, 100 * 30 * 40 * 50).Select(s => (float)s).ToArray();
+            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(100, 30, 40, 50), test);
 
-            var test3_result = testsingle["1::1", "1:3"][":2"];
-            var t = test3_result.Flat();
+            var test5_result = testsingle["::-1", "1:13"]["5:1:-1", "::-1", ":10"];
+            var t1 = test5_result.Flat();
+            var t2 = test5_result.Flat2();
 
-            //Slice[] t1 = new Slice[] {"1:5", "4:6", "0:9"};
-            //Slice[] t2 = new Slice[] { "1:2", "1:2", "0:7" ,"3:6"};
+            {
+                Stopwatch sp = new Stopwatch();
+                sp.Start();
+                for (int i = 0; i < 10000; i++)
+                {
+                    var tt1 = test5_result.Flat();
+                }
+                sp.Stop();
+                Console.WriteLine(sp.ElapsedMilliseconds);
+            }
 
-
-            //var z1 = t1.Zip(t2, (l, r) => l?.SubSlice(r) ?? r);
-
+            {
+                Stopwatch sp = new Stopwatch();
+                sp.Start();
+                for (int i = 0; i < 10000; i++)
+                {
+                    var tt1 = test5_result.Flat2();
+                }
+                sp.Stop();
+                Console.WriteLine(sp.ElapsedMilliseconds);
+            }
         }
     }
 }
