@@ -14,34 +14,23 @@ namespace test.console
     {
         public void Test()
         {
-            var test = Enumerable.Range(0, 100 * 30 * 40 * 50).Select(s => (float)s).ToArray();
-            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(100, 30, 40, 50), test);
+            //var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)s).ToArray();
+            //SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
 
-            var test5_result = testsingle["::-1", "1:13"]["5:1:-1", "::-1", ":10"];
-            var t1 = test5_result.Flat();
-            var t2 = test5_result.Flat2();
+            //var test5_result = testsingle["::-1", "1:13"]["5:1:-1", "::-1", ":10"];
+            //var t1 = test5_result.Flat().data;
 
-            {
-                Stopwatch sp = new Stopwatch();
-                sp.Start();
-                for (int i = 0; i < 10000; i++)
-                {
-                    var tt1 = test5_result.Flat();
-                }
-                sp.Stop();
-                Console.WriteLine(sp.ElapsedMilliseconds);
-            }
+            //var t2 = testsingle.Argmax(0);
 
-            {
-                Stopwatch sp = new Stopwatch();
-                sp.Start();
-                for (int i = 0; i < 10000; i++)
-                {
-                    var tt1 = test5_result.Flat2();
-                }
-                sp.Stop();
-                Console.WriteLine(sp.ElapsedMilliseconds);
-            }
+            Random rnd = new Random(0);
+
+
+            var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)rnd.Next(0, 50)).ToArray();
+            string testshape = "(10,3,4,5)";
+            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
+            var test2_result = testsingle.Argmax(0);
+
+
         }
     }
 }

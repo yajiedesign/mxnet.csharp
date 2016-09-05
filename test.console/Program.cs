@@ -58,7 +58,7 @@ namespace test.console
 
             NumericsTest test = new NumericsTest();
             test.Test();
-            return;
+ 
             var log4_net_config = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
             XmlConfigurator.Configure(new FileInfo(log4_net_config));
 
@@ -110,21 +110,21 @@ namespace test.console
             int hit = 0;
             for (int i = 0; i < batch_size; i++)
             {
-                var l = label[i];
+                var l = label[(Slice)i].data;
 
                 List<int> p = new List<int>();
                 for (int k = 0; k < 4; k++)
                 {
-                    p.Add((int)pred[k * batch_size + i].Argmax());
+                    p.Add((int)pred[(Slice)(k * batch_size + i)].Argmax());
                 }
 
-                if (l.shape.size == p.Count)
+                if (l.Length == p.Count)
                 {
 
                     var match = true;
                     for (int k = 0; k < p.Count; k++)
                     {
-                        if (p[k] != (int)(l.data[k]))
+                        if (p[k] != (int)(l[k]))
                         {
                             match = false;
                             break;

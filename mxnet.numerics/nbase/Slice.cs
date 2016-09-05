@@ -136,6 +136,10 @@ namespace mxnet.numerics.nbase
             return end;
         }
 
+        public static implicit operator Slice(int index)
+        {
+            return new Slice(index, index + 1, 1);
+        }
 
 
         private static readonly Regex RegNoStep = new Regex("(.*):(.*)");

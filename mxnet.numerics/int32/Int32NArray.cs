@@ -25,7 +25,7 @@ namespace mxnet.numerics.int32
                 ? -1
                 : data
                     .Select((value, index) => new { Value = value, Index = index })
-                    .Aggregate((a, b) => (a.Value > b.Value) ? a : b)
+                    .Aggregate((a, b) => (a.Value >= b.Value) ? a : b)
                     .Index;
         }
     }
