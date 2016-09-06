@@ -4,7 +4,6 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Collections.Generic" #>
-<#@ parameter name="namespacename" type="System.String" #>
 <#@ parameter name="classname" type="System.String" #>
 <#@ parameter name="typename" type="System.String" #>
 <#@ output extension=".cs" #>
@@ -13,7 +12,7 @@
 	var code = File.ReadAllText(projectPath + @"\single\SingleNArrayTemplate.cs");
 	code = code.Replace("Single", classname);
 	code = code.Replace("float", typename);
-	code = code.Replace("mxnet.numerics.single", namespacename);
+	code = code.Replace("mxnet.numerics.single", "mxnet.numerics."+classname.ToLower());
 	Write(code); 
   
 #>

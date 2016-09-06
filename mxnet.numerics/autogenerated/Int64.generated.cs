@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using mxnet.numerics.int32;
 using mxnet.numerics.nbase;
 
-namespace mxnet.numerics.single
+namespace mxnet.numerics.int64
 {
-    public partial struct SingleCalculator : ICalculator<float>
+    public partial struct Int64Calculator : ICalculator<long>
     {
-        public float Sum(float[] data)
+        public long Sum(long[] data)
         {
             return data.Sum();
         }
 
-        public int Argmax(float[] data)
+        public int Argmax(long[] data)
         {
             return !data.Any()
                 ? -1
@@ -28,17 +28,17 @@ namespace mxnet.numerics.single
 
  
 
-    public partial class SingleNArray : NArray<float, SingleCalculator, SingleNArray>
+    public partial class Int64NArray : NArray<long, Int64Calculator, Int64NArray>
     {
-        public SingleNArray()
+        public Int64NArray()
         {
 
         }
-        public SingleNArray(Shape shape) : base(shape)
+        public Int64NArray(Shape shape) : base(shape)
         {
         }
 
-        public SingleNArray(Shape shape, float[] data) : base(shape, data)
+        public Int64NArray(Shape shape, long[] data) : base(shape, data)
         {
 
         }

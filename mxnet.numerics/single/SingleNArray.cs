@@ -26,10 +26,20 @@ namespace mxnet.numerics.single
             var code = File.ReadAllText(@"..\single\SingleNArray.cs");
             code = code.Replace("Single", "Int32");
             code = code.Replace("float", "int");
-            code = code.Replace("mxnet.numerics.single", "mxnet.numerics.int32");
+            code = code.Replace("mxnet.numerics.single", "mxnet.numerics.int32".ToLower());
 
 
+            List<Tuple<string, string>> genlist = new List<Tuple<string, string>>()
+            {
+                Tuple.Create("Int32", "int")
+            };
 
+            foreach (var genitem in genlist)
+            {
+               
+
+
+            }
         }
     }
 }

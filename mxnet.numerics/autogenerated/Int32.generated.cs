@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -40,8 +40,8 @@ namespace mxnet.numerics.int32
 
         public Int32NArray(Shape shape, int[] data) : base(shape, data)
         {
-        }
 
+        }
 
         public  Int32NArray ToInt32()
         {
