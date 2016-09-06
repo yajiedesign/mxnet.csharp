@@ -159,6 +159,20 @@ namespace UnitTestProject
         }
 
         [TestMethod]
+        public void TestSlice3()
+        {
+            var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)s).ToArray();
+            string testshape = "(10,3,4,5)";
+            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
+
+            List<float> test1_np_result = eval_array<float>("arr[[1,3,5,7],[0,2,0,2]]",
+                new Parameter<float>("arr", testshape, test));
+            var test1_result = testsingle[new int[] {1,3,5,7},new int[] {0,2,0,2}];
+            CollectionAssert.AreEqual(test1_np_result, test1_result.Flat().data, "1");
+
+        }
+
+        [TestMethod]
         public void TestArithmetic()
         {
             Random rnd = new Random(0);

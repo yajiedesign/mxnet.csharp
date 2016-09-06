@@ -28,7 +28,7 @@ namespace test.console
             var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)rnd.Next(0, 50)).ToArray();
             string testshape = "(10,3,4,5)";
             SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
-            var test2_result = testsingle.Argmax(0);
+            var test1_result = testsingle[new int[] { 1, 3, 5, 7 }, new int[] { 0, 2, 0, 2 }];
 
 
         }
