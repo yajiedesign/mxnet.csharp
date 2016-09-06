@@ -12,9 +12,9 @@
 <# 
 string templateFile = this.Host.ResolvePath(@"BaseTemplate.tt");
 string templateContent = File.ReadAllText(templateFile);
-
+ 
 List<Tuple<string, string>> genlist = new List<Tuple<string, string>>()
-{
+{ 
     Tuple.Create("Int32", "int"),
     Tuple.Create("Int64", "long")
 };
@@ -26,6 +26,12 @@ List<Tuple<string, string>> genlist = new List<Tuple<string, string>>()
 <# 
 
         manager.StartNewFile($"{genitem.Item1}.generated.cs");
+#>
+using mxnet.numerics.single;
+using mxnet.numerics.int32;
+using mxnet.numerics.int64;
+using mxnet.numerics.nbase;
+<#
         TextTemplatingSession session = new TextTemplatingSession();
         session["classname"] = genitem.Item1;  
         session["typename"] = genitem.Item2;   

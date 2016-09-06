@@ -4,15 +4,23 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.Text.RegularExpressions" #>
 <#@ parameter name="classname" type="System.String" #>
 <#@ parameter name="typename" type="System.String" #>
 <#@ output extension=".cs" #>
 <#
-	string projectPath = Host.ResolveAssemblyReference("$(ProjectDir)");  
+    Regex reg = new Regex("#region Convert(.*?)#endregion", RegexOptions.Singleline);
+    string projectPath = Host.ResolveAssemblyReference("$(ProjectDir)");  
 	var code = File.ReadAllText(projectPath + @"\single\SingleNArrayTemplate.cs");
+    var m = reg.Match(code);
+    var convert = m.Groups[1].Value;
+    code = code.Replace(convert, "#$%^@123");
+
 	code = code.Replace("Single", classname);
 	code = code.Replace("float", typename);
 	code = code.Replace("mxnet.numerics.single", "mxnet.numerics."+classname.ToLower());
+    code = code.Replace("#region Convert#$%^@123#endregion", $"#region Convert{convert}#endregion");
+
 	Write(code); 
   
 #>
