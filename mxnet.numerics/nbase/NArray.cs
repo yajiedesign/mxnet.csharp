@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace mxnet.numerics.nbase
 {
 
-    public class NArray<T, TC, TOut>
+    public partial class NArray<T, TC, TOut>
         where T : new()
         where TC : ICalculator<T>, new()
         where TOut : NArray<T, TC, TOut> , new()

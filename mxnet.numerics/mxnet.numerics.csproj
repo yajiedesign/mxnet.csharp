@@ -60,6 +60,7 @@
     </Compile>
     <Compile Include="int32\Int32NArray.cs" />
     <Compile Include="int64\Int64NArray.cs" />
+    <Compile Include="nbase\NArrayStatic.cs" />
     <Compile Include="nbase\Slice.cs" />
     <Compile Include="nbase\ICalculator.cs" />
     <Compile Include="nbase\NArray.cs" />
