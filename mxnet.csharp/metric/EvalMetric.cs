@@ -75,7 +75,7 @@ namespace mxnet.csharp.metric
         {
             {"acc", typeof(Accuracy)},
             {"accuracy", typeof(Accuracy)},
-            //{  "ce", CrossEntropy},
+            {  "ce", typeof(CrossEntropy)},
             //{  "f1", F1},
             //{  "mae", MAE},
             //{  "mse", MSE},

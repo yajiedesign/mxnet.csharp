@@ -19,12 +19,14 @@ namespace test.console
         public List<NDArray> data { get; }
 
         public List<NDArray> label{ get; }
+        public int pad { get; }
 
 
         public DataBatch(List<NDArray> datas, List<NDArray> labels)
         {
             this.data = datas;
             this.label = labels;
+            this.pad = 0;
         }
 
         public Dictionary<string, Shape> provide_data { get; }
@@ -37,7 +39,7 @@ namespace test.console
         private readonly string _path;
         private readonly int _batch_size;
 
-        public ReadData(string path, int batch_size)
+        public ReadData(string path, int batch_size, bool is_predict=false)
         {
             _path = path;
             _batch_size = batch_size;
@@ -47,6 +49,16 @@ namespace test.console
                 {"data", new Shape((uint) _batch_size, 3, 60, 20)}
             };
 
+
+            if (is_predict)
+            {
+                provide_data = new Dictionary<string, Shape>
+                {
+                    {"data", new Shape((uint) _batch_size, 3, 60, 20)},
+                    {"softmax_label", new Shape((uint) _batch_size, 4)}
+                };
+            }
+
             provide_label = new Dictionary<string, Shape>
             {
                 {"softmax_label", new Shape((uint) _batch_size, 4)}
@@ -55,7 +67,7 @@ namespace test.console
 
             _data_s = new List<float[]>();
             _label_s = new List<float[]>();
-            foreach (var file in files)
+            foreach (var file in files.Take(256))
             {
                 float[] data = ReadFile(file);
                 float[] label = ReadLabel(file);

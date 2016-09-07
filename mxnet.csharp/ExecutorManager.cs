@@ -390,8 +390,8 @@ namespace mxnet.csharp
 
         public void load_data_batch(IDataBatch data_batch)
         {
-            _load_data(data_batch, this._data_arrays);
-            _load_label(data_batch, this._label_arrays);
+            ExecutorManager._load_data(data_batch, this._data_arrays);
+            ExecutorManager._load_label(data_batch, this._label_arrays);
         }
 
         /// <summary>
@@ -427,8 +427,23 @@ namespace mxnet.csharp
                 metric.Update(labels_slice, texec.outputs);
             }
         }
+    }
 
-        private static void _load_general(List<NDArray> data, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+    public class ExecutorManager
+    {
+        public static void _load_general(List<NDArray> data, List<NDArray> targets)
+        {
+
+            for (int i = 0; i < data.Count; i++)
+            {
+                var d_src = data[i];
+                var d_targets = targets[i];
+                d_src.Copy_to(d_targets);
+            }
+
+        }
+
+        public static void _load_general(List<NDArray> data, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
         {
 
             for (int i = 0; i < data.Count; i++)
@@ -446,17 +461,23 @@ namespace mxnet.csharp
 
         }
 
-        private static void _load_data(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        public static void _load_data(IDataBatch batch, List<NDArray> targets)
         {
             _load_general(batch.data, targets);
         }
 
-        private static void _load_label(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        public static void _load_data(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        {
+            _load_general(batch.data, targets);
+        }
+
+        public static void _load_label(IDataBatch batch, List<NDArray> targets)
         {
             _load_general(batch.label, targets);
         }
-
-
-  
+        public static void _load_label(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NDArray>>> targets)
+        {
+            _load_general(batch.label, targets);
+        }
     }
 }

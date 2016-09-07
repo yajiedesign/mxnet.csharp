@@ -6,6 +6,45 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
+
+    public static class LineHelp
+    {
+        public static TValue GetValueOrDefault<TKey, TValue>
+            (this IDictionary<TKey, TValue> dictionary,
+                TKey key,
+                TValue default_value)
+        {
+            TValue value;
+            return dictionary.TryGetValue(key, out value) ? value : default_value;
+        }
+
+        public static TValue GetValueOrDefault<TKey, TValue>
+            (this IDictionary<TKey, TValue> dictionary,
+                TKey key,
+                Func<TValue> default_value_provider)
+        {
+            TValue value;
+            return dictionary.TryGetValue(key, out value)
+                ? value
+                : default_value_provider();
+        }
+
+        public static IEnumerable<TResult> Zip<T1, T2, T3, TResult>(
+     this IEnumerable<T1> source,
+     IEnumerable<T2> second,
+     IEnumerable<T3> third,
+     Func<T1, T2, T3, TResult> func)
+        {
+            using (var e1 = source.GetEnumerator())
+            using (var e2 = second.GetEnumerator())
+            using (var e3 = third.GetEnumerator())
+            {
+                while (e1.MoveNext() && e2.MoveNext() && e3.MoveNext())
+                    yield return func(e1.Current, e2.Current, e3.Current);
+            }
+        }
+    }
+
     public static class Util
     {
 

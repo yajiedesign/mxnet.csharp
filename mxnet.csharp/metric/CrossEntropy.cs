@@ -21,8 +21,10 @@ namespace mxnet.csharp.metric
                 var pred = preds[i].As_numerics();
 
                 label = label.Flat();
-             //   prob = pred[Enumerable.Range(0,(int)label.shape[0]), numpy.int64(label)]
+                var prob = pred[Enumerable.Range(0, (int)label.shape[0]).ToArray(), label.ToInt32().data];
 
+
+                //TODO CrossEntropy
             }
         }
     }

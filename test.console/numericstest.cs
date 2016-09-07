@@ -26,9 +26,17 @@ namespace test.console
 
 
             var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)rnd.Next(0, 50)).ToArray();
+
+
             string testshape = "(10,3,4,5)";
             SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
             var test1_result = testsingle[new int[] { 1, 3, 5, 7 }, new int[] { 0, 2, 0, 2 }];
+
+
+            var a = new SingleNArray(new Shape(2, 2), new float[] { 1, 2, 3, 4 });
+            var b = new SingleNArray(new Shape(1, 2), new float[] { 5, 6 });
+
+            var test2_result = SingleNArray.Concatenate(0, a, b);
 
 
         }

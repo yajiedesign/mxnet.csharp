@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using mxnet.numerics.nbase;
 using mxnet.numerics.single;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Razorvine.Pyro;
@@ -180,7 +181,7 @@ namespace UnitTestProject
 
             var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)rnd.Next(0, 50)).ToArray();
             string testshape = "(10,3,4,5)";
-            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
+            SingleNArray testsingle = new SingleNArray(new Shape(10, 3, 4, 5), test);
 
 
             var test1_np_result = eval_scalar<float>("arr[1::1,1:3].sum()", new Parameter<float>("arr", testshape, test));
@@ -193,6 +194,21 @@ namespace UnitTestProject
             var test2_result = testsingle.Argmax(0);
             CollectionAssert.AreEqual(test2_np_result, test2_result.Flat().data, "1");
 
+            var a = new float[] {1, 2, 3, 4};
+            var b = new float[] {5, 6};
+            var aarry = new SingleNArray(new Shape(2, 2),a );
+            var barry = new SingleNArray(new Shape(1, 2),b);
+            var test3_np_result = eval_array<float>("np.concatenate((a,b),0)", 
+                new Parameter<float>("a", "(2,2)", a),
+                new Parameter<float>("b", "(1,2)", b));
+            var test3_result = SingleNArray.Concatenate(0, aarry, barry);
+            CollectionAssert.AreEqual(test3_np_result, test3_result.Flat().data, "2");
+
+            //var test4_np_result = eval_array<float>("np.concatenate((a,b),axis = 1)",
+            //new Parameter<float>("a", "(2,2)", a),
+            //new Parameter<float>("b", "(1,2)", b));
+            //var test4_result = SingleNArray.Concatenate(1, aarry, barry);
+            //CollectionAssert.AreEqual(test4_np_result, test4_result.Flat().data, "2");
 
 
         }

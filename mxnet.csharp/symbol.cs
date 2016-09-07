@@ -556,35 +556,92 @@ namespace mxnet.csharp
         }
 
         public Executor SimpleBind(
-            Context context, Dictionary<string, NDArray> args_map,
-            Dictionary<string, NDArray> arg_grad_store = null,
-            Dictionary<string, OpReqType> grad_req_type = null,
-            Dictionary<string, NDArray> aux_map = null)
+            Context context,
+            Dictionary<string, uint[]> input_shapes,
+            OpReqType grad_req,
+            Dictionary<string, Type> type_dict = null,
+            Dictionary<string, Context> group2ctx = null
+            )
         {
-            if (arg_grad_store == null)
+
+           var  list_arguments = ListArguments();
+
+
+            if (type_dict == null)
             {
-                arg_grad_store = new Dictionary<string, NDArray>();
-            }
-            if (grad_req_type == null)
-            {
-                grad_req_type = new Dictionary<string, OpReqType>();
-            }
-            if (aux_map == null)
-            {
-                aux_map = new Dictionary<string, NDArray>();
+                type_dict = list_arguments.ToDictionary(k => k, v => typeof(float));
             }
 
-            List<NDArray> arg_arrays = new List<NDArray>();
-            List<NDArray> grad_arrays = new List<NDArray>();
-            List<OpReqType> grad_reqs = new List<OpReqType>();
-            List<NDArray> aux_arrays = new List<NDArray>();
+            var arg_shapes = new List<uint[]>();
+            var aux_shapes = new List<uint[]>();
+            var out_shapes = new List<uint[]>();
+            InferShape(input_shapes, arg_shapes, aux_shapes, out_shapes);
 
-            InferExecutorArrays(context, arg_arrays, grad_arrays, grad_reqs,
-                                aux_arrays, args_map, arg_grad_store, grad_req_type,
-                                aux_map);
 
-            return new Executor(this, context, arg_arrays, grad_arrays, grad_reqs,
-                                aux_arrays);
+            var arg_types = new List<Type>();
+            var aux_types = new List<Type>();
+            var out_types = new List<Type>();
+
+            InferType(type_dict, arg_types, aux_types, out_types);
+
+            if (arg_shapes.Count == 0|| arg_types.Count == 0)
+            {
+                throw new Exception("Input node is not complete");
+            }
+
+            List<Context> arg_ctx;
+            List<Context> aux_ctx;
+            if (group2ctx != null)
+            {
+                var listattr = list_attr(true);
+                var attr_dict = listattr.Where(w => w.Key.EndsWith("ctx_group"))
+                    .ToDictionary(k => k.Key, v => group2ctx.GetValueOrDefault(v.Value, context));
+                arg_ctx = list_arguments
+                    .Select(name => attr_dict.GetValueOrDefault(name + "_ctx_group", context)).ToList();
+                aux_ctx = ListAuxiliaryStates()
+                    .Select(name => attr_dict.GetValueOrDefault(name + "_ctx_group", context)).ToList();
+            }
+            else
+            {
+                arg_ctx = Enumerable.Range(0, arg_shapes.Count).Select(s => context).ToList();
+                aux_ctx = Enumerable.Range(0, aux_shapes.Count).Select(s => context).ToList();
+            }
+
+            //alloc space
+            var arg_ndarrays = arg_types
+                .Zip(arg_ctx, arg_shapes,
+                    (dtype, dev, shape) =>
+                        NDArray.Zeros(new Shape(shape), dev, dtype))
+                .ToList();
+            Dictionary<string, NDArray> grad_ndarrays = new Dictionary<string, NDArray>();
+            if (grad_req != OpReqType.KNullOp)
+            {
+             
+                for (int i = 0; i < list_arguments.Count; i++)
+                {
+                    var name = list_arguments[i];
+                    var shape = arg_shapes[i];
+                    var dev = arg_ctx[i];
+                    var dtype = arg_types[i];
+
+                    grad_ndarrays[name] = NDArray.Zeros(new Shape(shape), dev, dtype: dtype);
+                }
+            }
+
+            var aux_ndarrays = aux_types
+                .Zip(aux_ctx, aux_shapes,
+                    (dtype, dev, shape) =>
+                        NDArray.Zeros(new Shape(shape), dev, dtype))
+                .ToList();
+
+            var executor = Bind(context,
+                arg_ndarrays,
+                grad_ndarrays, 
+                grad_req,
+                aux_ndarrays,
+                group_to_ctx: group2ctx);
+
+            return executor;
         }
 
         public Executor Bind(Context context,
@@ -597,6 +654,18 @@ namespace mxnet.csharp
         {
             return new Executor(this, context, arg_arrays, grad_arrays, grad_reqs,
                                 aux_arrays, group_to_ctx, shared_exec);
+        }
+
+        public Executor Bind(Context context,
+            List<NDArray> arg_arrays,
+            Dictionary<string, NDArray> grad_dict,
+            OpReqType grad_req,
+            List<NDArray> aux_arrays,
+            Dictionary<string, Context> group_to_ctx = null,
+            Executor shared_exec = null)
+        {
+            var grad_reqs = ListArguments().ToDictionary(k => k, v => grad_req);
+            return Bind(context, arg_arrays, grad_dict, grad_reqs, aux_arrays, group_to_ctx, shared_exec);
         }
 
         public Executor Bind(Context context,

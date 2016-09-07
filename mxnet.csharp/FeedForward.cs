@@ -26,6 +26,7 @@ namespace mxnet.csharp
         string bucket_key { get; }
         List<NDArray> data { get; }
         List<NDArray> label { get; }
+        int pad { get; }
     }
 
     public interface IDataIter : IDataIProvide, IEnumerable<IDataBatch>
@@ -36,7 +37,7 @@ namespace mxnet.csharp
         void Reset();
     }
 
-    public class FeedForward
+    public partial class FeedForward
     {
         private Symbol _symbol;
         private Dictionary<string, NDArray> _arg_params;
@@ -48,7 +49,7 @@ namespace mxnet.csharp
         private readonly int _num_epoch;
         private readonly Optimizer _optimizer;
         private readonly Initializer _initializer;
-        private object _pred_exec;
+        private Executor _pred_exec;
         private readonly int _begin_epoch;
         private readonly Dictionary<string, object> _kwargs;
         private readonly int? _epoch_size;
@@ -306,7 +307,7 @@ namespace mxnet.csharp
 
             if (update_on_kvstore)
             {
-                kvstore.set_optimizer(optimizer);
+                kvstore?.set_optimizer(optimizer);
             }
 
             //Now start training
@@ -573,5 +574,9 @@ namespace mxnet.csharp
 
             return Tuple.Create(arg_names.ToList(), param_names.ToList(), aux_names.ToList());
         }
+
+
+
+
     }
 }

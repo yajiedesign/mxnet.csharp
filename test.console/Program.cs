@@ -91,7 +91,7 @@ namespace test.console
 
 
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
-                num_epoch: 10,
+                num_epoch: 2,
                 optimizer: optimizer,
                 initializer: new Xavier(factor_type: FactorType.In, magnitude: 2.34f)
 
@@ -101,6 +101,10 @@ namespace test.console
             model.Fit(rdtrain, rdval,
                 custom_metric,
                 batch_end_callback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
+
+            ReadData rdpredict = new ReadData("data\\train\\", batch_size,true);
+            var test_out = model.Predict(rdpredict, 1);
+
             Console.WriteLine("");
 
         }
