@@ -26,6 +26,31 @@ namespace mxnet.numerics.single
                     .Aggregate((a, b) => (a.Value >= b.Value) ? a : b)
                     .Index;
         }
+
+        public float[] Log(float[] data)
+        {
+            return data.Select(s => (float) Math.Log(s)).ToArray();
+        }
+
+        public float Mean(float[] data)
+        {
+            return (float)data.Average();
+        }
+
+        public float[] Minus(float[] data)
+        {
+            return data.Select(s => -s).ToArray();
+        }
+
+        public float[] Minus(float[] ldata, float[] rdata)
+        {
+            return ldata.Zip(rdata, (l, r) => l - r).ToArray();
+        }
+
+        public float[] Pow(float[] data, float y)
+        {
+            return data.Select(s => (float)Math.Pow(s,y)).ToArray();
+        }
     }
 
  

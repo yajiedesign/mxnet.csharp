@@ -54,5 +54,12 @@ namespace mxnet.numerics.nbase
             return ret;
         }
 
+        public static TOut Pow(TOut x, T y)
+        {
+            TOut ret = new TOut();
+            ret.Init(x.shape, Calculator.Pow(x.data,y));
+            return ret;
+        }
+
     }
 }

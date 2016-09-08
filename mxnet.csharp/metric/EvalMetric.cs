@@ -71,6 +71,14 @@ namespace mxnet.csharp.metric
             }
         }
 
+        protected static void check_label_shapes(List<NDArray> labels, List<NDArray> preds)
+        {
+            if (labels.Count != preds.Count)
+            {
+                throw new ArgumentException($"Shape of labels {} does not match shape of predictions {labels.Count} {preds.Count}"  );
+            }
+        }
+
         private static readonly Dictionary<string, Type> Metrics = new Dictionary<string, Type>
         {
             {"acc", typeof(Accuracy)},

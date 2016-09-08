@@ -13,6 +13,7 @@ namespace mxnet.csharp.metric
 
         public override void Update(List<NDArray> labels, List<NDArray> preds)
         {
+            check_label_shapes(labels, preds);
 
             for (int i = 0; i < labels.Count; i++)
             {
@@ -23,5 +24,7 @@ namespace mxnet.csharp.metric
                 this.num_inst[0] += pred_label.Flat().data.Count();
             }
         }
+
+
     }
 }

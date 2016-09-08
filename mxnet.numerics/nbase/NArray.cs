@@ -42,6 +42,11 @@ namespace mxnet.numerics.nbase
             Init(shape);
             Array.Copy(data, storage, Math.Min(data.Length, storage.Length));
         }
+        /// <summary>
+        /// init with zero cpoy
+        /// </summary>
+        /// <param name="shape_input"></param>
+        /// <param name="data_input"></param>
 
         private void Init(Shape shape_input, T[] data_input =null)
         {
@@ -332,7 +337,17 @@ namespace mxnet.numerics.nbase
             return ret;
         }
 
+        public TOut Log()
+        {
+            TOut ret = new TOut();
+            ret.Init(shape, Calculator.Log(data));
+            return ret;
+        }
 
+        public T Mean()
+        {
+            return Calculator.Mean(data);
+        }
 
         #endregion
     }

@@ -30,6 +30,31 @@ namespace mxnet.numerics.int64
                     .Aggregate((a, b) => (a.Value >= b.Value) ? a : b)
                     .Index;
         }
+
+        public long[] Log(long[] data)
+        {
+            return data.Select(s => (long) Math.Log(s)).ToArray();
+        }
+
+        public long Mean(long[] data)
+        {
+            return (long)data.Average();
+        }
+
+        public long[] Minus(long[] data)
+        {
+            return data.Select(s => -s).ToArray();
+        }
+
+        public long[] Minus(long[] ldata, long[] rdata)
+        {
+            return ldata.Zip(rdata, (l, r) => l - r).ToArray();
+        }
+
+        public long[] Pow(long[] data, long y)
+        {
+            return data.Select(s => (long)Math.Pow(s,y)).ToArray();
+        }
     }
 
  
