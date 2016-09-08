@@ -61,5 +61,12 @@ namespace mxnet.numerics.nbase
             return ret;
         }
 
+        public static TOut Abs(TOut x)
+        {
+            TOut ret = new TOut();
+            ret.Init(x.shape, Calculator.Abs(x.data));
+            return ret;
+        }
+
     }
 }

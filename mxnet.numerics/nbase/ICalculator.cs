@@ -12,6 +12,7 @@ namespace mxnet.numerics.nbase
         T Sum(T[] data);
         int Argmax(T[] storage);
         T[] Log(T[] data);
+        T[] Abs(T[] data);
         T Mean(T[] data);
         T[] Minus(T[] data);
         T[] Minus(T[] l, T[] r);

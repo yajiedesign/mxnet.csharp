@@ -36,6 +36,11 @@ namespace mxnet.numerics.int32
             return data.Select(s => (int) Math.Log(s)).ToArray();
         }
 
+        public int[] Abs(int[] data)
+        {
+            return data.Select(Math.Abs).ToArray();
+        }
+
         public int Mean(int[] data)
         {
             return (int)data.Average();

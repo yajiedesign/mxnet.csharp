@@ -36,6 +36,11 @@ namespace mxnet.numerics.int64
             return data.Select(s => (long) Math.Log(s)).ToArray();
         }
 
+        public long[] Abs(long[] data)
+        {
+            return data.Select(Math.Abs).ToArray();
+        }
+
         public long Mean(long[] data)
         {
             return (long)data.Average();

@@ -7,9 +7,9 @@ using mxnet.numerics.single;
 
 namespace mxnet.csharp.metric
 {
-    class RMSE : EvalMetric
+    class MAE : EvalMetric
     {
-        public RMSE() : base("rmse", 1)
+        public MAE() : base("mas", 1)
         {
 
         }
@@ -27,7 +27,7 @@ namespace mxnet.csharp.metric
                     label = label.ReShape(new mxnet.numerics.nbase.Shape(label.shape[0], 1));
                 }
 
-                this.sum_metric[0] += (float)Math.Sqrt(SingleNArray.Pow((label - pred), 2).Mean());
+                this.sum_metric[0] += (float)SingleNArray.Abs((label - pred)).Mean();
                 this.num_inst[0] += 1;
             }
         }

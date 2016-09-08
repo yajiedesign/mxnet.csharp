@@ -32,6 +32,11 @@ namespace mxnet.numerics.single
             return data.Select(s => (float) Math.Log(s)).ToArray();
         }
 
+        public float[] Abs(float[] data)
+        {
+            return data.Select(Math.Abs).ToArray();
+        }
+
         public float Mean(float[] data)
         {
             return (float)data.Average();

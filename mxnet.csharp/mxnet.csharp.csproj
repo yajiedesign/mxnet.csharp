@@ -55,6 +55,8 @@
     <Compile Include="lr_scheduler\LRScheduler.cs" />
     <Compile Include="lr_scheduler\MultiFactorScheduler.cs" />
     <Compile Include="metric\CrossEntropy.cs" />
+    <Compile Include="metric\MAE.cs" />
+    <Compile Include="metric\MSE.cs" />
     <Compile Include="metric\RMSE.cs" />
     <Compile Include="optimizer\CcSgd.cs" />
     <Compile Include="optimizer\Sgd.cs" />
