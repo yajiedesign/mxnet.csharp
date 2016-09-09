@@ -12,21 +12,21 @@ namespace mxnet.csharp
         public static TValue GetValueOrDefault<TKey, TValue>
             (this IDictionary<TKey, TValue> dictionary,
                 TKey key,
-                TValue default_value)
+                TValue defaultValue)
         {
             TValue value;
-            return dictionary.TryGetValue(key, out value) ? value : default_value;
+            return dictionary.TryGetValue(key, out value) ? value : defaultValue;
         }
 
         public static TValue GetValueOrDefault<TKey, TValue>
             (this IDictionary<TKey, TValue> dictionary,
                 TKey key,
-                Func<TValue> default_value_provider)
+                Func<TValue> defaultValueProvider)
         {
             TValue value;
             return dictionary.TryGetValue(key, out value)
                 ? value
-                : default_value_provider();
+                : defaultValueProvider();
         }
 
         public static IEnumerable<TResult> Zip<T1, T2, T3, TResult>(
@@ -48,7 +48,7 @@ namespace mxnet.csharp
     public static class Util
     {
 
-        public static readonly Dictionary<Type, int> DtypeNpToMX = new Dictionary<Type, int>
+        public static readonly Dictionary<Type, int> DtypeNpToMx = new Dictionary<Type, int>
         {
             {typeof(float), 0},
             {typeof(double), 1},
@@ -58,7 +58,7 @@ namespace mxnet.csharp
         };
 
 
-        public static readonly Dictionary<int, Type> DtypeMXToNp = new Dictionary<int, Type>
+        public static readonly Dictionary<int, Type> DtypeMxToNp = new Dictionary<int, Type>
         {
             {0, typeof(float)},
             {1, typeof(double)},
@@ -78,7 +78,7 @@ namespace mxnet.csharp
         {
             if (ret != 0)
             {
-                throw new Exception(NativeMethods.MXGetLastError());
+                throw new Exception(NativeMethods.MxGetLastError());
             }
         }
 

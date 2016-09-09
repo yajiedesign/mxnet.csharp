@@ -4,12 +4,12 @@ namespace mxnet.csharp.optimizer
 {
     public class Sgd : Optimizer
     {
-        public override NDArray create_state(int index, NDArray weight)
+        public override NdArray create_state(int index, NdArray weight)
         {
             throw new NotImplementedException();
         }
 
-        public override void update(int index, NDArray weight, NDArray grad, NDArray state)
+        public override void update(int index, NdArray weight, NdArray grad, NdArray state)
         {
             throw new NotImplementedException();
         }

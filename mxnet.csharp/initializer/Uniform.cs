@@ -11,7 +11,7 @@ namespace mxnet.csharp.initializer
             this._scale = scale;
         }
 
-        protected override void _init_weight(string name, NDArray arr)
+        protected override void InitWeight(string name, NdArray arr)
         {
             //float[] temp = new float[arr.size()];
             //for (int i = 0; i < temp.Length; i++)

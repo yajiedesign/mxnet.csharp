@@ -9,53 +9,53 @@ namespace mxnet.csharp.util
 {
     static class Model
     {
-        public static void _check_arguments(Symbol symbol)
+        public static void CheckArguments(Symbol symbol)
         {
-            var arg_names = symbol.ListArguments();
-            var arg_names_duplicate = arg_names.GroupBy(i => i)
+            var argNames = symbol.ListArguments();
+            var argNamesDuplicate = argNames.GroupBy(i => i)
                 .Where(g => g.Count() > 1)
                 .Select(g => g.ElementAt(0));
-            foreach (var name in arg_names_duplicate)
+            foreach (var name in argNamesDuplicate)
             {
                 throw new Exception($"Find duplicated argument name \"{name}\"," +
                                     $"please make the weight name non-duplicated(using name arguments)," +
-                                    $"arguments are {String.Join(" ", arg_names)}");
+                                    $"arguments are {String.Join(" ", argNames)}");
             }
-            var aux_names = symbol.ListAuxiliaryStates();
-            var aux_names_duplicate = aux_names.GroupBy(i => i)
+            var auxNames = symbol.ListAuxiliaryStates();
+            var auxNamesDuplicate = auxNames.GroupBy(i => i)
                 .Where(g => g.Count() > 1)
                 .Select(g => g.ElementAt(0));
 
-            foreach (var name in aux_names_duplicate)
+            foreach (var name in auxNamesDuplicate)
             {
                 throw new Exception($"Find duplicated auxiliary name \"{name}\"," +
                                     $"please make the weight name non-duplicated(using name arguments)," +
-                                    $"arguments are {String.Join(" ", arg_names)}");
+                                    $"arguments are {String.Join(" ", argNames)}");
             }
         }
 
 
-        public static void save_checkpoint(string prefix,
+        public static void SaveCheckpoint(string prefix,
             int? epoch,
             Symbol symbol,
-            Dictionary<string, NDArray> arg_params,
-            Dictionary<string, NDArray> aux_params)
+            Dictionary<string, NdArray> argParams,
+            Dictionary<string, NdArray> auxParams)
         {
             symbol.Save($"{prefix}-symbol.json");
 
-            Dictionary<string, NDArray> dict = new Dictionary<string, NDArray>();
-            foreach (var kv in arg_params)
+            Dictionary<string, NdArray> dict = new Dictionary<string, NdArray>();
+            foreach (var kv in argParams)
             {
                 dict.Add(kv.Key, kv.Value);
             }
-            foreach (var kv in aux_params)
+            foreach (var kv in auxParams)
             {
                 dict.Add(kv.Key, kv.Value);
             }
-            var param_name = $"{prefix}-{epoch:04d}.params";
-            NDArray.Save(param_name, dict);
+            var paramName = $"{prefix}-{epoch:04d}.params";
+            NdArray.Save(paramName, dict);
             ILog log = LogManager.GetLogger("");
-            log.Info($"Saved checkpoint to \"{param_name}\"");
+            log.Info($"Saved checkpoint to \"{paramName}\"");
         }
     }
 }

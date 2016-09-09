@@ -6,8 +6,8 @@ namespace mxnet.csharp.metric
 {
     public class CustomMetricResult
     {
-        public float sum_metric { get; set; }
-        public int num_inst { get; set; }
+        public float SumMetric { get; set; }
+        public int NumInst { get; set; }
     }
     public delegate CustomMetricResult CustomMetricEval(SingleNArray labels, SingleNArray preds);
     public class CustomMetric : EvalMetric
@@ -25,20 +25,20 @@ namespace mxnet.csharp.metric
             return !string.IsNullOrWhiteSpace(name) ? name : $"Custom({eval.Method.Name})";
         }
 
-        public override void Update(List<NDArray> labels, List<NDArray> preds)
+        public override void Update(List<NdArray> labels, List<NdArray> preds)
         {
             for (int i = 0; i < labels.Count; i++)
             {
-                var label = labels[i].as_numerics();
-                var pred = preds[i].as_numerics();
+                var label = labels[i].AsNumerics();
+                var pred = preds[i].AsNumerics();
 
-                if (pred.shape[1] == 2)
+                if (pred.Shape[1] == 2)
                 {
                     //TODO pred = pred[:, 1]
                 }
                 var reval = this._feval(label, pred);
-                this.sum_metric[0] += reval.sum_metric;
-                this.num_inst[0] += reval.num_inst;
+                this.SumMetric[0] += reval.SumMetric;
+                this.NumInst[0] += reval.NumInst;
             }
         }
     }

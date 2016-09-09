@@ -10,8 +10,8 @@ namespace mxnet.csharp.metric
     {
         private readonly string _name;
         private readonly int _num;
-        protected int[] num_inst;
-        protected float[] sum_metric;
+        protected int[] NumInst;
+        protected float[] SumMetric;
 
         public EvalMetric(string name, int num = 1)
         {
@@ -20,21 +20,21 @@ namespace mxnet.csharp.metric
             Reset();
         }
 
-        public abstract void Update(List<NDArray> labels, List<NDArray> preds);
+        public abstract void Update(List<NdArray> labels, List<NdArray> preds);
 
         public void Reset()
         {
 
             if (this._num == 1)
             {
-                this.num_inst = new int[1];
-                this.sum_metric = new float[1];
+                this.NumInst = new int[1];
+                this.SumMetric = new float[1];
             }
 
             else
             {
-                this.num_inst = new int[_num];
-                this.sum_metric = new float[_num];
+                this.NumInst = new int[_num];
+                this.SumMetric = new float[_num];
             }
 
 
@@ -44,18 +44,18 @@ namespace mxnet.csharp.metric
         {
             if (_num == 1)
             {
-                if (this.num_inst[0] == 0)
+                if (this.NumInst[0] == 0)
                 {
                     return new[] {new EvalMetricResult(_name, float.NaN)};
                 }
                 else
                 {
-                    return new[] {new EvalMetricResult(_name, sum_metric[0]/num_inst[0])};
+                    return new[] {new EvalMetricResult(_name, SumMetric[0]/NumInst[0])};
                 }
             }
             else
             {
-                var ret = sum_metric.Zip(num_inst, (m, i) =>
+                var ret = SumMetric.Zip(NumInst, (m, i) =>
                 {
                     if (i == 0)
                     {
@@ -71,7 +71,7 @@ namespace mxnet.csharp.metric
             }
         }
 
-        protected static void check_label_shapes(List<NDArray> labels, List<NDArray> preds)
+        protected static void check_label_shapes(List<NdArray> labels, List<NdArray> preds)
         {
             if (labels.Count != preds.Count)
             {

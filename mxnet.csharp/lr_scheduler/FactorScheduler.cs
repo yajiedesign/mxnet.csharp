@@ -2,11 +2,11 @@
 
 namespace mxnet.csharp.lr_scheduler
 {
-    class FactorScheduler : LRScheduler
+    class FactorScheduler : LrScheduler
     {
         private readonly int _step;
         private readonly float _factor;
-        private readonly float _stop_factor_lr;
+        private readonly float _stopFactorLr;
         private int _count;
 
 
@@ -20,8 +20,8 @@ namespace mxnet.csharp.lr_scheduler
         /// </summary>
         /// <param name="step">schedule learning rate after n updates</param>
         /// <param name="factor">the factor for reducing the learning rate</param>
-        /// <param name="stop_factor_lr"></param>
-        public FactorScheduler(int step, float factor= 1f, float stop_factor_lr= 1e-8f)
+        /// <param name="stopFactorLr"></param>
+        public FactorScheduler(int step, float factor= 1f, float stopFactorLr= 1e-8f)
         {
             if (step < 1)
             {
@@ -35,29 +35,29 @@ namespace mxnet.csharp.lr_scheduler
             }
             this._step = step;
             this._factor = factor;
-            this._stop_factor_lr = stop_factor_lr;
+            this._stopFactorLr = stopFactorLr;
             this._count = 0;
         }
 
-        public override float Call(int num_update)
+        public override float Call(int numUpdate)
         {
-            if (num_update > this._count + this._step)
+            if (numUpdate > this._count + this._step)
             {
                 this._count += this._step;
-                this.base_lr *= this._factor;
-                if (this.base_lr < this._stop_factor_lr)
+                this.BaseLr *= this._factor;
+                if (this.BaseLr < this._stopFactorLr)
                 {
-                    this.base_lr = this._stop_factor_lr;
-                    log.Info($"Update[{num_update}]: now learning rate arrived at {this.base_lr:.5e}, will not " +
+                    this.BaseLr = this._stopFactorLr;
+                    Log.Info($"Update[{numUpdate}]: now learning rate arrived at {this.BaseLr:.5e}, will not " +
                              "change in the future");
                 }
                 else
                 {
-                    log.Info($"Update[{num_update}]: Change learning rate to {this.base_lr:.5e}");
+                    Log.Info($"Update[{numUpdate}]: Change learning rate to {this.BaseLr:.5e}");
                 }
             }
 
-            return this.base_lr;
+            return this.BaseLr;
         }
     }
 }

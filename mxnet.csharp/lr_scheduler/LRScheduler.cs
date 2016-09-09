@@ -6,14 +6,14 @@ using log4net;
 
 namespace mxnet.csharp.lr_scheduler
 {
-    public abstract class LRScheduler
+    public abstract class LrScheduler
     {
-        protected readonly ILog log;
-        public float base_lr { get; set; } = 0.01f;
+        protected readonly ILog Log;
+        public float BaseLr { get; set; } = 0.01f;
 
-        protected LRScheduler(ILog log=null)
+        protected LrScheduler(ILog log=null)
         {
-            this.log = log ?? LogManager.GetLogger("");
+            this.Log = log ?? LogManager.GetLogger("");
         }
 
         /// <summary>
@@ -28,8 +28,8 @@ namespace mxnet.csharp.lr_scheduler
         /// 
         /// See more details in https://github.com/dmlc/mxnet/issues/625
         /// </summary>
-        /// <param name="num_update">the maximal number of updates applied to a weight.</param>
-        public abstract float Call(int num_update);
+        /// <param name="numUpdate">the maximal number of updates applied to a weight.</param>
+        public abstract float Call(int numUpdate);
 
     }
 }

@@ -9,8 +9,8 @@ class UnitTestPythonWarp(object):
         self.index = 0
         dic = {}
         for key, value in arrs.items():  # styles is a regular dictionary
-            shape = eval(value["shape"])
-            dic[key] = np.array(value["value"])
+            shape = eval(value["Shape"])
+            dic[key] = np.array(value["Value"])
             dic[key].shape = shape
         eval_ret = eval(code, globals(), dic)
         print(eval_ret.shape)
@@ -22,8 +22,8 @@ class UnitTestPythonWarp(object):
         self.index = 0
         dic = {}
         for key, value in arrs.items():  # styles is a regular dictionary
-            shape = eval(value["shape"])
-            dic[key] = np.array(value["value"])
+            shape = eval(value["Shape"])
+            dic[key] = np.array(value["Value"])
             dic[key].shape = shape
         eval_ret = eval(code, globals(), dic)
         print(eval_ret.shape)

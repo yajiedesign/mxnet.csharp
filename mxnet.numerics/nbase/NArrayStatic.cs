@@ -8,10 +8,10 @@ namespace mxnet.numerics.nbase
 {
     public partial class NArray<T, TC, TOut>
     {
-        public static TOut Concatenate(int axis = 0 ,params TOut[] input_list)
+        public static TOut Concatenate(int axis = 0 ,params TOut[] inputList)
         {
-            var ndim = input_list.First().shape.ndim;
-            if (input_list.Any(a => a.shape.ndim != ndim))
+            var ndim = inputList.First().Shape.Ndim;
+            if (inputList.Any(a => a.Shape.Ndim != ndim))
             {
                 throw new ArgumentException("input_list dim not match");
             }
@@ -22,33 +22,33 @@ namespace mxnet.numerics.nbase
                 {
                     continue;
                 }
-                var size = input_list.First().shape[i];
-                if (input_list.Select(s => s.shape[i]).Any(a => a != size))
+                var size = inputList.First().Shape[i];
+                if (inputList.Select(s => s.Shape[i]).Any(a => a != size))
                 {
                     throw new ArgumentException("input_list shape not match");
                 }
             }
 
-            var t_axis_size = (uint) input_list.Select(s => (int)s.shape[axis]).Sum();
+            var tAxisSize = (uint) inputList.Select(s => (int)s.Shape[axis]).Sum();
 
-            var dst_dim = (uint[])input_list.First().shape.data.Clone();
-            dst_dim[axis] = t_axis_size;
+            var dstDim = (uint[])inputList.First().Shape.Data.Clone();
+            dstDim[axis] = tAxisSize;
 
             TOut ret = new TOut();
-            ret.Init(new Shape(dst_dim));
+            ret.Init(new Shape(dstDim));
 
-            var dst_sclie = Enumerable.Range(0, input_list.Length).Select(s => (Slice) ":").ToArray();
+            var dstSclie = Enumerable.Range(0, inputList.Length).Select(s => (Slice) ":").ToArray();
 
-            var dst_index = 0;
-            for (int input_index = 0; input_index < input_list.Length; input_index++)
+            var dstIndex = 0;
+            for (int inputIndex = 0; inputIndex < inputList.Length; inputIndex++)
             {
-                var curr = input_list[input_index];
-                var curr_axis_dim = (int) curr.shape[axis];
-                dst_sclie[axis] =new  Slice(dst_index, dst_index +curr_axis_dim);
+                var curr = inputList[inputIndex];
+                var currAxisDim = (int) curr.Shape[axis];
+                dstSclie[axis] =new  Slice(dstIndex, dstIndex +currAxisDim);
 
-                ret[dst_sclie] = curr;
+                ret[dstSclie] = curr;
 
-                dst_index += curr_axis_dim;
+                dstIndex += currAxisDim;
             }
 
             return ret;
@@ -57,14 +57,14 @@ namespace mxnet.numerics.nbase
         public static TOut Pow(TOut x, T y)
         {
             TOut ret = new TOut();
-            ret.Init(x.shape, Calculator.Pow(x.data,y));
+            ret.Init(x.Shape, Calculator.Pow(x.Data,y));
             return ret;
         }
 
         public static TOut Abs(TOut x)
         {
             TOut ret = new TOut();
-            ret.Init(x.shape, Calculator.Abs(x.data));
+            ret.Init(x.Shape, Calculator.Abs(x.Data));
             return ret;
         }
 

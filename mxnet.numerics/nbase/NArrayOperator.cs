@@ -11,19 +11,19 @@ namespace mxnet.numerics.nbase
         public static TOut operator-(NArray<T, TC, TOut> input)
         {
             TOut ret = new TOut();
-            ret.Init(input.shape, Calculator.Minus(input.data));
+            ret.Init(input.Shape, Calculator.Minus(input.Data));
             return ret;
         }
 
         public static TOut operator-(NArray<T, TC, TOut> inputl , NArray<T, TC, TOut> inputr)
         {
-            if (inputl.shape != inputr.shape)
+            if (inputl.Shape != inputr.Shape)
             {
                 throw new ArgumentException("left and right shape not match");
             }
 
             TOut ret = new TOut();
-            ret.Init(inputl.shape, Calculator.Minus(inputl.data, inputr.data));
+            ret.Init(inputl.Shape, Calculator.Minus(inputl.Data, inputr.Data));
             return ret;
         }
 

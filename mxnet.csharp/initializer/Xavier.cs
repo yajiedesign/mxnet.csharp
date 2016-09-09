@@ -6,39 +6,39 @@ namespace mxnet.csharp.initializer
 {
     public class Xavier:Initializer
     {
-        private readonly RndType _rnd_type;
-        private readonly FactorType _factor_type;
+        private readonly RndType _rndType;
+        private readonly FactorType _factorType;
         private readonly float _magnitude;
 
-        public Xavier(RndType rnd_type = RndType.Uniform, FactorType factor_type =  FactorType.Avg, float magnitude= 3)
+        public Xavier(RndType rndType = RndType.Uniform, FactorType factorType =  FactorType.Avg, float magnitude= 3)
         {
-            this._rnd_type = rnd_type;
-            this._factor_type = factor_type;
+            this._rndType = rndType;
+            this._factorType = factorType;
             this._magnitude = magnitude;
         }
 
-        protected override void _init_weight(string name, NDArray arr)
+        protected override void InitWeight(string name, NdArray arr)
         {
-            var shape = arr.get_shape();
-            float hw_scale = 1.0f;
+            var shape = arr.GetShape();
+            float hwScale = 1.0f;
             if (shape.Size() > 2)
             {
-                hw_scale = Util.Prod(shape.Data().Skip(2).ToArray());
+                hwScale = Util.Prod(shape.Data().Skip(2).ToArray());
             }
-            var fan_out = shape[0] * hw_scale;
-            var fan_in = shape[1] * hw_scale;
+            var fanOut = shape[0] * hwScale;
+            var fanIn = shape[1] * hwScale;
 
             float factor = 1.0f;
-            switch (_factor_type)
+            switch (_factorType)
             {
                 case FactorType.Avg:
-                    factor = (fan_in + fan_out)/2.0f;
+                    factor = (fanIn + fanOut)/2.0f;
                     break;
                 case FactorType.In:
-                    factor = fan_in;
+                    factor = fanIn;
                     break;
                 case FactorType.Out:
-                    factor = fan_out;
+                    factor = fanOut;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(FactorType));
@@ -46,7 +46,7 @@ namespace mxnet.csharp.initializer
 
             var scale = (float)Math.Sqrt(this._magnitude/factor);
 
-            switch (_rnd_type)
+            switch (_rndType)
             {
                 case RndType.Uniform:
                     Random.Uniform(-scale, scale, arr);

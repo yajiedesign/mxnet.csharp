@@ -10,18 +10,18 @@ namespace mxnet.csharp
 
     public class NameScop : IDisposable
     {
-        private bool _is_dispose = false;
+        private bool _isDispose = false;
         public NameScop()
         {
-            NameManager.instance.Push();
+            NameManager.Instance.Push();
         }
 
         public void Dispose()
         {
-            if (_is_dispose == false)
+            if (_isDispose == false)
             {
-                NameManager.instance.Pop();
-                _is_dispose = true;
+                NameManager.Instance.Pop();
+                _isDispose = true;
             }
         }
     }
@@ -29,23 +29,23 @@ namespace mxnet.csharp
     class NameUnit
     {
         private readonly Dictionary<string, int> _namedict = new Dictionary<string, int>();
-        public string get_name(string op_name)
+        public string get_name(string opName)
         {
-            op_name = op_name.ToLower();
-            if (!_namedict.ContainsKey(op_name))
+            opName = opName.ToLower();
+            if (!_namedict.ContainsKey(opName))
             {
-                _namedict.Add(op_name, 0);
+                _namedict.Add(opName, 0);
             }
-            _namedict[op_name]++;
+            _namedict[opName]++;
 
-            return $"{op_name}{_namedict[op_name]:D2}";
+            return $"{opName}{_namedict[opName]:D2}";
         }
     }
 
     class NameManager
     {
         private static readonly ThreadLocal<NameManager> Instancetls = new ThreadLocal<NameManager>(() => new NameManager());
-        public static NameManager instance => Instancetls.Value;
+        public static NameManager Instance => Instancetls.Value;
 
         private static readonly NameUnit Default = new NameUnit();
         private readonly Stack<NameUnit> _stack = new Stack<NameUnit>();
@@ -55,16 +55,16 @@ namespace mxnet.csharp
 
         }
 
-        public string get_name(string op_name)
+        public string GetName(string opName)
         {
             if (_stack.Count == 0)
             {
                 lock (Default)
                 {
-                    return Default.get_name(op_name);
+                    return Default.get_name(opName);
                 }
             }
-            return _stack.Peek().get_name(op_name);
+            return _stack.Peek().get_name(opName);
         }
 
         public void Push()

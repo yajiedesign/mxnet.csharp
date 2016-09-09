@@ -13,25 +13,25 @@ namespace mxnet.csharp.metric
 
         }
 
-        public override void Update(List<NDArray> labels, List<NDArray> preds)
+        public override void Update(List<NdArray> labels, List<NdArray> preds)
         {
             check_label_shapes(labels, preds);
 
             for (int i = 0; i < labels.Count; i++)
             {
-                var label = labels[i].as_numerics();
-                var pred = preds[i].as_numerics();
+                var label = labels[i].AsNumerics();
+                var pred = preds[i].AsNumerics();
 
                 label = label.Flat();
-                if (label.shape[0] != pred.shape[0])
+                if (label.Shape[0] != pred.Shape[0])
                 {
                     throw new ArgumentException("label and pred shape not match");
                 }
 
-                var prob = pred[Enumerable.Range(0, (int)label.shape[0]).ToArray(), label.ToInt32().data];
+                var prob = pred[Enumerable.Range(0, (int)label.Shape[0]).ToArray(), label.ToInt32().Data];
 
-                this.sum_metric[0] += (-prob.Log()).Sum();
-                this.num_inst[0] += (int)label.shape[0];
+                this.SumMetric[0] += (-prob.Log()).Sum();
+                this.NumInst[0] += (int)label.Shape[0];
             }
         }
     }

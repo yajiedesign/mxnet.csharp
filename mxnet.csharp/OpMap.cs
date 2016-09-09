@@ -16,37 +16,37 @@ namespace mxnet.csharp
         /// </summary>
         public OpMap()
         {
-            uint num_symbol_creators = 0;
-            IntPtr symbol_creators_ptr;
+            uint numSymbolCreators = 0;
+            IntPtr symbolCreatorsPtr;
      
-            int r =  NativeMethods.MXSymbolListAtomicSymbolCreators(out num_symbol_creators,out symbol_creators_ptr);
+            int r =  NativeMethods.MXSymbolListAtomicSymbolCreators(out numSymbolCreators,out symbolCreatorsPtr);
             Util.Assert(r == 0);
-            AtomicSymbolCreator[] symbol_creators = new AtomicSymbolCreator[num_symbol_creators];
-            Marshal.Copy(symbol_creators_ptr, symbol_creators, 0, (int)num_symbol_creators);
+            AtomicSymbolCreator[] symbolCreators = new AtomicSymbolCreator[numSymbolCreators];
+            Marshal.Copy(symbolCreatorsPtr, symbolCreators, 0, (int)numSymbolCreators);
 
-            for (int i = 0; i < num_symbol_creators; i++)
+            for (int i = 0; i < numSymbolCreators; i++)
             {
-                IntPtr name_ptr;
-                IntPtr description_ptr;
-                uint num_args = 0;
-                IntPtr arg_names_ptr;
-                IntPtr arg_type_infos_ptr;
-                IntPtr arg_descriptions_ptr;
-                IntPtr key_var_num_args_ptr;
-                IntPtr return_type_ptr;
-                r = NativeMethods.MXSymbolGetAtomicSymbolInfo(symbol_creators[i],
-                out name_ptr,
-                out description_ptr,
-                out num_args,
-                out arg_names_ptr,
-                out arg_type_infos_ptr,
-                out arg_descriptions_ptr,
-                out key_var_num_args_ptr,
-                out return_type_ptr);
+                IntPtr namePtr;
+                IntPtr descriptionPtr;
+                uint numArgs = 0;
+                IntPtr argNamesPtr;
+                IntPtr argTypeInfosPtr;
+                IntPtr argDescriptionsPtr;
+                IntPtr keyVarNumArgsPtr;
+                IntPtr returnTypePtr;
+                r = NativeMethods.MXSymbolGetAtomicSymbolInfo(symbolCreators[i],
+                out namePtr,
+                out descriptionPtr,
+                out numArgs,
+                out argNamesPtr,
+                out argTypeInfosPtr,
+                out argDescriptionsPtr,
+                out keyVarNumArgsPtr,
+                out returnTypePtr);
                 Util.Assert(r == 0);
 
-                string name = Marshal.PtrToStringAnsi(name_ptr);
-                _symbol_creators_[name] = symbol_creators[i];
+                string name = Marshal.PtrToStringAnsi(namePtr);
+                _symbolCreators[name] = symbolCreators[i];
             }
         }
 
@@ -58,10 +58,10 @@ namespace mxnet.csharp
         */
         public AtomicSymbolCreator GetSymbolCreator(string name)
         {
-            return _symbol_creators_[name];
+            return _symbolCreators[name];
         }
 
 
-        readonly Dictionary<string, AtomicSymbolCreator> _symbol_creators_ = new Dictionary<string, AtomicSymbolCreator>();
+        readonly Dictionary<string, AtomicSymbolCreator> _symbolCreators = new Dictionary<string, AtomicSymbolCreator>();
     }
 }

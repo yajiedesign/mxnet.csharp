@@ -15,17 +15,17 @@ namespace mxnet.numerics.nbase
     {
         private static readonly TC Calculator = new TC();
 
-        private Shape _storage_shape;
-        public Shape shape { get; protected set; }
+        private Shape _storageShape;
+        public Shape Shape { get; protected set; }
 
-        protected T[] storage;
+        protected T[] Storage;
         private Slice[] _slice;
 
-        public T[] data => SilceGetData(_slice);
+        public T[] Data => SilceGetData(_slice);
 
         public GCHandle GetDataGcHandle()
         {
-          return  GCHandle.Alloc(storage, GCHandleType.Pinned);
+          return  GCHandle.Alloc(Storage, GCHandleType.Pinned);
         }
 
         public NArray()
@@ -40,35 +40,35 @@ namespace mxnet.numerics.nbase
         public NArray(Shape shape, T[] data)
         {
             Init(shape);
-            Array.Copy(data, storage, Math.Min(data.Length, storage.Length));
+            Array.Copy(data, Storage, Math.Min(data.Length, Storage.Length));
         }
         /// <summary>
         /// init with zero cpoy
         /// </summary>
-        /// <param name="shape_input"></param>
-        /// <param name="data_input"></param>
+        /// <param name="shapeInput"></param>
+        /// <param name="dataInput"></param>
 
-        private void Init(Shape shape_input, T[] data_input =null)
+        private void Init(Shape shapeInput, T[] dataInput =null)
         {
-            this.shape = new Shape(shape_input);
-            this._storage_shape = this.shape;
-            storage = data_input ?? new T[this.shape.size];
-            _slice = Slice.FromShape(this.shape.data);
+            this.Shape = new Shape(shapeInput);
+            this._storageShape = this.Shape;
+            Storage = dataInput ?? new T[this.Shape.Size];
+            _slice = Slice.FromShape(this.Shape.Data);
         }
 
 
         private TOut SliceToTout(Slice[] slice)
         {
-            var src_dim = shape.data;
-            var tslice = slice.Select((x, i) => x.Translate(src_dim[i])).ToArray();
-            var dst_dim_temp = tslice.Select(s => (uint)s.size).ToArray();
-            var dst_dim = (uint[])src_dim.Clone();
-            Array.Copy(dst_dim_temp, dst_dim, dst_dim_temp.Length);
+            var srcDim = Shape.Data;
+            var tslice = slice.Select((x, i) => x.Translate(srcDim[i])).ToArray();
+            var dstDimTemp = tslice.Select(s => (uint)s.Size).ToArray();
+            var dstDim = (uint[])srcDim.Clone();
+            Array.Copy(dstDimTemp, dstDim, dstDimTemp.Length);
 
             var ret = new TOut();
-            ret._storage_shape = this._storage_shape;
-            ret.shape = new Shape(dst_dim);
-            ret.storage = storage;
+            ret._storageShape = this._storageShape;
+            ret.Shape = new Shape(dstDim);
+            ret.Storage = Storage;
 
             ret._slice = _slice.Zip(tslice, (l, r) => l.SubSlice(r))
                 .Concat(_slice.Skip(tslice.Count())).ToArray();
@@ -81,81 +81,81 @@ namespace mxnet.numerics.nbase
 
         private void SilceSetData(TOut value, params Slice[] slice)
         {
-            if (shape != value.shape)
+            if (Shape != value.Shape)
             {
                 throw new ArgumentException("shape not match");
             }
-            var src_dim = _storage_shape.data;
-            var dst_dim = value.shape.data;
+            var srcDim = _storageShape.Data;
+            var dstDim = value.Shape.Data;
 
-            ArrayCopy(storage, value.data, 0, storage.Length, 0, 0,
-                slice, src_dim, dst_dim, true);
+            ArrayCopy(Storage, value.Data, 0, Storage.Length, 0, 0,
+                slice, srcDim, dstDim, true);
 
         }
 
         private T[] SilceGetData(params Slice[] slice)
         {
-            var src_dim = _storage_shape.data;
+            var srcDim = _storageShape.Data;
             var tslice = slice;
-            var dst_dim = shape.data;
+            var dstDim = Shape.Data;
 
 
-            var ret_vshape = new Shape(dst_dim);
-            var local_storage = new T[ret_vshape.size];
-            ArrayCopy(storage, local_storage, 0, storage.Length, 0, local_storage.Length,
-                tslice, src_dim,
-                dst_dim);
-            return local_storage;
+            var retVshape = new Shape(dstDim);
+            var localStorage = new T[retVshape.Size];
+            ArrayCopy(Storage, localStorage, 0, Storage.Length, 0, localStorage.Length,
+                tslice, srcDim,
+                dstDim);
+            return localStorage;
         }
 
         static void ArrayCopy(T[] src, T[] dst, 
-            int src_start, int src_end, 
-            int dst_start, int dst_end,
-            Slice[] slice, uint[] src_dim,
-            uint[] dst_dim ,bool copytosrc =false
+            int srcStart, int srcEnd, 
+            int dstStart, int dstEnd,
+            Slice[] slice, uint[] srcDim,
+            uint[] dstDim ,bool copytosrc =false
             )
         {
-            var first_slice = slice.FirstOrDefault();
-            if (first_slice != null)
+            var firstSlice = slice.FirstOrDefault();
+            if (firstSlice != null)
             {
-                int src_pad = CalcPad(src_dim.Skip(1).ToArray());
-                int dst_index = 0;
-                var dst_pad = CalcPad(dst_dim.Skip(1).ToArray());
-                for (var i = first_slice.start;
+                int srcPad = CalcPad(srcDim.Skip(1).ToArray());
+                int dstIndex = 0;
+                var dstPad = CalcPad(dstDim.Skip(1).ToArray());
+                for (var i = firstSlice.Start;
         
-                    ((first_slice.step > 0) ? (i < first_slice.end) : (i > first_slice.end));
-                    i += first_slice.step)
+                    ((firstSlice.Step > 0) ? (i < firstSlice.End) : (i > firstSlice.End));
+                    i += firstSlice.Step)
                 {
                     ArrayCopy(src, dst,
-                        src_start + i * src_pad,
-                        src_start + (i + 1) * src_pad,
-                        dst_start + dst_index * dst_pad,
-                        dst_start + (dst_index + 1) * dst_pad,
+                        srcStart + i * srcPad,
+                        srcStart + (i + 1) * srcPad,
+                        dstStart + dstIndex * dstPad,
+                        dstStart + (dstIndex + 1) * dstPad,
                         slice.Skip(1).ToArray(),
-                        src_dim.Skip(1).ToArray(),
-                        dst_dim.Skip(1).ToArray(),
+                        srcDim.Skip(1).ToArray(),
+                        dstDim.Skip(1).ToArray(),
                         copytosrc);
-                    dst_index++;
+                    dstIndex++;
                 }
             }
             else
             {
                 if (!copytosrc)
                 {
-                    Array.Copy(src, src_start, dst, dst_start, dst_end - dst_start);
+                    Array.Copy(src, srcStart, dst, dstStart, dstEnd - dstStart);
                 }
                 else
                 {
-                    Array.Copy(dst, dst_start, src, src_start,  dst_end - dst_start);
+                    Array.Copy(dst, dstStart, src, srcStart,  dstEnd - dstStart);
                 }
          
             }
         }
 
 
-        private static int CalcPad(uint[] src_dim)
+        private static int CalcPad(uint[] srcDim)
         {
-            return (int)src_dim.Aggregate((long)1, (l, r) => l * r);
+            return (int)srcDim.Aggregate((long)1, (l, r) => l * r);
         }
 
         public virtual TOut this[params Slice[] slice]
@@ -185,13 +185,13 @@ namespace mxnet.numerics.nbase
                 }
 
 
-                var getshape = new Shape(new uint[] { 1} .Concat(shape.data.Skip(indexs.Length)).ToArray());
+                var getshape = new Shape(new uint[] { 1} .Concat(Shape.Data.Skip(indexs.Length)).ToArray());
 
 
                 var ret = new TOut();
                 ret.Init(new Shape(
                     new uint[]{(uint) indexs[0].Length }  
-                    .Concat(shape.data.Skip(indexs.Length)).ToArray()
+                    .Concat(Shape.Data.Skip(indexs.Length)).ToArray()
                     ));
                 var count = indexs.First().Length;
 
@@ -210,12 +210,12 @@ namespace mxnet.numerics.nbase
             get
             {
                 var retindex = GetIndexWithScalar(indexs);
-                return storage[retindex];
+                return Storage[retindex];
             }
             set
             {
                 var retindex = GetIndexWithScalar(indexs);
-                storage[retindex] = value;
+                Storage[retindex] = value;
             }
         }
 
@@ -224,15 +224,15 @@ namespace mxnet.numerics.nbase
         private int GetIndexWithScalar(int[] indexs)
         {
             int retindex = 0;
-            var src_dim = shape.data;
+            var srcDim = Shape.Data;
             for (int i = 0; i < indexs.Length; i++)
             {
                 var index = indexs[i];
                 var s = _slice[i];
-                int src_pad = CalcPad(src_dim.Skip(i + 1).ToArray());
+                int srcPad = CalcPad(srcDim.Skip(i + 1).ToArray());
 
-                index = s.step > 0 ? s.start + index : s.start - index;
-                retindex += (index*src_pad);
+                index = s.Step > 0 ? s.Start + index : s.Start - index;
+                retindex += (index*srcPad);
             }
             return retindex;
         }
@@ -246,13 +246,13 @@ namespace mxnet.numerics.nbase
         public TOut Flat()
         {
             var ret = new TOut();
-            ret.Init(new Shape(shape.size), data);
+            ret.Init(new Shape(Shape.Size), Data);
             return ret;
         }
 
         public TOut Compare(NArray<T, TC, TOut> other)
         {
-            if (shape != other.shape)
+            if (Shape != other.Shape)
             {
                 TOut retfalse = new TOut();
                 retfalse.Init(new Shape(1), new T[] {(T) Convert.ChangeType(0, typeof(T))});
@@ -261,20 +261,20 @@ namespace mxnet.numerics.nbase
 
 
             TOut ret = new TOut();
-            ret.Init(shape, this.storage
-                .Select((x, i) => Calculator.Compare(x, other.storage[i])).ToArray());
+            ret.Init(Shape, this.Storage
+                .Select((x, i) => Calculator.Compare(x, other.Storage[i])).ToArray());
             return ret;
         }
 
 
-        public TOut ReShape(Shape shape_input)
+        public TOut ReShape(Shape shapeInput)
         {
-            if (shape_input.size != shape.size)
+            if (shapeInput.Size != Shape.Size)
             {
                 throw new ArgumentException("size mistake");
             }
             TOut ret = new TOut();
-            ret.Init(shape_input, data);
+            ret.Init(shapeInput, Data);
             return ret;
         }
 
@@ -282,38 +282,38 @@ namespace mxnet.numerics.nbase
 
         public T Sum()
         {
-            return Calculator.Sum(data);
+            return Calculator.Sum(Data);
         }
 
-        private static void Argmax(NArray<T, TC, TOut> src,TOut dst, uint[] src_dim, int dimindex, int axis ,  List<Slice> src_slice, List<int> dst_index)
+        private static void Argmax(NArray<T, TC, TOut> src,TOut dst, uint[] srcDim, int dimindex, int axis ,  List<Slice> srcSlice, List<int> dstIndex)
         {
-            if (dimindex < src_dim.Length)
+            if (dimindex < srcDim.Length)
             {
-                src_slice.Add(0);
+                srcSlice.Add(0);
                 if (axis == dimindex)
                 {
-                    src_slice[dimindex] = ":";
-                    Argmax(src, dst, src_dim, dimindex + 1, axis, src_slice, dst_index);
+                    srcSlice[dimindex] = ":";
+                    Argmax(src, dst, srcDim, dimindex + 1, axis, srcSlice, dstIndex);
                 }
                 else
                 {
-                    dst_index.Add(0);
-                    var dst_index_last = dst_index.Count - 1;
-                    var current_dim = src_dim[dimindex];
+                    dstIndex.Add(0);
+                    var dstIndexLast = dstIndex.Count - 1;
+                    var currentDim = srcDim[dimindex];
 
-                    for (int i = 0; i < current_dim; i++)
+                    for (int i = 0; i < currentDim; i++)
                     {
-                        src_slice[dimindex] = i;
-                        dst_index[dst_index_last] = i;
-                        Argmax(src, dst, src_dim, dimindex + 1, axis, src_slice, dst_index);
+                        srcSlice[dimindex] = i;
+                        dstIndex[dstIndexLast] = i;
+                        Argmax(src, dst, srcDim, dimindex + 1, axis, srcSlice, dstIndex);
                     }
-                    dst_index.RemoveAt(dst_index.Count - 1);
+                    dstIndex.RemoveAt(dstIndex.Count - 1);
                 }
-                src_slice.RemoveAt(src_slice.Count - 1);
+                srcSlice.RemoveAt(srcSlice.Count - 1);
             }
             else
             {
-                dst[dst_index.ToArray()] =(T)Convert.ChangeType( src[src_slice.ToArray()].Argmax(),typeof(T));
+                dst[dstIndex.ToArray()] =(T)Convert.ChangeType( src[srcSlice.ToArray()].Argmax(),typeof(T));
             }
 
         }
@@ -321,32 +321,32 @@ namespace mxnet.numerics.nbase
         public int Argmax()
         {
 
-            return Calculator.Argmax(data);
+            return Calculator.Argmax(Data);
 
         }
 
         public TOut Argmax(int axis )
         {
-            var src_dim = shape.data.ToList();
-            src_dim.RemoveAt(axis);
+            var srcDim = Shape.Data.ToList();
+            srcDim.RemoveAt(axis);
             TOut ret = new TOut();
-            ret.Init(new Shape(src_dim.ToArray()));
-            List<Slice> src_slice = new List<Slice>();
-            List<int> dst_index = new List<int>();
-            Argmax(this, ret, shape.data, 0, axis, src_slice, dst_index);
+            ret.Init(new Shape(srcDim.ToArray()));
+            List<Slice> srcSlice = new List<Slice>();
+            List<int> dstIndex = new List<int>();
+            Argmax(this, ret, Shape.Data, 0, axis, srcSlice, dstIndex);
             return ret;
         }
 
         public TOut Log()
         {
             TOut ret = new TOut();
-            ret.Init(shape, Calculator.Log(data));
+            ret.Init(Shape, Calculator.Log(Data));
             return ret;
         }
 
         public T Mean()
         {
-            return Calculator.Mean(data);
+            return Calculator.Mean(Data);
         }
 
         #endregion

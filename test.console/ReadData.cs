@@ -14,23 +14,23 @@ namespace test.console
 
     class DataBatch: IDataBatch
     {
-        public string bucket_key { get; }
+        public string BucketKey { get; }
 
-        public List<NDArray> data { get; }
+        public List<NdArray> Data { get; }
 
-        public List<NDArray> label{ get; }
-        public int pad { get; }
+        public List<NdArray> Label{ get; }
+        public int Pad { get; }
 
 
-        public DataBatch(List<NDArray> datas, List<NDArray> labels)
+        public DataBatch(List<NdArray> datas, List<NdArray> labels)
         {
-            this.data = datas;
-            this.label = labels;
-            this.pad = 0;
+            this.Data = datas;
+            this.Label = labels;
+            this.Pad = 0;
         }
 
-        public Dictionary<string, Shape> provide_data { get; }
-        public Dictionary<string, Shape> provide_label { get; }
+        public Dictionary<string, Shape> ProvideData { get; }
+        public Dictionary<string, Shape> ProvideLabel { get; }
     }
 
 
@@ -44,7 +44,7 @@ namespace test.console
             _path = path;
             _batch_size = batch_size;
 
-            provide_data = new Dictionary<string, Shape>
+            ProvideData = new Dictionary<string, Shape>
             {
                 {"data", new Shape((uint) _batch_size, 3, 60, 20)}
             };
@@ -52,14 +52,14 @@ namespace test.console
 
             if (is_predict)
             {
-                provide_data = new Dictionary<string, Shape>
+                ProvideData = new Dictionary<string, Shape>
                 {
                     {"data", new Shape((uint) _batch_size, 3, 60, 20)},
                     {"softmax_label", new Shape((uint) _batch_size, 4)}
                 };
             }
 
-            provide_label = new Dictionary<string, Shape>
+            ProvideLabel = new Dictionary<string, Shape>
             {
                 {"softmax_label", new Shape((uint) _batch_size, 4)}
             };
@@ -103,8 +103,8 @@ namespace test.console
                     // labels.Add(new NDArray(label, new Shape((uint)_batchSize, 4)));
 
                 }
-                var data_all = new List<NDArray> { new NDArray(datas.ToArray(), new Shape((uint)_batch_size, 3, 60, 20)) };
-                var label_all = new List<NDArray> { new NDArray(labels.ToArray(), new Shape((uint)_batch_size, 4)) };
+                var data_all = new List<NdArray> { new NdArray(datas.ToArray(), new Shape((uint)_batch_size, 3, 60, 20)) };
+                var label_all = new List<NdArray> { new NdArray(labels.ToArray(), new Shape((uint)_batch_size, 4)) };
                 //   data_all.First().SetValue(3);
                 // label_all.First().SetValue(3);
                 yield return new DataBatch(data_all, label_all);
@@ -146,12 +146,12 @@ namespace test.console
             return GetEnumerator();
         }
 
-        public string default_bucket_key { get; set; }
+        public string DefaultBucketKey { get; set; }
 
-        public Dictionary<string, Shape> provide_data { get; set; }
-        public Dictionary<string, Shape> provide_label { get; set; }
+        public Dictionary<string, Shape> ProvideData { get; set; }
+        public Dictionary<string, Shape> ProvideLabel { get; set; }
 
-        public int batch_size { get { return _batch_size; } }
+        public int BatchSize { get { return _batch_size; } }
         public void Reset()
         {
       

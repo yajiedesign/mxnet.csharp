@@ -11,7 +11,7 @@ using NDArrayHandle = System.IntPtr;
 
 namespace mxnet.csharp
 {
-    public class KVStoreBlob : IDisposable
+    public class KvStoreBlob : IDisposable
     {
 
         /// <summary>
@@ -21,22 +21,22 @@ namespace mxnet.csharp
         /// construct with SymbolHandle to store
         /// </summary>
         /// <param name="handle"></param>
-        public KVStoreBlob(KVStoreHandle handle)
+        public KvStoreBlob(KVStoreHandle handle)
 
         {
-            this.handle = handle;
+            this.Handle = handle;
         }
         /// <summary>
         /// destructor, free the SymbolHandle
         /// </summary>
-        ~KVStoreBlob()
+        ~KvStoreBlob()
         {
             Dispose(false);
         }
 
         private void Dispose(bool disposing)
         {
-            NativeMethods.MXKVStoreFree(handle);
+            NativeMethods.MXKVStoreFree(Handle);
             if (disposing)
             {
                 GC.SuppressFinalize(this);
@@ -52,147 +52,147 @@ namespace mxnet.csharp
         /// <summary>
         /// the SymbolHandle to store
         /// </summary>
-        public KVStoreHandle handle { get; }
+        public KVStoreHandle Handle { get; }
     }
-    class KVStore
+    class KvStore
     {
-        private readonly KVStoreBlob _blob_ptr;
-        private static KVStore _kvstore;
+        private readonly KvStoreBlob _blobPtr;
+        private static KvStore _kvstore;
         private readonly string _kvtype;
-        private MXKVStoreUpdater _updater_func;
+        private MxkvStoreUpdater _updaterFunc;
 
-        public KVStore(string name)
+        public KvStore(string name)
         {
-            KVStoreHandle handle_;
-            Util.CallCheck(NativeMethods.MXKVStoreCreate(name, out handle_));
+            KVStoreHandle handle;
+            Util.CallCheck(NativeMethods.MXKVStoreCreate(name, out handle));
             _kvtype = name;
-            _blob_ptr = new KVStoreBlob(handle_);
+            _blobPtr = new KvStoreBlob(handle);
         }
 
 
-        public void Init(int key, NDArray val)
+        public void Init(int key, NdArray val)
         {
-            NDArrayHandle val_handle = val.get_handle();
-            Util.CallCheck(NativeMethods.MXKVStoreInit(_blob_ptr.handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }));
+            NDArrayHandle valHandle = val.Handle;
+            Util.CallCheck(NativeMethods.MXKVStoreInit(_blobPtr.Handle, 1, new int[] { key }, new NDArrayHandle[] { valHandle }));
         }
 
-        public void Init(List<int> keys, List<NDArray> vals)
+        public void Init(List<int> keys, List<NdArray> vals)
         {
             Util.Assert(keys.Count == vals.Count);
-            List<NDArrayHandle> val_handles = new List<NDArrayHandle>(vals.Count);
-            val_handles.AddRange(vals.Select(s => s.get_handle()));
-            Util.CallCheck(NativeMethods.MXKVStoreInit(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray()));
+            List<NDArrayHandle> valHandles = new List<NDArrayHandle>(vals.Count);
+            valHandles.AddRange(vals.Select(s => s.Handle));
+            Util.CallCheck(NativeMethods.MXKVStoreInit(_blobPtr.Handle, (uint)keys.Count, keys.ToArray(), valHandles.ToArray()));
         }
 
-        public void Push(int key, NDArray val, int priority)
+        public void Push(int key, NdArray val, int priority)
         {
-            NDArrayHandle val_handle = val.get_handle();
-            Util.CallCheck(NativeMethods.MXKVStorePush(_blob_ptr.handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }, priority));
+            NDArrayHandle valHandle = val.Handle;
+            Util.CallCheck(NativeMethods.MXKVStorePush(_blobPtr.Handle, 1, new int[] { key }, new NDArrayHandle[] { valHandle }, priority));
         }
 
-        public void Push(int key, List<NDArray> val, int priority)
+        public void Push(int key, List<NdArray> val, int priority)
         {
             var keys = Enumerable.Repeat(key, val.Count).ToList();
             Push(keys, val, priority);
         }
 
-        public void Push(List<int> keys, List<NDArray> vals, int priority)
+        public void Push(List<int> keys, List<NdArray> vals, int priority)
         {
             Util.Assert(keys.Count == vals.Count);
-            List<NDArrayHandle> val_handles = new List<NDArrayHandle>(vals.Count);
-            val_handles.AddRange(vals.Select(s => s.get_handle()));
+            List<NDArrayHandle> valHandles = new List<NDArrayHandle>(vals.Count);
+            valHandles.AddRange(vals.Select(s => s.Handle));
 
-            Util.CallCheck(NativeMethods.MXKVStorePush(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray(), priority));
+            Util.CallCheck(NativeMethods.MXKVStorePush(_blobPtr.Handle, (uint)keys.Count, keys.ToArray(), valHandles.ToArray(), priority));
         }
 
-        public void Pull(int key, NDArray @out, int priority)
+        public void Pull(int key, NdArray @out, int priority)
         {
-            NDArrayHandle out_handle = @out.get_handle();
-            Util.CallCheck(NativeMethods.MXKVStorePull(_blob_ptr.handle, 1, new[] { key }, new[] { out_handle }, priority));
+            NDArrayHandle outHandle = @out.Handle;
+            Util.CallCheck(NativeMethods.MXKVStorePull(_blobPtr.Handle, 1, new[] { key }, new[] { outHandle }, priority));
         }
 
-        public void Pull(int key, List<NDArray> outs, int priority)
+        public void Pull(int key, List<NdArray> outs, int priority)
         {
             var keys = Enumerable.Repeat(key, outs.Count).ToList();
             Pull(keys, outs, priority);
         }
 
-        public void Pull(List<int> keys, List<NDArray> outs, int priority)
+        public void Pull(List<int> keys, List<NdArray> outs, int priority)
         {
             Util.Assert(keys.Count == outs.Count);
 
-            List<NDArrayHandle> out_handles = new List<NDArrayHandle>(keys.Count);
-            out_handles.AddRange(outs.Select(s => s.get_handle()));
-            Util.CallCheck(NativeMethods.MXKVStorePull(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), out_handles.ToArray(), priority));
+            List<NDArrayHandle> outHandles = new List<NDArrayHandle>(keys.Count);
+            outHandles.AddRange(outs.Select(s => s.Handle));
+            Util.CallCheck(NativeMethods.MXKVStorePull(_blobPtr.Handle, (uint)keys.Count, keys.ToArray(), outHandles.ToArray(), priority));
         }
 
 
 
-        public void set_optimizer(Optimizer optimizer)
+        public void SetOptimizer(Optimizer optimizer)
         {
 
 
-            int is_worker;
-            Util.CallCheck(NativeMethods.MXKVStoreIsWorkerNode(out is_worker));
+            int isWorker;
+            Util.CallCheck(NativeMethods.MXKVStoreIsWorkerNode(out isWorker));
 
 
-            if (_kvtype.Contains("dist") && is_worker != 0)
+            if (_kvtype.Contains("dist") && isWorker != 0)
             {
-                Util.CallCheck(NativeMethods.MXKVStoreSendCommmandToServers(_blob_ptr.handle, 0, optimizer.Serialize()));
+                Util.CallCheck(NativeMethods.MXKVStoreSendCommmandToServers(_blobPtr.Handle, 0, optimizer.Serialize()));
             }
             else
             {
-                this._set_updater(Optimizer.get_updater(optimizer));
+                this._set_updater(Optimizer.GetUpdater(optimizer));
             }
         }
 
-        private static MXKVStoreUpdater _updater_wrapper(Action<int, NDArray, NDArray> updater)
+        private static MxkvStoreUpdater _updater_wrapper(Action<int, NdArray, NdArray> updater)
         {
 
             return (key, recv, local, handle) =>
             {
-                var lhs = new NDArray(recv);
-                var rhs = new NDArray(local);
+                var lhs = new NdArray(recv);
+                var rhs = new NdArray(local);
                 updater(key, lhs, rhs);
             };
         }
 
-        private void _set_updater(Action<int, NDArray, NDArray> updater)
+        private void _set_updater(Action<int, NdArray, NdArray> updater)
         {
-            this._updater_func = _updater_wrapper(updater);
+            this._updaterFunc = _updater_wrapper(updater);
 
-            Util.CallCheck(NativeMethods.MXKVStoreSetUpdater(_blob_ptr.handle, this._updater_func, IntPtr.Zero));
+            Util.CallCheck(NativeMethods.MXKVStoreSetUpdater(_blobPtr.Handle, this._updaterFunc, IntPtr.Zero));
 
         }
 
-        public string type
+        public string Type
         {
             get
             {
-                IntPtr type_ptr;
-                Util.CallCheck(NativeMethods.MXKVStoreGetType(_blob_ptr.handle, out type_ptr));
+                IntPtr typePtr;
+                Util.CallCheck(NativeMethods.MXKVStoreGetType(_blobPtr.Handle, out typePtr));
                 // type is managed by handle_, no need to free its memory.
-                return Marshal.PtrToStringAnsi(type_ptr);
+                return Marshal.PtrToStringAnsi(typePtr);
             }
         }
 
         public int GetRank()
         {
             int rank;
-            Util.CallCheck(NativeMethods.MXKVStoreGetRank(_blob_ptr.handle, out rank));
+            Util.CallCheck(NativeMethods.MXKVStoreGetRank(_blobPtr.Handle, out rank));
             return rank;
         }
 
         public int GetNumWorkers()
         {
-            int num_workers;
-            Util.CallCheck(NativeMethods.MXKVStoreGetGroupSize(_blob_ptr.handle, out num_workers));
-            return num_workers;
+            int numWorkers;
+            Util.CallCheck(NativeMethods.MXKVStoreGetGroupSize(_blobPtr.Handle, out numWorkers));
+            return numWorkers;
         }
 
         public void Barrier()
         {
-            Util.CallCheck(NativeMethods.MXKVStoreBarrier(_blob_ptr.handle));
+            Util.CallCheck(NativeMethods.MXKVStoreBarrier(_blobPtr.Handle));
         }
 
         public string GetRole()

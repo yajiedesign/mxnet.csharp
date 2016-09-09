@@ -7,28 +7,28 @@ using mxnet.numerics.single;
 
 namespace mxnet.csharp.metric
 {
-    class MAE : EvalMetric
+    class Mae : EvalMetric
     {
-        public MAE() : base("mas", 1)
+        public Mae() : base("mas", 1)
         {
 
         }
 
-        public override void Update(List<NDArray> labels, List<NDArray> preds)
+        public override void Update(List<NdArray> labels, List<NdArray> preds)
         {
             check_label_shapes(labels, preds);
             for (int i = 0; i < labels.Count; i++)
             {
-                var label = labels[i].as_numerics();
-                var pred = preds[i].as_numerics();
+                var label = labels[i].AsNumerics();
+                var pred = preds[i].AsNumerics();
 
-                if (label.shape.ndim == 1)
+                if (label.Shape.Ndim == 1)
                 {
-                    label = label.ReShape(new mxnet.numerics.nbase.Shape(label.shape[0], 1));
+                    label = label.ReShape(new mxnet.numerics.nbase.Shape(label.Shape[0], 1));
                 }
 
-                this.sum_metric[0] += (float)SingleNArray.Abs((label - pred)).Mean();
-                this.num_inst[0] += 1;
+                this.SumMetric[0] += (float)SingleNArray.Abs((label - pred)).Mean();
+                this.NumInst[0] += 1;
             }
         }
     }

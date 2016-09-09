@@ -11,17 +11,17 @@ namespace mxnet.csharp.metric
         {
         }
 
-        public override void Update(List<NDArray> labels, List<NDArray> preds)
+        public override void Update(List<NdArray> labels, List<NdArray> preds)
         {
             check_label_shapes(labels, preds);
 
             for (int i = 0; i < labels.Count; i++)
             {
-                var pred_label = preds[i].argmax_channel().as_numerics().ToInt32();
-                var label = labels[i].as_numerics().ToInt32();
+                var predLabel = preds[i].ArgmaxChannel().AsNumerics().ToInt32();
+                var label = labels[i].AsNumerics().ToInt32();
                 //var t = (pred_label.Flat().Compare(label.Flat())).Data.ToArray();
-                this.sum_metric[0] += (pred_label.Flat().Compare(label.Flat())).Sum();
-                this.num_inst[0] += pred_label.Flat().data.Count();
+                this.SumMetric[0] += (predLabel.Flat().Compare(label.Flat())).Sum();
+                this.NumInst[0] += predLabel.Flat().Data.Count();
             }
         }
 

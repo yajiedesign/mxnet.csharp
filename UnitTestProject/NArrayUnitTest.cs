@@ -15,24 +15,24 @@ namespace UnitTestProject
     {
         public Parameter(string key, string shape, T[] value)
         {
-            this.key = key;
-            this.shape = shape;
-            this.value = value;
+            this.Key = key;
+            this.Shape = shape;
+            this.Value = value;
         }
 
-        public string key { get; set; }
+        public string Key { get; set; }
 
-        public string shape { get; set; }
+        public string Shape { get; set; }
 
-        public T[] value { get; set; }
+        public T[] Value { get; set; }
 
         public static IDictionary Convert(object obj)
         {
             var o = obj as Parameter<T>;
 
             Dictionary<string, object> ret = new Dictionary<string, object>();
-            ret.Add(nameof(shape), o.shape);
-            ret.Add(nameof(value), o.value);
+            ret.Add(nameof(Shape), o.Shape);
+            ret.Add(nameof(Value), o.Value);
             return ret;
         }
     }
@@ -46,14 +46,14 @@ namespace UnitTestProject
 
         private List<T> eval_array<T>(string code, params Parameter<T>[] param)
         {
-            var dict = param.ToDictionary(k => k.key, v => v);
+            var dict = param.ToDictionary(k => k.Key, v => v);
             object result = _testserver.call("run", "eval_array", code, dict);
             return ((List<object>) result).Select(s => (T) Convert.ChangeType(s, typeof(T))).ToList();
         }
 
         private T eval_scalar<T>(string code, params Parameter<T>[] param)
         {
-            var dict = param.ToDictionary(k => k.key, v => v);
+            var dict = param.ToDictionary(k => k.Key, v => v);
             object result = _testserver.call("run", "eval_scalar", code, dict);
             return (T) Convert.ChangeType(result, typeof(T));
         }
@@ -84,41 +84,41 @@ namespace UnitTestProject
             string testshape = "(10,4,5,5)";
             SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 4, 5, 5), test);
 
-            List<float> test1_np_result = eval_array<float>("arr[:,::-1,::2,::-2]",
+            List<float> test1NpResult = eval_array<float>("arr[:,::-1,::2,::-2]",
                 new Parameter<float>("arr", testshape, test));
-            var test1_result = testsingle[":", "::-1", "::2", "::-2"];
-            CollectionAssert.AreEqual(test1_np_result, test1_result.Flat().data, "1");
+            var test1Result = testsingle[":", "::-1", "::2", "::-2"];
+            CollectionAssert.AreEqual(test1NpResult, test1Result.Flat().Data, "1");
 
-            List<float> test2_np_result = eval_array<float>("arr[1:9:1,1:3:2,9:1:-1,3::-1]",
+            List<float> test2NpResult = eval_array<float>("arr[1:9:1,1:3:2,9:1:-1,3::-1]",
                 new Parameter<float>("arr", testshape, test));
-            var test2_result = testsingle["1:9:1", "1:3:2", "9:1:-1", "3::-1"];
-            CollectionAssert.AreEqual(test2_np_result, test2_result.Flat().data, "2");
+            var test2Result = testsingle["1:9:1", "1:3:2", "9:1:-1", "3::-1"];
+            CollectionAssert.AreEqual(test2NpResult, test2Result.Flat().Data, "2");
 
-            List<float> test3_np_result = eval_array<float>("arr[1:-1,3:1:-1,:]",
+            List<float> test3NpResult = eval_array<float>("arr[1:-1,3:1:-1,:]",
                 new Parameter<float>("arr", testshape, test));
-            var test3_result = testsingle["1:-1", "3:1:-1", ":"];
-            CollectionAssert.AreEqual(test3_np_result, test3_result.Flat().data, "3");
+            var test3Result = testsingle["1:-1", "3:1:-1", ":"];
+            CollectionAssert.AreEqual(test3NpResult, test3Result.Flat().Data, "3");
 
-            List<float> test4_np_result = eval_array<float>("arr[-1:-1:3,:1:-1]",
+            List<float> test4NpResult = eval_array<float>("arr[-1:-1:3,:1:-1]",
                 new Parameter<float>("arr", testshape, test));
-            var test4_result = testsingle["-1:-1:3", ":1:-1"];
-            CollectionAssert.AreEqual(test4_np_result, test4_result.Flat().data, "4");
+            var test4Result = testsingle["-1:-1:3", ":1:-1"];
+            CollectionAssert.AreEqual(test4NpResult, test4Result.Flat().Data, "4");
 
-            List<float> test5_np_result = eval_array<float>("arr[-3:-1:3,:1:-1,:10]",
+            List<float> test5NpResult = eval_array<float>("arr[-3:-1:3,:1:-1,:10]",
                 new Parameter<float>("arr", testshape, test));
-            var test5_result = testsingle["-3:-1:3", ":1:-1", ":10"];
-            CollectionAssert.AreEqual(test5_np_result, test5_result.Flat().data, "5");
+            var test5Result = testsingle["-3:-1:3", ":1:-1", ":10"];
+            CollectionAssert.AreEqual(test5NpResult, test5Result.Flat().Data, "5");
 
 
-            List<float> test6_np_result = eval_array<float>("arr[1:5:2,10::-1,2]",
+            List<float> test6NpResult = eval_array<float>("arr[1:5:2,10::-1,2]",
                 new Parameter<float>("arr", testshape, test));
-            var test6_result = testsingle["1:5:2", "10::-1", "2"];
-            CollectionAssert.AreEqual(test6_np_result, test6_result.Flat().data, "6");
+            var test6Result = testsingle["1:5:2", "10::-1", "2"];
+            CollectionAssert.AreEqual(test6NpResult, test6Result.Flat().Data, "6");
 
 
-            var test7_np_result = eval_scalar<float>("arr[1:5][3,2,3,2]", new Parameter<float>("arr", testshape, test));
-            var test7_result = testsingle["1:5"][3,2,3,2];
-            Assert.AreEqual(test7_np_result, test7_result);
+            var test7NpResult = eval_scalar<float>("arr[1:5][3,2,3,2]", new Parameter<float>("arr", testshape, test));
+            var test7Result = testsingle["1:5"][3,2,3,2];
+            Assert.AreEqual(test7NpResult, test7Result);
 
             AssertExtension.Throws<ArgumentException>(() => testsingle["::0"].Flat());
             AssertExtension.Throws<ArgumentException>(() => testsingle["xx::0"].Flat());
@@ -132,31 +132,31 @@ namespace UnitTestProject
             string testshape = "(10,3,4,5)";
             SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
 
-            List<float> test1_np_result = eval_array<float>("arr[1::1,1:3]",
+            List<float> test1NpResult = eval_array<float>("arr[1::1,1:3]",
                 new Parameter<float>("arr", testshape, test));
-            var test1_result = testsingle["1::1", "1:3"];
-            CollectionAssert.AreEqual(test1_np_result, test1_result.Flat().data, "1");
+            var test1Result = testsingle["1::1", "1:3"];
+            CollectionAssert.AreEqual(test1NpResult, test1Result.Flat().Data, "1");
 
-            List<float> test2_np_result = eval_array<float>("arr[1::1,1:3][:2,:100,::-1]",
+            List<float> test2NpResult = eval_array<float>("arr[1::1,1:3][:2,:100,::-1]",
                 new Parameter<float>("arr", testshape, test));
-            var test2_result = testsingle["1::1", "1:3"][":2", ":100", "::-1"];
-            CollectionAssert.AreEqual(test2_np_result, test2_result.Flat().data, "2");
+            var test2Result = testsingle["1::1", "1:3"][":2", ":100", "::-1"];
+            CollectionAssert.AreEqual(test2NpResult, test2Result.Flat().Data, "2");
 
-            List<float> test3_np_result = eval_array<float>("arr[1::1,1:3][1:-1,3:1:-1,:]",
+            List<float> test3NpResult = eval_array<float>("arr[1::1,1:3][1:-1,3:1:-1,:]",
                 new Parameter<float>("arr", testshape, test));
-            var test3_result = testsingle["1::1", "1:3"]["1:-1", "3:1:-1", ":"];
-            CollectionAssert.AreEqual(test3_np_result, test3_result.Flat().data, "3");
+            var test3Result = testsingle["1::1", "1:3"]["1:-1", "3:1:-1", ":"];
+            CollectionAssert.AreEqual(test3NpResult, test3Result.Flat().Data, "3");
 
-            List<float> test4_np_result = eval_array<float>("arr[::-1,3:1:-1][-3:-1:1,:100:1]",
+            List<float> test4NpResult = eval_array<float>("arr[::-1,3:1:-1][-3:-1:1,:100:1]",
                 new Parameter<float>("arr", testshape, test));
-            var test4_result = testsingle["::-1", "3:1:-1"]["-3:-1:1", ":100:1"];
-            CollectionAssert.AreEqual(test4_np_result, test4_result.Flat().data, "4");
-            Assert.AreNotEqual(test4_result.Flat().data.Count(), 0);
+            var test4Result = testsingle["::-1", "3:1:-1"]["-3:-1:1", ":100:1"];
+            CollectionAssert.AreEqual(test4NpResult, test4Result.Flat().Data, "4");
+            Assert.AreNotEqual(test4Result.Flat().Data.Count(), 0);
 
-            List<float> test5_np_result = eval_array<float>("arr[::-1,3:1:-1][5:1:-1,100::-1,:10]",
+            List<float> test5NpResult = eval_array<float>("arr[::-1,3:1:-1][5:1:-1,100::-1,:10]",
                 new Parameter<float>("arr", testshape, test));
-            var test5_result = testsingle["::-1", "3:1:-1"]["5:1:-1", "100::-1", ":10"];
-            CollectionAssert.AreEqual(test5_np_result, test5_result.Flat().data, "5");
+            var test5Result = testsingle["::-1", "3:1:-1"]["5:1:-1", "100::-1", ":10"];
+            CollectionAssert.AreEqual(test5NpResult, test5Result.Flat().Data, "5");
         }
 
         [TestMethod]
@@ -164,12 +164,12 @@ namespace UnitTestProject
         {
             var test = Enumerable.Range(0, 10 * 3 * 4 * 5).Select(s => (float)s).ToArray();
             string testshape = "(10,3,4,5)";
-            SingleNArray testsingle = new SingleNArray(new mxnet.numerics.nbase.Shape(10, 3, 4, 5), test);
+            SingleNArray testsingle = new SingleNArray(new Shape(10, 3, 4, 5), test);
 
-            List<float> test1_np_result = eval_array<float>("arr[[1,3,5,7],[0,2,0,2]]",
+            List<float> test1NpResult = eval_array<float>("arr[[1,3,5,7],[0,2,0,2]]",
                 new Parameter<float>("arr", testshape, test));
-            var test1_result = testsingle[new int[] {1,3,5,7},new int[] {0,2,0,2}];
-            CollectionAssert.AreEqual(test1_np_result, test1_result.Flat().data, "1");
+            var test1Result = testsingle[new int[] {1,3,5,7},new int[] {0,2,0,2}];
+            CollectionAssert.AreEqual(test1NpResult, test1Result.Flat().Data, "1");
 
         }
 
@@ -184,25 +184,25 @@ namespace UnitTestProject
             SingleNArray testsingle = new SingleNArray(new Shape(10, 3, 4, 5), test);
 
 
-            var test1_np_result = eval_scalar<float>("arr[1::1,1:3].sum()", new Parameter<float>("arr", testshape, test));
-            var test1_result = testsingle["1::1", "1:3"].Sum();
-            Assert.AreEqual(test1_np_result, test1_result, "1");
+            var test1NpResult = eval_scalar<float>("arr[1::1,1:3].sum()", new Parameter<float>("arr", testshape, test));
+            var test1Result = testsingle["1::1", "1:3"].Sum();
+            Assert.AreEqual(test1NpResult, test1Result, "1");
 
 
 
-            var test2_np_result = eval_array<float>("arr.argmax(axis=0)", new Parameter<float>("arr", testshape, test));
-            var test2_result = testsingle.Argmax(0);
-            CollectionAssert.AreEqual(test2_np_result, test2_result.Flat().data, "1");
+            var test2NpResult = eval_array<float>("arr.argmax(axis=0)", new Parameter<float>("arr", testshape, test));
+            var test2Result = testsingle.Argmax(0);
+            CollectionAssert.AreEqual(test2NpResult, test2Result.Flat().Data, "1");
 
             var a = new float[] {1, 2, 3, 4};
             var b = new float[] {5, 6};
             var aarry = new SingleNArray(new Shape(2, 2),a );
             var barry = new SingleNArray(new Shape(1, 2),b);
-            var test3_np_result = eval_array<float>("np.concatenate((a,b),0)", 
+            var test3NpResult = eval_array<float>("np.concatenate((a,b),0)", 
                 new Parameter<float>("a", "(2,2)", a),
                 new Parameter<float>("b", "(1,2)", b));
-            var test3_result = SingleNArray.Concatenate(0, aarry, barry);
-            CollectionAssert.AreEqual(test3_np_result, test3_result.Flat().data, "2");
+            var test3Result = SingleNArray.Concatenate(0, aarry, barry);
+            CollectionAssert.AreEqual(test3NpResult, test3Result.Flat().Data, "2");
 
             //var test4_np_result = eval_array<float>("np.concatenate((a,b),axis = 1)",
             //new Parameter<float>("a", "(2,2)", a),

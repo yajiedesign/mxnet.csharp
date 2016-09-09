@@ -9,45 +9,45 @@ namespace mxnet.csharp
 {
     public class Monitor
     {
-        private readonly Func<NDArray, NDArray> _stat_func;
+        private readonly Func<NdArray, NdArray> _statFunc;
         private int _interval;
         private readonly bool _activated;
-        private readonly List<Tuple<int, string, NDArray>> _queue;
+        private readonly List<Tuple<int, string, NdArray>> _queue;
         private readonly int _step;
         private readonly List<Executor> _exes;
-        private readonly Regex _re_prog;
+        private readonly Regex _reProg;
         private bool _sort;
 
 
-        NDArray asum_stat(NDArray x)
+        NdArray asum_stat(NdArray x)
         {
             //TODO  return ndarray.norm(x)/Math.Sqrt(x.size());
             return x;
         }
 
-        public void stat_helper(string name, IntPtr array_ptr, IntPtr param2)
+        public void StatHelper(string name, IntPtr arrayPtr, IntPtr param2)
         {
-            if (!this._activated || !this._re_prog.IsMatch(name))
+            if (!this._activated || !this._reProg.IsMatch(name))
             {
                 return;
             }
 
-            var array = new NDArray(array_ptr, writable: false);
-            this._queue.Add(Tuple.Create(this._step, name, this._stat_func(array)));
+            var array = new NdArray(arrayPtr, writable: false);
+            this._queue.Add(Tuple.Create(this._step, name, this._statFunc(array)));
         }
-        public Monitor(int interval, Func<NDArray, NDArray> stat_func = null, string pattern = ".*", bool sort = false)
+        public Monitor(int interval, Func<NdArray, NdArray> statFunc = null, string pattern = ".*", bool sort = false)
         {
-            if (stat_func == null)
+            if (statFunc == null)
             {
-                stat_func = asum_stat;
+                statFunc = asum_stat;
             }
-            this._stat_func = stat_func;
+            this._statFunc = statFunc;
             this._interval = interval;
             this._activated = false;
-            this._queue = new List<Tuple<int, string, NDArray>>();
+            this._queue = new List<Tuple<int, string, NdArray>>();
             this._step = 0;
             this._exes = new List<Executor>();
-            this._re_prog = new Regex(pattern);
+            this._reProg = new Regex(pattern);
             this._sort = sort;
 
 
@@ -57,7 +57,7 @@ namespace mxnet.csharp
 
         public void Install(Executor exe)
         {
-            exe.set_monitor_callback(stat_helper);
+            exe.SetMonitorCallback(StatHelper);
             this._exes.Add(exe);
         }
 
@@ -71,9 +71,9 @@ namespace mxnet.csharp
             //TODO toc
         }
 
-        public void toc_print()
+        public void TocPrint()
         {
-            //TODO toc_print
+            //TODO TocPrint
         }
     }
 }

@@ -10,59 +10,59 @@ namespace mxnet.csharp.util
 {
     class Random
     {
-        public static void Uniform(float low, float high,NDArray @out)
+        public static void Uniform(float low, float high,NdArray @out)
         {
 
-            FunctionHandle func_handle;
-            NativeMethods.MXGetFunction("_sample_uniform", out func_handle);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_sample_uniform", out funcHandle);
 
             var input = IntPtr.Zero;
-            var output = @out.get_handle();
+            var output = @out.Handle;
 
-            var param_keys = new string[] {"low", "high", "shape"};
-            var param_vals = new string[]
+            var paramKeys = new string[] {"low", "high", "shape"};
+            var paramVals = new string[]
             {
                 low.ToString(CultureInfo.InvariantCulture),
                 high.ToString(CultureInfo.InvariantCulture),
-                @out.get_shape().ToString()
+                @out.GetShape().ToString()
             };
 
             Util.CallCheck(NativeMethods.MXFuncInvokeEx(
-            func_handle,
+            funcHandle,
             ref input,
             new float[0],
             ref output,
-            param_keys.Length,
-            param_keys,
-            param_vals
+            paramKeys.Length,
+            paramKeys,
+            paramVals
             ));
         }
 
-        public static void Normal(float loc, float scale, NDArray @out)
+        public static void Normal(float loc, float scale, NdArray @out)
         {
 
-            FunctionHandle func_handle;
-            NativeMethods.MXGetFunction("_sample_normal", out func_handle);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_sample_normal", out funcHandle);
 
             var input = IntPtr.Zero;
-            var output = @out.get_handle();
+            var output = @out.Handle;
 
-            var param_keys = new string[] { "loc", "scale", "shape" };
-            var param_vals = new string[]
+            var paramKeys = new string[] { "loc", "scale", "shape" };
+            var paramVals = new string[]
             {
                 loc.ToString(),
                 scale.ToString(),
-                @out.get_shape().ToString()
+                @out.GetShape().ToString()
             };
 
             Util.CallCheck(NativeMethods.MXFuncInvokeEx(
-            func_handle,
+            funcHandle,
             ref input,
             new float[0],
             ref output,
-            param_keys.Length,
-            param_keys,
-            param_vals
+            paramKeys.Length,
+            paramKeys,
+            paramVals
             ));
         }
     }

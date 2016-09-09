@@ -10,22 +10,22 @@ namespace mxnet.csharp
 {
     public partial class Operator 
     {
-        private readonly string _operator_name;
+        private readonly string _operatorName;
         static readonly OpMap OpMap = new OpMap();
-        readonly Dictionary<string, string> _params_ = new Dictionary<string, string>();
-        readonly List<SymbolHandle> _input_values = new List<SymbolHandle>();
-        private readonly List<string> _input_keys = new List<string>();
-        private readonly AtomicSymbolCreator _handle_;
+        readonly Dictionary<string, string> _params = new Dictionary<string, string>();
+        readonly List<SymbolHandle> _inputValues = new List<SymbolHandle>();
+        private readonly List<string> _inputKeys = new List<string>();
+        private readonly AtomicSymbolCreator _handle;
 
         /// <summary>
         /// Operator constructor
         /// </summary>
-        /// <param name="operator_name">type of the operator</param>
-        public Operator(string operator_name)
+        /// <param name="operatorName">type of the operator</param>
+        public Operator(string operatorName)
         {
-            _operator_name = operator_name;
+            _operatorName = operatorName;
    
-            _handle_ = OpMap.GetSymbolCreator(operator_name);
+            _handle = OpMap.GetSymbolCreator(operatorName);
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace mxnet.csharp
             {
                 return this;
             }
-            _params_[name] = value.ToString();
+            _params[name] = value.ToString();
             return this;
         }
 
@@ -57,8 +57,8 @@ namespace mxnet.csharp
             {
                 return this;
             }
-            _input_keys.Add(name);
-            _input_values.Add(symbol.get_handle());
+            _inputKeys.Add(name);
+            _inputValues.Add(symbol.get_handle());
             return this;
         }
         public Operator AddInput(Symbol s1)
@@ -91,7 +91,7 @@ namespace mxnet.csharp
         /// <param name="symbol">the input symbol</param>
         public void PushInput(Symbol symbol)
         {
-            _input_values.Add(symbol.get_handle());
+            _inputValues.Add(symbol.get_handle());
         }
 
 
@@ -104,46 +104,46 @@ namespace mxnet.csharp
         /// <returns>the operator Symbol</returns>
         public Symbol CreateSymbol(string name = "")
         {
-            string pname = name == "" ? NameManager.instance.get_name(_operator_name) : name;
+            string pname = name == "" ? NameManager.Instance.GetName(_operatorName) : name;
 
-            SymbolHandle symbol_handle;
-            List<string> input_keys = new List<string>();
-            List<string> param_keys = new List<string>();
-            List<string> param_values = new List<string>();
+            SymbolHandle symbolHandle;
+            List<string> inputKeys = new List<string>();
+            List<string> paramKeys = new List<string>();
+            List<string> paramValues = new List<string>();
 
-            foreach (var data in _params_)
+            foreach (var data in _params)
             {
-                param_keys.Add(data.Key);
-                param_values.Add(data.Value);
+                paramKeys.Add(data.Key);
+                paramValues.Add(data.Value);
             }
-            foreach (var data in this._input_keys)
+            foreach (var data in this._inputKeys)
             {
-                input_keys.Add(data);
+                inputKeys.Add(data);
             }
 
 
 
-            NativeMethods.MXSymbolCreateAtomicSymbol(_handle_, (uint)param_keys.Count, param_keys.ToArray(),
-                                       param_values.ToArray(), out symbol_handle);
+            NativeMethods.MXSymbolCreateAtomicSymbol(_handle, (uint)paramKeys.Count, paramKeys.ToArray(),
+                                       paramValues.ToArray(), out symbolHandle);
 
-            if (input_keys.Count > 0)
+            if (inputKeys.Count > 0)
             {
-                if (NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint) _input_values.Count, input_keys.ToArray(),
-                    _input_values.ToArray()) != 0)
+                if (NativeMethods.MXSymbolCompose(symbolHandle, pname, (uint) _inputValues.Count, inputKeys.ToArray(),
+                    _inputValues.ToArray()) != 0)
                 {
-                    string error = (NativeMethods.MXGetLastError());
+                    string error = (NativeMethods.MxGetLastError());
                 }
             }
             else
             {
-                if (NativeMethods.MXSymbolCompose(symbol_handle, pname, (uint) _input_values.Count, IntPtr.Zero,
-                    _input_values.ToArray())==0)
+                if (NativeMethods.MXSymbolCompose(symbolHandle, pname, (uint) _inputValues.Count, IntPtr.Zero,
+                    _inputValues.ToArray())==0)
                 {
-                    string error = (NativeMethods.MXGetLastError());
+                    string error = (NativeMethods.MxGetLastError());
                 }
             }
 
-            return new Symbol(symbol_handle);
+            return new Symbol(symbolHandle);
         }
 
 

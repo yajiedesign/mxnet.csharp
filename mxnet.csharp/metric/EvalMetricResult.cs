@@ -6,11 +6,11 @@
 
         public EvalMetricResult(string name, float value)
         {
-            this.name = name;
-            this.value = value;
+            this.Name = name;
+            this.Value = value;
         }
 
-        public string name { get;  }
-        public float value { get;}
+        public string Name { get;  }
+        public float Value { get;}
     }
 }

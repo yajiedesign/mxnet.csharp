@@ -19,46 +19,46 @@ namespace mxnet.csharp
         /// <param name="id">id of the device</param>
         public Context(DeviceType type, int id)
         {
-            device_type = type;
-            device_id = id;
+            DeviceType = type;
+            DeviceId = id;
         }
 
-        public static Context default_ctx { get; set; } = new Context(DeviceType.KCpu, 0);
+        public static Context DefaultCtx { get; set; } = new Context(DeviceType.KCpu, 0);
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns>the type of the device</returns>
         [DebuggerHidden]
-        public DeviceType device_type { get; }
+        public DeviceType DeviceType { get; }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns>the id of the device</returns>
         [DebuggerHidden]
-        public int device_id { get; }
+        public int DeviceId { get; }
 
 
         /// <summary>
         /// Return a GPU context
         /// </summary>
-        /// <param name="device_id">id of the device</param>
+        /// <param name="deviceId">id of the device</param>
         /// <returns>the corresponding GPU context</returns>
-        public static Context Gpu(int device_id = 0)
+        public static Context Gpu(int deviceId = 0)
         {
-            return new Context(DeviceType.KGpu, device_id);
+            return new Context(DeviceType.KGpu, deviceId);
         }
 
 
         /// <summary>
         /// Return a CPU context
         /// </summary>
-        /// <param name="device_id">id of the device. this is not needed by CPU</param>
+        /// <param name="deviceId">id of the device. this is not needed by CPU</param>
         /// <returns>the corresponding CPU context</returns>
-        public static Context Cpu(int device_id = 0)
+        public static Context Cpu(int deviceId = 0)
         {
-            return new Context(DeviceType.KCpu, device_id);
+            return new Context(DeviceType.KCpu, deviceId);
         }
 
 

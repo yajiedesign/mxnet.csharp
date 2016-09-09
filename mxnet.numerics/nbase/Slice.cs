@@ -11,9 +11,9 @@ namespace mxnet.numerics.nbase
     {
         public Slice()
         {
-            this.start = 0;
-            this.end = 0;
-            this.step = 1;
+            this.Start = 0;
+            this.End = 0;
+            this.Step = 1;
 
         }
         public Slice(int start, int end, int step = 1)
@@ -45,21 +45,21 @@ namespace mxnet.numerics.nbase
             //    }
             //}
 
-            this.start = start;
-            this.end = end;
-            this.step = step;
+            this.Start = start;
+            this.End = end;
+            this.Step = step;
         }
 
-        public int start { get; private set; }
-        public int end { get; private set; }
+        public int Start { get; private set; }
+        public int End { get; private set; }
 
-        public int step { get; private set; }
+        public int Step { get; private set; }
 
-        public int size
+        public int Size
         {
             get
             {
-                var temp = (int) Math.Ceiling((end - start)/(double) step);
+                var temp = (int) Math.Ceiling((End - Start)/(double) Step);
                 return temp > 0 ? temp : 0;
             }
         }
@@ -71,34 +71,34 @@ namespace mxnet.numerics.nbase
         /// <returns></returns>
         public Slice Translate(uint dim)
         {
-            int ret_start;
-            int ret_end;
-            int ret_step;
-            if (step > 0)
+            int retStart;
+            int retEnd;
+            int retStep;
+            if (Step > 0)
             {
-                ret_start = SetStart(start, dim , step);
-                ret_end = SetEnd(end, dim, step);
+                retStart = SetStart(Start, dim , Step);
+                retEnd = SetEnd(End, dim, Step);
 
-                if (ret_end >= dim)
+                if (retEnd >= dim)
                 {
-                    ret_end = (int)dim;
+                    retEnd = (int)dim;
                 }
-                ret_step = step;
+                retStep = Step;
             }
             else
             {
-                ret_start = SetEnd(start, dim, step);
-                ret_end = SetStart(end, dim, step);
+                retStart = SetEnd(Start, dim, Step);
+                retEnd = SetStart(End, dim, Step);
 
-                if (ret_start >= dim)
+                if (retStart >= dim)
                 {
-                    ret_start = (int)dim - 1;
+                    retStart = (int)dim - 1;
                 }
-                ret_step = step;
+                retStep = Step;
             }
 
 
-            Slice ret = new Slice(ret_start, ret_end, ret_step);
+            Slice ret = new Slice(retStart, retEnd, retStep);
             return ret;
         }
         private static int SetStart(int start, uint dim, int step)
@@ -165,31 +165,31 @@ namespace mxnet.numerics.nbase
 
             if (!m.Success) { throw new ArgumentException(nameof(slice));}
           
-            string str_start = m.Groups[1].Value;
-            if (!string.IsNullOrWhiteSpace(str_start) && !int.TryParse(str_start, out start))
+            string strStart = m.Groups[1].Value;
+            if (!string.IsNullOrWhiteSpace(strStart) && !int.TryParse(strStart, out start))
             {
                 throw new ArgumentException($"{nameof(start)} must be number");
             }
             int end = 0;
-            string str_end = m.Groups[2].Value;
-            if (!string.IsNullOrWhiteSpace(str_end) && !int.TryParse(str_end, out end))
+            string strEnd = m.Groups[2].Value;
+            if (!string.IsNullOrWhiteSpace(strEnd) && !int.TryParse(strEnd, out end))
             {
                 throw new ArgumentException($"{nameof(end)} must be number");
             }
             int step = 1;
             if (withstep)
             {
-                string str_step = m.Groups[3].Value;
-                if (!string.IsNullOrWhiteSpace(str_step) && !int.TryParse(str_step, out step))
+                string strStep = m.Groups[3].Value;
+                if (!string.IsNullOrWhiteSpace(strStep) && !int.TryParse(strStep, out step))
                 {
                     throw new ArgumentException($"{nameof(step)} must be number");
                 }
             }
-            if (string.IsNullOrWhiteSpace(str_start))
+            if (string.IsNullOrWhiteSpace(strStart))
             {
                 start = int.MinValue;
             }
-            if (string.IsNullOrWhiteSpace(str_end))
+            if (string.IsNullOrWhiteSpace(strEnd))
             {
                 end = int.MaxValue;
             }
@@ -198,73 +198,73 @@ namespace mxnet.numerics.nbase
 
         public Slice SubSlice(Slice sub)
         {
-            int local_start = 0;
-            int local_end = 0;
-            int local_step = 0;
-            if (this.step > 0 && sub.step > 0)
+            int localStart = 0;
+            int localEnd = 0;
+            int localStep = 0;
+            if (this.Step > 0 && sub.Step > 0)
             {
-                local_start = this.start + sub.start;
-                local_end = this.start + sub.end;
-                local_step = this.step * sub.step;
-                if (local_start > this.end)
+                localStart = this.Start + sub.Start;
+                localEnd = this.Start + sub.End;
+                localStep = this.Step * sub.Step;
+                if (localStart > this.End)
                 {
-                    local_start = this.end;
+                    localStart = this.End;
                 }
-                if (local_end > this.end)
+                if (localEnd > this.End)
                 {
-                    local_end = this.end;
+                    localEnd = this.End;
                 }
             }
 
-            if (this.step > 0 && sub.step < 0)
+            if (this.Step > 0 && sub.Step < 0)
             {
-                local_start = this.start + sub.start;
-                local_end = this.start + sub.end;
-                local_step = this.step * sub.step;
-                if (local_start >= this.end)
+                localStart = this.Start + sub.Start;
+                localEnd = this.Start + sub.End;
+                localStep = this.Step * sub.Step;
+                if (localStart >= this.End)
                 {
-                    local_start = this.end ;
+                    localStart = this.End ;
                 }
-                if (local_end >= this.end)
+                if (localEnd >= this.End)
                 {
-                    local_end = this.end;
+                    localEnd = this.End;
                 }
             }
 
-            if (this.step < 0 && sub.step > 0)
+            if (this.Step < 0 && sub.Step > 0)
             {
-                local_start = this.start - sub.start;
-                local_end = this.start - sub.end;
-                local_step = this.step * sub.step;
-                if (local_start < this.end)
+                localStart = this.Start - sub.Start;
+                localEnd = this.Start - sub.End;
+                localStep = this.Step * sub.Step;
+                if (localStart < this.End)
                 {
-                    local_start = this.end;
+                    localStart = this.End;
                 }
-                if (local_end < this.end)
+                if (localEnd < this.End)
                 {
-                    local_end = this.end;
+                    localEnd = this.End;
                 }
             }
 
 
-            if (this.step < 0 && sub.step < 0)
+            if (this.Step < 0 && sub.Step < 0)
             {
-                local_end = this.start - sub.end ;
-                local_start = this.start - sub.start;
-                local_step = this.step * sub.step;
-                if (local_start <= this.end)
+                localEnd = this.Start - sub.End ;
+                localStart = this.Start - sub.Start;
+                localStep = this.Step * sub.Step;
+                if (localStart <= this.End)
                 {
-                    local_start = this.end;
+                    localStart = this.End;
                 }
-                if (local_end < this.end)
+                if (localEnd < this.End)
                 {
-                    local_end = this.end;
+                    localEnd = this.End;
                 }
             }
 
        
       
-            return new Slice(local_start, local_end, local_step);
+            return new Slice(localStart, localEnd, localStep);
         }
 
         public static Slice[] FromShape(uint[] data)

@@ -81,17 +81,17 @@ namespace mxnet.numerics.int32
         #region Convert
         public SingleNArray ToSingle()
         { 
-            return new SingleNArray(shape, storage.Select(s => (float)s).ToArray());
+            return new SingleNArray(Shape, Storage.Select(s => (float)s).ToArray());
         }
 
         public  Int32NArray ToInt32()
         {
-            return new Int32NArray(shape, storage. Select(s => (int)s).ToArray());
+            return new Int32NArray(Shape, Storage. Select(s => (int)s).ToArray());
         }
 
         public Int64NArray ToInt64()
         {
-            return new Int64NArray(shape, storage.Select(s => (long)s).ToArray());
+            return new Int64NArray(Shape, Storage.Select(s => (long)s).ToArray());
         }
         #endregion
     }
