@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="45d13690-27a4-480d-8243-b5dfc96b38ea" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.csharp/ExecutorManager.cs" afterPath="$PROJECT_DIR$/../mxnet.csharp/ExecutorManager.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.csharp/FeedForward.cs" afterPath="$PROJECT_DIR$/../mxnet.csharp/FeedForward.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.csharp/FeedForward_Predict.cs" afterPath="$PROJECT_DIR$/../mxnet.csharp/FeedForward_Predict.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.csharp/Util.cs" afterPath="$PROJECT_DIR$/../mxnet.csharp/Util.cs" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.csharp/mxnet.csharp.csproj" afterPath="$PROJECT_DIR$/../mxnet.csharp/mxnet.csharp.csproj" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../mxnet.csharp/symbol.cs" afterPath="$PROJECT_DIR$/../mxnet.csharp/symbol.cs" />
-    </list>
+    <list default="true" id="45d13690-27a4-480d-8243-b5dfc96b38ea" name="Default" comment="" />
     <ignored path="unittest.python.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />

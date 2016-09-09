@@ -426,7 +426,11 @@ namespace mxnet.csharp
         ///args: NDArrayHandle*
         ///keys: char**
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArraySave")]
-        public static extern int MXNDArraySave([In] [MarshalAs(UnmanagedType.LPStr)] string fname, uint num_args, ref IntPtr args, ref IntPtr keys);
+        public static extern int MXNDArraySave(
+            [In] [MarshalAs(UnmanagedType.LPStr)] string fname,
+            uint num_args,
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] args,
+            [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys);
 
 
         /// Return Type: int

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using log4net;
 
 namespace mxnet.csharp.util
 {
@@ -42,7 +43,19 @@ namespace mxnet.csharp.util
         {
             symbol.Save($"{prefix}-symbol.json");
 
-
+            Dictionary<string, NDArray> dict = new Dictionary<string, NDArray>();
+            foreach (var kv in arg_params)
+            {
+                dict.Add(kv.Key, kv.Value);
+            }
+            foreach (var kv in aux_params)
+            {
+                dict.Add(kv.Key, kv.Value);
+            }
+            var param_name = $"{prefix}-{epoch:04d}.params";
+            NDArray.Save(param_name, dict);
+            ILog log = LogManager.GetLogger("");
+            log.Info($"Saved checkpoint to \"{param_name}\"");
         }
     }
 }

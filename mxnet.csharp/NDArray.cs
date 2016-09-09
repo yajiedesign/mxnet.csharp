@@ -265,5 +265,20 @@ namespace mxnet.csharp
         #endregion
 
 
+        public static void Save(string filename, Dictionary<string, NDArray> data)
+        {
+            var handles = new List<NDArrayHandle>();
+            var keys = new List<string>();
+            foreach (var kv in data)
+            {
+                handles.Add(kv.Value.get_handle());
+
+                keys.Add(kv.Key);
+
+            }
+            NativeMethods.MXNDArraySave(filename,(uint) keys.Count,handles.ToArray(),keys.ToArray());
+        }
+
+
     }
 }
