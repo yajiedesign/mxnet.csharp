@@ -91,7 +91,7 @@ namespace test.console
 
 
             FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
-                num_epoch: 2,
+                num_epoch: 10,
                 optimizer: optimizer,
                 initializer: new Xavier(factor_type: FactorType.In, magnitude: 2.34f)
 

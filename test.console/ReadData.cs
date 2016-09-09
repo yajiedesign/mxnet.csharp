@@ -67,7 +67,7 @@ namespace test.console
 
             _data_s = new List<float[]>();
             _label_s = new List<float[]>();
-            foreach (var file in files.Take(256))
+            foreach (var file in files)
             {
                 float[] data = ReadFile(file);
                 float[] label = ReadLabel(file);

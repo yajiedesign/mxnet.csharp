@@ -37,6 +37,25 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
@@ -59,12 +78,12 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="PresentationCore" />
-    <Reference Include="Razorvine.Pyrolite, Version=4.12.0.38689, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Razorvine.Pyrolite.4.12.0\lib\net40\Razorvine.Pyrolite.dll</HintPath>
+    <Reference Include="Razorvine.Pyrolite, Version=4.13.0.42731, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Razorvine.Pyrolite.4.13.0\lib\net40\Razorvine.Pyrolite.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Razorvine.Serpent, Version=1.12.0.35091, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Razorvine.Serpent.1.12.0.0\lib\net40\Razorvine.Serpent.dll</HintPath>
+    <Reference Include="Razorvine.Serpent, Version=1.13.0.42338, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Razorvine.Serpent.1.13.0\lib\net40\Razorvine.Serpent.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />

@@ -33,6 +33,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
@@ -98,6 +116,17 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\libzmqdep.4.2.0.4\build\libzmqdep.targets" Condition="Exists('..\packages\libzmqdep.4.2.0.4\build\libzmqdep.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\libzmqdep.4.2.0.4\build\libzmqdep.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\libzmqdep.4.2.0.4\build\libzmqdep.targets'))" />
+    <Error Condition="!Exists('..\packages\opencvdep.3.1.0.2\build\opencvdep.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\opencvdep.3.1.0.2\build\opencvdep.targets'))" />
+    <Error Condition="!Exists('..\packages\mxnetdep.0.7.0.4\build\mxnetdep.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\mxnetdep.0.7.0.4\build\mxnetdep.targets'))" />
+  </Target>
+  <Import Project="..\packages\opencvdep.3.1.0.2\build\opencvdep.targets" Condition="Exists('..\packages\opencvdep.3.1.0.2\build\opencvdep.targets')" />
+  <Import Project="..\packages\mxnetdep.0.7.0.4\build\mxnetdep.targets" Condition="Exists('..\packages\mxnetdep.0.7.0.4\build\mxnetdep.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

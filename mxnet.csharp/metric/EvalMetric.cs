@@ -75,7 +75,7 @@ namespace mxnet.csharp.metric
         {
             if (labels.Count != preds.Count)
             {
-                throw new ArgumentException($"Shape of labels {} does not match shape of predictions {labels.Count} {preds.Count}"  );
+                throw new ArgumentException($"Shape of labels does not match shape of predictions {labels.Count} {preds.Count}"  );
             }
         }
 
