@@ -15,14 +15,14 @@ namespace mxnet.csharp
     {
 
         private ILog _logger;
-        private readonly List<Tuple<int, int>> _slices;
-        private readonly List<string> _argNames;
-        public List<string> ParamNames { get; }
-        public List<List<NdArray>> ParamArrays => _execgrp.ParamArrays;
-        public List<List<NdArray>> GradArrays => _execgrp.GradArrays;
+        private readonly IList<Tuple<int, int>> _slices;
+        private readonly IList<string> _argNames;
+        public IList<string> ParamNames { get; }
+        public IList<List<NdArray>> ParamArrays => _execgrp.ParamArrays;
+        public IList<List<NdArray>> GradArrays => _execgrp.GradArrays;
 
-        private List<string> _auxNames;
-        private readonly List<Context> _ctx
+        private IList<string> _auxNames;
+        private readonly IList<Context> _ctx
             ;
 
         private readonly DataParallelExecutorGroup _execgrp;
@@ -32,9 +32,15 @@ namespace mxnet.csharp
         private readonly Dictionary<string, DataParallelExecutorGroup> _execgrpBucket;
 
 
-        public DataParallelExecutorManager(Symbol symbol, SymbolGenerate symGen, List<Context> ctx,
-          IDataIter trainData, List<string> paramNames, List<string> argNames,
-          List<string> auxNames, List<int> workLoadList, ILog logger)
+        public DataParallelExecutorManager(Symbol symbol,
+            SymbolGenerate symGen,
+            IList<Context> ctx,
+            IDataIter trainData,
+            IList<string> paramNames,
+            IList<string> argNames,
+            IList<string> auxNames,
+            IList<int> workLoadList,
+            ILog logger)
         {
             if (logger == null)
             {
@@ -79,7 +85,7 @@ namespace mxnet.csharp
 
         }
 
-        private List<Tuple<int, int>> SplitInputSlice(int batchSize, List<int> workLoadList)
+        private List<Tuple<int, int>> SplitInputSlice(int batchSize, IList<int> workLoadList)
         {
             var totalWorkLoad = workLoadList.Sum();
 
@@ -175,25 +181,25 @@ namespace mxnet.csharp
 
     internal class DataParallelExecutorGroup
     {
-        private readonly List<Dictionary<string, NdArray>> _sharedDataArrays;
-        private readonly List<string> _dataNames;
-        private readonly List<string> _labelNames;
+        private readonly IList<Dictionary<string, NdArray>> _sharedDataArrays;
+        private readonly IList<string> _dataNames;
+        private readonly IList<string> _labelNames;
         private readonly IList<string> _auxNames;
-        private readonly List<int> _paramIdx;
-        private readonly List<string> _paramNames;
-        public List<Executor> TrainExecs { get; }
-        private readonly List<List<Tuple<Tuple<int, int>, NdArray>>> _dataArrays;
-        private readonly List<List<Tuple<Tuple<int, int>, NdArray>>> _labelArrays;
-        public List<List<NdArray>> ParamArrays { get; }
-        public List<List<NdArray>> GradArrays { get; }
-        private List<List<NdArray>> _auxArrays;
-        private readonly List<Tuple<int, int>> _slices;
+        private readonly IList<int> _paramIdx;
+        private readonly IList<string> _paramNames;
+        public IList<Executor> TrainExecs { get; }
+        private readonly IList<List<Tuple<Tuple<int, int>, NdArray>>> _dataArrays;
+        private readonly IList<List<Tuple<Tuple<int, int>, NdArray>>> _labelArrays;
+        public IList<List<NdArray>> ParamArrays { get; }
+        public IList<List<NdArray>> GradArrays { get; }
+        private IList<List<NdArray>> _auxArrays;
+        private readonly IList<Tuple<int, int>> _slices;
 
         public DataParallelExecutorGroup(Symbol sym,
-            List<string> argNames,
-            List<string> paramNames,
-            List<Context> ctx,
-            List<Tuple<int, int>> slices,
+            IList<string> argNames,
+            IList<string> paramNames,
+            IList<Context> ctx,
+            IList<Tuple<int, int>> slices,
             IDataIProvide trainData,
             DataParallelExecutorGroup sharedGroup = null)
         {
@@ -251,7 +257,7 @@ namespace mxnet.csharp
         }
 
         private  Executor BindExec(Symbol sym, Context ctx, Dictionary<string, uint[]> inputShapes,
-            List<string> paramNames, bool needGradInput, Executor baseExec,
+            IList<string> paramNames, bool needGradInput, Executor baseExec,
             Dictionary<string, NdArray> sharedDataArrays, Dictionary<string, Type> inputTypes = null, ILog logger = null)
         {
             if (logger == null)
@@ -368,7 +374,7 @@ namespace mxnet.csharp
 
 
             }
-            List<NdArray> auxArrays;
+            IList<NdArray> auxArrays;
             if (baseExec == null)
             {
                 auxArrays = auxShapes.Zip(auxType, (l, r) => NdArray.Zeros(new Shape(l), ctx, r)).ToList();
@@ -433,7 +439,7 @@ namespace mxnet.csharp
 
     public class ExecutorManager
     {
-        public static void Load_general(List<NdArray> data, List<NdArray> targets)
+        public static void Load_general(IList<NdArray> data, IList<NdArray> targets)
         {
 
             for (int i = 0; i < data.Count; i++)
@@ -445,7 +451,7 @@ namespace mxnet.csharp
 
         }
 
-        public static void Load_general(List<NdArray> data, List<List<Tuple<Tuple<int, int>, NdArray>>> targets)
+        public static void Load_general(IList<NdArray> data, IList<List<Tuple<Tuple<int, int>, NdArray>>> targets)
         {
 
             for (int i = 0; i < data.Count; i++)
@@ -463,21 +469,21 @@ namespace mxnet.csharp
 
         }
 
-        public static void LoadData(IDataBatch batch, List<NdArray> targets)
+        public static void LoadData(IDataBatch batch, IList<NdArray> targets)
         {
             Load_general(batch.Data, targets);
         }
 
-        public static void LoadData(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NdArray>>> targets)
+        public static void LoadData(IDataBatch batch, IList<List<Tuple<Tuple<int, int>, NdArray>>> targets)
         {
             Load_general(batch.Data, targets);
         }
 
-        public static void _load_label(IDataBatch batch, List<NdArray> targets)
+        public static void _load_label(IDataBatch batch, IList<NdArray> targets)
         {
             Load_general(batch.Label, targets);
         }
-        public static void _load_label(IDataBatch batch, List<List<Tuple<Tuple<int, int>, NdArray>>> targets)
+        public static void _load_label(IDataBatch batch, IList<List<Tuple<Tuple<int, int>, NdArray>>> targets)
         {
             Load_general(batch.Label, targets);
         }

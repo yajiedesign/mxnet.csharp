@@ -18,7 +18,7 @@ namespace mxnet.csharp
             Softrelu,
             Tanh
         };
-        private static readonly List<string> ActivationActTypeConvert = new List<string>() { "relu", "sigmoid", "softrelu", "tanh" };
+        private static readonly IList<string> ActivationActTypeConvert = new List<string>() { "relu", "sigmoid", "softrelu", "tanh" };
         /// <summary>
         /// Apply activation function to input.Softmax Activation is only available with CUDNN on GPUand will be computed at each location across channel if input is 4D.
         /// </summary>
@@ -270,7 +270,7 @@ namespace mxnet.csharp
             Int32,
             Uint8
         };
-        private static readonly List<string> CastDtypeConvert = new List<string>() { "float16", "float32", "float64", "int32", "uint8" };
+        private static readonly IList<string> CastDtypeConvert = new List<string>() { "float16", "float32", "float64", "int32", "uint8" };
         /// <summary>
         /// Cast array to a different data type.
         /// </summary>
@@ -346,7 +346,7 @@ namespace mxnet.csharp
             LimitedWorkspace,
             Off
         };
-        private static readonly List<string> ConvolutionCudnnTuneConvert = new List<string>() { "fastest", "limited_workspace", "off" };
+        private static readonly IList<string> ConvolutionCudnnTuneConvert = new List<string>() { "fastest", "limited_workspace", "off" };
         /// <summary>
         /// Apply convolution to input then add a bias.
         /// </summary>
@@ -1401,7 +1401,7 @@ namespace mxnet.csharp
             Prelu,
             Rrelu
         };
-        private static readonly List<string> LeakyreluActTypeConvert = new List<string>() { "elu", "leaky", "prelu", "rrelu" };
+        private static readonly IList<string> LeakyreluActTypeConvert = new List<string>() { "elu", "leaky", "prelu", "rrelu" };
         /// <summary>
         /// Apply activation function to input.
         /// </summary>
@@ -1729,7 +1729,7 @@ namespace mxnet.csharp
             Max,
             Sum
         };
-        private static readonly List<string> PoolingPoolTypeConvert = new List<string>() { "avg", "max", "sum" };
+        private static readonly IList<string> PoolingPoolTypeConvert = new List<string>() { "avg", "max", "sum" };
         /// <summary>
         /// Perform spatial pooling on inputs.
         /// </summary>
@@ -1962,7 +1962,7 @@ namespace mxnet.csharp
             RnnRelu,
             RnnTanh
         };
-        private static readonly List<string> RnnModeConvert = new List<string>() { "gru", "lstm", "rnn_relu", "rnn_tanh" };
+        private static readonly IList<string> RnnModeConvert = new List<string>() { "gru", "lstm", "rnn_relu", "rnn_tanh" };
         /// <summary>
         /// Apply a recurrent layer to input.
         /// </summary>
@@ -2223,7 +2223,7 @@ namespace mxnet.csharp
             Channel,
             Instance
         };
-        private static readonly List<string> SoftmaxactivationModeConvert = new List<string>() { "channel", "instance" };
+        private static readonly IList<string> SoftmaxactivationModeConvert = new List<string>() { "channel", "instance" };
         /// <summary>
         /// Apply softmax activation to input. This is intended for internal layers. For output (loss layer) please use SoftmaxOutput. If mode=instance, this operator will compute a softmax for each instance in the batch; this is the default mode. If mode=channel, this operator will compute a num_channel-class softmax at each position of each instance; this can be used for fully convolutional network, image segmentation, etc.
         /// </summary>
@@ -2263,7 +2263,7 @@ namespace mxnet.csharp
             Null,
             Valid
         };
-        private static readonly List<string> SoftmaxoutputNormalizationConvert = new List<string>() { "batch", "null", "valid" };
+        private static readonly IList<string> SoftmaxoutputNormalizationConvert = new List<string>() { "batch", "null", "valid" };
         /// <summary>
         /// Perform a softmax transformation on input, backprop with logloss.
         /// </summary>
@@ -2333,7 +2333,7 @@ namespace mxnet.csharp
             Null,
             Valid
         };
-        private static readonly List<string> SoftmaxNormalizationConvert = new List<string>() { "batch", "null", "valid" };
+        private static readonly IList<string> SoftmaxNormalizationConvert = new List<string>() { "batch", "null", "valid" };
         /// <summary>
         /// DEPRECATED: Perform a softmax transformation on input. Please use SoftmaxOutput
         /// </summary>
@@ -2395,7 +2395,7 @@ namespace mxnet.csharp
         {
             Affine
         };
-        private static readonly List<string> SpatialtransformerTransformTypeConvert = new List<string>() { "affine" };
+        private static readonly IList<string> SpatialtransformerTransformTypeConvert = new List<string>() { "affine" };
         /// <summary>
         /// sampling type
         /// </summary>
@@ -2403,7 +2403,7 @@ namespace mxnet.csharp
         {
             Bilinear
         };
-        private static readonly List<string> SpatialtransformerSamplerTypeConvert = new List<string>() { "bilinear" };
+        private static readonly IList<string> SpatialtransformerSamplerTypeConvert = new List<string>() { "bilinear" };
         /// <summary>
         /// Apply spatial transformer to input feature map.
         /// </summary>
@@ -2548,7 +2548,7 @@ namespace mxnet.csharp
             Bilinear,
             Nearest
         };
-        private static readonly List<string> UpsamplingSampleTypeConvert = new List<string>() { "bilinear", "nearest" };
+        private static readonly IList<string> UpsamplingSampleTypeConvert = new List<string>() { "bilinear", "nearest" };
         /// <summary>
         /// How to handle multiple input. concat means concatenate upsampled images along the channel dimension. sum means add all images together, only available for nearest neighbor upsampling.
         /// </summary>
@@ -2557,7 +2557,7 @@ namespace mxnet.csharp
             Concat,
             Sum
         };
-        private static readonly List<string> UpsamplingMultiInputModeConvert = new List<string>() { "concat", "sum" };
+        private static readonly IList<string> UpsamplingMultiInputModeConvert = new List<string>() { "concat", "sum" };
         /// <summary>
         /// Perform nearest neighboor/bilinear up sampling to inputs
         /// </summary>

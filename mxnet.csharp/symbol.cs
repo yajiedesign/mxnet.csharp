@@ -442,9 +442,9 @@ namespace mxnet.csharp
 
 
         void InferExecutorArrays(
-            Context context, List<NdArray> argArrays,
-            List<NdArray> gradArrays, List<OpReqType> gradReqs,
-            List<NdArray> auxArrays,
+            Context context, IList<NdArray> argArrays,
+            IList<NdArray> gradArrays, IList<OpReqType> gradReqs,
+            IList<NdArray> auxArrays,
             Dictionary<string, NdArray> argsMap,
             Dictionary<string, NdArray> argGradStore,
             Dictionary<string, OpReqType> gradReqType,
@@ -594,7 +594,7 @@ namespace mxnet.csharp
             List<Context> auxCtx;
             if (group2Ctx != null)
             {
-                var listattr = list_attr(true);
+                var listattr = ListAttr(true);
                 var attrDict = listattr.Where(w => w.Key.EndsWith("ctx_group"))
                     .ToDictionary(k => k.Key, v => group2Ctx.GetValueOrDefault(v.Value, context));
                 argCtx = listArguments
@@ -646,10 +646,10 @@ namespace mxnet.csharp
         }
 
         public Executor Bind(Context context,
-            List<NdArray> argArrays,
-            List<NdArray> gradArrays,
-            List<OpReqType> gradReqs,
-            List<NdArray> auxArrays,
+            IList<NdArray> argArrays,
+            IList<NdArray> gradArrays,
+            IList<OpReqType> gradReqs,
+            IList<NdArray> auxArrays,
             Dictionary<string, Context> groupToCtx = null,
             Executor sharedExec = null)
         {
@@ -658,10 +658,10 @@ namespace mxnet.csharp
         }
 
         public Executor Bind(Context context,
-            List<NdArray> argArrays,
+            IList<NdArray> argArrays,
             Dictionary<string, NdArray> gradDict,
             OpReqType gradReq,
-            List<NdArray> auxArrays,
+            IList<NdArray> auxArrays,
             Dictionary<string, Context> groupToCtx = null,
             Executor sharedExec = null)
         {
@@ -670,21 +670,21 @@ namespace mxnet.csharp
         }
 
         public Executor Bind(Context context,
-            List<NdArray> argArrays,
+            IList<NdArray> argArrays,
             Dictionary<string, NdArray> gradDict,
             Dictionary<string, OpReqType> gradReqs,
-            List<NdArray> auxArrays,
+            IList<NdArray> auxArrays,
             Dictionary<string, Context> groupToCtx = null,
             Executor sharedExec = null)
         {
             var listedArguments = this.ListArguments();
-            var gradArrays = this._get_ndarray_inputs("args_grad", gradDict, listedArguments, true);
+            var gradArrays = this.GetNDarrayInputs("args_grad", gradDict, listedArguments, true);
 
             return new Executor(this, context, argArrays, gradArrays,
                 gradReqs.Select(s => s.Value).ToList(), auxArrays, groupToCtx, sharedExec);
         }
 
-        private List<NdArray> _get_ndarray_inputs(string argKey, Dictionary<string, NdArray> args, IList<string> argNames, bool allowMissing)
+        private List<NdArray> GetNDarrayInputs(string argKey, Dictionary<string, NdArray> args, IList<string> argNames, bool allowMissing)
         {
             List<NdArray> argArrays = new List<NdArray>();
             foreach (var name in argNames)
@@ -718,7 +718,7 @@ namespace mxnet.csharp
         /// that belongs to this symbol is returned, and the attribute names will
         /// **not** be pre-pended with the symbol name.
         /// </param>
-        public Dictionary<string, string> list_attr(bool recursive = false)
+        public Dictionary<string, string> ListAttr(bool recursive = false)
         {
             uint outSize;
             IntPtr outPtr;

@@ -13,9 +13,9 @@ namespace mxnet.csharp.metric
 
         }
 
-        public override void Update(List<NdArray> labels, List<NdArray> preds)
+        public override void Update(IList<NdArray> labels, IList<NdArray> preds)
         {
-            check_label_shapes(labels, preds);
+            CheckLabelShapes(labels, preds);
 
             for (int i = 0; i < labels.Count; i++)
             {

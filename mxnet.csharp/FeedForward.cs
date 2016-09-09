@@ -24,7 +24,7 @@ namespace mxnet.csharp
     public interface IDataBatch : IDataIProvide
     {
         string BucketKey { get; }
-        List<NdArray> Data { get; }
+        IList<NdArray> Data { get; }
         List<NdArray> Label { get; }
         int Pad { get; }
     }
@@ -188,11 +188,11 @@ namespace mxnet.csharp
         public void Fit(IDataIter trainData,
             IDataIter evalData,
             EvalMetric evalMetric = null,
-            List<Action> epochEndCallback = null,
-            List<Action<BatchEndParam>> batchEndCallback = null,
+            IList<Action> epochEndCallback = null,
+            IList<Action<BatchEndParam>> batchEndCallback = null,
             string kvstoreInput = "local",
             ILog logger = null,
-            List<int> workLoadList = null, Monitor monitor = null,
+            IList<int> workLoadList = null, Monitor monitor = null,
             Action evalBatchEndCallback = null
             )
         {
@@ -261,8 +261,10 @@ namespace mxnet.csharp
         }
 
         private static void TrainMultiDevice(Symbol symbol, 
-            List<Context> ctx, List<string> argNames,
-            List<string> paramNames, List<string> auxNames,
+            IList<Context> ctx, 
+            IList<string> argNames,
+            IList<string> paramNames,
+            IList<string> auxNames,
             Dictionary<string, NdArray> argParams,
             Dictionary<string, NdArray> auxParams,
             int beginEpoch,
@@ -272,11 +274,11 @@ namespace mxnet.csharp
             IDataIter trainData, 
             IDataIter evalData, 
             EvalMetric evalMetric,
-            List<Action> epochEndCallback,
-            List<Action<BatchEndParam>> batchEndCallback,
+            IList<Action> epochEndCallback,
+            IList<Action<BatchEndParam>> batchEndCallback,
             KvStore kvstore, bool updateOnKvstore,
             ILog logger,
-            List<int> workLoadList,
+            IList<int> workLoadList,
             Monitor monitor, 
             Action evalBatchEndCallback,
             SymbolGenerate symGen)
@@ -414,8 +416,8 @@ namespace mxnet.csharp
         }
 
         private static void UpdateParams(
-            List<List<NdArray>> paramArrays,
-            List<List<NdArray>> gradArrays,
+            IList<List<NdArray>> paramArrays,
+            IList<List<NdArray>> gradArrays,
             Action<int, NdArray, NdArray> updater,
             int numDevice, 
             KvStore kvstore = null)
@@ -454,8 +456,8 @@ namespace mxnet.csharp
         }
 
         private static void UpdateParamsOnKvstore(
-            List<List<NdArray>> paramArrays,
-            List<List<NdArray>> gradArrays,
+            IList<List<NdArray>> paramArrays,
+            IList<List<NdArray>> gradArrays,
             KvStore kvstore)
         {
 
@@ -475,9 +477,9 @@ namespace mxnet.csharp
         }
 
         private static void InitializeKvstore(KvStore kvstore,
-            List<List<NdArray>> paramArrays,
+            IList<List<NdArray>> paramArrays,
             Dictionary<string, NdArray> argParams,
-            List<string> paramNames,
+            IList<string> paramNames,
             bool updateOnKvstore)
         {
             for (int idx = 0; idx < paramArrays.Count; idx++)

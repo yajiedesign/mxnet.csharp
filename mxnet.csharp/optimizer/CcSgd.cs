@@ -11,10 +11,24 @@ namespace mxnet.csharp.optimizer
         private readonly IntPtr _handle;
 
 
-        public CcSgd(float momentum = 0.0f,float rescaleGrad = 1, Dictionary<int, string> paramIdx2Name = null, float wd = 0,
-            float clipGradient = -1, float learningRate = 0.01F, LrScheduler lrScheduler = null,
-            Symbol sym = null, int beginNumUpdate = 0)
-            : base(rescaleGrad, paramIdx2Name, wd, clipGradient, learningRate, lrScheduler, sym, beginNumUpdate)
+        public CcSgd(
+            float momentum = 0.0f,
+            float rescaleGrad = 1,
+            Dictionary<int, string> paramIdx2Name = null,
+            float wd = 0,
+            float clipGradient = -1,
+            float learningRate = 0.01F,
+            LrScheduler lrScheduler = null,
+            Symbol sym = null,
+            int beginNumUpdate = 0)
+            : base(rescaleGrad,
+                paramIdx2Name,
+                wd,
+                clipGradient,
+                learningRate,
+                lrScheduler,
+                sym,
+                beginNumUpdate)
         {
             this._momentum = momentum;
 

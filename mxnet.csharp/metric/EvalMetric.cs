@@ -20,7 +20,7 @@ namespace mxnet.csharp.metric
             Reset();
         }
 
-        public abstract void Update(List<NdArray> labels, List<NdArray> preds);
+        public abstract void Update(IList<NdArray> labels, IList<NdArray> preds);
 
         public void Reset()
         {
@@ -71,7 +71,7 @@ namespace mxnet.csharp.metric
             }
         }
 
-        protected static void check_label_shapes(List<NdArray> labels, List<NdArray> preds)
+        protected static void CheckLabelShapes(IList<NdArray> labels, IList<NdArray> preds)
         {
             if (labels.Count != preds.Count)
             {

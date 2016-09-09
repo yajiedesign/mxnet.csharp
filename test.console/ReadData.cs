@@ -16,13 +16,13 @@ namespace test.console
     {
         public string BucketKey { get; }
 
-        public List<NdArray> Data { get; }
+        public IList<NdArray> Data { get; }
 
         public List<NdArray> Label{ get; }
         public int Pad { get; }
 
 
-        public DataBatch(List<NdArray> datas, List<NdArray> labels)
+        public DataBatch(IList<NdArray> datas, List<NdArray> labels)
         {
             this.Data = datas;
             this.Label = labels;
@@ -113,8 +113,8 @@ namespace test.console
         }
 
         private static readonly Regex Reg = new Regex("(\\d*)-.*", RegexOptions.Compiled);
-        private List<float[]> _data_s;
-        private List<float[]> _label_s;
+        private IList<float[]> _data_s;
+        private IList<float[]> _label_s;
         private Random _rnd;
 
         private float[] ReadLabel(string path)

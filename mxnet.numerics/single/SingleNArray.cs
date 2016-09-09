@@ -39,7 +39,7 @@ namespace mxnet.numerics.single
 
 
 
-            List<Tuple<string, string>> genlist = new List<Tuple<string, string>>()
+            IList<Tuple<string, string>> genlist = new List<Tuple<string, string>>()
             {
                 Tuple.Create("Int32", "int")
             };

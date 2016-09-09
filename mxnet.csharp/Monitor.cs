@@ -12,9 +12,9 @@ namespace mxnet.csharp
         private readonly Func<NdArray, NdArray> _statFunc;
         private int _interval;
         private readonly bool _activated;
-        private readonly List<Tuple<int, string, NdArray>> _queue;
+        private readonly IList<Tuple<int, string, NdArray>> _queue;
         private readonly int _step;
-        private readonly List<Executor> _exes;
+        private readonly IList<Executor> _exes;
         private readonly Regex _reProg;
         private bool _sort;
 

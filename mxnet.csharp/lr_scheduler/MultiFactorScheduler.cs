@@ -8,12 +8,12 @@ namespace mxnet.csharp.lr_scheduler
 {
     public class MultiFactorScheduler: LrScheduler
     {
-        private readonly List<int> _step;
+        private readonly IList<int> _step;
         private int _curStepInd;
         private readonly float _factor;
         private int _count;
 
-        public MultiFactorScheduler(List<int> step , float factor = 1f)
+        public MultiFactorScheduler(IList<int> step , float factor = 1f)
         {
             for (int i = 0; i < step.Count; i++)
             {

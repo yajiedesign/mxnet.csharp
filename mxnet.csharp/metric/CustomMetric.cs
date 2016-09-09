@@ -25,7 +25,7 @@ namespace mxnet.csharp.metric
             return !string.IsNullOrWhiteSpace(name) ? name : $"Custom({eval.Method.Name})";
         }
 
-        public override void Update(List<NdArray> labels, List<NdArray> preds)
+        public override void Update(IList<NdArray> labels, IList<NdArray> preds)
         {
             for (int i = 0; i < labels.Count; i++)
             {

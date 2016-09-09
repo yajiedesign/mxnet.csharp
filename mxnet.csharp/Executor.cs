@@ -38,10 +38,10 @@ namespace mxnet.csharp
     public class Executor : IDisposable
     {
         private readonly ExecutorHandle _handle;
-        public List<NdArray> Outputs { get; } = new List<NdArray>();
-        public List<NdArray> ArgArrays { get; }
-        public List<NdArray> GradArrays { get; }
-        public List<NdArray> AuxArrays { get; }
+        public IList<NdArray> Outputs { get; } = new List<NdArray>();
+        public IList<NdArray> ArgArrays { get; }
+        public IList<NdArray> GradArrays { get; }
+        public IList<NdArray> AuxArrays { get; }
 
         public Dictionary<string, NdArray> ArgDict { get; private set; }
         public Dictionary<string, NdArray> GradDict { get; private set; }
@@ -50,10 +50,10 @@ namespace mxnet.csharp
         private readonly Dictionary<string, NdArray> _auxDict;
 
         public Executor(Symbol symbol, Context context,
-            List<NdArray> argArrays,
-            List<NdArray> gradArrays,
-            List<OpReqType> gradReqs,
-            List<NdArray> auxArrays,
+            IList<NdArray> argArrays,
+            IList<NdArray> gradArrays,
+            IList<OpReqType> gradReqs,
+            IList<NdArray> auxArrays,
             Dictionary<string, Context> groupToCtx = null,
             Executor sharedExec = null)
         {
@@ -188,7 +188,7 @@ namespace mxnet.csharp
         ///     loss function and head gradeitn is not needed.
         /// </summary>
         /// <param name="headGrads">the gradient of head nodes to be backproped.</param>
-        public void Backward(List<NdArray> headGrads = null)
+        public void Backward(IList<NdArray> headGrads = null)
         {
             if (headGrads == null)
             {

@@ -116,7 +116,7 @@ namespace test.console
             {
                 var l = label[(Slice)i].Data;
 
-                List<int> p = new List<int>();
+                IList<int> p = new List<int>();
                 for (int k = 0; k < 4; k++)
                 {
                     p.Add((int)pred[(Slice)(k * batch_size + i)].Argmax());

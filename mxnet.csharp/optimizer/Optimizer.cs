@@ -75,7 +75,7 @@ namespace mxnet.csharp.optimizer
             this._lrMult = new Dictionary<string, float>();
             if (_sym != null)
             {
-               var attr=  _sym.list_attr(true);
+               var attr=  _sym.ListAttr(true);
                 foreach (var kv in attr)
                 {
                     if (kv.Key.EndsWith("_lr_mult"))
@@ -104,7 +104,7 @@ namespace mxnet.csharp.optimizer
             }
             if (_sym != null)
             {
-                var attr = _sym.list_attr(true);
+                var attr = _sym.ListAttr(true);
                 foreach (var kv in attr)
                 {
                     if (kv.Key.EndsWith("_wd_mult"))

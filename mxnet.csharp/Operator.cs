@@ -14,7 +14,7 @@ namespace mxnet.csharp
         static readonly OpMap OpMap = new OpMap();
         readonly Dictionary<string, string> _params = new Dictionary<string, string>();
         readonly List<SymbolHandle> _inputValues = new List<SymbolHandle>();
-        private readonly List<string> _inputKeys = new List<string>();
+        private readonly IList<string> _inputKeys = new List<string>();
         private readonly AtomicSymbolCreator _handle;
 
         /// <summary>
