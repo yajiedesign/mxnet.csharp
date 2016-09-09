@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>$id$</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>yajiedesign</authors>
+    <owners>yajiedesign</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>https://github.com/yajiedesign/mxnet.csharp</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>mxnet csharp Interface</description>
+    <copyright>Copyright 2016</copyright>
+    <tags>mxnet</tags>
+  </metadata>
+  <files>
+    <file src="bin\x64\$configuration$\mxnet.numerics.dll" target="lib\net461\" />
+  </files>
+</package>

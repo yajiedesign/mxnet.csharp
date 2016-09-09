@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Linq;
 namespace mxnet.csharp
@@ -326,7 +327,20 @@ namespace mxnet.csharp
     public static class NativeMethods
     {
 
-  
+        static NativeMethods()
+        {
+            if (!File.Exists("libmxnet.dll"))
+            {
+                LoadLibrary("x64\\libmxnet.dll");
+            }
+        }
+
+        [DllImport("Kernel32.dll")]
+        private static extern IntPtr LoadLibrary(string path);
+
+
+
+
 
         /// Return Type: char*
         [DllImport("libmxnet.dll", EntryPoint = "MXGetLastError")]
