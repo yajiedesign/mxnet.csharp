@@ -58,7 +58,7 @@ namespace mxnet.csharp
                 return this;
             }
             _input_keys.Add(name);
-            _input_values.Add(symbol.GetHandle());
+            _input_values.Add(symbol.get_handle());
             return this;
         }
         public Operator AddInput(Symbol s1)
@@ -91,7 +91,7 @@ namespace mxnet.csharp
         /// <param name="symbol">the input symbol</param>
         public void PushInput(Symbol symbol)
         {
-            _input_values.Add(symbol.GetHandle());
+            _input_values.Add(symbol.get_handle());
         }
 
 

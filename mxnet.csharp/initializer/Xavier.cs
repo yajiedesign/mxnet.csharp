@@ -19,7 +19,7 @@ namespace mxnet.csharp.initializer
 
         protected override void _init_weight(string name, NDArray arr)
         {
-            var shape = arr.Get_shape();
+            var shape = arr.get_shape();
             float hw_scale = 1.0f;
             if (shape.Size() > 2)
             {

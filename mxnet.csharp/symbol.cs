@@ -142,7 +142,7 @@ namespace mxnet.csharp
             get
             {
                 SymbolHandle @out;
-                NativeMethods.MXSymbolGetOutput(GetHandle(), (uint)index, out @out);
+                NativeMethods.MXSymbolGetOutput(get_handle(), (uint)index, out @out);
                 return new Symbol(@out);
             }
         }
@@ -168,7 +168,7 @@ namespace mxnet.csharp
             var handle_list = new List<SymbolHandle>();
             foreach (var symbol in symbols)
             {
-                handle_list.Add(symbol.GetHandle());
+                handle_list.Add(symbol.get_handle());
             }
             SymbolHandle @out;
 
@@ -190,29 +190,29 @@ namespace mxnet.csharp
             return new Symbol(handle);
         }
 
-        private void Save(string file_name)
+        public void Save(string file_name)
         {
-            Util.CallCheck(NativeMethods.MXSymbolSaveToFile(GetHandle(), file_name));
+            Util.CallCheck(NativeMethods.MXSymbolSaveToFile(get_handle(), file_name));
         }
 
         public string ToJson()
         {
             IntPtr out_json;
-            Util.CallCheck(NativeMethods.MXSymbolSaveToJSON(GetHandle(), out out_json));
+            Util.CallCheck(NativeMethods.MXSymbolSaveToJSON(get_handle(), out out_json));
             return Marshal.PtrToStringAnsi(out_json);
         }
 
         public Symbol GetInternals()
         {
             SymbolHandle handle;
-            Util.CallCheck(NativeMethods.MXSymbolGetInternals(GetHandle(), out handle));
+            Util.CallCheck(NativeMethods.MXSymbolGetInternals(get_handle(), out handle));
             return new Symbol(handle);
         }
 
         public Symbol Copy()
         {
             SymbolHandle handle;
-            Util.CallCheck(NativeMethods.MXSymbolCopy(GetHandle(), out handle));
+            Util.CallCheck(NativeMethods.MXSymbolCopy(get_handle(), out handle));
             return new Symbol(handle);
         }
 
@@ -222,7 +222,7 @@ namespace mxnet.csharp
             uint size;
             IntPtr sarr_ptr;
 
-            NativeMethods.MXSymbolListArguments(GetHandle(), out size, out sarr_ptr);
+            NativeMethods.MXSymbolListArguments(get_handle(), out size, out sarr_ptr);
             var sarr = new IntPtr[size];
             if (size > 0)
             {
@@ -241,7 +241,7 @@ namespace mxnet.csharp
             uint size;
             IntPtr sarr_ptr;
 
-            NativeMethods.MXSymbolListOutputs(GetHandle(), out size, out sarr_ptr);
+            NativeMethods.MXSymbolListOutputs(get_handle(), out size, out sarr_ptr);
             var sarr = new IntPtr[size];
             if (size > 0)
             {
@@ -260,7 +260,7 @@ namespace mxnet.csharp
             uint size;
             IntPtr sarr_ptr;
 
-            NativeMethods.MXSymbolListAuxiliaryStates(GetHandle(), out size, out sarr_ptr);
+            NativeMethods.MXSymbolListAuxiliaryStates(get_handle(), out size, out sarr_ptr);
             var sarr = new IntPtr[size];
             if (size > 0)
             {
@@ -355,7 +355,7 @@ namespace mxnet.csharp
 
             int complete;
 
-            Util.CallCheck(NativeMethods.MXSymbolInferType(GetHandle(), (uint)keys.Count, keys.ToArray(),
+            Util.CallCheck(NativeMethods.MXSymbolInferType(get_handle(), (uint)keys.Count, keys.ToArray(),
                 arg_type_data.ToArray(),
                 out in_type_size, out in_type_data_ptr,
                 out out_type_size, out out_type_data_ptr,
@@ -415,7 +415,7 @@ namespace mxnet.csharp
             IntPtr aux_shape_data_ptr;
             int complete;
 
-            Util.CallCheck(NativeMethods.MXSymbolInferShape(GetHandle(), (uint)keys.Count, keys.ToArray(),
+            Util.CallCheck(NativeMethods.MXSymbolInferShape(get_handle(), (uint)keys.Count, keys.ToArray(),
                 arg_ind_ptr.ToArray(), arg_shape_data.ToArray(),
                 out in_shape_size, out in_shape_ndim_ptr, out in_shape_data_ptr,
                 out out_shape_size, out out_shape_ndim_ptr, out out_shape_data_ptr,
@@ -460,7 +460,7 @@ namespace mxnet.csharp
             {
                 if (args_map.ContainsKey(arg_name))
                 {
-                    arg_shapes[arg_name] = args_map[arg_name].Get_shape();
+                    arg_shapes[arg_name] = args_map[arg_name].get_shape();
                 }
             }
 
@@ -480,7 +480,7 @@ namespace mxnet.csharp
                 {
                     var temp = new NDArray(shape, context, false);
                     arg_arrays.Add(temp);
-                    NDArray.Sample_gaussian(0, 1, temp);
+                    NDArray.sample_gaussian(0, 1, temp);
                 }
 
                 if (arg_grad_store.ContainsKey(arg_name))
@@ -514,7 +514,7 @@ namespace mxnet.csharp
                 {
                     var temp = new NDArray(shape, context, false);
                     aux_arrays.Add(temp);
-                    csharp.NDArray.Sample_gaussian(0, 1, temp);
+                    csharp.NDArray.sample_gaussian(0, 1, temp);
                 }
             }
         }
@@ -533,7 +533,7 @@ namespace mxnet.csharp
             {
                 if (known_args.ContainsKey(arg_name))
                 {
-                    arg_shapes[arg_name] = known_args[arg_name].Get_shape();
+                    arg_shapes[arg_name] = known_args[arg_name].get_shape();
                 }
             }
 
@@ -550,7 +550,7 @@ namespace mxnet.csharp
                 else
                 {
                     args_map[arg_name] = new NDArray(shape, context, false);
-                    NDArray.Sample_gaussian(0, 1, args_map[arg_name]);
+                    NDArray.sample_gaussian(0, 1, args_map[arg_name]);
                 }
             }
         }
@@ -723,11 +723,11 @@ namespace mxnet.csharp
             IntPtr out_ptr;
             if (recursive)
             {
-                NativeMethods.MXSymbolListAttr(GetHandle(), out out_size, out out_ptr);
+                NativeMethods.MXSymbolListAttr(get_handle(), out out_size, out out_ptr);
             }
             else
             {
-                NativeMethods.MXSymbolListAttrShallow(GetHandle(), out out_size, out out_ptr);
+                NativeMethods.MXSymbolListAttrShallow(get_handle(), out out_size, out out_ptr);
             }
             IntPtr[] out_ptr_array = new IntPtr[out_size * 2];
 
@@ -741,7 +741,7 @@ namespace mxnet.csharp
 
         }
         [DebuggerHidden]
-        public SymbolHandle GetHandle()
+        public SymbolHandle get_handle()
         {
             return _blob_ptr.handle;
         }

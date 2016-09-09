@@ -81,7 +81,7 @@ namespace mxnet.csharp
 
             foreach (var array in arg_arrays)
             {
-                arg_handles.Add(array.Get_handle());
+                arg_handles.Add(array.get_handle());
             }
             foreach (var array in grad_arrays)
             {
@@ -91,12 +91,12 @@ namespace mxnet.csharp
                 }
                 else
                 {
-                    grad_handles.Add(array.Get_handle());
+                    grad_handles.Add(array.get_handle());
                 }
             }
             foreach (var array in aux_arrays)
             {
-                aux_handles.Add(array.Get_handle());
+                aux_handles.Add(array.get_handle());
             }
 
             var grad_reqs_uint = new List<uint>();
@@ -119,7 +119,7 @@ namespace mxnet.csharp
                 shared_exec?._handle_ ?? NDArrayHandle.Zero;
 
             Util.CallCheck(NativeMethods.MXExecutorBindEX(
-                symbol.GetHandle(),
+                symbol.get_handle(),
                 (int)context.device_type,
                 context.device_id,
                 (uint)group_to_ctx.Count,
@@ -149,7 +149,7 @@ namespace mxnet.csharp
             }
         }
 
-        public string Debug_str()
+        public string debug_str()
         {
             NDArrayHandle output_ptr;
             NativeMethods.MXExecutorPrint(_handle_, out output_ptr);
@@ -196,11 +196,11 @@ namespace mxnet.csharp
             var new_head_grads = new List<NDArray>();
             foreach (var d in head_grads)
             {
-                new_head_grads.Add(new NDArray(d.Get_handle()));
+                new_head_grads.Add(new NDArray(d.get_handle()));
             }
             if (new_head_grads.Count > 0)
             {
-                var ptrs = new_head_grads.Select(s => s.Get_handle()).ToArray();
+                var ptrs = new_head_grads.Select(s => s.get_handle()).ToArray();
 
                 NativeMethods.MXExecutorBackward(_handle_, (uint)new_head_grads.Count, ptrs);
             }
@@ -221,7 +221,7 @@ namespace mxnet.csharp
             {
                 if (arg_dict.ContainsKey(kv.Key))
                 {
-                    kv.Value.Copy_to(arg_dict[kv.Key]);
+                    kv.Value.copy_to(arg_dict[kv.Key]);
                 }
                 else
                 {
@@ -239,7 +239,7 @@ namespace mxnet.csharp
                 {
                     if (_aux_dict.ContainsKey(kv.Key))
                     {
-                        kv.Value.Copy_to(_aux_dict[kv.Key]);
+                        kv.Value.copy_to(_aux_dict[kv.Key]);
                     }
                     else
                     {

@@ -166,7 +166,7 @@ namespace mxnet.csharp
             this._argument_checked = true;
 
             //check if symbol contain duplicated names.
-            Util._check_arguments(this._symbol);
+            Model._check_arguments(this._symbol);
             //rematch parameters to delete useless ones
             if (this._allow_extra_params)
             {
@@ -498,7 +498,7 @@ namespace mxnet.csharp
                     {
 
                         //automatically select a proper local
-                        var max_size = arg_params.Select(s => Util.Prod(s.Value.Get_shape())).Max();
+                        var max_size = arg_params.Select(s => Util.Prod(s.Value.get_shape())).Max();
                         if (max_size < 1024 * 1024 * 16)
                         {
                             kvstore = "local_update_cpu";
@@ -547,7 +547,7 @@ namespace mxnet.csharp
                 var k = kv.Key;
                 if (this._arg_params != null && this._arg_params.ContainsKey(kv.Key) && !overwrite)
                 {
-                    this._arg_params[k].Copy_to(arg_params[k]);
+                    this._arg_params[k].copy_to(arg_params[k]);
                 }
                 else
                 {
@@ -561,7 +561,7 @@ namespace mxnet.csharp
                 var k = kv.Key;
                 if (this._aux_params != null && this._aux_params.ContainsKey(kv.Key) && !overwrite)
                 {
-                    this._aux_params[k].Copy_to(aux_params[k]);
+                    this._aux_params[k].copy_to(aux_params[k]);
                 }
                 else
                 {
@@ -576,7 +576,22 @@ namespace mxnet.csharp
         }
 
 
+        /// <summary>
+        /// Checkpoint the model checkpoint into file.
+        /// The advantage of load/save is the file is language agnostic.
+        /// This means the file saved using save can be loaded by other language binding of mxnet.
+        /// </summary>
+        /// <param name="prefix">Prefix of model name.</param>
+        /// <param name="epoch"></param>
+        public void Save(string prefix, int? epoch = null)
+        {
 
+            if (!epoch.HasValue)
+            {
+                epoch = this._num_epoch;
+            }
+            Model.save_checkpoint(prefix, epoch, this._symbol, this._arg_params, this._aux_params);
+        }
 
     }
 }

@@ -72,7 +72,7 @@ namespace mxnet.csharp
 
         public void Init(int key, NDArray val)
         {
-            NDArrayHandle val_handle = val.Get_handle();
+            NDArrayHandle val_handle = val.get_handle();
             Util.CallCheck(NativeMethods.MXKVStoreInit(_blob_ptr.handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }));
         }
 
@@ -80,13 +80,13 @@ namespace mxnet.csharp
         {
             Util.Assert(keys.Count == vals.Count);
             List<NDArrayHandle> val_handles = new List<NDArrayHandle>(vals.Count);
-            val_handles.AddRange(vals.Select(s => s.Get_handle()));
+            val_handles.AddRange(vals.Select(s => s.get_handle()));
             Util.CallCheck(NativeMethods.MXKVStoreInit(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray()));
         }
 
         public void Push(int key, NDArray val, int priority)
         {
-            NDArrayHandle val_handle = val.Get_handle();
+            NDArrayHandle val_handle = val.get_handle();
             Util.CallCheck(NativeMethods.MXKVStorePush(_blob_ptr.handle, 1, new int[] { key }, new NDArrayHandle[] { val_handle }, priority));
         }
 
@@ -100,14 +100,14 @@ namespace mxnet.csharp
         {
             Util.Assert(keys.Count == vals.Count);
             List<NDArrayHandle> val_handles = new List<NDArrayHandle>(vals.Count);
-            val_handles.AddRange(vals.Select(s => s.Get_handle()));
+            val_handles.AddRange(vals.Select(s => s.get_handle()));
 
             Util.CallCheck(NativeMethods.MXKVStorePush(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), val_handles.ToArray(), priority));
         }
 
         public void Pull(int key, NDArray @out, int priority)
         {
-            NDArrayHandle out_handle = @out.Get_handle();
+            NDArrayHandle out_handle = @out.get_handle();
             Util.CallCheck(NativeMethods.MXKVStorePull(_blob_ptr.handle, 1, new[] { key }, new[] { out_handle }, priority));
         }
 
@@ -122,7 +122,7 @@ namespace mxnet.csharp
             Util.Assert(keys.Count == outs.Count);
 
             List<NDArrayHandle> out_handles = new List<NDArrayHandle>(keys.Count);
-            out_handles.AddRange(outs.Select(s => s.Get_handle()));
+            out_handles.AddRange(outs.Select(s => s.get_handle()));
             Util.CallCheck(NativeMethods.MXKVStorePull(_blob_ptr.handle, (uint)keys.Count, keys.ToArray(), out_handles.ToArray(), priority));
         }
 

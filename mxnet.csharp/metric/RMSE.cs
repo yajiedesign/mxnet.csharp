@@ -19,8 +19,8 @@ namespace mxnet.csharp.metric
             check_label_shapes(labels, preds);
             for (int i = 0; i < labels.Count; i++)
             {
-                var label = labels[i].As_numerics();
-                var pred = preds[i].As_numerics();
+                var label = labels[i].as_numerics();
+                var pred = preds[i].as_numerics();
 
                 if (label.shape.ndim == 1)
                 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using mxnet.csharp.util;
 using mxnet.numerics.single;
 
 namespace mxnet.csharp
@@ -43,7 +44,7 @@ namespace mxnet.csharp
 
                 foreach (var vitem in output_list.Zip(this._pred_exec.outputs, Tuple.Create))
                 {
-                    vitem.Item1.Add(vitem.Item2.Slice(0, (uint)real_size).As_numerics());
+                    vitem.Item1.Add(vitem.Item2.Slice(0, (uint)real_size).as_numerics());
 
                 }
 
@@ -53,13 +54,13 @@ namespace mxnet.csharp
                     for (int j = 0; j < batch.data.Count; j++)
                     {
                         var x = batch.data[j];
-                        data_list[j].Add(x.Slice(0, (uint)real_size).As_numerics());
+                        data_list[j].Add(x.Slice(0, (uint)real_size).as_numerics());
                     }
 
                     for (int j = 0; j < batch.data.Count; j++)
                     {
                         var x = batch.label[j];
-                        label_list[j].Add(x.Slice(0, (uint)real_size).As_numerics());
+                        label_list[j].Add(x.Slice(0, (uint)real_size).as_numerics());
                     }
                 }
 
@@ -95,7 +96,7 @@ namespace mxnet.csharp
                 {
                     throw new ArgumentException("Incomplete input shapes");
                 }
-                var pred_shapes = this._pred_exec.arg_arrays.Select(s => s.Get_shape().Data()).ToList();
+                var pred_shapes = this._pred_exec.arg_arrays.Select(s => s.get_shape().Data()).ToList();
                 if (pred_shapes.SequenceEqual(arg_shapes))
                 {
                     return;
@@ -107,7 +108,7 @@ namespace mxnet.csharp
                 this._ctx[0], input_shapes.ToDictionary(k => k.Key, v => v.Value.Data()), OpReqType.KWriteTo);
             pred_exec.copy_params_from(this._arg_params, this._aux_params);
 
-            Util._check_arguments(this._symbol);
+            Model._check_arguments(this._symbol);
             this._pred_exec = pred_exec;
 
         }

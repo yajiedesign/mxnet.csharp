@@ -21,7 +21,7 @@ namespace mxnet.csharp
 
         NDArray asum_stat(NDArray x)
         {
-            //TODO  return ndarray.norm(x)/Math.Sqrt(x.Size());
+            //TODO  return ndarray.norm(x)/Math.Sqrt(x.size());
             return x;
         }
 

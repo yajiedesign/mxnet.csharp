@@ -123,14 +123,14 @@ namespace mxnet.csharp
         }
 
 
-        public void Sync_copy_from_cpu(float[] data)
+        public void sync_copy_from_cpu(float[] data)
         {
             NativeMethods.MXNDArraySyncCopyFromCPU(_blob_ptr.handle, data, (uint)data.Length);
         }
 
-        public float[] Sync_copy_to_cpu(uint size)
+        public float[] sync_copy_to_cpu(uint size)
         {
-            size = size > 0 ? size : Size();
+            size = size > 0 ? size : this.Size();
             var data = new float[size];
             var datagch = GCHandle.Alloc(data, GCHandleType.Pinned);
             NativeMethods.MXNDArraySyncCopyToCPU(_blob_ptr.handle, datagch.AddrOfPinnedObject(), size);
@@ -138,17 +138,17 @@ namespace mxnet.csharp
             return data;
         }
 
-        public void Wait_to_read()
+        public void wait_to_read()
         {
             Util.CallCheck(NativeMethods.MXNDArrayWaitToRead(_blob_ptr.handle));
         }
-        public void Wait_to_write()
+        public void wait_to_write()
         {
             Util.CallCheck(NativeMethods.MXNDArrayWaitToWrite(_blob_ptr.handle));
         }
-        public static void Wait_all() { Util.CallCheck(NativeMethods.MXNDArrayWaitAll()); }
+        public static void wait_all() { Util.CallCheck(NativeMethods.MXNDArrayWaitAll()); }
 
-        public NDArray Copy_to(NDArray other)
+        public NDArray copy_to(NDArray other)
         {
             FunctionHandle func_handle;
             NativeMethods.MXGetFunction("_copyto", out func_handle);
@@ -162,7 +162,7 @@ namespace mxnet.csharp
         public NDArray Slice(uint begin, uint end)
         {
             NDArrayHandle handle;
-            Util.CallCheck(NativeMethods.MXNDArraySlice(Get_handle(), begin, end, out handle));
+            Util.CallCheck(NativeMethods.MXNDArraySlice(get_handle(), begin, end, out handle));
             return new NDArray(handle);
         }
 
@@ -170,11 +170,11 @@ namespace mxnet.csharp
         {
             NDArrayHandle handle;
             var dims = new_shape.Data().Select(s => (int)s);
-            Util.CallCheck(NativeMethods.MXNDArrayReshape(Get_handle(), (int)new_shape.Ndim(), dims.ToArray(), out handle));
+            Util.CallCheck(NativeMethods.MXNDArrayReshape(get_handle(), (int)new_shape.Ndim(), dims.ToArray(), out handle));
             return new NDArray(handle);
         }
 
-        public NDArray Set_value(float value)
+        public NDArray set_value(float value)
         {
             FunctionHandle func_handle;
             NativeMethods.MXGetFunction("_set_value", out func_handle);
@@ -185,7 +185,7 @@ namespace mxnet.csharp
             return this;
         }
 
-        public static void Sample_gaussian(float mu, float sigma, NDArray out_array)
+        public static void sample_gaussian(float mu, float sigma, NDArray out_array)
         {
             FunctionHandle func_handle;
             NativeMethods.MXGetFunction("_random_gaussian", out func_handle);
@@ -197,10 +197,10 @@ namespace mxnet.csharp
 
         public uint Size()
         {
-            return Get_shape().Size();
+            return get_shape().Size();
         }
 
-        public Shape Get_shape()
+        public Shape get_shape()
         {
             IntPtr out_pdata;
             uint out_dim;
@@ -210,7 +210,7 @@ namespace mxnet.csharp
             return new Shape(ret.Select(s => (uint)s).ToArray());
         }
 
-        public Type Get_dtype()
+        public Type get_dtype()
         {
             int out_dtype;
             Util.CallCheck(NativeMethods.MXNDArrayGetDType(_blob_ptr.handle, out out_dtype));
@@ -232,9 +232,9 @@ namespace mxnet.csharp
 
 
         [DebuggerHidden]
-        public NDArrayHandle Get_handle() { return _blob_ptr.handle; }
+        public NDArrayHandle get_handle() { return _blob_ptr.handle; }
 
-        public static NDArray Zeros(Shape shape, Context ctx =null, Type dtype=null)
+        public static NDArray Zeros(Shape shape, Context ctx = null, Type dtype = null)
         {
             if (ctx == null)
             {
@@ -246,14 +246,14 @@ namespace mxnet.csharp
             }
 
             var array = new NDArray(shape, ctx, false, dtype);
-            array.Set_value(0);
+            array.set_value(0);
             return array;
         }
 
         #region Numerics
-        public SingleNArray As_numerics()
+        public SingleNArray as_numerics()
         {
-            var shape = Get_shape();
+            var shape = get_shape();
             SingleNArray data = new SingleNArray(new numerics.nbase.Shape(shape.Data()));
             var datagch = data.GetDataGcHandle();
             IntPtr pointer = datagch.AddrOfPinnedObject();

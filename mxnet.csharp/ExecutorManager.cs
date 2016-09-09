@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using log4net;
 using mxnet.csharp.metric;
+using mxnet.csharp.util;
 
 namespace mxnet.csharp
 {
@@ -195,7 +196,7 @@ namespace mxnet.csharp
             IDataIProvide train_data,
             DataParallelExecutorGroup shared_group = null)
         {
-            Util._check_arguments(sym);
+            Model._check_arguments(sym);
 
             if (shared_group == null)
             {
@@ -302,9 +303,9 @@ namespace mxnet.csharp
                     {
                         arg_arr = shared_data_arrays[name];
 
-                        if (Util.Prod(arg_arr.Get_shape()) >= Util.Prod(arg_shapes[i]))
+                        if (Util.Prod(arg_arr.get_shape()) >= Util.Prod(arg_shapes[i]))
                         {
-                            Util.Assert(arg_types[i] == arg_arr.Get_dtype());
+                            Util.Assert(arg_types[i] == arg_arr.get_dtype());
 
                             arg_arr = arg_arr.Reshape(new Shape(arg_shapes[i]));
 
@@ -313,7 +314,7 @@ namespace mxnet.csharp
                         {
                             logger.Warn($"bucketing: data \"{name}\" has a shape {new Shape(arg_shapes[i])}" +
                                         ", which is larger than already allocated " +
-                                        $"shape {arg_arr.Get_shape()}" +
+                                        $"shape {arg_arr.get_shape()}" +
                                         ". Need to re-allocate. Consider putting " +
                                         "default_bucket_key to be the bucket taking the largest " +
                                         "input for better memory sharing.");
@@ -354,8 +355,8 @@ namespace mxnet.csharp
                     else
                     {
                         arg_arr = base_exec.arg_dict[name];
-                        Util.Assert(arg_arr.Get_shape() == new Shape(arg_shapes[i]));
-                        Util.Assert(arg_arr.Get_dtype() == arg_types[i]);
+                        Util.Assert(arg_arr.get_shape() == new Shape(arg_shapes[i]));
+                        Util.Assert(arg_arr.get_dtype() == arg_types[i]);
                         if (need_grad_input && need_grad.Contains(name))
                         {
                             grad_arrays[name] = base_exec.grad_dict[name];
@@ -376,8 +377,8 @@ namespace mxnet.csharp
                 for (int i = 0; i < base_exec.aux_arrays.Count; i++)
                 {
                     var a = base_exec.aux_arrays[i];
-                    Util.Assert((new Shape(aux_shapes[i])) == a.Get_shape());
-                    Util.Assert(aux_type[i] == a.Get_dtype());
+                    Util.Assert((new Shape(aux_shapes[i])) == a.get_shape());
+                    Util.Assert(aux_type[i] == a.get_dtype());
                 }
                 aux_arrays = base_exec.aux_arrays;
             }
@@ -438,7 +439,7 @@ namespace mxnet.csharp
             {
                 var d_src = data[i];
                 var d_targets = targets[i];
-                d_src.Copy_to(d_targets);
+                d_src.copy_to(d_targets);
             }
 
         }
@@ -454,7 +455,7 @@ namespace mxnet.csharp
                 
                     var slice_idx = dst.Item1;
                     var d_dst = dst.Item2;
-                    d_src.Slice((uint) slice_idx.Item1, (uint) slice_idx.Item2).Copy_to(d_dst);
+                    d_src.Slice((uint) slice_idx.Item1, (uint) slice_idx.Item2).copy_to(d_dst);
                 }
               
             }
