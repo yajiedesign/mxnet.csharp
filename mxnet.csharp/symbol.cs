@@ -177,7 +177,7 @@ namespace mxnet.csharp
             return new Symbol(@out);
         }
 
-        public Symbol Load(string fileName)
+        public static Symbol Load(string fileName)
         {
             SymbolHandle handle;
             Util.CallCheck(NativeMethods.MXSymbolCreateFromFile(fileName, out handle));

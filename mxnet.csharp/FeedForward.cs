@@ -79,26 +79,26 @@ namespace mxnet.csharp
         }
 
         public FeedForward(SymbolGenerate symbolGenerate = null,
-        List<Context> ctx = null,
-        int numEpoch = 0,
-        int? epochSize = null,
-        Optimizer optimizer = null,
-        Initializer initializer = null,
-        Dictionary<string, NdArray> argParams = null,
-        Dictionary<string, NdArray> auxParams = null,
-        bool allowExtraParams = false,
-        int beginEpoch = 0)
-        : this(null,
-            symbolGenerate,
-            ctx,
-            numEpoch,
-            epochSize,
-            optimizer,
-            initializer,
-            argParams,
-            auxParams,
-            allowExtraParams,
-            beginEpoch)
+            List<Context> ctx = null,
+            int numEpoch = 0,
+            int? epochSize = null,
+            Optimizer optimizer = null,
+            Initializer initializer = null,
+            Dictionary<string, NdArray> argParams = null,
+            Dictionary<string, NdArray> auxParams = null,
+            bool allowExtraParams = false,
+            int beginEpoch = 0)
+            : this(null,
+                symbolGenerate,
+                ctx,
+                numEpoch,
+                epochSize,
+                optimizer,
+                initializer,
+                argParams,
+                auxParams,
+                allowExtraParams,
+                beginEpoch)
         {
         }
 
@@ -610,5 +610,30 @@ namespace mxnet.csharp
             Model.SaveCheckpoint(prefix, epoch, this._symbol, this._argParams, this._auxParams);
         }
 
+        public static FeedForward Load(string prefix, int? epoch = null, Context ctx = null
+            , int numEpoch = 0,
+            int? epochSize = null,
+            Optimizer optimizer = null,
+            Initializer initializer = null,
+            bool allowExtraParams = false,
+            int beginEpoch = 0
+            )
+        {
+
+            if (ctx == null)
+            {
+                ctx = Context.DefaultCtx;
+            }
+
+            Symbol symbol;
+            Dictionary<string, NdArray> argParams;
+            Dictionary<string, NdArray> auxParams;
+            Model.LoadCheckpoint(prefix, epoch, out symbol, out argParams, out auxParams);
+
+            return new FeedForward(symbol, new List<Context>() {ctx}, numEpoch, epochSize, optimizer, initializer,
+                argParams, auxParams, allowExtraParams, beginEpoch);
+        }
     }
+
 }
+

@@ -440,7 +440,12 @@ namespace mxnet.csharp
         ///out_name_size: mx_uint*
         ///out_names: char***
         [DllImport("libmxnet.dll", EntryPoint = "MXNDArrayLoad")]
-        public static extern int MXNDArrayLoad([In] [MarshalAs(UnmanagedType.LPStr)] string fname, ref uint outSize, ref IntPtr outArr, ref uint outNameSize, ref IntPtr outNames);
+        public static extern int MXNDArrayLoad(
+            [In] [MarshalAs(UnmanagedType.LPStr)] string fname,
+            out uint outSize,
+            out IntPtr outArr,
+            out uint outNameSize,
+            out IntPtr outNames);
 
 
         /// Return Type: int

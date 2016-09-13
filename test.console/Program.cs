@@ -21,7 +21,7 @@ namespace test.console
     class Program
     {
 
-        static Symbol get_ocrnet(int batch_size)
+        static Symbol get_ocrnet(int batchSize)
         {
             using (NameScop scop = new NameScop())
             {
@@ -48,7 +48,7 @@ namespace test.console
                 var fc24 = Symbol.FullyConnected(data: fc1, numHidden: 10);
                 var fc2 = Symbol.Concat(new Symbol[] { fc21, fc22, fc23, fc24 }, 4, dim: 0);
                 label = Symbol.Transpose(data = label);
-                label = Symbol.Reshape(data = label, shape: new Shape((uint)(batch_size * 4)));
+                label = Symbol.Reshape(data = label, shape: new Shape((uint)(batchSize * 4)));
                 return Symbol.SoftmaxOutput("softmax", fc2, label);
             }
         }
@@ -63,50 +63,47 @@ namespace test.console
             XmlConfigurator.Configure(new FileInfo(log4_net_config));
 
 
-            int batch_size = 32;
-            uint w = 60;
-            uint h = 20;
-            float learning_rate = 1e-4f;
-            float weight_decay = 1e-4f;
+            var model = FeedForward.Load("checkpoint\\cnn");
 
+            ReadData rdpredict = new ReadData("data\\train\\", 32, true);
+            var testOut = model.Predict(rdpredict, 1);
+
+
+            TrainTest();
+        }
+
+        private static void TrainTest()
+        {
+            int batch_size = 32;
+ 
             ReadData rdtrain = new ReadData("data\\train\\", batch_size);
             ReadData rdval = new ReadData("data\\val\\", batch_size);
 
-
-            //var first = rdtrain.First();
             Context ctx = new Context(DeviceType.KGpu, 0);
 
-            //NDArray dataArray = new NDArray(new Shape((uint)batchSize, 3, W, H), ctx, false);
-            //NDArray labelArray = new NDArray(new Shape((uint)batchSize,4), ctx, false);
-
-
-            //Symbol data1 = Symbol.Variable("data1");
-            //Symbol data2 = Symbol.Variable("data2");
             var pnet = get_ocrnet(batch_size);
             Speedometer speed = new Speedometer(batch_size, 50);
 
-            CustomMetric custom_metric = new CustomMetric((l, p) => Accuracy(l, p, batch_size));
+            CustomMetric customMetric = new CustomMetric((l, p) => Accuracy(l, p, batch_size));
 
-            Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f / batch_size);
+            Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f/batch_size);
 
-
-            FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
-                numEpoch: 10,
+            FeedForward model = new FeedForward(pnet, new List<Context> {ctx},
+                numEpoch: 1,
                 optimizer: optimizer,
                 initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f)
-
                 );
 
-
             model.Fit(rdtrain, rdval,
-                custom_metric,
-                batchEndCallback: new List<Action<mxnet.csharp.util.BatchEndParam>> { speed.Call });
+                customMetric,
+                batchEndCallback: new List<Action<mxnet.csharp.util.BatchEndParam>> {speed.Call});
 
-            ReadData rdpredict = new ReadData("data\\train\\", batch_size,true);
-            var test_out = model.Predict(rdpredict, 1);
+            model.Save("checkpoint\\cnn");
+
+            ReadData rdpredict = new ReadData("data\\train\\", batch_size, true);
+            var testOut = model.Predict(rdpredict, 1);
 
             Console.WriteLine("");
-
         }
 
         private static CustomMetricResult Accuracy(SingleNArray label, SingleNArray pred, int batch_size)

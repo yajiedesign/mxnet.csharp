@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -46,16 +47,71 @@ namespace mxnet.csharp.util
             Dictionary<string, NdArray> dict = new Dictionary<string, NdArray>();
             foreach (var kv in argParams)
             {
-                dict.Add(kv.Key, kv.Value);
+                dict.Add($"arg:{kv.Key}" , kv.Value);
             }
             foreach (var kv in auxParams)
             {
-                dict.Add(kv.Key, kv.Value);
+                dict.Add($"aux:{kv.Key}", kv.Value);
             }
-            var paramName = $"{prefix}-{epoch:04d}.params";
+            var paramName = $"{prefix}-{epoch:D4}.params";
             NdArray.Save(paramName, dict);
             ILog log = LogManager.GetLogger("");
             log.Info($"Saved checkpoint to \"{paramName}\"");
+        }
+
+        public static void LoadCheckpoint(string prefix,
+           int? epoch,
+          out Symbol symbol,
+          out Dictionary<string, NdArray> argParams,
+          out Dictionary<string, NdArray> auxParams)
+        {
+            symbol = Symbol.Load($"{prefix}-symbol.json");
+            Dictionary<string, NdArray> saveDict;
+
+            if (epoch.HasValue)
+            {
+                NdArray.Load($"{prefix}-{epoch:D4}.params", out saveDict);
+            }
+            else
+            {
+                int i = 1;
+                for (; i < 10000; i++)
+                {
+                    var path = $"{prefix}-{i:D4}.params";
+                    if (!File.Exists(path))
+                    {
+                        i--;
+                        break;
+                    }
+                }
+                var readpath = $"{prefix}-{i:D4}.params";
+                if (File.Exists(readpath))
+                {
+                    NdArray.Load(readpath, out saveDict);
+                }
+                else
+                {
+                    throw new FileNotFoundException("can not laod params files,check you prefix and epoch");
+                }
+            }
+
+            argParams = new Dictionary<string, NdArray>();
+            auxParams = new Dictionary<string, NdArray>();
+
+            foreach (var kvitem in saveDict)
+            {
+                var sp = kvitem.Key.Split(':');
+                var tp = sp[0];
+                var name = sp[1];
+
+                if (tp == "arg")
+                {
+                    argParams[name] = kvitem.Value;}
+                if (tp == "aux")
+                {
+                    auxParams[name] = kvitem.Value;
+                }
+            }
         }
     }
 }

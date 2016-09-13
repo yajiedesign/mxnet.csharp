@@ -8,3 +8,6 @@ if __name__ == '__main__':
     t = array1.mean()
     print(t.T.shape)
     print(t)
+    data_tmp = np.ones((3, 4))
+    data_tmp[:] = 0.5
+    print(data_tmp * 1 / (1 - data_tmp ** 2) ** (1 / 2) * 2)

@@ -279,6 +279,44 @@ namespace mxnet.csharp
             NativeMethods.MXNDArraySave(filename,(uint) keys.Count,handles.ToArray(),keys.ToArray());
         }
 
+        public static void Load(string filename, out Dictionary<string, NdArray> data)
+        {
+            data = new Dictionary<string, NdArray>();
+            uint outSize;
+            IntPtr outArrPtr;
+            uint outNameSize;
+            IntPtr outNamesPtr;
+
+            NativeMethods.MXNDArrayLoad(filename, out outSize, out outArrPtr, out outNameSize,out outNamesPtr);
+            NDArrayHandle[] outArr = new NDArrayHandle[outSize];
+            Marshal.Copy(outArrPtr, outArr, 0, (int) outSize);
+
+
+            if (outNameSize == 0)
+            {
+                for (int i = 0; i < outArr.Length; i++)
+                {
+                    data.Add(i.ToString(), new NdArray(outArr[i]));
+                }
+
+            }
+            else
+            {
+                Util.Assert(outNameSize == outSize);
+                IntPtr[] outNames = new IntPtr[outNameSize];
+                Marshal.Copy(outNamesPtr, outNames, 0, (int)outNameSize);
+
+                for (int i = 0; i < outArr.Length; i++)
+                {
+                    var key = Marshal.PtrToStringAnsi(outNames[i]);
+                    if (!string.IsNullOrEmpty(key))
+                    {
+                        data.Add(key, new NdArray(outArr[i]));
+                    }
+                }
+            }
+        }
+  
 
     }
 }
