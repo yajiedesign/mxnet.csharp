@@ -331,7 +331,16 @@ namespace mxnet.csharp
         {
             if (!File.Exists("libmxnet.dll"))
             {
+                LoadLibrary("x64\\cublas64_75.dll");
+                LoadLibrary("x64\\cudart64_75.dll");
+                LoadLibrary("x64\\cudnn64_4.dll");
+                LoadLibrary("x64\\curand64_75.dll");
+                LoadLibrary("x64\\libgcc_s_seh-1.dll");
+                LoadLibrary("x64\\libgfortran-3.dll");
+                LoadLibrary("x64\\libquadmath-0.dll");
+                LoadLibrary("x64\\libopenblas.dll");
                 LoadLibrary("x64\\libmxnet.dll");
+
             }
         }
 
