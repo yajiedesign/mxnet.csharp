@@ -86,7 +86,7 @@ namespace test.console
             Speedometer speed = new Speedometer(batch_size, 50);
             DoCheckpoint doCheckpoint = new DoCheckpoint("checkpoint\\cnn");
 
-            CustomMetric customMetric = new CustomMetric((l, p) => Accuracy(l, p, batch_size));
+            CustomMetric customMetric = new CustomMetric((l, p) => Accuracy(l, p, batch_size), "Accuracy");
 
             Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f/batch_size);
 

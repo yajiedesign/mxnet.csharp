@@ -14,7 +14,11 @@ namespace mxnet.csharp.util
         public Dictionary<string, NdArray> ArgParams { get; }
         public Dictionary<string, NdArray> AuxParams { get; }
 
-        public EpochEndParam(int epoch, Symbol symbol, Dictionary<string, NdArray> argParams, Dictionary<string, NdArray> auxParams)
+        public EpochEndParam(
+            int epoch, 
+            Symbol symbol,
+            Dictionary<string, NdArray> argParams,
+            Dictionary<string, NdArray> auxParams)
         {
             Epoch = epoch;
             Symbol = symbol;

@@ -193,7 +193,7 @@ namespace mxnet.csharp
             string kvstoreInput = "local",
             ILog logger = null,
             IList<int> workLoadList = null, Monitor monitor = null,
-            Action evalBatchEndCallback = null
+            IList<BatchEndDelegate> evalBatchEndCallback = null
             )
         {
 
@@ -279,8 +279,8 @@ namespace mxnet.csharp
             KvStore kvstore, bool updateOnKvstore,
             ILog logger,
             IList<int> workLoadList,
-            Monitor monitor, 
-            Action evalBatchEndCallback,
+            Monitor monitor,
+            IList<BatchEndDelegate> evalBatchEndCallback,
             SymbolGenerate symGen)
         {
 
@@ -423,6 +423,43 @@ namespace mxnet.csharp
                         callitem(epochEndParam);
                     }
                 }
+
+                // evaluation
+                if (evalData!=null)
+                {
+                    evalMetric.Reset();
+                    evalData.Reset();
+                    int i = 0;
+                    foreach (var eval_batch in evalData)
+                    {
+                        executorManager.LoadDataBatch(eval_batch);
+                        executorManager.Forward(isTrain: false);
+                        executorManager.UpdateMetric(evalMetric, eval_batch.Label);
+
+                        if (evalBatchEndCallback != null)
+                        {
+                            var batchEndParams = new BatchEndParam(epoch: epoch,
+                                 nbatch: i,
+                                 evalMetric: evalMetric,
+                                 locals: Thread.CurrentThread.CurrentCulture);
+                            foreach (var call in evalBatchEndCallback)
+                            {
+                                call(batchEndParams);
+                            }
+
+                        }
+
+                        i++;
+
+                    }
+                    var nameValue = evalMetric.get_name_value();
+                    foreach (var item in nameValue)
+                    {
+                        logger.Info($"Epoch[{epoch}] Validation-{item.Name}={item.Value:0.000}");
+                    }
+                    evalData.Reset();
+                }
+
             }
         }
 
