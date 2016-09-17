@@ -11,18 +11,18 @@ namespace mxnet.csharp
     public partial class FeedForward
     {
 
-        public List<SingleNArray> Predict(IDataIter X, int? numBatch = null, bool returnData = false, bool reset = true)
+        public List<SingleNArray> Predict(IDataIter inputX, int? numBatch = null, bool returnData = false, bool reset = true)
         {
             if (reset)
             {
-                X.Reset();
+                inputX.Reset();
             }
 
-            var dataShapes = X.ProvideData;
+            var dataShapes = inputX.ProvideData;
             var dataNames = dataShapes.Select(s => s.Key).ToList();
             InitPredictor(dataShapes);
 
-            var batchSize = X.BatchSize;
+            var batchSize = inputX.BatchSize;
             var dataArrays = dataNames.Select(name => this._predExec.ArgDict[name]).ToList();
             var outputList = this._predExec.Outputs.Select(s => new List<SingleNArray>()).ToList();
 
@@ -30,12 +30,12 @@ namespace mxnet.csharp
             List<List<SingleNArray>> labelList = null;
             if (returnData)
             {
-                dataList = X.ProvideData.Select(s => new List<SingleNArray>()).ToList();
-                labelList = X.ProvideLabel.Select(s => new List<SingleNArray>()).ToList();
+                dataList = inputX.ProvideData.Select(s => new List<SingleNArray>()).ToList();
+                labelList = inputX.ProvideLabel.Select(s => new List<SingleNArray>()).ToList();
             }
 
             int i = 0;
-            foreach (var batch in X)
+            foreach (var batch in inputX)
             {
                 ExecutorManager.LoadData(batch, dataArrays);
                 this._predExec.Forward(isTrain: false);
@@ -106,7 +106,7 @@ namespace mxnet.csharp
 
             var predExec = this._symbol.SimpleBind(
                 this._ctx[0], inputShapes.ToDictionary(k => k.Key, v => v.Value.Data()), OpReqType.KWriteTo);
-            predExec.CopyParamsFrom(this._argParams, this._auxParams);
+            predExec.CopyParamsFrom(this.ArgParams, this.AuxParams);
 
             Model.CheckArguments(this._symbol);
             this._predExec = predExec;

@@ -324,7 +324,7 @@ namespace mxnet.csharp
         /// <param name="outShape">List of shapes of outputs.The order is in the same order as list_auxiliary()</param>
         public void InferShape(Dictionary<string, Shape> argShapes, List<uint[]> inShape, List<uint[]> auxShape, List<uint[]> outShape)
         {
-            InferShape(argShapes.ToDictionary(x => x.Key, y => (uint[])y.Value), inShape, auxShape, outShape);
+            InferShape(argShapes.ToDictionary(x => x.Key, y => (uint[])y.Value), inShape, outShape, auxShape);
         }
 
 
@@ -376,19 +376,14 @@ namespace mxnet.csharp
         }
 
 
-
         /// <summary>
         /// Infer the shape of outputs and arguments of given known shapes of arguments
         /// </summary>
         /// <param name="argShapes"> Provide keyword arguments of known shapes.</param>
         /// <param name="inShape">List of shapes of arguments.The order is in the same order as list_arguments()</param>
-        /// <param name="auxShape">List of shapes of outputs.The order is in the same order as list_outputs()</param>
-        /// <param name="outShape">List of shapes of outputs.The order is in the same order as list_auxiliary()</param>
-        public void InferShape(
-            Dictionary<string, uint[]> argShapes,
-            [Out] List<uint[]> inShape,
-            [Out] List<uint[]> auxShape,
-            [Out] List<uint[]> outShape)
+        /// <param name="outShape">List of shapes of outputs.The order is in the same order as list_outputs()</param>
+        /// <param name="auxShape">List of shapes of outputs.The order is in the same order as list_auxiliary()</param>
+        public void InferShape(Dictionary<string, uint[]> argShapes, [Out] List<uint[]> inShape, [Out] List<uint[]> outShape, [Out] List<uint[]> auxShape)
         {
             var keys = new List<string>();
             var argIndPtr = new List<uint>();
@@ -466,7 +461,7 @@ namespace mxnet.csharp
             }
 
 
-            InferShape(argShapes, inShapes, auxShapes, outShapes);
+            InferShape(argShapes, inShapes, outShapes, auxShapes);
 
             for (int i = 0; i < inShapes.Count; ++i)
             {
@@ -538,7 +533,7 @@ namespace mxnet.csharp
                 }
             }
 
-            InferShape(argShapes, inShapes, auxShapes, outShapes);
+            InferShape(argShapes, inShapes, outShapes, auxShapes);
 
             for (var i = 0; i < inShapes.Count; ++i)
             {
@@ -576,7 +571,7 @@ namespace mxnet.csharp
             var argShapes = new List<uint[]>();
             var auxShapes = new List<uint[]>();
             var outShapes = new List<uint[]>();
-            InferShape(inputShapes, argShapes, auxShapes, outShapes);
+            InferShape(inputShapes, argShapes, outShapes, auxShapes);
 
 
             var argTypes = new List<Type>();

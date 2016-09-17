@@ -14,6 +14,10 @@
 	var code = File.ReadAllText(projectPath + @"\single\SingleNArrayTemplate.cs");
     var m = reg.Match(code);
     var convert = m.Groups[1].Value;
+
+    var namespaceindex = code.IndexOf("namespace mxnet.numerics", StringComparison.Ordinal);
+    code = code.Substring(namespaceindex);
+
     code = code.Replace(convert, "#$%^@123");
 
 	code = code.Replace("Single", classname);

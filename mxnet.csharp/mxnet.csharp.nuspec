@@ -14,6 +14,18 @@
     <tags>mxnet</tags>
   </metadata>
   <files>
-    <file src="bin\x64\$configuration$\mxnet.numerics.dll" target="lib\net461\" />
+    <file src="bin\x64\$configuration$\net40\mxnet.csharp.dll" target="lib\net40\" />
+    <file src="bin\x64\$configuration$\net40\mxnet.numerics.dll" target="lib\net40\" />
+    <file src="bin\x64\$configuration$\net40\System.Net.Http.dll" target="lib\net40\" />
+    
+    <file src="bin\x64\$configuration$\net45\mxnet.csharp.dll" target="lib\net45\" />
+    <file src="bin\x64\$configuration$\net45\mxnet.numerics.dll" target="lib\net45\" />
+    
+    <file src="bin\x64\$configuration$\net46\mxnet.csharp.dll" target="lib\net46\" />
+    <file src="bin\x64\$configuration$\net46\mxnet.numerics.dll" target="lib\net46\" />
+    
+    
+    <file src="bin\x64\$configuration$\net461\mxnet.csharp.dll" target="lib\net461\" />
+    <file src="bin\x64\$configuration$\net461\mxnet.numerics.dll" target="lib\net461\" />
   </files>
 </package>

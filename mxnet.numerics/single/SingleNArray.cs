@@ -30,6 +30,9 @@ namespace mxnet.numerics.single
             var convert = m1.Groups[1].Value;
             code = code.Replace(convert, "#$%^@123");
 
+            var namespaceindex = code.IndexOf("namespace mxnet.numerics", StringComparison.Ordinal);
+            code = code.Substring(namespaceindex);
+
             code = code.Replace("Single", "Int32");
             code = code.Replace("float", "int");
             code = code.Replace("mxnet.numerics.single", "mxnet.numerics.int32".ToLower());

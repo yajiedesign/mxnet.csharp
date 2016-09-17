@@ -40,8 +40,8 @@ namespace mxnet.csharp
     public partial class FeedForward
     {
         private Symbol _symbol;
-        private Dictionary<string, NdArray> _argParams;
-        private Dictionary<string, NdArray> _auxParams;
+        public Dictionary<string, NdArray> ArgParams { get; private set; }
+        public Dictionary<string, NdArray> AuxParams { get; private set; }
         private readonly bool _allowExtraParams;
         private bool _argumentChecked;
         private readonly SymbolGenerate _symGen;
@@ -122,8 +122,8 @@ namespace mxnet.csharp
                 initializer = new Uniform(0.01f);
             }
             this._initializer = initializer;
-            this._argParams = argParams;
-            this._auxParams = auxParams;
+            this.ArgParams = argParams;
+            this.AuxParams = auxParams;
             this._allowExtraParams = allowExtraParams;
 
             this._argumentChecked = false;
@@ -170,16 +170,16 @@ namespace mxnet.csharp
             //rematch parameters to delete useless ones
             if (this._allowExtraParams)
             {
-                if (this._argParams != null)
+                if (this.ArgParams != null)
                 {
                     var argNames = new HashSet<string>(this._symbol.ListArguments());
-                    this._argParams = this._argParams.Where(w => argNames.Contains(w.Key))
+                    this.ArgParams = this.ArgParams.Where(w => argNames.Contains(w.Key))
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
-                if (this._auxParams != null)
+                if (this.AuxParams != null)
                 {
                     var auxNames = new HashSet<string>(this._symbol.ListAuxiliaryStates());
-                    this._auxParams = this._auxParams.Where(w => auxNames.Contains(w.Key))
+                    this.AuxParams = this.AuxParams.Where(w => auxNames.Contains(w.Key))
                         .ToDictionary(k => k.Key, v => v.Value);
                 }
             }
@@ -188,8 +188,8 @@ namespace mxnet.csharp
         public void Fit(IDataIter trainData,
             IDataIter evalData,
             EvalMetric evalMetric = null,
-            IList<Action> epochEndCallback = null,
-            IList<Action<BatchEndParam>> batchEndCallback = null,
+            IList<EpochEndDelegate> epochEndCallback = null,
+            IList<BatchEndDelegate> batchEndCallback = null,
             string kvstoreInput = "local",
             ILog logger = null,
             IList<int> workLoadList = null, Monitor monitor = null,
@@ -220,7 +220,7 @@ namespace mxnet.csharp
             }
 
             //create kvstore
-            var createKvstoreTemp = CreateKvstore(kvstoreInput, _ctx.Count, _argParams);
+            var createKvstoreTemp = CreateKvstore(kvstoreInput, _ctx.Count, ArgParams);
             var kvstore = createKvstoreTemp.Item1;
             var updateOnKvstore = createKvstoreTemp.Item2;
 
@@ -244,7 +244,7 @@ namespace mxnet.csharp
             //(TODO)init optmizer
 
             TrainMultiDevice(this._symbol, this._ctx, argNames, paramNames, auxNames,
-                this._argParams, this._auxParams,
+                this.ArgParams, this.AuxParams,
                 beginEpoch: this._beginEpoch, endEpoch: this._numEpoch,
                 epochSize: this._epochSize,
                 optimizer: _optimizer,
@@ -274,8 +274,8 @@ namespace mxnet.csharp
             IDataIter trainData, 
             IDataIter evalData, 
             EvalMetric evalMetric,
-            IList<Action> epochEndCallback,
-            IList<Action<BatchEndParam>> batchEndCallback,
+            IList<EpochEndDelegate> epochEndCallback,
+            IList<BatchEndDelegate> batchEndCallback,
             KvStore kvstore, bool updateOnKvstore,
             ILog logger,
             IList<int> workLoadList,
@@ -412,6 +412,17 @@ namespace mxnet.csharp
 
                 logger.Info($"Epoch[{epoch}] Time cost={(toc.ElapsedMilliseconds/1000):.000}");
 
+
+
+                if (epochEndCallback != null)
+                {
+                    EpochEndParam epochEndParam = new EpochEndParam(epoch, symbol, argParams, auxParams);
+
+                    foreach (var callitem in epochEndCallback)
+                    {
+                        callitem(epochEndParam);
+                    }
+                }
             }
         }
 
@@ -562,9 +573,9 @@ namespace mxnet.csharp
             foreach (var kv in argParams)
             {
                 var k = kv.Key;
-                if (this._argParams != null && this._argParams.ContainsKey(kv.Key) && !overwrite)
+                if (this.ArgParams != null && this.ArgParams.ContainsKey(kv.Key) && !overwrite)
                 {
-                    this._argParams[k].CopyTo(argParams[k]);
+                    this.ArgParams[k].CopyTo(argParams[k]);
                 }
                 else
                 {
@@ -576,9 +587,9 @@ namespace mxnet.csharp
             foreach (var kv in auxParams)
             {
                 var k = kv.Key;
-                if (this._auxParams != null && this._auxParams.ContainsKey(kv.Key) && !overwrite)
+                if (this.AuxParams != null && this.AuxParams.ContainsKey(kv.Key) && !overwrite)
                 {
-                    this._auxParams[k].CopyTo(auxParams[k]);
+                    this.AuxParams[k].CopyTo(auxParams[k]);
                 }
                 else
                 {
@@ -586,8 +597,8 @@ namespace mxnet.csharp
                 }
             }
 
-            this._argParams = argParams;
-            this._auxParams = auxParams;
+            this.ArgParams = argParams;
+            this.AuxParams = auxParams;
 
             return Tuple.Create(argNames.ToList(), paramNames.ToList(), auxNames.ToList());
         }
@@ -607,7 +618,7 @@ namespace mxnet.csharp
             {
                 epoch = this._numEpoch;
             }
-            Model.SaveCheckpoint(prefix, epoch, this._symbol, this._argParams, this._auxParams);
+            Model.SaveCheckpoint(prefix, epoch, this._symbol, this.ArgParams, this.AuxParams);
         }
 
         public static FeedForward Load(string prefix, int? epoch = null, Context ctx = null

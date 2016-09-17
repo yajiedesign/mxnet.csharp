@@ -241,9 +241,9 @@ namespace mxnet.csharp.optimizer
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
-           var  optRegistry = assemblies.SelectMany(s1 => s1.Modules.SelectMany(s2 => s2.GetTypes()))
-                .Where(w => w.IsSubclassOf(typeof(Optimizer) ))
-                .ToDictionary(k=>k.Name.ToLower(),v=>v);
+            var optRegistry = assemblies.SelectMany(s1 => s1.GetModules().SelectMany(s2 => s2.GetTypes()))
+                 .Where(w => w.IsSubclassOf(typeof(Optimizer)))
+                 .ToDictionary(k => k.Name.ToLower(), v => v);
 
 
 

@@ -268,7 +268,7 @@ namespace mxnet.csharp
             var argShapes = new List<uint[]>();
             var auxShapes = new List<uint[]>();
             var outShapes = new List<uint[]>();
-            sym.InferShape(inputShapes, argShapes, auxShapes, outShapes);
+            sym.InferShape(inputShapes, argShapes, outShapes, auxShapes);
 
 
             var argTypes = new List<Type>();

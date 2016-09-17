@@ -3,6 +3,7 @@ using mxnet.csharp.metric;
 
 namespace mxnet.csharp.util
 {
+    public delegate void BatchEndDelegate(BatchEndParam param);
     public class BatchEndParam
     {
         public int Epoch { get; set; }

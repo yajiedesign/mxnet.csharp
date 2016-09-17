@@ -27,10 +27,16 @@ List<Tuple<string, string>> genlist = new List<Tuple<string, string>>()
 
         manager.StartNewFile($"{genitem.Item1}.generated.cs");
 #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using mxnet.numerics.single;
 using mxnet.numerics.int32;
 using mxnet.numerics.int64;
 using mxnet.numerics.nbase;
+
 <#
         TextTemplatingSession session = new TextTemplatingSession();
         session["classname"] = genitem.Item1;  

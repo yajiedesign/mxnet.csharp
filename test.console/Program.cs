@@ -12,6 +12,7 @@ using mxnet.csharp.callback;
 using mxnet.csharp.initializer;
 using mxnet.csharp.metric;
 using mxnet.csharp.optimizer;
+using mxnet.csharp.util;
 using mxnet.numerics.nbase;
 using mxnet.numerics.single;
 using Shape = mxnet.csharp.Shape;
@@ -83,6 +84,7 @@ namespace test.console
 
             var pnet = get_ocrnet(batch_size);
             Speedometer speed = new Speedometer(batch_size, 50);
+            DoCheckpoint doCheckpoint = new DoCheckpoint("checkpoint\\cnn");
 
             CustomMetric customMetric = new CustomMetric((l, p) => Accuracy(l, p, batch_size));
 
@@ -96,7 +98,8 @@ namespace test.console
 
             model.Fit(rdtrain, rdval,
                 customMetric,
-                batchEndCallback: new List<Action<mxnet.csharp.util.BatchEndParam>> {speed.Call});
+                batchEndCallback: new List<BatchEndDelegate> { speed.Call },
+                epochEndCallback: new List<EpochEndDelegate> { doCheckpoint.Call });
 
             model.Save("checkpoint\\cnn");
 
@@ -106,17 +109,17 @@ namespace test.console
             Console.WriteLine("");
         }
 
-        private static CustomMetricResult Accuracy(SingleNArray label, SingleNArray pred, int batch_size)
+        private static CustomMetricResult Accuracy(SingleNArray label, SingleNArray pred, int batchSize)
         {
             int hit = 0;
-            for (int i = 0; i < batch_size; i++)
+            for (int i = 0; i < batchSize; i++)
             {
                 var l = label[(Slice)i].Data;
 
                 IList<int> p = new List<int>();
                 for (int k = 0; k < 4; k++)
                 {
-                    p.Add((int)pred[(Slice)(k * batch_size + i)].Argmax());
+                    p.Add((int)pred[(Slice)(k * batchSize + i)].Argmax());
                 }
 
                 if (l.Length == p.Count)
@@ -140,7 +143,7 @@ namespace test.console
 
             }
 
-            return new CustomMetricResult { SumMetric = hit, NumInst = batch_size };
+            return new CustomMetricResult { SumMetric = hit, NumInst = batchSize };
 
         }
     }

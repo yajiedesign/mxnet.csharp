@@ -148,6 +148,7 @@ namespace mxnet.csharp
             {
                 Outputs.Add(new NdArray(outArray[i]));
             }
+        
         }
 
         public string DebugStr()
@@ -177,6 +178,7 @@ namespace mxnet.csharp
             {
                 Outputs[i] = new NdArray(outArray[i]);
             }
+            var shape = Outputs.First().GetShape();
         }
 
         /// <summary>

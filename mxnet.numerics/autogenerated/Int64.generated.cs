@@ -1,13 +1,9 @@
-using mxnet.numerics.single;
-using mxnet.numerics.int32;
-using mxnet.numerics.int64;
-using mxnet.numerics.nbase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using mxnet.numerics.int64;
+using mxnet.numerics.single;
 using mxnet.numerics.int32;
 using mxnet.numerics.int64;
 using mxnet.numerics.nbase;
