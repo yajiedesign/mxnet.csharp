@@ -75,6 +75,8 @@ namespace test.console
 
         private static void TrainTest()
         {
+        
+
             int batch_size = 32;
  
             ReadData rdtrain = new ReadData("data\\train\\", batch_size);
@@ -88,23 +90,30 @@ namespace test.console
 
             CustomMetric customMetric = new CustomMetric((l, p) => Accuracy(l, p, batch_size), "Accuracy");
 
-            Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f/batch_size);
+            Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f / batch_size);
 
-            FeedForward model = new FeedForward(pnet, new List<Context> {ctx},
-                numEpoch: 1,
-                optimizer: optimizer,
-                initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f)
-                );
+            var modelload = FeedForward.Load("checkpoint\\cnn", ctx: ctx ,
+            numEpoch: 1,
+            optimizer: optimizer,
+            initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f));
 
-            model.Fit(rdtrain, rdval,
+            //FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
+            //    numEpoch: 1,
+            //    optimizer: optimizer,
+            //    initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f),
+            //    argParams: modelload.ArgParams,
+            //    auxParams: modelload.AuxParams
+            //    );
+
+            modelload.Fit(rdtrain, rdval,
                 customMetric,
                 batchEndCallback: new List<BatchEndDelegate> { speed.Call },
                 epochEndCallback: new List<EpochEndDelegate> { doCheckpoint.Call });
 
-            model.Save("checkpoint\\cnn");
+            //model.Save("checkpoint\\cnn");
 
             ReadData rdpredict = new ReadData("data\\train\\", batch_size, true);
-            var testOut = model.Predict(rdpredict, 1);
+          //  var testOut = model.Predict(rdpredict, 1);
 
             Console.WriteLine("");
         }

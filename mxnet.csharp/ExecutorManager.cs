@@ -131,7 +131,16 @@ namespace mxnet.csharp
             {
                 texec.CopyParamsFrom(argParams, auxParams);
             }
-     
+
+        }
+
+        public void copy_to(Dictionary<string, NdArray> argParams, Dictionary<string, NdArray> auxParams)
+        {
+
+            foreach (var kvitem in this.ParamNames.Zip(this.ParamArrays, (l, r) => new { name = l, block = r }))
+            {
+                var weight = kvitem.block.Select(s => s.CopyTo(Context.Cpu())).Sum() / kvitem.block.Count;
+            }
         }
 
         public void LoadDataBatch(IDataBatch dataBatch)
@@ -177,6 +186,8 @@ namespace mxnet.csharp
         {
             this._currExecgrp.UpdateMetric(metric, labels);
         }
+
+
     }
 
     internal class DataParallelExecutorGroup

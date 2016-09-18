@@ -74,17 +74,17 @@ namespace mxnet.csharp.util
             }
             else
             {
-                int i = 1;
+                int findindex = 0;
+                int i = 0;
                 for (; i < 10000; i++)
                 {
                     var path = $"{prefix}-{i:D4}.params";
-                    if (!File.Exists(path))
+                    if (File.Exists(path))
                     {
-                        i--;
-                        break;
+                        findindex = i;
                     }
                 }
-                var readpath = $"{prefix}-{i:D4}.params";
+                var readpath = $"{prefix}-{findindex:D4}.params";
                 if (File.Exists(readpath))
                 {
                     NdArray.Load(readpath, out saveDict);

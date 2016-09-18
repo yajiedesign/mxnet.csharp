@@ -159,6 +159,18 @@ namespace mxnet.csharp
             return other;
         }
 
+        public NdArray CopyTo(Context ctx)
+        {
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_copyto", out funcHandle);
+
+            var other = new NdArray(this.GetShape(), ctx, true);
+            var input = _blobPtr.Handle;
+            var output = other._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref input, new float[0], ref output));
+            return other;
+        }
+
         public NdArray Slice(uint begin, uint end)
         {
             NDArrayHandle handle;
@@ -316,7 +328,95 @@ namespace mxnet.csharp
                 }
             }
         }
-  
+
+        #region operator
+        public static NdArray operator +(NdArray lhs, NdArray rhs)
+        {
+         
+            //FunctionHandle funcHandle;
+            //NativeMethods.MXGetFunction("_plus", out funcHandle);
+
+            //var ret = new NdArray();
+            //var input = _blobPtr.Handle;
+
+            //var output = ret._blobPtr.Handle;
+            //Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref input, new float[0], ref output));
+            //return other;
+
+
+            return ret;
+        }
+
+        public static NdArray operator -(NdArray lhs, NdArray rhs)
+        {
+            return Operator._Minus(lhs, rhs);
+        }
+
+        public static NdArray operator *(NdArray lhs, NdArray rhs)
+        {
+            return Operator._Mul(lhs, rhs);
+        }
+
+        public static NdArray operator /(NdArray lhs, NdArray rhs)
+        {
+            return Operator._Div(lhs, rhs);
+        }
+
+        public static NdArray operator +(NdArray lhs, float scalar)
+        {
+            return Operator._PlusScalar(lhs, scalar);
+        }
+
+        public static NdArray operator +(float scalar, NdArray rhs)
+        {
+            return Operator._PlusScalar(rhs, scalar);
+        }
+
+        public static NdArray operator -(NdArray lhs, float scalar)
+        {
+            return Operator._MinusScalar(lhs, scalar);
+        }
+
+        public static NdArray operator -(float scalar, NdArray rhs)
+        {
+            return Operator._RMinusScalar(scalar, rhs);
+        }
+
+        public static NdArray operator *(NdArray lhs, float scalar)
+        {
+            return Operator._MulScalar(lhs, scalar);
+        }
+
+        public static NdArray operator *(float scalar, NdArray rhs)
+        {
+            return Operator._MulScalar(rhs, scalar);
+        }
+
+        public static NdArray operator /(NdArray lhs, float scalar)
+        {
+            return Operator._DivScalar(lhs, scalar);
+        }
+
+        public static NdArray operator /(float scalar, NdArray rhs)
+        {
+            return Operator._RDivScalar(scalar, rhs);
+        }
+        #endregion
+
+
+    }
+
+    public static class NdArrayExtension
+    {
+        public static NdArray Sum<TSource>(this IEnumerable<TSource> source)
+        {
+            return null;
+        }
+
+        public static NdArray Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, NdArray> selector)
+        {
+            return null;
+        }
 
     }
 }

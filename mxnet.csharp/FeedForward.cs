@@ -412,7 +412,11 @@ namespace mxnet.csharp
 
                 logger.Info($"Epoch[{epoch}] Time cost={(toc.ElapsedMilliseconds/1000):.000}");
 
-
+                if (epochEndCallback != null || epoch + 1 == endEpoch)
+                {
+                    executorManager.copy_to(argParams, auxParams);
+                }
+          
 
                 if (epochEndCallback != null)
                 {
