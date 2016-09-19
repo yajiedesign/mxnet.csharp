@@ -64,10 +64,10 @@ namespace test.console
             XmlConfigurator.Configure(new FileInfo(log4_net_config));
 
 
-            var model = FeedForward.Load("checkpoint\\cnn");
+            //var model = FeedForward.Load("checkpoint\\cnn");
 
-            ReadData rdpredict = new ReadData("data\\train\\", 32, true);
-            var testOut = model.Predict(rdpredict, 1);
+            //ReadData rdpredict = new ReadData("data\\train\\", 32, true);
+            //var testOut = model.Predict(rdpredict, 1);
 
 
             TrainTest();
@@ -92,20 +92,20 @@ namespace test.console
 
             Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f / batch_size);
 
-            var modelload = FeedForward.Load("checkpoint\\cnn", ctx: ctx ,
+            var modelload = FeedForward.Load("checkpoint\\cnn", ctx: ctx,
             numEpoch: 1,
             optimizer: optimizer,
             initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f));
 
-            //FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
-            //    numEpoch: 1,
-            //    optimizer: optimizer,
-            //    initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f),
-            //    argParams: modelload.ArgParams,
-            //    auxParams: modelload.AuxParams
-            //    );
+            FeedForward model = new FeedForward(pnet, new List<Context> { ctx },
+                numEpoch: 1,
+                optimizer: optimizer,
+                initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f),
+                argParams: modelload.ArgParams,
+                auxParams: modelload.AuxParams
+                );
 
-            modelload.Fit(rdtrain, rdval,
+            model.Fit(rdtrain, rdval,
                 customMetric,
                 batchEndCallback: new List<BatchEndDelegate> { speed.Call },
                 epochEndCallback: new List<EpochEndDelegate> { doCheckpoint.Call });

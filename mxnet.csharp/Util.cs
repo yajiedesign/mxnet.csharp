@@ -81,6 +81,13 @@ namespace mxnet.csharp
                 throw new Exception(NativeMethods.MxGetLastError());
             }
         }
+        public static void NnCallCheck(int ret)
+        {
+            if (ret != 0)
+            {
+                throw new Exception(NativeMethods.NnGetLastError());
+            }
+        }
 
         public static void Assert(bool ret,string str=null)
         {

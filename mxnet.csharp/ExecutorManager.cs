@@ -20,6 +20,7 @@ namespace mxnet.csharp
         public IList<string> ParamNames { get; }
         public IList<List<NdArray>> ParamArrays => _execgrp.ParamArrays;
         public IList<List<NdArray>> GradArrays => _execgrp.GradArrays;
+        public IList<List<NdArray>> AuxArrays => _execgrp.AuxArrays;
 
         private IList<string> _auxNames;
         private readonly IList<Context> _ctx
@@ -140,6 +141,13 @@ namespace mxnet.csharp
             foreach (var kvitem in this.ParamNames.Zip(this.ParamArrays, (l, r) => new { name = l, block = r }))
             {
                 var weight = kvitem.block.Select(s => s.CopyTo(Context.Cpu())).Sum() / kvitem.block.Count;
+                weight.CopyTo(argParams[kvitem.name]);
+            }
+
+            foreach (var kvitem in this._auxNames.Zip(this.AuxArrays, (l, r) => new { name = l, block = r }))
+            {
+                var weight = kvitem.block.Select(s => s.CopyTo(Context.Cpu())).Sum() / kvitem.block.Count;
+                weight.CopyTo(auxParams[kvitem.name]);
             }
         }
 
@@ -203,7 +211,7 @@ namespace mxnet.csharp
         private readonly IList<List<Tuple<Tuple<int, int>, NdArray>>> _labelArrays;
         public IList<List<NdArray>> ParamArrays { get; }
         public IList<List<NdArray>> GradArrays { get; }
-        private IList<List<NdArray>> _auxArrays;
+        public IList<List<NdArray>> AuxArrays { get; }
         private readonly IList<Tuple<int, int>> _slices;
 
         public DataParallelExecutorGroup(Symbol sym,
@@ -262,7 +270,7 @@ namespace mxnet.csharp
 
             this.GradArrays = _paramIdx.Select(i => TrainExecs.Select((e) => e.GradArrays[i]).ToList()).ToList();
 
-            this._auxArrays = Enumerable.Range(0, this._auxNames.Count).Select(i => TrainExecs.Select((e) => e.AuxArrays[i]).ToList()).ToList();
+            this.AuxArrays = Enumerable.Range(0, this._auxNames.Count).Select(i => TrainExecs.Select((e) => e.AuxArrays[i]).ToList()).ToList();
 
             this._slices = slices;
         }

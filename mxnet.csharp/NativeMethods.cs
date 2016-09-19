@@ -321,7 +321,7 @@ namespace mxnet.csharp
     ///head: int
     ///body: char*
     ///controller_handle: void*
-    public delegate void MxkvStoreServerController(int head, [InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string body, IntPtr controllerHandle);
+    public delegate void MxkvStoreServerController(int head, [In()] [MarshalAs(UnmanagedType.LPStr)] string body, IntPtr controllerHandle);
 
 
     public static class NativeMethods
@@ -598,9 +598,9 @@ namespace mxnet.csharp
         ///scalar_args: mx_float*
         ///mutate_vars: NDArrayHandle*
         [DllImport("libmxnet.dll", EntryPoint = "MXFuncInvoke")]
-        public static extern int MXFuncInvoke(IntPtr fun, 
-            ref IntPtr useVars,
-                [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.R4)]  float[] scalarArgs, 
+        public static extern int MXFuncInvoke(IntPtr fun,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] useVars,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.R4)] float[] scalarArgs,
             ref IntPtr mutateVars);
 
 
@@ -899,7 +899,7 @@ namespace mxnet.csharp
         ///aux_shape_ndim: mx_uint**
         ///aux_shape_data: mx_uint***
         ///complete: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXSymbolInferShapePartial")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolInferShapePartial")]
         public static extern int MXSymbolInferShapePartial(IntPtr sym, uint numArgs, ref IntPtr keys, ref uint argIndPtr, ref uint argShapeData, ref uint inShapeSize, ref IntPtr inShapeNdim, ref IntPtr inShapeData, ref uint outShapeSize, ref IntPtr outShapeNdim, ref IntPtr outShapeData, ref uint auxShapeSize, ref IntPtr auxShapeNdim, ref IntPtr auxShapeData, ref int complete);
 
 
@@ -915,7 +915,7 @@ namespace mxnet.csharp
         ///aux_type_size: mx_uint*
         ///aux_type_data: int**
         ///complete: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXSymbolInferType")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolInferType")]
         public static extern int MXSymbolInferType(IntPtr sym,
             uint numArgs,
             [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
@@ -931,21 +931,21 @@ namespace mxnet.csharp
 
         /// Return Type: int
         ///handle: ExecutorHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorFree")]
         public static extern int MXExecutorFree(IntPtr handle);
 
 
         /// Return Type: int
         ///handle: ExecutorHandle->void*
         ///out_str: char**
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorPrint")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorPrint")]
         public static extern int MXExecutorPrint(IntPtr handle, out IntPtr outStr);
 
 
         /// Return Type: int
         ///handle: ExecutorHandle->void*
         ///is_train: int
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorForward")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorForward")]
         public static extern int MXExecutorForward(IntPtr handle, int isTrain);
 
 
@@ -953,21 +953,21 @@ namespace mxnet.csharp
         ///handle: ExecutorHandle->void*
         ///len: mx_uint->unsigned int
         ///head_grads: NDArrayHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorBackward")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorBackward")]
         public static extern int MXExecutorBackward(IntPtr handle, uint len, [In]  [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysUInt)] IntPtr[] headGrads);
 
         /// Return Type: int
         ///handle: ExecutorHandle->void*
         ///len: mx_uint->unsigned int
         ///head_grads: NDArrayHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorBackward")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorBackward")]
         public static extern int MXExecutorBackward(IntPtr handle, uint len, IntPtr headGrads);
 
         /// Return Type: int
         ///handle: ExecutorHandle->void*
         ///out_size: mx_uint*
         ///out: NDArrayHandle**
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorOutputs")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorOutputs")]
         public static extern int MXExecutorOutputs(IntPtr handle, out uint outSize, out IntPtr @out);
 
 
@@ -982,7 +982,7 @@ namespace mxnet.csharp
         ///aux_states_len: mx_uint->unsigned int
         ///aux_states: NDArrayHandle*
         ///out: ExecutorHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorBind")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorBind")]
         public static extern int MXExecutorBind(IntPtr symbolHandle, int devType, int devId, uint len, ref IntPtr inArgs, ref IntPtr argGradStore, ref uint gradReqType, uint auxStatesLen, ref IntPtr auxStates, ref IntPtr @out);
 
 
@@ -1001,7 +1001,7 @@ namespace mxnet.csharp
         ///aux_states_len: mx_uint->unsigned int
         ///aux_states: NDArrayHandle*
         ///out: ExecutorHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorBindX")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorBindX")]
         public static extern int MXExecutorBindX(IntPtr symbolHandle, int devType, int devId, uint numMapKeys, ref IntPtr mapKeys, ref int mapDevTypes, ref int mapDevIds, uint len, ref IntPtr inArgs, ref IntPtr argGradStore, ref uint gradReqType, uint auxStatesLen, ref IntPtr auxStates, ref IntPtr @out);
 
 
@@ -1021,7 +1021,7 @@ namespace mxnet.csharp
         ///aux_states: NDArrayHandle*
         ///shared_exec: ExecutorHandle->void*
         ///out: ExecutorHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorBindEX")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorBindEX")]
         public static extern int MXExecutorBindEX(IntPtr symbolHandle,
             int devType,
             int devId,
@@ -1042,14 +1042,14 @@ namespace mxnet.csharp
         ///handle: ExecutorHandle->void*
         ///callback: ExecutorMonitorCallback
         ///callback_handle: void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXExecutorSetMonitorCallback")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXExecutorSetMonitorCallback")]
         public static extern int MXExecutorSetMonitorCallback(IntPtr handle, ExecutorMonitorCallback callback, IntPtr callbackHandle);
 
 
         /// Return Type: int
         ///out_size: mx_uint*
         ///out_array: DataIterCreator**
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXListDataIters")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXListDataIters")]
         public static extern int MXListDataIters(ref uint outSize, ref IntPtr outArray);
 
 
@@ -1059,7 +1059,7 @@ namespace mxnet.csharp
         ///keys: char**
         ///vals: char**
         ///out: DataIterHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterCreateIter")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterCreateIter")]
         public static extern int MXDataIterCreateIter(IntPtr handle, uint numParam, ref IntPtr keys, ref IntPtr vals, ref IntPtr @out);
 
 
@@ -1071,33 +1071,33 @@ namespace mxnet.csharp
         ///arg_names: char***
         ///arg_type_infos: char***
         ///arg_descriptions: char***
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterGetIterInfo")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterGetIterInfo")]
         public static extern int MXDataIterGetIterInfo(IntPtr creator, ref IntPtr name, ref IntPtr description, ref uint numArgs, ref IntPtr argNames, ref IntPtr argTypeInfos, ref IntPtr argDescriptions);
 
 
         /// Return Type: int
         ///handle: DataIterHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterFree")]
         public static extern int MXDataIterFree(IntPtr handle);
 
 
         /// Return Type: int
         ///handle: DataIterHandle->void*
         ///out: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterNext")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterNext")]
         public static extern int MXDataIterNext(IntPtr handle, ref int @out);
 
 
         /// Return Type: int
         ///handle: DataIterHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterBeforeFirst")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterBeforeFirst")]
         public static extern int MXDataIterBeforeFirst(IntPtr handle);
 
 
         /// Return Type: int
         ///handle: DataIterHandle->void*
         ///out: NDArrayHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterGetData")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterGetData")]
         public static extern int MXDataIterGetData(IntPtr handle, ref IntPtr @out);
 
 
@@ -1105,21 +1105,21 @@ namespace mxnet.csharp
         ///handle: DataIterHandle->void*
         ///out_index: uint64_t**
         ///out_size: uint64_t*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterGetIndex")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterGetIndex")]
         public static extern int MXDataIterGetIndex(IntPtr handle, ref IntPtr outIndex, ref ulong outSize);
 
 
         /// Return Type: int
         ///handle: DataIterHandle->void*
         ///pad: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterGetPadNum")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterGetPadNum")]
         public static extern int MXDataIterGetPadNum(IntPtr handle, ref int pad);
 
 
         /// Return Type: int
         ///handle: DataIterHandle->void*
         ///out: NDArrayHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXDataIterGetLabel")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXDataIterGetLabel")]
         public static extern int MXDataIterGetLabel(IntPtr handle, ref IntPtr @out);
 
 
@@ -1127,20 +1127,20 @@ namespace mxnet.csharp
         ///num_vars: mx_uint->unsigned int
         ///keys: char**
         ///vals: char**
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXInitPSEnv")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXInitPSEnv")]
         public static extern int MXInitPSEnv(uint numVars, ref IntPtr keys, ref IntPtr vals);
 
 
         /// Return Type: int
         ///type: char*
         ///out: KVStoreHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreCreate")]
-        public static extern int MXKVStoreCreate([InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string type, out IntPtr @out);
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreCreate")]
+        public static extern int MXKVStoreCreate([In()] [MarshalAs(UnmanagedType.LPStr)] string type, out IntPtr @out);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreFree")]
         public static extern int MXKVStoreFree(IntPtr handle);
 
 
@@ -1149,7 +1149,7 @@ namespace mxnet.csharp
         ///num: mx_uint->unsigned int
         ///keys: int*
         ///vals: NDArrayHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreInit")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreInit")]
         public static extern int MXKVStoreInit(IntPtr handle, uint num,
                  [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.I4)] int[]   keys,
                  [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] vals);
@@ -1184,7 +1184,7 @@ namespace mxnet.csharp
         ///handle: KVStoreHandle->void*
         ///updater: MXKVStoreUpdater
         ///updater_handle: void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreSetUpdater")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreSetUpdater")]
         public static extern int MXKVStoreSetUpdater(IntPtr handle,
             [MarshalAs(UnmanagedType.FunctionPtr)]MxkvStoreUpdater updater,
             IntPtr updaterHandle);
@@ -1193,52 +1193,52 @@ namespace mxnet.csharp
         /// Return Type: int
         ///handle: KVStoreHandle->void*
         ///type: char**
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetType")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreGetType")]
         public static extern int MXKVStoreGetType(IntPtr handle, out IntPtr type);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
         ///ret: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetRank")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreGetRank")]
         public static extern int MXKVStoreGetRank(IntPtr handle, out int ret);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
         ///ret: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetGroupSize")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreGetGroupSize")]
         public static extern int MXKVStoreGetGroupSize(IntPtr handle, out int ret);
 
 
         /// Return Type: int
         ///ret: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreIsWorkerNode")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreIsWorkerNode")]
         public static extern int MXKVStoreIsWorkerNode(out int ret);
 
 
         /// Return Type: int
         ///ret: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreIsServerNode")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreIsServerNode")]
         public static extern int MXKVStoreIsServerNode(out int ret);
 
 
         /// Return Type: int
         ///ret: int*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreIsSchedulerNode")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreIsSchedulerNode")]
         public static extern int MXKVStoreIsSchedulerNode(out int ret);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreBarrier")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreBarrier")]
         public static extern int MXKVStoreBarrier(IntPtr handle);
 
 
         /// Return Type: int
         ///handle: KVStoreHandle->void*
         ///barrier_before_exit: int
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreSetBarrierBeforeExit")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreSetBarrierBeforeExit")]
         public static extern int MXKVStoreSetBarrierBeforeExit(IntPtr handle, int barrierBeforeExit);
 
 
@@ -1246,7 +1246,7 @@ namespace mxnet.csharp
         ///handle: KVStoreHandle->void*
         ///controller: MXKVStoreServerController
         ///controller_handle: void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreRunServer")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreRunServer")]
         public static extern int MXKVStoreRunServer(IntPtr handle, MxkvStoreServerController controller, IntPtr controllerHandle);
 
 
@@ -1254,7 +1254,7 @@ namespace mxnet.csharp
         ///handle: KVStoreHandle->void*
         ///cmd_id: int
         ///cmd_body: char*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreSendCommmandToServers")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreSendCommmandToServers")]
         public static extern int MXKVStoreSendCommmandToServers(IntPtr handle, int cmdId,
             [In(), MarshalAs(UnmanagedType.LPStr)]  string cmdBody);
 
@@ -1264,20 +1264,20 @@ namespace mxnet.csharp
         ///node_id: int
         ///number: int*
         ///timeout_sec: int
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXKVStoreGetNumDeadNode")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXKVStoreGetNumDeadNode")]
         public static extern int MXKVStoreGetNumDeadNode(IntPtr handle, int nodeId, ref int number, int timeoutSec);
 
 
         /// Return Type: int
         ///uri: char*
         ///out: RecordIOHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOWriterCreate")]
-        public static extern int MXRecordIOWriterCreate([InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string uri, ref IntPtr @out);
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOWriterCreate")]
+        public static extern int MXRecordIOWriterCreate([In()] [MarshalAs(UnmanagedType.LPStr)] string uri, ref IntPtr @out);
 
 
         /// Return Type: int
         ///handle: RecordIOHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOWriterFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOWriterFree")]
         public static extern int MXRecordIOWriterFree(IntPtr handle);
 
 
@@ -1285,27 +1285,27 @@ namespace mxnet.csharp
         ///handle: RecordIOHandle*
         ///buf: char*
         ///size: size_t->unsigned int
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOWriterWriteRecord")]
-        public static extern int MXRecordIOWriterWriteRecord(ref IntPtr handle, [InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string buf, [MarshalAsAttribute(UnmanagedType.SysUInt)] uint size);
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOWriterWriteRecord")]
+        public static extern int MXRecordIOWriterWriteRecord(ref IntPtr handle, [In()] [MarshalAs(UnmanagedType.LPStr)] string buf, [MarshalAs(UnmanagedType.SysUInt)] uint size);
 
 
         /// Return Type: int
         ///handle: RecordIOHandle*
         ///pos: size_t*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOWriterTell")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOWriterTell")]
         public static extern int MXRecordIOWriterTell(ref IntPtr handle, ref uint pos);
 
 
         /// Return Type: int
         ///uri: char*
         ///out: RecordIOHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOReaderCreate")]
-        public static extern int MXRecordIOReaderCreate([InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string uri, ref IntPtr @out);
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOReaderCreate")]
+        public static extern int MXRecordIOReaderCreate([In()] [MarshalAs(UnmanagedType.LPStr)] string uri, ref IntPtr @out);
 
 
         /// Return Type: int
         ///handle: RecordIOHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOReaderFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOReaderFree")]
         public static extern int MXRecordIOReaderFree(ref IntPtr handle);
 
 
@@ -1313,15 +1313,15 @@ namespace mxnet.csharp
         ///handle: RecordIOHandle*
         ///buf: char**
         ///size: size_t*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOReaderReadRecord")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOReaderReadRecord")]
         public static extern int MXRecordIOReaderReadRecord(ref IntPtr handle, ref IntPtr buf, ref uint size);
 
 
         /// Return Type: int
         ///handle: RecordIOHandle*
         ///pos: size_t->unsigned int
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRecordIOReaderSeek")]
-        public static extern int MXRecordIOReaderSeek(ref IntPtr handle, [MarshalAsAttribute(UnmanagedType.SysUInt)] uint pos);
+        [DllImport("libmxnet.dll", EntryPoint = "MXRecordIOReaderSeek")]
+        public static extern int MXRecordIOReaderSeek(ref IntPtr handle, [MarshalAs(UnmanagedType.SysUInt)] uint pos);
 
 
         /// Return Type: int
@@ -1334,7 +1334,7 @@ namespace mxnet.csharp
         ///outputs: NDArrayHandle*
         ///kernel: char*
         ///out: RtcHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRtcCreate")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRtcCreate")]
         public static extern int MXRtcCreate(IntPtr name, uint numInput, uint numOutput, ref IntPtr inputNames, ref IntPtr outputNames, ref IntPtr inputs, ref IntPtr outputs, IntPtr kernel, ref IntPtr @out);
 
 
@@ -1350,21 +1350,21 @@ namespace mxnet.csharp
         ///blockDimX: mx_uint->unsigned int
         ///blockDimY: mx_uint->unsigned int
         ///blockDimZ: mx_uint->unsigned int
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRtcPush")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRtcPush")]
         public static extern int MXRtcPush(IntPtr handle, uint numInput, uint numOutput, ref IntPtr inputs, ref IntPtr outputs, uint gridDimX, uint gridDimY, uint gridDimZ, uint blockDimX, uint blockDimY, uint blockDimZ);
 
 
         /// Return Type: int
         ///handle: RtcHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXRtcFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXRtcFree")]
         public static extern int MXRtcFree(IntPtr handle);
 
 
         /// Return Type: int
         ///key: char*
         ///out: OptimizerCreator*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXOptimizerFindCreator")]
-        public static extern int MXOptimizerFindCreator([InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string key, out IntPtr @out);
+        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerFindCreator")]
+        public static extern int MXOptimizerFindCreator([In()] [MarshalAs(UnmanagedType.LPStr)] string key, out IntPtr @out);
 
 
         /// Return Type: int
@@ -1373,7 +1373,7 @@ namespace mxnet.csharp
         ///keys: char**
         ///vals: char**
         ///out: OptimizerHandle*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXOptimizerCreateOptimizer")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerCreateOptimizer")]
         public static extern int MXOptimizerCreateOptimizer(IntPtr creator, uint numParam,
             [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
             [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] vals,
@@ -1382,7 +1382,7 @@ namespace mxnet.csharp
 
         /// Return Type: int
         ///handle: OptimizerHandle->void*
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXOptimizerFree")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerFree")]
         public static extern int MXOptimizerFree(IntPtr handle);
 
 
@@ -1393,17 +1393,259 @@ namespace mxnet.csharp
         ///grad: NDArrayHandle->void*
         ///lr: mx_float->float
         ///wd: mx_float->float
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXOptimizerUpdate")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerUpdate")]
         public static extern int MXOptimizerUpdate(IntPtr handle, int index, IntPtr weight, IntPtr grad, float lr, float wd);
 
 
         /// Return Type: int
         ///op_type: char*
         ///creator: CustomOpPropCreator
-        [DllImportAttribute("libmxnet.dll", EntryPoint = "MXCustomOpRegister")]
-        public static extern int MXCustomOpRegister([InAttribute()] [MarshalAsAttribute(UnmanagedType.LPStr)] string opType, CustomOpPropCreator creator);
+        [DllImport("libmxnet.dll", EntryPoint = "MXCustomOpRegister")]
+        public static extern int MXCustomOpRegister([In()] [MarshalAs(UnmanagedType.LPStr)] string opType, CustomOpPropCreator creator);
 
-    
+
+        /// Return Type: int
+        /// creator: AtomicSymbolCreator->void*
+        /// num_inputs: int
+        /// inputs: NDArrayHandle*
+        /// num_outputs: int*
+        /// outputs: NDArrayHandle**
+        /// num_params: int
+        /// param_keys: char**
+        /// param_vals: char**
+        [DllImport("libmxnet.dll", EntryPoint = "MXImperativeInvoke")]
+        public static extern int MXImperativeInvoke(IntPtr creator,
+            int num_inputs,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] inputs,
+            ref int num_outputs,
+            ref IntPtr outputs,
+            int num_params,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] param_keys,
+            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] param_vals);
+
+
+
+        #region NNVM
+        /// Return Type: void
+        ///msg: char*
+        [DllImport("libmxnet.dll", EntryPoint = "NNAPISetLastError")]
+        public static extern void NNAPISetLastError([In()] [MarshalAs(UnmanagedType.LPStr)] string msg);
+
+
+        /// Return Type: char*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGetLastError")]
+        public static extern IntPtr NNGetLastErrorNative();
+
+        public static string NnGetLastError()
+        {
+            return Marshal.PtrToStringAnsi(NNGetLastErrorNative());
+        }
+
+
+        /// Return Type: int
+        ///out_size: nn_uint*
+        ///out_array: char***
+        [DllImport("libmxnet.dll", EntryPoint = "NNListAllOpNames")]
+        public static extern int NNListAllOpNames(out uint out_size, out IntPtr out_array);
+
+
+        /// Return Type: int
+        ///op_name: char*
+        ///op_out: OpHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGetOpHandle")]
+        public static extern int NNGetOpHandle([In()] [MarshalAs(UnmanagedType.LPStr)] string op_name, out IntPtr op_out);
+
+
+        /// Return Type: int
+        ///out_size: nn_uint*
+        ///out_array: OpHandle**
+        [DllImport("libmxnet.dll", EntryPoint = "NNListUniqueOps")]
+        public static extern int NNListUniqueOps(ref uint out_size, ref IntPtr out_array);
+
+
+        /// Return Type: int
+        ///op: OpHandle->void*
+        ///real_name: char**
+        ///description: char**
+        ///num_doc_args: nn_uint*
+        ///arg_names: char***
+        ///arg_type_infos: char***
+        ///arg_descriptions: char***
+        ///return_type: char**
+        [DllImport("libmxnet.dll", EntryPoint = "NNGetOpInfo")]
+        public static extern int NNGetOpInfo(IntPtr op, ref IntPtr real_name, ref IntPtr description, ref uint num_doc_args, ref IntPtr arg_names, ref IntPtr arg_type_infos, ref IntPtr arg_descriptions, ref IntPtr return_type);
+
+
+        /// Return Type: int
+        ///op: OpHandle->void*
+        ///num_param: nn_uint->unsigned int
+        ///keys: char**
+        ///vals: char**
+        ///out: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolCreateAtomicSymbol")]
+        public static extern int NNSymbolCreateAtomicSymbol(IntPtr op, uint num_param, ref IntPtr keys, ref IntPtr vals, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///name: char*
+        ///out: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolCreateVariable")]
+        public static extern int NNSymbolCreateVariable([In()] [MarshalAs(UnmanagedType.LPStr)] string name, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///num_symbols: nn_uint->unsigned int
+        ///symbols: SymbolHandle*
+        ///out: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolCreateGroup")]
+        public static extern int NNSymbolCreateGroup(uint num_symbols, ref IntPtr symbols, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolFree")]
+        public static extern int NNSymbolFree(IntPtr symbol);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///out: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolCopy")]
+        public static extern int NNSymbolCopy(IntPtr symbol, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///out_str: char**
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolPrint")]
+        public static extern int NNSymbolPrint(IntPtr symbol, ref IntPtr out_str);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///key: char*
+        ///out: char**
+        ///success: int*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolGetAttr")]
+        public static extern int NNSymbolGetAttr(IntPtr symbol, [In()] [MarshalAs(UnmanagedType.LPStr)] string key, ref IntPtr @out, ref int success);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///num_param: nn_uint->unsigned int
+        ///keys: char**
+        ///values: char**
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolSetAttrs")]
+        public static extern int NNSymbolSetAttrs(IntPtr symbol, uint num_param, ref IntPtr keys, ref IntPtr values);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///recursive_option: int
+        ///out_size: nn_uint*
+        ///out: char***
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolListAttrs")]
+        public static extern int NNSymbolListAttrs(IntPtr symbol, int recursive_option, ref uint out_size, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///option: int
+        ///out_size: nn_uint*
+        ///out_str_array: char***
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolListInputNames")]
+        public static extern int NNSymbolListInputNames(IntPtr symbol, int option, ref uint out_size, ref IntPtr out_str_array);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///out_size: nn_uint*
+        ///out_str_array: char***
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolListOutputNames")]
+        public static extern int NNSymbolListOutputNames(IntPtr symbol, ref uint out_size, ref IntPtr out_str_array);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///out: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolGetInternals")]
+        public static extern int NNSymbolGetInternals(IntPtr symbol, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///index: nn_uint->unsigned int
+        ///out: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolGetOutput")]
+        public static extern int NNSymbolGetOutput(IntPtr symbol, uint index, ref IntPtr @out);
+
+
+        /// Return Type: int
+        ///sym: SymbolHandle->void*
+        ///name: char*
+        ///num_args: nn_uint->unsigned int
+        ///keys: char**
+        ///args: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNSymbolCompose")]
+        public static extern int NNSymbolCompose(IntPtr sym, [In()] [MarshalAs(UnmanagedType.LPStr)] string name, uint num_args, ref IntPtr keys, ref IntPtr args);
+
+
+        /// Return Type: int
+        ///symbol: SymbolHandle->void*
+        ///graph: GraphHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphCreate")]
+        public static extern int NNGraphCreate(IntPtr symbol, ref IntPtr graph);
+
+
+        /// Return Type: int
+        ///handle: GraphHandle->void*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphFree")]
+        public static extern int NNGraphFree(IntPtr handle);
+
+
+        /// Return Type: int
+        ///graph: GraphHandle->void*
+        ///symbol: SymbolHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphGetSymbol")]
+        public static extern int NNGraphGetSymbol(IntPtr graph, ref IntPtr symbol);
+
+
+        /// Return Type: int
+        ///handle: GraphHandle->void*
+        ///key: char*
+        ///json_value: char*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphSetJSONAttr")]
+        public static extern int NNGraphSetJSONAttr(IntPtr handle, [In()] [MarshalAs(UnmanagedType.LPStr)] string key, [In()] [MarshalAs(UnmanagedType.LPStr)] string json_value);
+
+
+        /// Return Type: int
+        ///handle: SymbolHandle->void*
+        ///key: char*
+        ///json_out: char**
+        ///success: int*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphGetJSONAttr")]
+        public static extern int NNGraphGetJSONAttr(IntPtr handle, [In()] [MarshalAs(UnmanagedType.LPStr)] string key, ref IntPtr json_out, ref int success);
+
+
+        /// Return Type: int
+        ///handle: GraphHandle->void*
+        ///key: char*
+        ///list: SymbolHandle->void*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphSetNodeEntryListAttr_")]
+        public static extern int NNGraphSetNodeEntryListAttr_(IntPtr handle, [In()] [MarshalAs(UnmanagedType.LPStr)] string key, IntPtr list);
+
+
+        /// Return Type: int
+        ///src: GraphHandle->void*
+        ///num_pass: nn_uint->unsigned int
+        ///pass_names: char**
+        ///dst: GraphHandle*
+        [DllImport("libmxnet.dll", EntryPoint = "NNGraphApplyPasses")]
+        public static extern int NNGraphApplyPasses(IntPtr src, uint num_pass, ref IntPtr pass_names, ref IntPtr dst);
+
+
+        #endregion
+
 
     }
 

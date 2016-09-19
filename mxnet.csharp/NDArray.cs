@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
 using System.Threading.Tasks;
 using mxnet.numerics.single;
+using Microsoft.CSharp.RuntimeBinder;
 using NDArrayHandle = System.IntPtr;
 using FunctionHandle = System.IntPtr;
 
@@ -155,7 +158,7 @@ namespace mxnet.csharp
 
             var input = _blobPtr.Handle;
             var output = other._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref input, new float[0], ref output));
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new [] { input}, new float[0], ref output));
             return other;
         }
 
@@ -167,7 +170,7 @@ namespace mxnet.csharp
             var other = new NdArray(this.GetShape(), ctx, true);
             var input = _blobPtr.Handle;
             var output = other._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref input, new float[0], ref output));
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new [] { input}, new float[0], ref output));
             return other;
         }
 
@@ -193,7 +196,7 @@ namespace mxnet.csharp
             float[] scalar = { value };
             IntPtr zero = IntPtr.Zero;
             var handle = _blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref zero, scalar, ref handle));
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new[] { zero}, scalar, ref handle));
             return this;
         }
 
@@ -204,7 +207,7 @@ namespace mxnet.csharp
             float[] scalar = { mu, sigma };
             IntPtr zero = IntPtr.Zero;
             var handle = outArray._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref zero, scalar, ref handle));
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new[] { zero}, scalar, ref handle));
         }
 
         public uint Size()
@@ -237,7 +240,7 @@ namespace mxnet.csharp
             NativeMethods.MXGetFunction("argmax_channel", out funcHandle);
             var input = _blobPtr.Handle;
             var output = ret._blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref input, new float[0], ref output));
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new[] { input}, new float[0], ref output));
 
             return ret;
         }
@@ -332,74 +335,125 @@ namespace mxnet.csharp
         #region operator
         public static NdArray operator +(NdArray lhs, NdArray rhs)
         {
-         
-            //FunctionHandle funcHandle;
-            //NativeMethods.MXGetFunction("_plus", out funcHandle);
-
-            //var ret = new NdArray();
-            //var input = _blobPtr.Handle;
-
-            //var output = ret._blobPtr.Handle;
-            //Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, ref input, new float[0], ref output));
-            //return other;
-
-
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_plus", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle,  new NDArrayHandle[] { lhs.Handle,rhs.Handle }, new float[0], ref output));
             return ret;
         }
 
         public static NdArray operator -(NdArray lhs, NdArray rhs)
         {
-            return Operator._Minus(lhs, rhs);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_minus", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle, rhs.Handle }, new float[0], ref output));
+            return ret;
         }
 
         public static NdArray operator *(NdArray lhs, NdArray rhs)
         {
-            return Operator._Mul(lhs, rhs);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_mul", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle, rhs.Handle }, new float[0], ref output));
+            return ret;
         }
 
         public static NdArray operator /(NdArray lhs, NdArray rhs)
         {
-            return Operator._Div(lhs, rhs);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_div", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle, rhs.Handle }, new float[0], ref output));
+            return ret;
         }
 
         public static NdArray operator +(NdArray lhs, float scalar)
         {
-            return Operator._PlusScalar(lhs, scalar);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_plus_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle,  }, new float[] { scalar }, ref output));
+            return ret;
         }
 
         public static NdArray operator +(float scalar, NdArray rhs)
         {
-            return Operator._PlusScalar(rhs, scalar);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_plus_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { rhs.Handle, }, new float[] { scalar }, ref output));
+            return ret;
         }
 
         public static NdArray operator -(NdArray lhs, float scalar)
         {
-            return Operator._MinusScalar(lhs, scalar);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_minus_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle, }, new float[] { scalar }, ref output));
+            return ret;
         }
 
         public static NdArray operator -(float scalar, NdArray rhs)
         {
-            return Operator._RMinusScalar(scalar, rhs);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_rminus_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { rhs.Handle, }, new float[] { scalar }, ref output));
+            return ret;
         }
 
         public static NdArray operator *(NdArray lhs, float scalar)
         {
-            return Operator._MulScalar(lhs, scalar);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_mul_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle, }, new float[] { scalar }, ref output));
+            return ret;
         }
 
         public static NdArray operator *(float scalar, NdArray rhs)
         {
-            return Operator._MulScalar(rhs, scalar);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_mul_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { rhs.Handle, }, new float[] { scalar }, ref output));
+            return ret;
         }
 
         public static NdArray operator /(NdArray lhs, float scalar)
         {
-            return Operator._DivScalar(lhs, scalar);
+             
+            //FunctionHandle funcHandle;
+            //NativeMethods.NNGetOpHandle("_div_scalar", out funcHandle);
+            var ret = new NdArray();
+            //var output = ret._blobPtr.Handle;
+            //Util.CallCheck(NativeMethods.MXImperativeInvoke(funcHandle, new NDArrayHandle[] { lhs.Handle, }, new float[] { scalar }, ref output));
+            NdArrayDynamic.InInstance._div_scalar(lhs, scalar, @out: ret);
+
+            return ret;
         }
 
         public static NdArray operator /(float scalar, NdArray rhs)
         {
-            return Operator._RDivScalar(scalar, rhs);
+            FunctionHandle funcHandle;
+            NativeMethods.MXGetFunction("_rdiv_scalar", out funcHandle);
+            var ret = new NdArray();
+            var output = ret._blobPtr.Handle;
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new NDArrayHandle[] { rhs.Handle, }, new float[] { scalar }, ref output));
+            return ret;
         }
         #endregion
 
@@ -408,15 +462,249 @@ namespace mxnet.csharp
 
     public static class NdArrayExtension
     {
-        public static NdArray Sum<TSource>(this IEnumerable<TSource> source)
+        public static NdArray Sum(this IEnumerable<NdArray> source)
         {
-            return null;
+            return source.Aggregate((total, next) => total + next);
         }
 
-        public static NdArray Sum<TSource>(this IEnumerable<TSource> source, Func<TSource, NdArray> selector)
+    }
+
+    public class NdArrayDynamic : DynamicObject
+    {
+
+        public static dynamic InInstance { get; } = new NdArrayDynamic();
+
+        private Dictionary<string, NdarrayFunctionDelegate> _functions =
+            new Dictionary<string, NdarrayFunctionDelegate>();
+
+        public NdArrayDynamic()
         {
-            return null;
+            InitNdarrayModule();
         }
 
+        private void InitNdarrayModule()
+        {
+
+            uint opNamesSize;
+            IntPtr opNamesArrayPtr;
+            NativeMethods.NNListAllOpNames(out opNamesSize, out opNamesArrayPtr);
+            IntPtr[] opNamesArrayPtrs = new IntPtr[opNamesSize];
+            Marshal.Copy(opNamesArrayPtr, opNamesArrayPtrs, 0, (int)opNamesSize);
+            IList<string> opNames = new List<string>();
+            for (int i = 0; i < opNamesSize; i++)
+            {
+                opNames.Add(Marshal.PtrToStringAnsi(opNamesArrayPtrs[i]));
+            }
+
+            foreach (var opName in opNames)
+            {
+                FunctionHandle funcHandle;
+                Util.NnCallCheck(NativeMethods.NNGetOpHandle(opName, out funcHandle));
+
+                var function = _make_ndarray_function(funcHandle, opName);
+                _functions.Add(opName, function);
+            }
+
+
+        }
+
+        private delegate dynamic NdarrayFunctionDelegate(InvokeMemberBinder binder, object[] args);
+
+        private NdarrayFunctionDelegate _make_ndarray_function(IntPtr funcHandle, string opName)
+        {
+            IntPtr namePtr;
+            IntPtr descriptionPtr;
+            uint numArgs = 0;
+            IntPtr argNamesPtr;
+            IntPtr argTypeInfosPtr;
+            IntPtr argDescriptionsPtr;
+            IntPtr keyVarNumArgsPtr;
+            IntPtr returnTypePtr;
+            Util.CallCheck( NativeMethods.MXSymbolGetAtomicSymbolInfo(funcHandle,
+            out namePtr,
+            out descriptionPtr,
+            out numArgs,
+            out argNamesPtr,
+            out argTypeInfosPtr,
+            out argDescriptionsPtr,
+            out keyVarNumArgsPtr,
+            out returnTypePtr));
+
+            IntPtr[] argNamesPtrArray = new IntPtr[numArgs];
+            IntPtr[] argTypeInfosPtrArray = new IntPtr[numArgs];
+            IntPtr[] argDescriptionsPtrArray = new IntPtr[numArgs];
+
+            if (numArgs > 0)
+            {
+                Marshal.Copy(argNamesPtr, argNamesPtrArray, 0, (int)numArgs);
+                Marshal.Copy(argTypeInfosPtr, argTypeInfosPtrArray, 0, (int)numArgs);
+                Marshal.Copy(argDescriptionsPtr, argDescriptionsPtrArray, 0, (int)numArgs);
+            }
+ 
+            List<string> arguments = new List<string>();
+
+            for (int i = 0; i < numArgs; i++)
+            {
+                var dtype = Marshal.PtrToStringAnsi(argTypeInfosPtrArray[i]);
+                if (dtype != null && !(dtype.StartsWith("NDArray") || dtype.StartsWith("Symbol")))
+                {
+                    arguments.Add(Marshal.PtrToStringAnsi(argNamesPtrArray[i]));
+                }
+            }
+
+
+            return (InvokeMemberBinder binder, object[] args) => generic_ndarray_function(funcHandle, arguments, binder, args);
+
+
+        }
+
+        private dynamic generic_ndarray_function(IntPtr funcHandle, List<string> arguments, InvokeMemberBinder binder, object[] args)
+        {
+            var csharpBinder = binder.GetType().GetInterface("Microsoft.CSharp.RuntimeBinder.ICSharpInvokeOrInvokeMemberBinder");
+            var argumentInfos = ((IList<CSharpArgumentInfo>) csharpBinder.GetProperty("ArgumentInfo").GetValue(binder, null)).Skip(1).ToList();
+            var namedArgumentProperty = typeof(CSharpArgumentInfo).GetProperty("NamedArgument",
+                System.Reflection.BindingFlags.NonPublic | 
+                System.Reflection.BindingFlags.Instance  |
+                System.Reflection.BindingFlags.GetProperty);
+
+            var nametProperty = typeof(CSharpArgumentInfo).GetProperty("Name",
+    System.Reflection.BindingFlags.NonPublic |
+    System.Reflection.BindingFlags.Instance |
+    System.Reflection.BindingFlags.GetProperty);
+
+            Debug.Assert(argumentInfos != null, "argumentInfos != null");
+            var nonamarg = argumentInfos.Where(w => !(bool)namedArgumentProperty.GetValue(w, null)).ToList();
+            var namarg = argumentInfos.Select((x, i) => new { x, i }).Where(w => (bool)namedArgumentProperty.GetValue(w.x, null))
+                .ToDictionary(k => nametProperty.GetValue(k.x, null) as string, v => args[v.i]).ToList();
+
+            List<NDArrayHandle> nd_args = new List<NDArrayHandle>();
+            List<NDArrayHandle> output_vars = new List<NDArrayHandle>();
+            List<string> sparam_vals = new List<string>();
+            List<string> sparam_keys = new List<string>();
+
+            int pos_param_arg = 0;
+            for (int i = 0; i < nonamarg.Count; i++)
+            {
+                if (args[i] is NdArray)
+                {
+                    nd_args.Add(((NdArray) args[i]).Handle);
+                }
+                else
+                {
+                    if (pos_param_arg >= arguments.Count)
+                    {
+                        throw new ArgumentException ("Too many positional arguments");
+                    }
+
+                    sparam_vals.Add(args[i].ToString());
+                    sparam_keys.Add(arguments[pos_param_arg]);
+                    pos_param_arg = pos_param_arg + 1;
+                }
+            }
+
+            dynamic original_output = null;
+
+            foreach (var kviem in namarg)
+            {
+                if (kviem.Key == "out")
+                {
+                    original_output = kviem.Value;
+                    if (kviem.Value is NdArray)
+                    {
+                        output_vars.Add(((NdArray) kviem.Value).Handle);
+                    }
+                    else
+                    {
+                        foreach (var v in (IEnumerable) kviem.Value)
+                        {
+                            if (!(v is NdArray))
+                            {
+                                throw new ArgumentException("out need to be of type NDArray");
+                            }
+                            output_vars.Add(((NdArray) v).Handle);
+                        }
+                    }
+
+                }
+                else
+                {
+                    sparam_vals.Add(kviem.Value.ToString());
+                    sparam_keys.Add(kviem.Key);
+                }
+
+            }
+            int num_output = output_vars.Count;
+            bool nooutput = num_output == 0;
+
+
+            GCHandle? outputArrayGch = null;
+            NDArrayHandle[] outputArray = null;
+            IntPtr outputArrayPtr;
+
+            if (nooutput)
+            {
+                outputArrayPtr = IntPtr.Zero;
+            }
+            else
+            {
+                outputArray = output_vars.ToArray();
+                outputArrayGch = GCHandle.Alloc(outputArray, GCHandleType.Pinned);
+                outputArrayPtr = outputArrayGch.Value.AddrOfPinnedObject();
+            }
+
+
+            NativeMethods.MXImperativeInvoke(funcHandle,
+                nd_args.Count, nd_args.ToArray(),
+                ref num_output, ref outputArrayPtr,
+                sparam_keys.Count, sparam_keys.ToArray(), sparam_vals.ToArray());
+
+            if (!nooutput)
+            {
+                outputArrayGch.Value.Free();
+            }
+
+            if (original_output != null)
+            {
+                return original_output;
+            }
+            if (nooutput)
+            {
+                NDArrayHandle[] ndArrays = new NDArrayHandle[num_output];
+                Marshal.Copy(outputArrayPtr, ndArrays, 0, num_output);
+
+                if (num_output == 1)
+                {
+                    return new NdArray(ndArrays[0]);
+                }
+                else
+                {
+                    return (IList<NdArray>) ndArrays.Select(s => new NdArray(s)).ToList();
+                }
+
+            }
+            else
+            {
+                if (num_output == 1)
+                {
+                    return new NdArray(outputArray[0]);
+                }
+                else
+                {
+                    return (IList<NdArray>)outputArray.Select(s => new NdArray(s)).ToList();
+                }
+            }
+        }
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+
+            if(_functions.ContainsKey(binder.Name))
+            {
+                result = _functions[binder.Name](binder, args);
+                return true;
+            }
+            result = null;
+            return false;
+        }
     }
 }
