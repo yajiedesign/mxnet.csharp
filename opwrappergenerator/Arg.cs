@@ -17,9 +17,22 @@ namespace opwrappergenerator
             {"Symbol", "Symbol"},
             {"Symbol[]", "Symbol[]"},
             {"float", "float"},
+            {"double", "double"},
             {"int", "int"},
             {"long", "long"},
-            {"string", "string"}
+            {"string", "string"},
+            {"NDArray", "Symbol"},
+            {"NDArray-or-Symbol", "Symbol"},
+            {"NDArray-or-Symbol[]", "Symbol[]"}
+
+        };
+        private Dictionary<string, string> _type_dict_with_null = new Dictionary<string, string>
+        {
+            {"boolean", "bool"},
+            {"float", "float"},
+            {"double", "double"},
+            {"int", "int"},
+            {"long", "long"},
         };
         public string orgin_name { get; }
         public string name { get; }
@@ -72,7 +85,17 @@ namespace opwrappergenerator
 
                 if (is_enum)
                 {
-                    default_string = Enum.GetDefaultValueString(default_string);
+                    if (default_string == "None")
+                    {
+                        type_name += "?";
+                        default_string = "null";
+                    }
+                    else
+                    {
+                        default_string = Enum.GetDefaultValueString(default_string);
+
+                    }
+
                 }
                 else if (default_string == "False")
                 {
@@ -81,6 +104,14 @@ namespace opwrappergenerator
                 else if (default_string == "True")
                 {
                     default_string = "true";
+                }
+                else if (default_string == "None")
+                {
+                    default_string = "null";
+                    if (_type_dict_with_null.ContainsKey(type_name))
+                    {
+                        type_name += "?";
+                    }
                 }
                 else if (default_string.StartsWith("("))
                 {
@@ -94,6 +125,10 @@ namespace opwrappergenerator
                 if (type_name == "float")
                 {
                     default_string = default_string + "f";
+                }
+                if (type_name == "string")
+                {
+                    default_string = "null";
                 }
             }
             if (arg_name == "weight" || arg_name == "bias")

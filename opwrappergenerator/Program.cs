@@ -28,7 +28,7 @@ namespace mxnet.csharp
     @"}
 }
 ";
-            File.WriteAllText(@"..\..\..\mxnet.csharp\OperatorWarp.cs", str);
+            File.WriteAllText(@"..\..\..\..\mxnet.csharp\OperatorWarp.cs", str);
 
         }
     }

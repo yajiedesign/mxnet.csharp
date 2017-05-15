@@ -11,7 +11,7 @@ namespace opwrappergenerator
     {        /// Return Type: int
              ///out_size: mx_uint*
              ///out_array: AtomicSymbolCreator**
-        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListAtomicSymbolCreators")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolListAtomicSymbolCreators",CallingConvention = CallingConvention.Cdecl)]
         public static extern int MXSymbolListAtomicSymbolCreators(out uint out_size,
             out IntPtr out_array_ptr);
 
@@ -25,7 +25,7 @@ namespace opwrappergenerator
         ///arg_descriptions: char***
         ///key_var_num_args: char**
         ///return_type: char**
-        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolGetAtomicSymbolInfo")]
+        [DllImport("libmxnet.dll", EntryPoint = "MXSymbolGetAtomicSymbolInfo", CallingConvention = CallingConvention.Cdecl)]
         public static extern int MXSymbolGetAtomicSymbolInfo(IntPtr creator,
           [Out]out IntPtr name,
           [Out]out IntPtr description,
