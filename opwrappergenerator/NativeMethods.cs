@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace opwrappergenerator
 {
-   static class  NativeMethods
+    static class NativeMethods
     {        /// Return Type: int
              ///out_size: mx_uint*
              ///out_array: AtomicSymbolCreator**

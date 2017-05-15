@@ -69,22 +69,24 @@ namespace test.console
             //ReadData rdpredict = new ReadData("data\\train\\", 32, true);
             //var testOut = model.Predict(rdpredict, 1);
 
-
+      
             TrainTest();
         }
 
         private static void TrainTest()
         {
-        
-
             int batch_size = 32;
+            var pnet = get_ocrnet(batch_size);
+            //var modelloadtest = FeedForward.Load("checkpoint\\cnn");
+
+  
  
             ReadData rdtrain = new ReadData("data\\train\\", batch_size);
             ReadData rdval = new ReadData("data\\val\\", batch_size);
 
             Context ctx = new Context(DeviceType.KGpu, 0);
 
-            var pnet = get_ocrnet(batch_size);
+   
             Speedometer speed = new Speedometer(batch_size, 50);
             DoCheckpoint doCheckpoint = new DoCheckpoint("checkpoint\\cnn");
 

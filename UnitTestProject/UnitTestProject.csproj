@@ -53,14 +53,30 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Razorvine.Pyrolite, Version=4.13.0.42731, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Razorvine.Pyrolite.4.13.0\lib\net40\Razorvine.Pyrolite.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Razorvine.Pyrolite, Version=4.19.0.27570, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Razorvine.Pyrolite.4.19.0\lib\net40\Razorvine.Pyrolite.dll</HintPath>
     </Reference>
-    <Reference Include="Razorvine.Serpent, Version=1.13.0.42338, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Razorvine.Serpent.1.13.0\lib\net40\Razorvine.Serpent.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Razorvine.Serpent, Version=1.18.0.25311, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Razorvine.Serpent.1.18.0\lib\net40\Razorvine.Serpent.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
