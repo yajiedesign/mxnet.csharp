@@ -194,6 +194,13 @@ namespace mxnet.csharp
 
         }
 
+        public NdArray Invoke(NdArray @out)
+        {
+            List<NdArray> outputs = new List<NdArray> { @out };
+            Invoke(outputs);
+            return outputs.First();
+        }
+
         public NdArray Invoke()
         {
             List<NdArray> outputs = new List<NdArray> {new NdArray()};

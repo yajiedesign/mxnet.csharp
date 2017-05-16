@@ -82,7 +82,8 @@ namespace opwrappergenerator
                      + op.GetOpDefinitionString(false, OpNdArrayOrSymbol.Symbol,ref tmp) + "\n";
 
 
-                retNdArray += op.GetOpDefinitionString(false, OpNdArrayOrSymbol.NdArray, ref tmp) + "\n";
+                retNdArray += op.GetOpDefinitionString(true, OpNdArrayOrSymbol.NdArray, ref tmp) + "\n"
+                     +  op.GetOpDefinitionString(false, OpNdArrayOrSymbol.NdArray, ref tmp) + "\n";
 
             }
             return (retSymbol, retNdArray, retEnums);

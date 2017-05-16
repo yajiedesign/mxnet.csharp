@@ -46,11 +46,11 @@ namespace mxnet.csharp.optimizer
 
             if (state != null)
             {
-              //  Symbol.SgdMomUpdate(grad, state, lr, weight, this._momentum, wd, this._rescaleGrad, _clipGradient);
+                NdArray.SgdMomUpdate(grad, state, lr, weight, this._momentum, wd, this._rescaleGrad, _clipGradient);
             }
             else
             {
-               // Symbol.SgdUpdate(grad, lr, weight, wd, this._rescaleGrad, _clipGradient);
+                NdArray.SgdUpdate(grad, lr, weight, wd, this._rescaleGrad, _clipGradient);
             }
         }
     }

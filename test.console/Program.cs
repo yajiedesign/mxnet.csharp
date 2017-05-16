@@ -84,7 +84,7 @@ namespace test.console
             ReadData rdtrain = new ReadData("data\\train\\", batch_size);
             ReadData rdval = new ReadData("data\\val\\", batch_size);
 
-            Context ctx = new Context(DeviceType.KGpu, 0);
+            Context ctx = new Context(DeviceType.KCpu, 0);
 
 
             Speedometer speed = new Speedometer(batch_size, 50);

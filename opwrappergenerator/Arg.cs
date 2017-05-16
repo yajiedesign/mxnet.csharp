@@ -44,6 +44,11 @@ namespace opwrappergenerator
         public string default_string { get; }
         public string default_string_with_object { get; } = "";
 
+        public Arg()
+        {
+            
+        }
+
         public Arg(string op_name = "", string arg_name = "", string type_string = "", string desc_string = "")
         {
             if (arg_name == "src")

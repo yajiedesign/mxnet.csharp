@@ -64,11 +64,26 @@ namespace opwrappergenerator
                     throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
             }
             string ret = "";
-            var args_local = this._args.Skip(use_name ? 0 : 1).ToList();
-
+            List<Arg> args_local = this._args.Skip(use_name ? 0 : 1).ToList();
+            switch (opNdArrayOrSymbol)
+            {
+                case OpNdArrayOrSymbol.Symbol:
+           
+                    break;
+                case OpNdArrayOrSymbol.NdArray:
+                    if (use_name)
+                    {
+                        args_local = this._args.Skip(1).ToList();
+                        args_local.Insert(0, new Arg("", "@out", "NDArray-or-Symbol", "output Ndarray") { });
+                    }
+              
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
+            }
 
             //enum
-            if (use_name || opNdArrayOrSymbol== OpNdArrayOrSymbol.NdArray)
+            if (use_name)
             {
                 foreach (var arg in args_local.Where(w => w.is_enum))
                 {
@@ -82,15 +97,14 @@ namespace opwrappergenerator
             //comments 
             ret += $"/// <summary>\n/// {_description.Replace("\n", "")}\n/// </summary>\n";
 
-
             foreach (var arg in args_local)
             {
                 ret += $"/// <param name=\"{arg.name}\">{arg.description.Replace("\n", "")}</param>\n";
             }
             ret += $" /// <returns>returns new symbol</returns>\n";
 
-
             ret += $"public static {NdArrayOrSymbol} {ConvertName(_name)}(";
+
             foreach (var arg in args_local)
             {
                 if (arg.type_name == "NdArrayOrSymbol")
@@ -181,7 +195,14 @@ namespace opwrappergenerator
                    }
                     break;
                 case OpNdArrayOrSymbol.NdArray:
-                    ret += ".Invoke();\n";
+                    if (use_name)
+                    {
+                        ret += ".Invoke(@out);\n";
+                    }
+                    else
+                    {
+                        ret += ".Invoke();\n";
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
