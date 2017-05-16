@@ -56,7 +56,7 @@ namespace mxnet.csharp
         /// </summary>
         public NDArrayHandle Handle { get; }
     }
-    public class NdArray
+    public partial class NdArray :INdArrayOrSymbol
     {
         private readonly bool _writable;
         private readonly NdBlob _blobPtr;
@@ -457,7 +457,11 @@ namespace mxnet.csharp
         }
         #endregion
 
-
+        [DebuggerHidden]
+        public NDArrayHandle get_handle()
+        {
+            return _blobPtr.Handle;
+        }
     }
 
     public static class NdArrayExtension
@@ -706,5 +710,6 @@ namespace mxnet.csharp
             result = null;
             return false;
         }
+   
     }
 }

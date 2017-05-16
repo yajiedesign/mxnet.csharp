@@ -55,7 +55,7 @@ namespace mxnet.csharp
         public SymbolHandle Handle { get; } = IntPtr.Zero;
     }
 
-    public partial class Symbol
+    public partial class Symbol :INdArrayOrSymbol
     {
         private readonly SymBlob _blobPtr;
 
@@ -179,6 +179,7 @@ namespace mxnet.csharp
 
         public static Symbol Load(string fileName)
         {
+            
             SymbolHandle handle;
             Util.CallCheck(NativeMethods.MXSymbolCreateFromFile(fileName, out handle));
             return new Symbol(handle);
@@ -741,7 +742,6 @@ namespace mxnet.csharp
         {
             return _blobPtr.Handle;
         }
-
 
 
     }

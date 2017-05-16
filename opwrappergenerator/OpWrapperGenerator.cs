@@ -10,7 +10,7 @@ namespace opwrappergenerator
 {
     class OpWrapperGenerator
     {
-        public string ParseAllOps()
+        public (string, string, string) ParseAllOps()
         {
             uint num_symbol_creators = 0;
             IntPtr symbol_creators_ptr;
@@ -20,7 +20,9 @@ namespace opwrappergenerator
             IntPtr[] symbol_creators = new IntPtr[num_symbol_creators];
             Marshal.Copy(symbol_creators_ptr, symbol_creators, 0, (int)num_symbol_creators);
 
-            string ret = "";
+            string retSymbol = "";
+            string retNdArray = "";
+            string retEnums = "";
             for (int i = 0; i < num_symbol_creators; i++)
             {
                 IntPtr name_ptr;
@@ -53,9 +55,9 @@ namespace opwrappergenerator
                 IntPtr[] arg_descriptions_array = new IntPtr[num_args];
                 if (num_args > 0)
                 {
-                    Marshal.Copy(arg_names_ptr, arg_names_array, 0, (int) num_args);
-                    Marshal.Copy(arg_type_infos_ptr, arg_type_infos_array, 0, (int) num_args);
-                    Marshal.Copy(arg_descriptions_ptr, arg_descriptions_array, 0, (int) num_args);
+                    Marshal.Copy(arg_names_ptr, arg_names_array, 0, (int)num_args);
+                    Marshal.Copy(arg_type_infos_ptr, arg_type_infos_array, 0, (int)num_args);
+                    Marshal.Copy(arg_descriptions_ptr, arg_descriptions_array, 0, (int)num_args);
 
                 }
 
@@ -74,14 +76,16 @@ namespace opwrappergenerator
                         );
                     args.Add(arg);
                 }
-
+                string tmp = "";
                 var op = new Op(name, description, args);
-                ret += op.GetOpDefinitionString(true) + "\n"
-                           + op.GetOpDefinitionString(false) + "\n";
+                retSymbol += op.GetOpDefinitionString(true, OpNdArrayOrSymbol.Symbol, ref retEnums) + "\n"
+                     + op.GetOpDefinitionString(false, OpNdArrayOrSymbol.Symbol,ref tmp) + "\n";
 
+
+                retNdArray += op.GetOpDefinitionString(false, OpNdArrayOrSymbol.NdArray, ref tmp) + "\n";
 
             }
-            return ret;
+            return (retSymbol, retNdArray, retEnums);
         }
     }
 }

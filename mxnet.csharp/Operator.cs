@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using SymbolHandle = System.IntPtr;
+using NdArrayHandle = System.IntPtr;
 using AtomicSymbolCreator = System.IntPtr;
 namespace mxnet.csharp
 {
@@ -51,7 +52,7 @@ namespace mxnet.csharp
         /// <param name="name">name name of the input symbol</param>
         /// <param name="symbol">the input symbol</param>
         /// <returns></returns>
-        public Operator SetInput(string name, Symbol symbol)
+        public Operator SetInput(string name, INdArrayOrSymbol symbol)
         {
             if (symbol == null)
             {
@@ -61,12 +62,12 @@ namespace mxnet.csharp
             _inputValues.Add(symbol.get_handle());
             return this;
         }
-        public Operator AddInput(Symbol s1)
+        public Operator AddInput(INdArrayOrSymbol s1)
         {
             PushInput(s1);
             return this;
         }
-        public Operator AddInput(ICollection<Symbol> sc)
+        public Operator AddInput(ICollection<INdArrayOrSymbol> sc)
         {
             foreach (var s in sc)
             {
@@ -75,25 +76,23 @@ namespace mxnet.csharp
             return this;
         }
 
-        public Operator AddInput(Symbol s1, Symbol s2)
+        public Operator AddInput(INdArrayOrSymbol s1, INdArrayOrSymbol s2)
         {
             PushInput(s1);
             PushInput(s2);
             return this;
         }
-        /*!
-        * \brief add an input symbol
-        * \param symbol the input symbol
-        */
+
         /// <summary>
         /// add an input symbol
         /// </summary>
         /// <param name="symbol">the input symbol</param>
-        public void PushInput(Symbol symbol)
+        public void PushInput(INdArrayOrSymbol symbol)
         {
             _inputValues.Add(symbol.get_handle());
         }
 
+ 
 
 
 
@@ -123,8 +122,8 @@ namespace mxnet.csharp
 
 
 
-            NativeMethods.MXSymbolCreateAtomicSymbol(_handle, (uint)paramKeys.Count, paramKeys.ToArray(),
-                                       paramValues.ToArray(), out symbolHandle);
+            Util.CallCheck(NativeMethods.MXSymbolCreateAtomicSymbol(_handle, (uint)paramKeys.Count, paramKeys.ToArray(),
+                                        paramValues.ToArray(), out symbolHandle));
 
             if (inputKeys.Count > 0)
             {
@@ -146,6 +145,61 @@ namespace mxnet.csharp
             return new Symbol(symbolHandle);
         }
 
+        public void Invoke(List<NdArray> outputs)
+        {
+
+   
+            List<string> inputKeys = new List<string>();
+            List<string> paramKeys = new List<string>();
+            List<string> paramValues = new List<string>();
+
+            foreach (var data in _params)
+            {
+                paramKeys.Add(data.Key);
+                paramValues.Add(data.Value);
+            }
+            foreach (var data in this._inputKeys)
+            {
+                inputKeys.Add(data);
+            }
+            int num_inputs = _inputValues.Count;
+            int num_outputs = outputs.Count;
+
+            NdArrayHandle[] output_handles = outputs.Select(s => s.get_handle()).ToArray();
+            IntPtr outputs_receiver = IntPtr.Zero;
+            GCHandle? gcHandle = null;
+            if (outputs.Count > 0)
+            {
+                gcHandle = GCHandle.Alloc(output_handles, GCHandleType.Pinned);
+                outputs_receiver = gcHandle.Value.AddrOfPinnedObject();
+
+            }
+
+            NativeMethods.MXImperativeInvoke(_handle, num_inputs, _inputValues.ToArray(),ref num_outputs, ref outputs_receiver,
+                paramKeys.Count, paramKeys.ToArray(), paramValues.ToArray());
+
+            if (outputs.Count > 0)
+            {
+                gcHandle?.Free();
+                return;
+            }
+            output_handles = new IntPtr[num_outputs];
+
+            Marshal.Copy(outputs_receiver, output_handles,0, num_outputs);
+
+            foreach (IntPtr outputHandle in output_handles)
+            {
+                outputs.Add(new NdArray(outputHandle));
+            }
+
+        }
+
+        public NdArray Invoke()
+        {
+            List<NdArray> outputs = new List<NdArray> {new NdArray()};
+            Invoke(outputs);
+            return outputs.First();
+        }
 
     }
 }

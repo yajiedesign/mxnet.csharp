@@ -15,7 +15,7 @@ namespace mxnet.csharp.optimizer
     [Serializable]
     public abstract class Optimizer
     {
-        private float _rescaleGrad;
+        protected float _rescaleGrad;
         private readonly LrScheduler _lrScheduler;
         private readonly float _lr;
         private readonly float _wd;
@@ -24,7 +24,7 @@ namespace mxnet.csharp.optimizer
         private readonly int _beginNumUpdate;
         private int _numUpdate;
         private readonly Dictionary<int, int> _indexUpdateCount;
-        private float? _clipGradient;
+        protected float _clipGradient;
         private readonly Dictionary<int, string> _idx2Name;
         private readonly Symbol _sym;
 
@@ -32,7 +32,7 @@ namespace mxnet.csharp.optimizer
         public Optimizer(float rescaleGrad = 1.0f,
             Dictionary<int, string> paramIdx2Name = null,
             float wd = 0f,
-            float? clipGradient = null,
+            float clipGradient = -1.0f,
             float learningRate = 0.01f,
             LrScheduler lrScheduler = null,
             Symbol sym = null,
@@ -219,21 +219,7 @@ namespace mxnet.csharp.optimizer
             return "";
 
         }
-        protected static OptimizerHandle _init_cc_optimizer(string name, string[] paramKeys, string[] paramVals)
-        {
-            IntPtr creator;
-            Util.CallCheck(NativeMethods.MXOptimizerFindCreator(name,
-                out creator));
-            OptimizerHandle handle;
-            Util.CallCheck(NativeMethods.MXOptimizerCreateOptimizer(
-                creator,
-                (uint) paramKeys.Count(),
-                paramKeys, paramVals,
-                out handle));
-
-            return handle;
-        }
-
+ 
 
 
 

@@ -22,8 +22,8 @@ namespace opwrappergenerator
             {"long", "long"},
             {"string", "string"},
             {"NDArray", "Symbol"},
-            {"NDArray-or-Symbol", "Symbol"},
-            {"NDArray-or-Symbol[]", "Symbol[]"}
+            {"NDArray-or-Symbol", "NdArrayOrSymbol"},
+            {"NDArray-or-Symbol[]", "NdArrayOrSymbol[]"}
 
         };
         private Dictionary<string, string> _type_dict_with_null = new Dictionary<string, string>

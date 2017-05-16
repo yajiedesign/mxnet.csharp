@@ -198,6 +198,7 @@
     <Compile Include="callback\DoCheckpoint.cs" />
     <Compile Include="callback\Speedometer.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="INdArrayOrSymbol.cs" />
     <Compile Include="initializer\Xavier.cs" />
     <Compile Include="lr_scheduler\FactorScheduler.cs" />
     <Compile Include="lr_scheduler\LRScheduler.cs" />
@@ -206,6 +207,9 @@
     <Compile Include="metric\MAE.cs" />
     <Compile Include="metric\MSE.cs" />
     <Compile Include="metric\RMSE.cs" />
+    <Compile Include="OperatorWarpEnum.cs" />
+    <Compile Include="OperatorWarpNdArray.cs" />
+    <Compile Include="OperatorWarpSymbol.cs" />
     <Compile Include="optimizer\CcSgd.cs" />
     <Compile Include="optimizer\Sgd.cs" />
     <Compile Include="FeedForward_Predict.cs" />
@@ -225,7 +229,6 @@
     <Compile Include="NDArray.cs" />
     <Compile Include="Operator.cs" />
     <Compile Include="OperatorSupplement.cs" />
-    <Compile Include="OperatorWarp.cs" />
     <Compile Include="OpMap.cs" />
     <Compile Include="optimizer\Optimizer.cs" />
     <Compile Include="Shape.cs" />

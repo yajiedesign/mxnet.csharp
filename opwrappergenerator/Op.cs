@@ -6,13 +6,22 @@ using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace opwrappergenerator
-{
+{    /// <summary>
+     /// 
+     /// </summary>
+    enum OpNdArrayOrSymbol
+    {
+        Symbol,
+        NdArray
+
+
+    }
     internal class Op
     {
         private static readonly Regex R = new Regex(@"
                 (?<=[A-Z])(?=[A-Z][a-z]) |
                  (?<=[^A-Z])(?=[A-Z]) |
-                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace| RegexOptions.Compiled);
+                 (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace | RegexOptions.Compiled);
 
         private readonly string _name;
         private readonly string _description;
@@ -31,37 +40,42 @@ namespace opwrappergenerator
             this._args = args.Where(w => !w.has_default).Concat(args.Where(w => w.has_default)).ToList();
 
         }
-        /// <summary>
-        /// 
-        /// </summary>
-        enum MyEnum
-        { 
-            
-        }
+
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="use_name"></param>
+        /// <param name="opNdArrayOrSymbol"></param>
         /// <returns></returns>
-        public string GetOpDefinitionString(bool use_name)
+        public string GetOpDefinitionString(bool use_name, OpNdArrayOrSymbol opNdArrayOrSymbol,ref string enumret)
         {
-  
+
+            string NdArrayOrSymbol = "";
+            switch (opNdArrayOrSymbol)
+            {
+                case OpNdArrayOrSymbol.Symbol:
+                    NdArrayOrSymbol = "Symbol";
+                    break;
+                case OpNdArrayOrSymbol.NdArray:
+                    NdArrayOrSymbol = "NdArray";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
+            }
             string ret = "";
             var args_local = this._args.Skip(use_name ? 0 : 1).ToList();
 
 
             //enum
-            if (use_name)
+            if (use_name || opNdArrayOrSymbol== OpNdArrayOrSymbol.NdArray)
             {
                 foreach (var arg in args_local.Where(w => w.is_enum))
                 {
-                    ret += $"/// <summary>\n/// {arg.description.Replace("\n","")}\n/// </summary>\n";
-                    ret += arg.Enum.GetDefinitionString() +"\n";
+                    enumret += $"/// <summary>\n/// {arg.description.Replace("\n", "")}\n/// </summary>\n";
+                    enumret += arg.Enum.GetDefinitionString() + "\n";
                     ret += arg.Enum.GetConvertString() + "\n";
                 }
-
-
             }
 
 
@@ -76,10 +90,21 @@ namespace opwrappergenerator
             ret += $" /// <returns>returns new symbol</returns>\n";
 
 
-            ret += $"public static Symbol {ConvertName(_name)}(";
+            ret += $"public static {NdArrayOrSymbol} {ConvertName(_name)}(";
             foreach (var arg in args_local)
             {
-                ret += $"{arg.type_name} {arg.name}";
+                if (arg.type_name == "NdArrayOrSymbol")
+                {
+                    ret += $"{NdArrayOrSymbol} {arg.name}";
+                }
+                else if (arg.type_name == "NdArrayOrSymbol[]")
+                {
+                    ret += $"{NdArrayOrSymbol}[] {arg.name}";
+                }
+                else
+                {
+                    ret += $"{arg.type_name} {arg.name}";
+                }
                 if (arg.has_default)
                 {
 
@@ -91,20 +116,20 @@ namespace opwrappergenerator
             {
                 ret = ret.Substring(0, ret.Length - 2);
             }
-      
+
             ret += ")\n{";
 
             foreach (var arg in args_local)
             {
-                ret += arg.default_string_with_object ;
+                ret += arg.default_string_with_object;
             }
 
             ret += $"\nreturn new Operator(\"{_name}\")\n";
 
             foreach (var arg in _args)
             {
-                if (arg.type_name == "Symbol" ||
-                    arg.type_name == "Symbol[]" ||
+                if (arg.type_name == "NdArrayOrSymbol" ||
+                    arg.type_name == "NdArrayOrSymbol[]" ||
                     arg.name == "symbol_name")
                 {
                     continue;
@@ -112,20 +137,20 @@ namespace opwrappergenerator
 
                 if (arg.is_enum)
                 {
-                    ret += $".SetParam(\"{arg.orgin_name}\", {arg.Enum.name}Convert[(int){arg.name}])\n";
+                    ret += $".SetParam(\"{arg.orgin_name}\", Util.EnumToString<{arg.Enum.name}>({arg.name},{arg.Enum.name}Convert))\n";
                 }
                 else
                 {
                     ret += $".SetParam(\"{arg.orgin_name}\", {arg.name})\n";
                 }
-        
+
 
             }
 
 
             foreach (var arg in _args)
             {
-                if (arg.type_name != "Symbol")
+                if (arg.type_name != "NdArrayOrSymbol")
                 {
                     continue;
                 }
@@ -134,21 +159,34 @@ namespace opwrappergenerator
 
             foreach (var arg in _args)
             {
-                if (arg.type_name != "Symbol[]")
+                if (arg.type_name != "NdArrayOrSymbol[]")
                 {
                     continue;
                 }
                 ret += $".AddInput({arg.name})\n";
             }
-            if (use_name)
-            {
-                ret += ".CreateSymbol(symbol_name);\n";
-            }
-            else
-            {
 
-                ret += ".CreateSymbol();\n";
+            switch (opNdArrayOrSymbol)
+            {
+                case OpNdArrayOrSymbol.Symbol:
+                {
+                    if (use_name)
+                    {
+                        ret += ".CreateSymbol(symbol_name);\n";
+                    }
+                    else
+                    {
+                        ret += ".CreateSymbol();\n";
+                    }
+                   }
+                    break;
+                case OpNdArrayOrSymbol.NdArray:
+                    ret += ".Invoke();\n";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
             }
+    
             ret += "}";
             return ret;
         }

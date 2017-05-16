@@ -1371,43 +1371,6 @@ namespace mxnet.csharp
 
 
         /// Return Type: int
-        ///key: char*
-        ///out: OptimizerCreator*
-        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerFindCreator", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MXOptimizerFindCreator([In()] [MarshalAs(UnmanagedType.LPStr)] string key, out IntPtr @out);
-
-
-        /// Return Type: int
-        ///creator: OptimizerCreator->void*
-        ///num_param: mx_uint->unsigned int
-        ///keys: char**
-        ///vals: char**
-        ///out: OptimizerHandle*
-        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerCreateOptimizer", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MXOptimizerCreateOptimizer(IntPtr creator, uint numParam,
-            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] keys,
-            [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] vals,
-            out IntPtr @out);
-
-
-        /// Return Type: int
-        ///handle: OptimizerHandle->void*
-        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerFree", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MXOptimizerFree(IntPtr handle);
-
-
-        /// Return Type: int
-        ///handle: OptimizerHandle->void*
-        ///index: int
-        ///weight: NDArrayHandle->void*
-        ///grad: NDArrayHandle->void*
-        ///lr: mx_float->float
-        ///wd: mx_float->float
-        [DllImport("libmxnet.dll", EntryPoint = "MXOptimizerUpdate", CallingConvention = CallingConvention.Cdecl)]
-        public static extern int MXOptimizerUpdate(IntPtr handle, int index, IntPtr weight, IntPtr grad, float lr, float wd);
-
-
-        /// Return Type: int
         ///op_type: char*
         ///creator: CustomOpPropCreator
         [DllImport("libmxnet.dll", EntryPoint = "MXCustomOpRegister", CallingConvention = CallingConvention.Cdecl)]
@@ -1428,7 +1391,7 @@ namespace mxnet.csharp
             int num_inputs,
             [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.SysInt)] IntPtr[] inputs,
             ref int num_outputs,
-            ref IntPtr outputs,
+           ref IntPtr outputs,
             int num_params,
             [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] param_keys,
             [In] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] string[] param_vals);

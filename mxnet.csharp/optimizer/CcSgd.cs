@@ -31,21 +31,6 @@ namespace mxnet.csharp.optimizer
                 beginNumUpdate)
         {
             this._momentum = momentum;
-
-            this._handle = Optimizer._init_cc_optimizer(
-                "ccsgd",
-                new[]
-                {
-                    "momentum",
-                    "rescale_grad",
-                    "clip_gradient"
-                },
-                new[]
-                {
-                    momentum.ToString(CultureInfo.InvariantCulture),
-                    rescaleGrad.ToString(CultureInfo.InvariantCulture),
-                    clipGradient.ToString(CultureInfo.InvariantCulture)
-                });
         }
 
         public override NdArray create_state(int index, NdArray weight)
@@ -58,12 +43,15 @@ namespace mxnet.csharp.optimizer
             var lr = this._get_lr(index);
             var wd = this._get_wd(index);
             this._update_count(index);
-            Util.CallCheck(NativeMethods.MXOptimizerUpdate(this._handle,
-                index,
-                weight.Handle,
-                grad.Handle,
-                lr,
-                wd));
+
+            if (state != null)
+            {
+              //  Symbol.SgdMomUpdate(grad, state, lr, weight, this._momentum, wd, this._rescaleGrad, _clipGradient);
+            }
+            else
+            {
+               // Symbol.SgdUpdate(grad, lr, weight, wd, this._rescaleGrad, _clipGradient);
+            }
         }
     }
 }
