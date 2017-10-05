@@ -56,12 +56,18 @@ namespace test.console
 
         static void Main(string[] args)
         {
-
-            NumericsTest test = new NumericsTest();
-            test.Test();
-
             var log4NetConfig = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
             XmlConfigurator.Configure(new FileInfo(log4NetConfig));
+
+
+            TrainTest();
+
+
+            //Predict p = new Predict();
+            //p.DoPredict();
+
+            //NumericsTest test = new NumericsTest();
+            //test.Test();
 
 
             //var model = FeedForward.Load("checkpoint\\cnn");
@@ -70,7 +76,7 @@ namespace test.console
             //var testOut = model.Predict(rdpredict, 1);
 
 
-            TrainTest();
+       
         }
 
         private static void TrainTest()
@@ -84,7 +90,7 @@ namespace test.console
             ReadData rdtrain = new ReadData("data\\train\\", batch_size);
             ReadData rdval = new ReadData("data\\val\\", batch_size);
 
-            Context ctx = new Context(DeviceType.KCpu, 0);
+            Context ctx = new Context(DeviceType.KGpu, 0);
 
 
             Speedometer speed = new Speedometer(batch_size, 50);

@@ -12,12 +12,12 @@ namespace mxnet.csharp.util
     {
         public static void Uniform(float low, float high,NdArray @out)
         {
-            NdArray.RandomUniform(@out, low, high);       
+            NdArray.(@out, low, high);       
         }
 
         public static void Normal(float loc, float scale, NdArray @out)
         {
-            NdArray.RandomNormal(@out, loc, scale);
+            NdArray.(@out, loc, scale);
         }
     }
 }

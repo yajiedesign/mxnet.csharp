@@ -25,6 +25,14 @@ Edge,
 Reflect
 };
 /// <summary>
+/// Output storage type.
+/// </summary>
+public enum CastStorageStype
+{Csr,
+Default,
+RowSparse
+};
+/// <summary>
 /// Output data type.
 /// </summary>
 public enum CastDtype
@@ -63,69 +71,6 @@ Int32,
 Uint8
 };
 /// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SampleUniformDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SampleNormalDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SampleGammaDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SampleExponentialDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SamplePoissonDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SampleNegativeBinomialDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum SampleGeneralizedNegativeBinomialDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
 /// The return type. "value" means to return the top k values, "indices" means to return the indices of the top k values, "mask" means to return a mask array containing 0 and 1. 1 means the top k values. "both" means to return a list of both values and indices of top k elements.
 /// </summary>
 public enum TopkRetTyp
@@ -133,69 +78,6 @@ public enum TopkRetTyp
 Indices,
 Mask,
 Value
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomUniformDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomNormalDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomGammaDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomExponentialDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomPoissonDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomNegativeBinomialDtype
-{None,
-Float16,
-Float32,
-Float64
-};
-/// <summary>
-/// DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).
-/// </summary>
-public enum RandomGeneralizedNegativeBinomialDtype
-{None,
-Float16,
-Float32,
-Float64
 };
 /// <summary>
 /// upsampling method
@@ -256,7 +138,7 @@ NDHWC,
 NHWC
 };
 /// <summary>
-/// Whether to pick convolution algo by running performance test.
+/// Whether to pick convolution algorithm by running performance test.
 /// </summary>
 public enum DeconvolutionCudnnTune
 {Fastest,
@@ -264,7 +146,7 @@ LimitedWorkspace,
 Off
 };
 /// <summary>
-/// Set layout for input, output and weight. Empty for    default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.
+/// Set layout for input, output and weight. Empty for default layout, NCW for 1d, NCHW for 2d and NCDHW for 3d.
 /// </summary>
 public enum DeconvolutionLayout
 {NCDHW,
@@ -274,7 +156,14 @@ NDHWC,
 NHWC
 };
 /// <summary>
-/// transformation type    if transformation type is affine, data is affine matrix : (batch, 6)    if transformation type is warp, data is optical flow : (batch, 2, h, w)
+/// Whether to only turn on dropout during training or to also turn on for inference.
+/// </summary>
+public enum DropoutMode
+{Always,
+Training
+};
+/// <summary>
+/// The type of transformation. For `affine`, input data should be an affine matrix of size (batch, 6). For `warp`, input data should be an optical flow of size (batch, 2, h, w).
 /// </summary>
 public enum GridgeneratorTransformType
 {Affine,

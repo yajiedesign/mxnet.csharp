@@ -10,7 +10,7 @@ namespace opwrappergenerator
 {
     class Arg
     {
-        private Dictionary<string, string> _type_dict = new Dictionary<string, string>
+        private Dictionary<string, string> _typeDict = new Dictionary<string, string>
         {
             {"boolean", "bool"},
             {"Shape(tuple)", "Shape"},
@@ -26,7 +26,7 @@ namespace opwrappergenerator
             {"NDArray-or-Symbol[]", "NdArrayOrSymbol[]"}
 
         };
-        private Dictionary<string, string> _type_dict_with_null = new Dictionary<string, string>
+        private Dictionary<string, string> _typeDictWithNull = new Dictionary<string, string>
         {
             {"boolean", "bool"},
             {"float", "float"},
@@ -34,119 +34,119 @@ namespace opwrappergenerator
             {"int", "int"},
             {"long", "long"},
         };
-        public string orgin_name { get; }
-        public string name { get; }
-        public string description { get; }
-        public bool is_enum { get; } = false;
+        public string OrginName { get; }
+        public string Name { get; }
+        public string Description { get; }
+        public bool IsEnum { get; } = false;
         public EnumType Enum { get; }
-        public string type_name { get; }
-        public bool has_default { get; } = false;
-        public string default_string { get; }
-        public string default_string_with_object { get; } = "";
+        public string TypeName { get; }
+        public bool HasDefault { get; } = false;
+        public string DefaultString { get; }
+        public string DefaultStringWithObject { get; } = "";
 
         public Arg()
         {
             
         }
 
-        public Arg(string op_name = "", string arg_name = "", string type_string = "", string desc_string = "")
+        public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
         {
-            if (arg_name == "src")
+            if (argName == "src")
             {
-                arg_name = "data";
+                argName = "data";
             }
-            this.orgin_name = arg_name;
-            this.name = GetName(arg_name);
-            this.description = desc_string;
-            if (type_string.StartsWith("{"))
+            this.OrginName = argName;
+            this.Name = GetName(argName);
+            this.Description = descString;
+            if (typeString.StartsWith("{"))
             {
-                is_enum = true;
-                Enum = new EnumType(op_name +"_" + arg_name, type_string);
-                type_name = Enum.name;
+                IsEnum = true;
+                Enum = new EnumType(opName +"_" + argName, typeString);
+                TypeName = Enum.Name;
             }
             else
             {
                 string typename;
 
-                if (_type_dict.TryGetValue(type_string.Split(' ').First().Replace(",", ""), out typename))
+                if (_typeDict.TryGetValue(typeString.Split(' ').First().Replace(",", ""), out typename))
                 {
-                    type_name = typename;
+                    TypeName = typename;
                 }
                 else
                 {
-                    if (op_name == "Reshape")
+                    if (opName == "Reshape")
                     {
-                        type_name = "Shape";
+                        TypeName = "Shape";
                     }
                 }
 
              
             }
-            if (type_string.IndexOf("default", StringComparison.Ordinal) != -1)
+            if (typeString.IndexOf("default=", StringComparison.Ordinal) != -1)
             {
-                has_default = true;
-                default_string = type_string.Split(new string[] { "default=" }, StringSplitOptions.None)[1].Trim()
+                HasDefault = true;
+                DefaultString = typeString.Split(new string[] { "default=" }, StringSplitOptions.None)[1].Trim()
                     .Trim('\'');
 
-                if (is_enum)
+                if (IsEnum)
                 {
-                    if (default_string == "None")
+                    if (DefaultString == "None")
                     {
-                        type_name += "?";
-                        default_string = "null";
+                        TypeName += "?";
+                        DefaultString = "null";
                     }
                     else
                     {
-                        default_string = Enum.GetDefaultValueString(default_string);
+                        DefaultString = Enum.GetDefaultValueString(DefaultString);
 
                     }
 
                 }
-                else if (default_string == "False")
+                else if (DefaultString == "False")
                 {
-                    default_string = "false";
+                    DefaultString = "false";
                 }
-                else if (default_string == "True")
+                else if (DefaultString == "True")
                 {
-                    default_string = "true";
+                    DefaultString = "true";
                 }
-                else if (default_string == "None")
+                else if (DefaultString == "None")
                 {
-                    default_string = "null";
-                    if (_type_dict_with_null.ContainsKey(type_name))
+                    DefaultString = "null";
+                    if (_typeDictWithNull.ContainsKey(TypeName))
                     {
-                        type_name += "?";
+                        TypeName += "?";
                     }
                 }
-                else if (default_string.StartsWith("("))
+                else if (DefaultString.StartsWith("("))
                 {
-                    if (default_string != "()")
+                    if (DefaultString != "()")
                     {
-                        default_string_with_object = $"if({name}==null){{ {name}= new Shape{default_string};}}\n";
+                        DefaultStringWithObject = $"if({Name}==null){{ {Name}= new Shape{DefaultString};}}\n";
                     }
      
-                    default_string = "null";       
+                    DefaultString = "null";       
                 }
-                if (type_name == "float")
+                if (TypeName == "float")
                 {
-                    default_string = default_string + "f";
+                    DefaultString = DefaultString + "f";
                 }
-                if (type_name == "string")
+                if (TypeName == "string")
                 {
-                    default_string = "null";
+                    DefaultString = "null";
                 }
             }
-            if (arg_name == "weight" || arg_name == "bias")
+            if (argName == "weight" || argName == "bias")
             {
-                has_default = true;
-                default_string = "null";
+                HasDefault = true;
+                DefaultString = "null";
             }
 
         }
 
-        private string GetName(string arg_name)
+        private string GetName(string argName)
         {
-            return arg_name;
+            return argName;
         }
     }
     

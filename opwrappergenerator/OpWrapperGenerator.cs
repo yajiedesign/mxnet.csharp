@@ -12,67 +12,62 @@ namespace opwrappergenerator
     {
         public (string, string, string) ParseAllOps()
         {
-            uint num_symbol_creators = 0;
-            IntPtr symbol_creators_ptr;
 
-            int r = NativeMethods.MXSymbolListAtomicSymbolCreators(out num_symbol_creators, out symbol_creators_ptr);
+            int r = NativeMethods.MXSymbolListAtomicSymbolCreators(out uint numSymbolCreators, out IntPtr symbolCreatorsPtr);
             Debug.Assert(r == 0);
-            IntPtr[] symbol_creators = new IntPtr[num_symbol_creators];
-            Marshal.Copy(symbol_creators_ptr, symbol_creators, 0, (int)num_symbol_creators);
+            IntPtr[] symbolCreators = new IntPtr[numSymbolCreators];
+            Marshal.Copy(symbolCreatorsPtr, symbolCreators, 0, (int)numSymbolCreators);
 
             string retSymbol = "";
             string retNdArray = "";
             string retEnums = "";
-            for (int i = 0; i < num_symbol_creators; i++)
+            for (int i = 0; i < numSymbolCreators; i++)
             {
-                IntPtr name_ptr;
-                IntPtr description_ptr;
-                uint num_args;
-                IntPtr arg_names_ptr;
-                IntPtr arg_type_infos_ptr;
-                IntPtr arg_descriptions_ptr;
-                IntPtr key_var_num_args_ptr;
-                IntPtr return_type_ptr;
-                r = NativeMethods.MXSymbolGetAtomicSymbolInfo(symbol_creators[i],
-                out name_ptr,
-                out description_ptr,
-                out num_args,
-                out arg_names_ptr,
-                out arg_type_infos_ptr,
-                out arg_descriptions_ptr,
-                out key_var_num_args_ptr,
-                out return_type_ptr);
-                string name = Marshal.PtrToStringAnsi(name_ptr);
+                r = NativeMethods.MXSymbolGetAtomicSymbolInfo(symbolCreators[i],
+                out IntPtr namePtr,
+                out IntPtr descriptionPtr,
+                out uint numArgs,
+                out IntPtr argNamesPtr,
+                out IntPtr argTypeInfosPtr,
+                out IntPtr argDescriptionsPtr,
+                out IntPtr keyVarNumArgsPtr,
+                out IntPtr returnTypePtr);
+                string name = Marshal.PtrToStringAnsi(namePtr);
+                if (name == null)
+                {
+                    Console.WriteLine($"error namePtr {i}");
+                    continue;;
+                }
                 if (name.StartsWith("_"))
                 {
-                    continue;
+                    //continue;
                 }
 
-                string description = Marshal.PtrToStringAnsi(description_ptr);
+                string description = Marshal.PtrToStringAnsi(descriptionPtr);
 
-                IntPtr[] arg_names_array = new IntPtr[num_args];
-                IntPtr[] arg_type_infos_array = new IntPtr[num_args];
-                IntPtr[] arg_descriptions_array = new IntPtr[num_args];
-                if (num_args > 0)
+                IntPtr[] argNamesArray = new IntPtr[numArgs];
+                IntPtr[] argTypeInfosArray = new IntPtr[numArgs];
+                IntPtr[] argDescriptionsArray = new IntPtr[numArgs];
+                if (numArgs > 0)
                 {
-                    Marshal.Copy(arg_names_ptr, arg_names_array, 0, (int)num_args);
-                    Marshal.Copy(arg_type_infos_ptr, arg_type_infos_array, 0, (int)num_args);
-                    Marshal.Copy(arg_descriptions_ptr, arg_descriptions_array, 0, (int)num_args);
+                    Marshal.Copy(argNamesPtr, argNamesArray, 0, (int)numArgs);
+                    Marshal.Copy(argTypeInfosPtr, argTypeInfosArray, 0, (int)numArgs);
+                    Marshal.Copy(argDescriptionsPtr, argDescriptionsArray, 0, (int)numArgs);
 
                 }
 
                 List<Arg> args = new List<Arg>();
-                for (int j = 0; j < num_args; j++)
+                for (int j = 0; j < numArgs; j++)
                 {
-                    var descriptions = Marshal.PtrToStringAnsi(arg_descriptions_array[j]);
-                    if (descriptions.Contains("Deprecated"))
+                    string descriptions = Marshal.PtrToStringAnsi(argDescriptionsArray[j]);
+                    if (descriptions==null || descriptions.Contains("Deprecated"))
                     {
                         continue;
                     }
                     Arg arg = new Arg(name,
-                        Marshal.PtrToStringAnsi(arg_names_array[j]),
-                        Marshal.PtrToStringAnsi(arg_type_infos_array[j]),
-                     descriptions
+                        Marshal.PtrToStringAnsi(argNamesArray[j]),
+                        Marshal.PtrToStringAnsi(argTypeInfosArray[j]),
+                        descriptions
                         );
                     args.Add(arg);
                 }

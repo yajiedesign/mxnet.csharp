@@ -11,13 +11,13 @@ namespace opwrappergenerator
     {
         static void Main(string[] args)
         {
-            OpWrapperGenerator op_wrapper_generator = new OpWrapperGenerator();
+            OpWrapperGenerator opWrapperGenerator = new OpWrapperGenerator();
 
-            var (Symbol, NdArray, Enums) = op_wrapper_generator.ParseAllOps();
+            var (symbol, ndArray, enums) = opWrapperGenerator.ParseAllOps();
 
-            Symbol = Symbol.Replace("\n", "\r\n");
-            NdArray = NdArray.Replace("\n", "\r\n");
-            Enums = Enums.Replace("\n", "\r\n");
+            symbol = symbol.Replace("\n", "\r\n");
+            ndArray = ndArray.Replace("\n", "\r\n");
+            enums = enums.Replace("\n", "\r\n");
 
             string strSymbol = @"using System;
 using System.Collections.Generic;
@@ -30,7 +30,7 @@ namespace mxnet.csharp
 {
     public partial class Symbol
     {
-" + Symbol +
+" + symbol +
     @"}
 }
 ";
@@ -48,7 +48,7 @@ namespace mxnet.csharp
 {
     public partial class NdArray
     {
-" + NdArray +
+" + ndArray +
                                @"}
 }
 ";
@@ -64,7 +64,7 @@ using System.Threading.Tasks;
 
 namespace mxnet.csharp
 {
-" + Enums +  @"
+" + enums +  @"
                               
 }
 ";

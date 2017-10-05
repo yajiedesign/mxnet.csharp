@@ -32,12 +32,12 @@ namespace opwrappergenerator
             this._name = name;
             this._description = description;
 
-            var name_arg = new Arg(name,
+            var nameArg = new Arg(name,
                 "symbol_name",
                 "string",
                 "name of the resulting symbol");
-            args.Insert(0, name_arg);
-            this._args = args.Where(w => !w.has_default).Concat(args.Where(w => w.has_default)).ToList();
+            args.Insert(0, nameArg);
+            this._args = args.Where(w => !w.HasDefault).Concat(args.Where(w => w.HasDefault)).ToList();
 
         }
 
@@ -45,36 +45,36 @@ namespace opwrappergenerator
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="use_name"></param>
+        /// <param name="useName"></param>
         /// <param name="opNdArrayOrSymbol"></param>
         /// <returns></returns>
-        public string GetOpDefinitionString(bool use_name, OpNdArrayOrSymbol opNdArrayOrSymbol,ref string enumret)
+        public string GetOpDefinitionString(bool useName, OpNdArrayOrSymbol opNdArrayOrSymbol,ref string enumret)
         {
 
-            string NdArrayOrSymbol = "";
+            string ndArrayOrSymbol = "";
             switch (opNdArrayOrSymbol)
             {
                 case OpNdArrayOrSymbol.Symbol:
-                    NdArrayOrSymbol = "Symbol";
+                    ndArrayOrSymbol = "Symbol";
                     break;
                 case OpNdArrayOrSymbol.NdArray:
-                    NdArrayOrSymbol = "NdArray";
+                    ndArrayOrSymbol = "NdArray";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
             }
             string ret = "";
-            List<Arg> args_local = this._args.Skip(use_name ? 0 : 1).ToList();
+            List<Arg> argsLocal = this._args.Skip(useName ? 0 : 1).ToList();
             switch (opNdArrayOrSymbol)
             {
                 case OpNdArrayOrSymbol.Symbol:
            
                     break;
                 case OpNdArrayOrSymbol.NdArray:
-                    if (use_name)
+                    if (useName)
                     {
-                        args_local = this._args.Skip(1).ToList();
-                        args_local.Insert(0, new Arg("", "@out", "NDArray-or-Symbol", "output Ndarray") { });
+                        argsLocal = this._args.Skip(1).ToList();
+                        argsLocal.Insert(0, new Arg("", "@out", "NDArray-or-Symbol", "output Ndarray") { });
                     }
               
                     break;
@@ -83,11 +83,11 @@ namespace opwrappergenerator
             }
 
             //enum
-            if (use_name)
+            if (useName)
             {
-                foreach (var arg in args_local.Where(w => w.is_enum))
+                foreach (var arg in argsLocal.Where(w => w.IsEnum))
                 {
-                    enumret += $"/// <summary>\n/// {arg.description.Replace("\n", "")}\n/// </summary>\n";
+                    enumret += $"/// <summary>\n/// {arg.Description.Replace("\n", "")}\n/// </summary>\n";
                     enumret += arg.Enum.GetDefinitionString() + "\n";
                     ret += arg.Enum.GetConvertString() + "\n";
                 }
@@ -97,65 +97,65 @@ namespace opwrappergenerator
             //comments 
             ret += $"/// <summary>\n/// {_description.Replace("\n", "")}\n/// </summary>\n";
 
-            foreach (var arg in args_local)
+            foreach (var arg in argsLocal)
             {
-                ret += $"/// <param name=\"{arg.name}\">{arg.description.Replace("\n", "")}</param>\n";
+                ret += $"/// <param name=\"{arg.Name}\">{arg.Description.Replace("\n", "")}</param>\n";
             }
             ret += $" /// <returns>returns new symbol</returns>\n";
 
-            ret += $"public static {NdArrayOrSymbol} {ConvertName(_name)}(";
+            ret += $"public static {ndArrayOrSymbol} {ConvertName(_name)}(";
 
-            foreach (var arg in args_local)
+            foreach (var arg in argsLocal)
             {
-                if (arg.type_name == "NdArrayOrSymbol")
+                if (arg.TypeName == "NdArrayOrSymbol")
                 {
-                    ret += $"{NdArrayOrSymbol} {arg.name}";
+                    ret += $"{ndArrayOrSymbol} {arg.Name}";
                 }
-                else if (arg.type_name == "NdArrayOrSymbol[]")
+                else if (arg.TypeName == "NdArrayOrSymbol[]")
                 {
-                    ret += $"{NdArrayOrSymbol}[] {arg.name}";
+                    ret += $"{ndArrayOrSymbol}[] {arg.Name}";
                 }
                 else
                 {
-                    ret += $"{arg.type_name} {arg.name}";
+                    ret += $"{arg.TypeName} {arg.Name}";
                 }
-                if (arg.has_default)
+                if (arg.HasDefault)
                 {
 
-                    ret += $"={arg.default_string}";
+                    ret += $"={arg.DefaultString}";
                 }
                 ret += ",\n";
             }
-            if (args_local.Count > 0)
+            if (argsLocal.Count > 0)
             {
                 ret = ret.Substring(0, ret.Length - 2);
             }
 
             ret += ")\n{";
 
-            foreach (var arg in args_local)
+            foreach (var arg in argsLocal)
             {
-                ret += arg.default_string_with_object;
+                ret += arg.DefaultStringWithObject;
             }
 
             ret += $"\nreturn new Operator(\"{_name}\")\n";
 
             foreach (var arg in _args)
             {
-                if (arg.type_name == "NdArrayOrSymbol" ||
-                    arg.type_name == "NdArrayOrSymbol[]" ||
-                    arg.name == "symbol_name")
+                if (arg.TypeName == "NdArrayOrSymbol" ||
+                    arg.TypeName == "NdArrayOrSymbol[]" ||
+                    arg.Name == "symbol_name")
                 {
                     continue;
                 }
 
-                if (arg.is_enum)
+                if (arg.IsEnum)
                 {
-                    ret += $".SetParam(\"{arg.orgin_name}\", Util.EnumToString<{arg.Enum.name}>({arg.name},{arg.Enum.name}Convert))\n";
+                    ret += $".SetParam(\"{arg.OrginName}\", Util.EnumToString<{arg.Enum.Name}>({arg.Name},{arg.Enum.Name}Convert))\n";
                 }
                 else
                 {
-                    ret += $".SetParam(\"{arg.orgin_name}\", {arg.name})\n";
+                    ret += $".SetParam(\"{arg.OrginName}\", {arg.Name})\n";
                 }
 
 
@@ -164,27 +164,27 @@ namespace opwrappergenerator
 
             foreach (var arg in _args)
             {
-                if (arg.type_name != "NdArrayOrSymbol")
+                if (arg.TypeName != "NdArrayOrSymbol")
                 {
                     continue;
                 }
-                ret += $".SetInput(\"{arg.orgin_name}\", {arg.name})\n";
+                ret += $".SetInput(\"{arg.OrginName}\", {arg.Name})\n";
             }
 
             foreach (var arg in _args)
             {
-                if (arg.type_name != "NdArrayOrSymbol[]")
+                if (arg.TypeName != "NdArrayOrSymbol[]")
                 {
                     continue;
                 }
-                ret += $".AddInput({arg.name})\n";
+                ret += $".AddInput({arg.Name})\n";
             }
 
             switch (opNdArrayOrSymbol)
             {
                 case OpNdArrayOrSymbol.Symbol:
                 {
-                    if (use_name)
+                    if (useName)
                     {
                         ret += ".CreateSymbol(symbol_name);\n";
                     }
@@ -195,7 +195,7 @@ namespace opwrappergenerator
                    }
                     break;
                 case OpNdArrayOrSymbol.NdArray:
-                    if (use_name)
+                    if (useName)
                     {
                         ret += ".Invoke(@out);\n";
                     }
@@ -214,13 +214,13 @@ namespace opwrappergenerator
 
         private string ConvertName(string name)
         {
-            CultureInfo culture_info = Thread.CurrentThread.CurrentCulture;
-            TextInfo text_info = culture_info.TextInfo;
+            CultureInfo cultureInfo = Thread.CurrentThread.CurrentCulture;
+            TextInfo textInfo = cultureInfo.TextInfo;
 
 
 
             var ret = R.Replace(name, "_");
-            return text_info.ToTitleCase(ret).Replace("_", "");
+            return textInfo.ToTitleCase(ret).Replace("_", "");
         }
     }
 }
