@@ -48,25 +48,7 @@ namespace mxnet.csharp
     public static class Util
     {
 
-        public static readonly Dictionary<Type, int> DtypeNpToMx = new Dictionary<Type, int>
-        {
-            {typeof(float), 0},
-            {typeof(double), 1},
-          //  {typeof(np.float16), 2},
-            {typeof(byte), 3},
-            {typeof(int), 4}
-        };
-
-
-        public static readonly Dictionary<int, Type> DtypeMxToNp = new Dictionary<int, Type>
-        {
-            {0, typeof(float)},
-            {1, typeof(double)},
-            // {  2 , typeof(np.float16)},
-            {3, typeof(byte)},
-            {4, typeof(int)}
-        };
-
+    
 
         public static long Prod(uint[] shape)
         {

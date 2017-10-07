@@ -330,10 +330,10 @@ namespace mxnet.csharp
 
 
         public void InferType(
-         Dictionary<string, Type> inputTypes,
-         [Out] List<Type> inType,
-         [Out] List<Type> auxType,
-         [Out] List<Type> outType)
+         Dictionary<string, Dtype> inputTypes,
+         [Out] List<Dtype> inType,
+         [Out] List<Dtype> auxType,
+         [Out] List<Dtype> outType)
         {
             var keys = new List<string>();
             var argTypeData = new List<int>();
@@ -342,7 +342,7 @@ namespace mxnet.csharp
             foreach (var arg in inputTypes)
             {
                 keys.Add(arg.Key);
-                argTypeData.Add(Util.DtypeNpToMx[arg.Value]);
+                argTypeData.Add(arg.Value.Index);
             }
 
 
@@ -370,9 +370,9 @@ namespace mxnet.csharp
 
             if (complete > 0)
             {
-                if (inTypeSize != 0) { inType?.AddRange(inTypeData.Select(s => Util.DtypeMxToNp[s])); }
-                if (outTypeSize != 0) { outType?.AddRange(outTypeData.Select(s => Util.DtypeMxToNp[s])); }
-                if (auxTypeSize != 0) { auxType?.AddRange(auxTypeData.Select(s => Util.DtypeMxToNp[s])); }
+                if (inTypeSize != 0) { inType?.AddRange(inTypeData.Select(s =>  (Dtype)s)); }
+                if (outTypeSize != 0) { outType?.AddRange(outTypeData.Select(s => (Dtype)s)); }
+                if (auxTypeSize != 0) { auxType?.AddRange(auxTypeData.Select(s => (Dtype)s)); }
             }
         }
 
@@ -556,7 +556,7 @@ namespace mxnet.csharp
             Context context,
             Dictionary<string, uint[]> inputShapes,
             OpReqType gradReq,
-            Dictionary<string, Type> typeDict = null,
+            Dictionary<string, Dtype> typeDict = null,
             Dictionary<string, Context> group2Ctx = null
             )
         {
@@ -566,7 +566,7 @@ namespace mxnet.csharp
 
             if (typeDict == null)
             {
-                typeDict = listArguments.ToDictionary(k => k, v => typeof(float));
+                typeDict = listArguments.ToDictionary(k => k, v => Dtype.Float32);
             }
 
             var argShapes = new List<uint[]>();
@@ -575,9 +575,9 @@ namespace mxnet.csharp
             InferShape(inputShapes, argShapes, outShapes, auxShapes);
 
 
-            var argTypes = new List<Type>();
-            var auxTypes = new List<Type>();
-            var outTypes = new List<Type>();
+            var argTypes = new List<Dtype>();
+            var auxTypes = new List<Dtype>();
+            var outTypes = new List<Dtype>();
 
             InferType(typeDict, argTypes, auxTypes, outTypes);
 

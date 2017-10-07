@@ -277,7 +277,7 @@ namespace mxnet.csharp
 
         private  Executor BindExec(Symbol sym, Context ctx, Dictionary<string, uint[]> inputShapes,
             IList<string> paramNames, bool needGradInput, Executor baseExec,
-            Dictionary<string, NdArray> sharedDataArrays, Dictionary<string, Type> inputTypes = null, ILog logger = null)
+            Dictionary<string, NdArray> sharedDataArrays, Dictionary<string, Dtype> inputTypes = null, ILog logger = null)
         {
             if (logger == null)
             {
@@ -290,12 +290,12 @@ namespace mxnet.csharp
             sym.InferShape(inputShapes, argShapes, outShapes, auxShapes);
 
 
-            var argTypes = new List<Type>();
-            var auxType = new List<Type>();
-            var outType = new List<Type>();
+            var argTypes = new List<Dtype>();
+            var auxType = new List<Dtype>();
+            var outType = new List<Dtype>();
             if (inputTypes == null)
             {
-                inputTypes = inputShapes.ToDictionary(k => k.Key, v => typeof(float));
+                inputTypes = inputShapes.ToDictionary(k => k.Key, v => Dtype.Float32);
             }
             sym.InferType(inputTypes, argTypes, auxType, outType);
 

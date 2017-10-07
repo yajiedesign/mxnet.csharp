@@ -198,6 +198,7 @@
     <Compile Include="callback\DoCheckpoint.cs" />
     <Compile Include="callback\Speedometer.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="Dtype.cs" />
     <Compile Include="INdArrayOrSymbol.cs" />
     <Compile Include="initializer\Xavier.cs" />
     <Compile Include="lr_scheduler\FactorScheduler.cs" />
@@ -213,6 +214,7 @@
     <Compile Include="optimizer\CcSgd.cs" />
     <Compile Include="optimizer\Sgd.cs" />
     <Compile Include="FeedForward_Predict.cs" />
+    <Compile Include="Tuple.cs" />
     <Compile Include="util\BatchEndParam.cs" />
     <Compile Include="Executor.cs" />
     <Compile Include="ExecutorManager.cs" />

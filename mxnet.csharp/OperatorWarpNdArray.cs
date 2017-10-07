@@ -10,6 +10,294 @@ namespace mxnet.csharp
     public partial class NdArray
     {
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CustomFunction(NdArray @out)
+{
+return new Operator("_CustomFunction")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray CustomFunction()
+{
+return new Operator("_CustomFunction")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCustomFunction(NdArray @out)
+{
+return new Operator("_backward_CustomFunction")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCustomFunction()
+{
+return new Operator("_backward_CustomFunction")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CachedOp(NdArray @out)
+{
+return new Operator("_CachedOp")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray CachedOp()
+{
+return new Operator("_CachedOp")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCachedOp(NdArray @out)
+{
+return new Operator("_backward_CachedOp")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCachedOp()
+{
+return new Operator("_backward_CachedOp")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CachedOpNoGrad(NdArray @out)
+{
+return new Operator("_CachedOp_NoGrad")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray CachedOpNoGrad()
+{
+return new Operator("_CachedOp_NoGrad")
+.Invoke();
+}
+/// <summary>
+/// Decode image with OpenCV. Note: return image in RGB by default, instead of OpenCV's default BGR.
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="buf">Buffer containing binary encoded image</param>
+/// <param name="flag">Convert decoded image to grayscale (0) or color (1).</param>
+/// <param name="to_rgb">Whether to convert decoded image to mxnet's default RGB format (instead of opencv's default BGR).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Cvimdecode(NdArray @out,
+Symbol buf,
+int flag=1,
+bool to_rgb=true)
+{
+return new Operator("_cvimdecode")
+.SetParam("buf", buf)
+.SetParam("flag", flag)
+.SetParam("to_rgb", to_rgb)
+.Invoke(@out);
+}
+/// <summary>
+/// Decode image with OpenCV. Note: return image in RGB by default, instead of OpenCV's default BGR.
+/// </summary>
+/// <param name="buf">Buffer containing binary encoded image</param>
+/// <param name="flag">Convert decoded image to grayscale (0) or color (1).</param>
+/// <param name="to_rgb">Whether to convert decoded image to mxnet's default RGB format (instead of opencv's default BGR).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Cvimdecode(Symbol buf,
+int flag=1,
+bool to_rgb=true)
+{
+return new Operator("_cvimdecode")
+.SetParam("buf", buf)
+.SetParam("flag", flag)
+.SetParam("to_rgb", to_rgb)
+.Invoke();
+}
+/// <summary>
+/// Read and decode image with OpenCV. Note: return image in RGB by default, instead of OpenCV's default BGR.
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="filename">Name of the image file to be loaded.</param>
+/// <param name="flag">Convert decoded image to grayscale (0) or color (1).</param>
+/// <param name="to_rgb">Whether to convert decoded image to mxnet's default RGB format (instead of opencv's default BGR).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Cvimread(NdArray @out,
+string filename,
+int flag=1,
+bool to_rgb=true)
+{
+return new Operator("_cvimread")
+.SetParam("filename", filename)
+.SetParam("flag", flag)
+.SetParam("to_rgb", to_rgb)
+.Invoke(@out);
+}
+/// <summary>
+/// Read and decode image with OpenCV. Note: return image in RGB by default, instead of OpenCV's default BGR.
+/// </summary>
+/// <param name="filename">Name of the image file to be loaded.</param>
+/// <param name="flag">Convert decoded image to grayscale (0) or color (1).</param>
+/// <param name="to_rgb">Whether to convert decoded image to mxnet's default RGB format (instead of opencv's default BGR).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Cvimread(string filename,
+int flag=1,
+bool to_rgb=true)
+{
+return new Operator("_cvimread")
+.SetParam("filename", filename)
+.SetParam("flag", flag)
+.SetParam("to_rgb", to_rgb)
+.Invoke();
+}
+/// <summary>
+/// Resize image with OpenCV. 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source image</param>
+/// <param name="w">Width of resized image.</param>
+/// <param name="h">Height of resized image.</param>
+/// <param name="interp">Interpolation method (default=cv2.INTER_LINEAR).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Cvimresize(NdArray @out,
+Symbol data,
+int w,
+int h,
+int interp=1)
+{
+return new Operator("_cvimresize")
+.SetParam("data", data)
+.SetParam("w", w)
+.SetParam("h", h)
+.SetParam("interp", interp)
+.Invoke(@out);
+}
+/// <summary>
+/// Resize image with OpenCV. 
+/// </summary>
+/// <param name="data">source image</param>
+/// <param name="w">Width of resized image.</param>
+/// <param name="h">Height of resized image.</param>
+/// <param name="interp">Interpolation method (default=cv2.INTER_LINEAR).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Cvimresize(Symbol data,
+int w,
+int h,
+int interp=1)
+{
+return new Operator("_cvimresize")
+.SetParam("data", data)
+.SetParam("w", w)
+.SetParam("h", h)
+.SetParam("interp", interp)
+.Invoke();
+}
+/// <summary>
+/// Pad image border with OpenCV. 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source image</param>
+/// <param name="top">Top margin.</param>
+/// <param name="bot">Bottom margin.</param>
+/// <param name="left">Left margin.</param>
+/// <param name="right">Right margin.</param>
+/// <param name="type">Filling type (default=cv2.BORDER_CONSTANT).</param>
+/// <param name="values">Fill with value(RGB[A] or gray), up to 4 channels.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CvcopyMakeBorder(NdArray @out,
+Symbol data,
+int top,
+int bot,
+int left,
+int right,
+int type=0,
+Tuple<double> values=null)
+{
+return new Operator("_cvcopyMakeBorder")
+.SetParam("data", data)
+.SetParam("top", top)
+.SetParam("bot", bot)
+.SetParam("left", left)
+.SetParam("right", right)
+.SetParam("type", type)
+.SetParam("values", values)
+.Invoke(@out);
+}
+/// <summary>
+/// Pad image border with OpenCV. 
+/// </summary>
+/// <param name="data">source image</param>
+/// <param name="top">Top margin.</param>
+/// <param name="bot">Bottom margin.</param>
+/// <param name="left">Left margin.</param>
+/// <param name="right">Right margin.</param>
+/// <param name="type">Filling type (default=cv2.BORDER_CONSTANT).</param>
+/// <param name="values">Fill with value(RGB[A] or gray), up to 4 channels.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CvcopyMakeBorder(Symbol data,
+int top,
+int bot,
+int left,
+int right,
+int type=0,
+Tuple<double> values=null)
+{
+return new Operator("_cvcopyMakeBorder")
+.SetParam("data", data)
+.SetParam("top", top)
+.SetParam("bot", bot)
+.SetParam("left", left)
+.SetParam("right", right)
+.SetParam("type", type)
+.SetParam("values", values)
+.Invoke();
+}
+/// <summary>
+/// Place holder for variable who cannot perform gradient
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NoGradient(NdArray @out)
+{
+return new Operator("_NoGradient")
+.Invoke(@out);
+}
+/// <summary>
+/// Place holder for variable who cannot perform gradient
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray NoGradient()
+{
+return new Operator("_NoGradient")
+.Invoke();
+}
+/// <summary>
 /// Batch normalization.Normalizes a data batch by mean and variance, and applies a scale ``gamma`` aswell as offset ``beta``.Assume the input has more than one dimension and we normalize along axis 1.We first compute the mean and variance along this axis:.. math::  data\_mean[i] = mean(data[:,i,:,...]) \\  data\_var[i] = var(data[:,i,:,...])Then compute the normalized output, which has the same shape as input, as following:.. math::  out[:,i,:,...] = \frac{data[:,i,:,...] - data\_mean[i]}{\sqrt{data\_var[i]+\epsilon}} * gamma[i] + beta[i]Both *mean* and *var* returns a scalar by treating the input as a vector.Assume the input has size *k* on axis 1, then both ``gamma`` and ``beta``have shape *(k,)*. If ``output_mean_var`` is set to be true, then outputs both ``data_mean`` and``data_var`` as well, which are needed for the backward pass.Besides the inputs and the outputs, this operator accepts two auxiliarystates, ``moving_mean`` and ``moving_var``, which are *k*-lengthvectors. They are global statistics for the whole dataset, which are updatedby::  moving_mean = moving_mean * momentum + data_mean * (1 - momentum)  moving_var = moving_var * momentum + data_var * (1 - momentum)If ``use_global_stats`` is set to be true, then ``moving_mean`` and``moving_var`` are used instead of ``data_mean`` and ``data_var`` to computethe output. It is often used during inference.The parameter ``axis`` specifies which axis of the input shape denotesthe 'channel' (separately normalized groups).  The default is 1.  Specifying -1 sets the channelaxis to be the last item in the input shape.Both ``gamma`` and ``beta`` are learnable parameters. But if ``fix_gamma`` is true,then set ``gamma`` to 1 and its gradient to 0.Defined in G:\deeplearn\mxnet\src\operator\batch_norm.cc:L399
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -201,6 +489,153 @@ return new Operator("Concat")
 .AddInput(data)
 .Invoke();
 }
+private static readonly List<string> ContribCtclossBlankLabelConvert = new List<string>(){"first","last"};
+/// <summary>
+/// Connectionist Temporal Classification Loss.The shapes of the inputs and outputs:- **data**: `(sequence_length, batch_size, alphabet_size)`- **label**: `(batch_size, label_sequence_length)`- **out**: `(batch_size)`The `data` tensor consists of sequences of activation vectors (without applying softmax),with i-th channel in the last dimension corresponding to i-th labelfor i between 0 and alphabet_size-1 (i.e always 0-indexed).Alphabet size should include one additional value reserved for blank label.When `blank_label` is ``"first"``, the ``0``-th channel is be reserved foractivation of blank label, or otherwise if it is "last", ``(alphabet_size-1)``-th channel should bereserved for blank label.``label`` is an index matrix of integers. When `blank_label` is ``"first"``,the value 0 is then reserved for blank label, and should not be passed in this matrix. Otherwise,when `blank_label` is ``"last"``, the value `(alphabet_size-1)` is reserved for blank label.If a sequence of labels is shorter than *label_sequence_length*, use the specialpadding value at the end of the sequence to conform it to the correctlength. The padding value is `0` when `blank_label` is ``"first"``, and `-1` otherwise.For example, suppose the vocabulary is `[a, b, c]`, and in one batch we have three sequences'ba', 'cbb', and 'abac'. When `blank_label` is ``"first"``, we can index the labels as`{'a': 1, 'b': 2, 'c': 3}`, and we reserve the 0-th channel for blank label in data tensor.The resulting `label` tensor should be padded to be::  [[2, 1, 0, 0], [3, 2, 2, 0], [1, 2, 1, 3]]When `blank_label` is ``"last"``, we can index the labels as`{'a': 0, 'b': 1, 'c': 2}`, and we reserve the channel index 3 for blank label in data tensor.The resulting `label` tensor should be padded to be::  [[1, 0, -1, -1], [2, 1, 1, -1], [0, 1, 0, 2]]``out`` is a list of CTC loss values, one per example in the batch.See *Connectionist Temporal Classification: Labelling UnsegmentedSequence Data with Recurrent Neural Networks*, A. Graves *et al*. for moreinformation on the definition and the algorithm.Defined in G:\deeplearn\mxnet\src\operator\contrib\ctc_loss.cc:L114
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the ctc_loss op.</param>
+/// <param name="label">Ground-truth labels for the loss.</param>
+/// <param name="data_lengths">Lengths of data for each of the samples. Only required when use_data_lengths is true.</param>
+/// <param name="label_lengths">Lengths of labels for each of the samples. Only required when use_label_lengths is true.</param>
+/// <param name="use_data_lengths">Whether the data lenghts are decided by `data_lengths`. If false, the lengths are equal to the max sequence length.</param>
+/// <param name="use_label_lengths">Whether the label lenghts are decided by `label_lengths`, or derived from `padding_mask`. If false, the lengths are derived from the first occurrence of the value of `padding_mask`. The value of `padding_mask` is ``0`` when first CTC label is reserved for blank, and ``-1`` when last label is reserved for blank. See `blank_label`.</param>
+/// <param name="blank_label">Set the label that is reserved for blank label.If "first", 0-th label is reserved, and label values for tokens in the vocabulary are between ``1`` and ``alphabet_size-1``, and the padding mask is ``-1``. If "last", last label value ``alphabet_size-1`` is reserved for blank label instead, and label values for tokens in the vocabulary are between ``0`` and ``alphabet_size-2``, and the padding mask is ``0``.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribCTCLoss(NdArray @out,
+NdArray data,
+NdArray label,
+NdArray data_lengths,
+NdArray label_lengths,
+bool use_data_lengths=false,
+bool use_label_lengths=false,
+ContribCtclossBlankLabel blank_label=ContribCtclossBlankLabel.First)
+{
+return new Operator("_contrib_CTCLoss")
+.SetParam("use_data_lengths", use_data_lengths)
+.SetParam("use_label_lengths", use_label_lengths)
+.SetParam("blank_label", Util.EnumToString<ContribCtclossBlankLabel>(blank_label,ContribCtclossBlankLabelConvert))
+.SetInput("data", data)
+.SetInput("label", label)
+.SetInput("data_lengths", data_lengths)
+.SetInput("label_lengths", label_lengths)
+.Invoke(@out);
+}
+/// <summary>
+/// Connectionist Temporal Classification Loss.The shapes of the inputs and outputs:- **data**: `(sequence_length, batch_size, alphabet_size)`- **label**: `(batch_size, label_sequence_length)`- **out**: `(batch_size)`The `data` tensor consists of sequences of activation vectors (without applying softmax),with i-th channel in the last dimension corresponding to i-th labelfor i between 0 and alphabet_size-1 (i.e always 0-indexed).Alphabet size should include one additional value reserved for blank label.When `blank_label` is ``"first"``, the ``0``-th channel is be reserved foractivation of blank label, or otherwise if it is "last", ``(alphabet_size-1)``-th channel should bereserved for blank label.``label`` is an index matrix of integers. When `blank_label` is ``"first"``,the value 0 is then reserved for blank label, and should not be passed in this matrix. Otherwise,when `blank_label` is ``"last"``, the value `(alphabet_size-1)` is reserved for blank label.If a sequence of labels is shorter than *label_sequence_length*, use the specialpadding value at the end of the sequence to conform it to the correctlength. The padding value is `0` when `blank_label` is ``"first"``, and `-1` otherwise.For example, suppose the vocabulary is `[a, b, c]`, and in one batch we have three sequences'ba', 'cbb', and 'abac'. When `blank_label` is ``"first"``, we can index the labels as`{'a': 1, 'b': 2, 'c': 3}`, and we reserve the 0-th channel for blank label in data tensor.The resulting `label` tensor should be padded to be::  [[2, 1, 0, 0], [3, 2, 2, 0], [1, 2, 1, 3]]When `blank_label` is ``"last"``, we can index the labels as`{'a': 0, 'b': 1, 'c': 2}`, and we reserve the channel index 3 for blank label in data tensor.The resulting `label` tensor should be padded to be::  [[1, 0, -1, -1], [2, 1, 1, -1], [0, 1, 0, 2]]``out`` is a list of CTC loss values, one per example in the batch.See *Connectionist Temporal Classification: Labelling UnsegmentedSequence Data with Recurrent Neural Networks*, A. Graves *et al*. for moreinformation on the definition and the algorithm.Defined in G:\deeplearn\mxnet\src\operator\contrib\ctc_loss.cc:L114
+/// </summary>
+/// <param name="data">Input data to the ctc_loss op.</param>
+/// <param name="label">Ground-truth labels for the loss.</param>
+/// <param name="data_lengths">Lengths of data for each of the samples. Only required when use_data_lengths is true.</param>
+/// <param name="label_lengths">Lengths of labels for each of the samples. Only required when use_label_lengths is true.</param>
+/// <param name="use_data_lengths">Whether the data lenghts are decided by `data_lengths`. If false, the lengths are equal to the max sequence length.</param>
+/// <param name="use_label_lengths">Whether the label lenghts are decided by `label_lengths`, or derived from `padding_mask`. If false, the lengths are derived from the first occurrence of the value of `padding_mask`. The value of `padding_mask` is ``0`` when first CTC label is reserved for blank, and ``-1`` when last label is reserved for blank. See `blank_label`.</param>
+/// <param name="blank_label">Set the label that is reserved for blank label.If "first", 0-th label is reserved, and label values for tokens in the vocabulary are between ``1`` and ``alphabet_size-1``, and the padding mask is ``-1``. If "last", last label value ``alphabet_size-1`` is reserved for blank label instead, and label values for tokens in the vocabulary are between ``0`` and ``alphabet_size-2``, and the padding mask is ``0``.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribCTCLoss(NdArray data,
+NdArray label,
+NdArray data_lengths,
+NdArray label_lengths,
+bool use_data_lengths=false,
+bool use_label_lengths=false,
+ContribCtclossBlankLabel blank_label=ContribCtclossBlankLabel.First)
+{
+return new Operator("_contrib_CTCLoss")
+.SetParam("use_data_lengths", use_data_lengths)
+.SetParam("use_label_lengths", use_label_lengths)
+.SetParam("blank_label", Util.EnumToString<ContribCtclossBlankLabel>(blank_label,ContribCtclossBlankLabelConvert))
+.SetInput("data", data)
+.SetInput("label", label)
+.SetInput("data_lengths", data_lengths)
+.SetInput("label_lengths", label_lengths)
+.Invoke();
+}
+private static readonly List<string> ContribDequantizeOutTypeConvert = new List<string>(){"float32"};
+/// <summary>
+/// Dequantize the input tensor into a float tensor.[min_range, max_range] are scalar floats that spcify the range forthe output data.Each value of the tensor will undergo the following:`out[i] = min_range + (in[i] * (max_range - min_range) / range(INPUT_TYPE))`here `range(T) = numeric_limits<T>::max() - numeric_limits<T>::min()`Defined in G:\deeplearn\mxnet\src\operator\contrib\dequantize.cc:L40
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="input">A ndarray/symbol of type `uint8`</param>
+/// <param name="min_range">The minimum scalar value possibly produced for the input</param>
+/// <param name="max_range">The maximum scalar value possibly produced for the input</param>
+/// <param name="out_type">Output data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribDequantize(NdArray @out,
+NdArray input,
+NdArray min_range,
+NdArray max_range,
+ContribDequantizeOutType out_type)
+{
+return new Operator("_contrib_dequantize")
+.SetParam("out_type", Util.EnumToString<ContribDequantizeOutType>(out_type,ContribDequantizeOutTypeConvert))
+.SetInput("input", input)
+.SetInput("min_range", min_range)
+.SetInput("max_range", max_range)
+.Invoke(@out);
+}
+/// <summary>
+/// Dequantize the input tensor into a float tensor.[min_range, max_range] are scalar floats that spcify the range forthe output data.Each value of the tensor will undergo the following:`out[i] = min_range + (in[i] * (max_range - min_range) / range(INPUT_TYPE))`here `range(T) = numeric_limits<T>::max() - numeric_limits<T>::min()`Defined in G:\deeplearn\mxnet\src\operator\contrib\dequantize.cc:L40
+/// </summary>
+/// <param name="input">A ndarray/symbol of type `uint8`</param>
+/// <param name="min_range">The minimum scalar value possibly produced for the input</param>
+/// <param name="max_range">The maximum scalar value possibly produced for the input</param>
+/// <param name="out_type">Output data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribDequantize(NdArray input,
+NdArray min_range,
+NdArray max_range,
+ContribDequantizeOutType out_type)
+{
+return new Operator("_contrib_dequantize")
+.SetParam("out_type", Util.EnumToString<ContribDequantizeOutType>(out_type,ContribDequantizeOutTypeConvert))
+.SetInput("input", input)
+.SetInput("min_range", min_range)
+.SetInput("max_range", max_range)
+.Invoke();
+}
+private static readonly List<string> ContribQuantizeOutTypeConvert = new List<string>(){"uint8"};
+/// <summary>
+/// Quantize a input tensor from float to `out_type`,with user-specified `min_range` and `max_range`.[min_range, max_range] are scalar floats that spcify the range forthe input data. Each value of the tensor will undergo the following:`out[i] = (in[i] - min_range) * range(OUTPUT_TYPE) / (max_range - min_range)`here `range(T) = numeric_limits<T>::max() - numeric_limits<T>::min()`Defined in G:\deeplearn\mxnet\src\operator\contrib\quantize.cc:L40
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="input">A ndarray/symbol of type `float32`</param>
+/// <param name="min_range">The minimum scalar value possibly produced for the input</param>
+/// <param name="max_range">The maximum scalar value possibly produced for the input</param>
+/// <param name="out_type">Output data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribQuantize(NdArray @out,
+NdArray input,
+NdArray min_range,
+NdArray max_range,
+ContribQuantizeOutType out_type=ContribQuantizeOutType.Uint8)
+{
+return new Operator("_contrib_quantize")
+.SetParam("out_type", Util.EnumToString<ContribQuantizeOutType>(out_type,ContribQuantizeOutTypeConvert))
+.SetInput("input", input)
+.SetInput("min_range", min_range)
+.SetInput("max_range", max_range)
+.Invoke(@out);
+}
+/// <summary>
+/// Quantize a input tensor from float to `out_type`,with user-specified `min_range` and `max_range`.[min_range, max_range] are scalar floats that spcify the range forthe input data. Each value of the tensor will undergo the following:`out[i] = (in[i] - min_range) * range(OUTPUT_TYPE) / (max_range - min_range)`here `range(T) = numeric_limits<T>::max() - numeric_limits<T>::min()`Defined in G:\deeplearn\mxnet\src\operator\contrib\quantize.cc:L40
+/// </summary>
+/// <param name="input">A ndarray/symbol of type `float32`</param>
+/// <param name="min_range">The minimum scalar value possibly produced for the input</param>
+/// <param name="max_range">The maximum scalar value possibly produced for the input</param>
+/// <param name="out_type">Output data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribQuantize(NdArray input,
+NdArray min_range,
+NdArray max_range,
+ContribQuantizeOutType out_type=ContribQuantizeOutType.Uint8)
+{
+return new Operator("_contrib_quantize")
+.SetParam("out_type", Util.EnumToString<ContribQuantizeOutType>(out_type,ContribQuantizeOutTypeConvert))
+.SetInput("input", input)
+.SetInput("min_range", min_range)
+.SetInput("max_range", max_range)
+.Invoke();
+}
 /// <summary>
 /// Apply batch normalization to input.
 /// </summary>
@@ -295,6 +730,25 @@ string op_type)
 return new Operator("Custom")
 .SetParam("op_type", op_type)
 .AddInput(data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCustom(NdArray @out)
+{
+return new Operator("_backward_Custom")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCustom()
+{
+return new Operator("_backward_Custom")
 .Invoke();
 }
 /// <summary>
@@ -419,6 +873,25 @@ return new Operator("softmax_cross_entropy")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmaxCrossEntropy(NdArray @out)
+{
+return new Operator("_backward_softmax_cross_entropy")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmaxCrossEntropy()
+{
+return new Operator("_backward_softmax_cross_entropy")
+.Invoke();
+}
+/// <summary>
 /// Applies the softmax function.The resulting array contains elements in the range (0,1) and the elements along the given axis sum up to 1... math::   softmax(\mathbf{z})_j = \frac{e^{z_j}}{\sum_{k=1}^K e^{z_k}}for :math:`j = 1, ..., K`Example::  x = [[ 1.  1.  1.]       [ 1.  1.  1.]]  softmax(x,axis=0) = [[ 0.5  0.5  0.5]                       [ 0.5  0.5  0.5]]  softmax(x,axis=1) = [[ 0.33333334,  0.33333334,  0.33333334],                       [ 0.33333334,  0.33333334,  0.33333334]]Defined in G:\deeplearn\mxnet\src\operator\nn\softmax.cc:L53
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -449,6 +922,36 @@ return new Operator("softmax")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmax(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_softmax")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmax(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_softmax")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Computes the log softmax of the input.This is equivalent to computing softmax followed by log.Examples::  >>> x = mx.nd.array([1, 2, .1])  >>> mx.nd.log_softmax(x).asnumpy()  array([-1.41702998, -0.41702995, -2.31702995], dtype=float32)  >>> x = mx.nd.array( [[1, 2, .1],[.1, 2, 1]] )  >>> mx.nd.log_softmax(x, axis=0).asnumpy()  array([[-0.34115392, -0.69314718, -1.24115396],         [-1.24115396, -0.69314718, -0.34115392]], dtype=float32)
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -476,6 +979,36 @@ int axis=-1)
 return new Operator("log_softmax")
 .SetParam("axis", axis)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLogSoftmax(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_log_softmax")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLogSoftmax(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_log_softmax")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -1110,6 +1643,675 @@ return new Operator("Pad")
 .Invoke();
 }
 /// <summary>
+/// Concurrent sampling from multipleuniform distributions on the intervals given by *[low,high)*.The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Examples::   low = [ 0.0, 2.5 ]   high = [ 1.0, 3.7 ]   // Draw a single sample for each distribution   sample_uniform(low, high) = [ 0.40451524,  3.18687344]   // Draw a vector containing two samples for each distribution   sample_uniform(low, high, shape=(2)) = [[ 0.40451524,  0.18017688],                                           [ 3.18687344,  3.68352246]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L382
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="low">Lower bounds of the distributions.</param>
+/// <param name="high">Upper bounds of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleUniform(NdArray @out,
+NdArray low,
+NdArray high,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_uniform")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("low", low)
+.SetInput("high", high)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multipleuniform distributions on the intervals given by *[low,high)*.The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Examples::   low = [ 0.0, 2.5 ]   high = [ 1.0, 3.7 ]   // Draw a single sample for each distribution   sample_uniform(low, high) = [ 0.40451524,  3.18687344]   // Draw a vector containing two samples for each distribution   sample_uniform(low, high, shape=(2)) = [[ 0.40451524,  0.18017688],                                           [ 3.18687344,  3.68352246]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L382
+/// </summary>
+/// <param name="low">Lower bounds of the distributions.</param>
+/// <param name="high">Upper bounds of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleUniform(NdArray low,
+NdArray high,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_uniform")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("low", low)
+.SetInput("high", high)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multiplenormal distributions with parameters *mu* (mean) and *sigma* (standard deviation).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Examples::   mu = [ 0.0, 2.5 ]   sigma = [ 1.0, 3.7 ]   // Draw a single sample for each distribution   sample_normal(mu, sigma) = [-0.56410581,  0.95934606]   // Draw a vector containing two samples for each distribution   sample_normal(mu, sigma, shape=(2)) = [[-0.56410581,  0.2928229 ],                                          [ 0.95934606,  4.48287058]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L384
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="mu">Means of the distributions.</param>
+/// <param name="sigma">Standard deviations of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleNormal(NdArray @out,
+NdArray mu,
+NdArray sigma,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_normal")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("mu", mu)
+.SetInput("sigma", sigma)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multiplenormal distributions with parameters *mu* (mean) and *sigma* (standard deviation).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Examples::   mu = [ 0.0, 2.5 ]   sigma = [ 1.0, 3.7 ]   // Draw a single sample for each distribution   sample_normal(mu, sigma) = [-0.56410581,  0.95934606]   // Draw a vector containing two samples for each distribution   sample_normal(mu, sigma, shape=(2)) = [[-0.56410581,  0.2928229 ],                                          [ 0.95934606,  4.48287058]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L384
+/// </summary>
+/// <param name="mu">Means of the distributions.</param>
+/// <param name="sigma">Standard deviations of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleNormal(NdArray mu,
+NdArray sigma,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_normal")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("mu", mu)
+.SetInput("sigma", sigma)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multiplegamma distributions with parameters *alpha* (shape) and *beta* (scale).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Examples::   alpha = [ 0.0, 2.5 ]   beta = [ 1.0, 0.7 ]   // Draw a single sample for each distribution   sample_gamma(alpha, beta) = [ 0.        ,  2.25797319]   // Draw a vector containing two samples for each distribution   sample_gamma(alpha, beta, shape=(2)) = [[ 0.        ,  0.        ],                                           [ 2.25797319,  1.70734084]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L387
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="alpha">Alpha (shape) parameters of the distributions.</param>
+/// <param name="beta">Beta (scale) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleGamma(NdArray @out,
+NdArray alpha,
+NdArray beta,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_gamma")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("alpha", alpha)
+.SetInput("beta", beta)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multiplegamma distributions with parameters *alpha* (shape) and *beta* (scale).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Examples::   alpha = [ 0.0, 2.5 ]   beta = [ 1.0, 0.7 ]   // Draw a single sample for each distribution   sample_gamma(alpha, beta) = [ 0.        ,  2.25797319]   // Draw a vector containing two samples for each distribution   sample_gamma(alpha, beta, shape=(2)) = [[ 0.        ,  0.        ],                                           [ 2.25797319,  1.70734084]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L387
+/// </summary>
+/// <param name="alpha">Alpha (shape) parameters of the distributions.</param>
+/// <param name="beta">Beta (scale) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleGamma(NdArray alpha,
+NdArray beta,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_gamma")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("alpha", alpha)
+.SetInput("beta", beta)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multipleexponential distributions with parameters lambda (rate).The parameters of the distributions are provided as an input array.Let *[s]* be the shape of the input array, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input array, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input value at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input array.Examples::   lam = [ 1.0, 8.5 ]   // Draw a single sample for each distribution   sample_exponential(lam) = [ 0.51837951,  0.09994757]   // Draw a vector containing two samples for each distribution   sample_exponential(lam, shape=(2)) = [[ 0.51837951,  0.19866663],                                         [ 0.09994757,  0.50447971]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L389
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lam">Lambda (rate) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleExponential(NdArray @out,
+NdArray lam,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_exponential")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("lam", lam)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multipleexponential distributions with parameters lambda (rate).The parameters of the distributions are provided as an input array.Let *[s]* be the shape of the input array, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input array, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input value at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input array.Examples::   lam = [ 1.0, 8.5 ]   // Draw a single sample for each distribution   sample_exponential(lam) = [ 0.51837951,  0.09994757]   // Draw a vector containing two samples for each distribution   sample_exponential(lam, shape=(2)) = [[ 0.51837951,  0.19866663],                                         [ 0.09994757,  0.50447971]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L389
+/// </summary>
+/// <param name="lam">Lambda (rate) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleExponential(NdArray lam,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_exponential")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("lam", lam)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multiplePoisson distributions with parameters lambda (rate).The parameters of the distributions are provided as an input array.Let *[s]* be the shape of the input array, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input array, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input value at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input array.Samples will always be returned as a floating point data type.Examples::   lam = [ 1.0, 8.5 ]   // Draw a single sample for each distribution   sample_poisson(lam) = [  0.,  13.]   // Draw a vector containing two samples for each distribution   sample_poisson(lam, shape=(2)) = [[  0.,   4.],                                     [ 13.,   8.]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L391
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lam">Lambda (rate) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SamplePoisson(NdArray @out,
+NdArray lam,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_poisson")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("lam", lam)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multiplePoisson distributions with parameters lambda (rate).The parameters of the distributions are provided as an input array.Let *[s]* be the shape of the input array, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input array, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input value at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input array.Samples will always be returned as a floating point data type.Examples::   lam = [ 1.0, 8.5 ]   // Draw a single sample for each distribution   sample_poisson(lam) = [  0.,  13.]   // Draw a vector containing two samples for each distribution   sample_poisson(lam, shape=(2)) = [[  0.,   4.],                                     [ 13.,   8.]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L391
+/// </summary>
+/// <param name="lam">Lambda (rate) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SamplePoisson(NdArray lam,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_poisson")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("lam", lam)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multiplenegative binomial distributions with parameters *k* (failure limit) and *p* (failure probability).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Samples will always be returned as a floating point data type.Examples::   k = [ 20, 49 ]   p = [ 0.4 , 0.77 ]   // Draw a single sample for each distribution   sample_negative_binomial(k, p) = [ 15.,  16.]   // Draw a vector containing two samples for each distribution   sample_negative_binomial(k, p, shape=(2)) = [[ 15.,  50.],                                                [ 16.,  12.]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L394
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="k">Limits of unsuccessful experiments.</param>
+/// <param name="p">Failure probabilities in each experiment.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleNegativeBinomial(NdArray @out,
+NdArray k,
+NdArray p,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_negative_binomial")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("k", k)
+.SetInput("p", p)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multiplenegative binomial distributions with parameters *k* (failure limit) and *p* (failure probability).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Samples will always be returned as a floating point data type.Examples::   k = [ 20, 49 ]   p = [ 0.4 , 0.77 ]   // Draw a single sample for each distribution   sample_negative_binomial(k, p) = [ 15.,  16.]   // Draw a vector containing two samples for each distribution   sample_negative_binomial(k, p, shape=(2)) = [[ 15.,  50.],                                                [ 16.,  12.]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L394
+/// </summary>
+/// <param name="k">Limits of unsuccessful experiments.</param>
+/// <param name="p">Failure probabilities in each experiment.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleNegativeBinomial(NdArray k,
+NdArray p,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_negative_binomial")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("k", k)
+.SetInput("p", p)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multiplegeneralized negative binomial distributions with parameters *mu* (mean) and *alpha* (dispersion).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Samples will always be returned as a floating point data type.Examples::   mu = [ 2.0, 2.5 ]   alpha = [ 1.0, 0.1 ]   // Draw a single sample for each distribution   sample_generalized_negative_binomial(mu, alpha) = [ 0.,  3.]   // Draw a vector containing two samples for each distribution   sample_generalized_negative_binomial(mu, alpha, shape=(2)) = [[ 0.,  3.],                                                                 [ 3.,  1.]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L398
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="mu">Means of the distributions.</param>
+/// <param name="alpha">Alpha (dispersion) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleGeneralizedNegativeBinomial(NdArray @out,
+NdArray mu,
+NdArray alpha,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_generalized_negative_binomial")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("mu", mu)
+.SetInput("alpha", alpha)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multiplegeneralized negative binomial distributions with parameters *mu* (mean) and *alpha* (dispersion).The parameters of the distributions are provided as input arrays.Let *[s]* be the shape of the input arrays, *n* be the dimension of *[s]*, *[t]*be the shape specified as the parameter of the operator, and *m* be the dimensionof *[t]*. Then the output will be a *(n+m)*-dimensional array with shape *[s]x[t]*.For any valid *n*-dimensional index *i* with respect to the input arrays, *output[i]*will be an *m*-dimensional array that holds randomly drawn samples from the distributionwhich is parameterized by the input values at index *i*. If the shape parameter of theoperator is not set, then one sample will be drawn per distribution and the output arrayhas the same shape as the input arrays.Samples will always be returned as a floating point data type.Examples::   mu = [ 2.0, 2.5 ]   alpha = [ 1.0, 0.1 ]   // Draw a single sample for each distribution   sample_generalized_negative_binomial(mu, alpha) = [ 0.,  3.]   // Draw a vector containing two samples for each distribution   sample_generalized_negative_binomial(mu, alpha, shape=(2)) = [[ 0.,  3.],                                                                 [ 3.,  1.]]Defined in G:\deeplearn\mxnet\src\operator\random\multisample_op.cc:L398
+/// </summary>
+/// <param name="mu">Means of the distributions.</param>
+/// <param name="alpha">Alpha (dispersion) parameters of the distributions.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleGeneralizedNegativeBinomial(NdArray mu,
+NdArray alpha,
+Shape shape=null,
+Dtype dtype=null)
+{
+return new Operator("_sample_generalized_negative_binomial")
+.SetParam("shape", shape)
+.SetParam("dtype", dtype)
+.SetInput("mu", mu)
+.SetInput("alpha", alpha)
+.Invoke();
+}
+/// <summary>
+/// Concurrent sampling from multiple multinomial distributions.*data* is an *n* dimensional array whose last dimension has length *k*, where*k* is the number of possible outcomes of each multinomial distribution. Thisoperator will draw *shape* samples from each distribution. If shape is emptyone sample will be drawn from each distribution.If *get_prob* is true, a second array containing log likelihood of the drawnsamples will also be returned. This is usually used for reinforcement learningwhere you can provide reward as head gradient for this array to estimategradient.Note that the input distribution must be normalized, i.e. *data* must sum to1 along its last axis.Examples::   probs = [[0, 0.1, 0.2, 0.3, 0.4], [0.4, 0.3, 0.2, 0.1, 0]]   // Draw a single sample for each distribution   sample_multinomial(probs) = [3, 0]   // Draw a vector containing two samples for each distribution   sample_multinomial(probs, shape=(2)) = [[4, 2],                                           [0, 0]]   // requests log likelihood   sample_multinomial(probs, get_prob=True) = [2, 1], [0.2, 0.3]
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Distribution probabilities. Must sum to one on the last axis.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="get_prob">Whether to also return the log probability of sampled result. This is usually used for differentiating through stochastic variables, e.g. in reinforcement learning.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Only support int32 for now.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleMultinomial(NdArray @out,
+NdArray data,
+Shape shape=null,
+bool get_prob=false,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Int32;}
+
+return new Operator("_sample_multinomial")
+.SetParam("shape", shape)
+.SetParam("get_prob", get_prob)
+.SetParam("dtype", dtype)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// Concurrent sampling from multiple multinomial distributions.*data* is an *n* dimensional array whose last dimension has length *k*, where*k* is the number of possible outcomes of each multinomial distribution. Thisoperator will draw *shape* samples from each distribution. If shape is emptyone sample will be drawn from each distribution.If *get_prob* is true, a second array containing log likelihood of the drawnsamples will also be returned. This is usually used for reinforcement learningwhere you can provide reward as head gradient for this array to estimategradient.Note that the input distribution must be normalized, i.e. *data* must sum to1 along its last axis.Examples::   probs = [[0, 0.1, 0.2, 0.3, 0.4], [0.4, 0.3, 0.2, 0.1, 0]]   // Draw a single sample for each distribution   sample_multinomial(probs) = [3, 0]   // Draw a vector containing two samples for each distribution   sample_multinomial(probs, shape=(2)) = [[4, 2],                                           [0, 0]]   // requests log likelihood   sample_multinomial(probs, get_prob=True) = [2, 1], [0.2, 0.3]
+/// </summary>
+/// <param name="data">Distribution probabilities. Must sum to one on the last axis.</param>
+/// <param name="shape">Shape to be sampled from each random distribution.</param>
+/// <param name="get_prob">Whether to also return the log probability of sampled result. This is usually used for differentiating through stochastic variables, e.g. in reinforcement learning.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Only support int32 for now.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SampleMultinomial(NdArray data,
+Shape shape=null,
+bool get_prob=false,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Int32;}
+
+return new Operator("_sample_multinomial")
+.SetParam("shape", shape)
+.SetParam("get_prob", get_prob)
+.SetParam("dtype", dtype)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSampleMultinomial(NdArray @out)
+{
+return new Operator("_backward_sample_multinomial")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSampleMultinomial()
+{
+return new Operator("_backward_sample_multinomial")
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from a uniform distribution... note:: The existing alias ``uniform`` is deprecated.Samples are uniformly distributed over the half-open interval *[low, high)*(includes *low*, but excludes *high*).Example::   uniform(low=0, high=1, shape=(2,2)) = [[ 0.60276335,  0.85794562],                                          [ 0.54488319,  0.84725171]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L64
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="low">Lower bound of the distribution.</param>
+/// <param name="high">Upper bound of the distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomUniform(NdArray @out,
+float low=0f,
+float high=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_uniform")
+.SetParam("low", low)
+.SetParam("high", high)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from a uniform distribution... note:: The existing alias ``uniform`` is deprecated.Samples are uniformly distributed over the half-open interval *[low, high)*(includes *low*, but excludes *high*).Example::   uniform(low=0, high=1, shape=(2,2)) = [[ 0.60276335,  0.85794562],                                          [ 0.54488319,  0.84725171]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L64
+/// </summary>
+/// <param name="low">Lower bound of the distribution.</param>
+/// <param name="high">Upper bound of the distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomUniform(float low=0f,
+float high=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_uniform")
+.SetParam("low", low)
+.SetParam("high", high)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from a normal (Gaussian) distribution... note:: The existing alias ``normal`` is deprecated.Samples are distributed according to a normal distribution parametrized by *loc* (mean) and *scale* (standard deviation).Example::   normal(loc=0, scale=1, shape=(2,2)) = [[ 1.89171135, -1.16881478],                                          [-1.23474145,  1.55807114]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L83
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="loc">Mean of the distribution.</param>
+/// <param name="scale">Standard deviation of the distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomNormal(NdArray @out,
+float loc=0f,
+float scale=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_normal")
+.SetParam("loc", loc)
+.SetParam("scale", scale)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from a normal (Gaussian) distribution... note:: The existing alias ``normal`` is deprecated.Samples are distributed according to a normal distribution parametrized by *loc* (mean) and *scale* (standard deviation).Example::   normal(loc=0, scale=1, shape=(2,2)) = [[ 1.89171135, -1.16881478],                                          [-1.23474145,  1.55807114]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L83
+/// </summary>
+/// <param name="loc">Mean of the distribution.</param>
+/// <param name="scale">Standard deviation of the distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomNormal(float loc=0f,
+float scale=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_normal")
+.SetParam("loc", loc)
+.SetParam("scale", scale)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from a gamma distribution.Samples are distributed according to a gamma distribution parametrized by *alpha* (shape) and *beta* (scale).Example::   gamma(alpha=9, beta=0.5, shape=(2,2)) = [[ 7.10486984,  3.37695289],                                            [ 3.91697288,  3.65933681]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L98
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="alpha">Alpha parameter (shape) of the gamma distribution.</param>
+/// <param name="beta">Beta parameter (scale) of the gamma distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomGamma(NdArray @out,
+float alpha=1f,
+float beta=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_gamma")
+.SetParam("alpha", alpha)
+.SetParam("beta", beta)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from a gamma distribution.Samples are distributed according to a gamma distribution parametrized by *alpha* (shape) and *beta* (scale).Example::   gamma(alpha=9, beta=0.5, shape=(2,2)) = [[ 7.10486984,  3.37695289],                                            [ 3.91697288,  3.65933681]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L98
+/// </summary>
+/// <param name="alpha">Alpha parameter (shape) of the gamma distribution.</param>
+/// <param name="beta">Beta parameter (scale) of the gamma distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomGamma(float alpha=1f,
+float beta=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_gamma")
+.SetParam("alpha", alpha)
+.SetParam("beta", beta)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from an exponential distribution.Samples are distributed according to an exponential distribution parametrized by *lambda* (rate).Example::   exponential(lam=4, shape=(2,2)) = [[ 0.0097189 ,  0.08999364],                                      [ 0.04146638,  0.31715935]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L113
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lam">Lambda parameter (rate) of the exponential distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomExponential(NdArray @out,
+float lam=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_exponential")
+.SetParam("lam", lam)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from an exponential distribution.Samples are distributed according to an exponential distribution parametrized by *lambda* (rate).Example::   exponential(lam=4, shape=(2,2)) = [[ 0.0097189 ,  0.08999364],                                      [ 0.04146638,  0.31715935]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L113
+/// </summary>
+/// <param name="lam">Lambda parameter (rate) of the exponential distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomExponential(float lam=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_exponential")
+.SetParam("lam", lam)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from a Poisson distribution.Samples are distributed according to a Poisson distribution parametrized by *lambda* (rate).Samples will always be returned as a floating point data type.Example::   poisson(lam=4, shape=(2,2)) = [[ 5.,  2.],                                  [ 4.,  6.]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L127
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lam">Lambda parameter (rate) of the Poisson distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomPoisson(NdArray @out,
+float lam=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_poisson")
+.SetParam("lam", lam)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from a Poisson distribution.Samples are distributed according to a Poisson distribution parametrized by *lambda* (rate).Samples will always be returned as a floating point data type.Example::   poisson(lam=4, shape=(2,2)) = [[ 5.,  2.],                                  [ 4.,  6.]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L127
+/// </summary>
+/// <param name="lam">Lambda parameter (rate) of the Poisson distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomPoisson(float lam=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_poisson")
+.SetParam("lam", lam)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from a negative binomial distribution.Samples are distributed according to a negative binomial distribution parametrized by*k* (limit of unsuccessful experiments) and *p* (failure probability in each experiment).Samples will always be returned as a floating point data type.Example::   negative_binomial(k=3, p=0.4, shape=(2,2)) = [[ 4.,  7.],                                                 [ 2.,  5.]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L142
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="k">Limit of unsuccessful experiments.</param>
+/// <param name="p">Failure probability in each experiment.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomNegativeBinomial(NdArray @out,
+int k=1,
+float p=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_negative_binomial")
+.SetParam("k", k)
+.SetParam("p", p)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from a negative binomial distribution.Samples are distributed according to a negative binomial distribution parametrized by*k* (limit of unsuccessful experiments) and *p* (failure probability in each experiment).Samples will always be returned as a floating point data type.Example::   negative_binomial(k=3, p=0.4, shape=(2,2)) = [[ 4.,  7.],                                                 [ 2.,  5.]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L142
+/// </summary>
+/// <param name="k">Limit of unsuccessful experiments.</param>
+/// <param name="p">Failure probability in each experiment.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomNegativeBinomial(int k=1,
+float p=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_negative_binomial")
+.SetParam("k", k)
+.SetParam("p", p)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Draw random samples from a generalized negative binomial distribution.Samples are distributed according to a generalized negative binomial distribution parametrized by*mu* (mean) and *alpha* (dispersion). *alpha* is defined as *1/k* where *k* is the failure limit of thenumber of unsuccessful experiments (generalized to real numbers).Samples will always be returned as a floating point data type.Example::   generalized_negative_binomial(mu=2.0, alpha=0.3, shape=(2,2)) = [[ 2.,  1.],                                                                    [ 6.,  4.]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L158
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="mu">Mean of the negative binomial distribution.</param>
+/// <param name="alpha">Alpha (dispersion) parameter of the negative binomial distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomGeneralizedNegativeBinomial(NdArray @out,
+float mu=1f,
+float alpha=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_generalized_negative_binomial")
+.SetParam("mu", mu)
+.SetParam("alpha", alpha)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Draw random samples from a generalized negative binomial distribution.Samples are distributed according to a generalized negative binomial distribution parametrized by*mu* (mean) and *alpha* (dispersion). *alpha* is defined as *1/k* where *k* is the failure limit of thenumber of unsuccessful experiments (generalized to real numbers).Samples will always be returned as a floating point data type.Example::   generalized_negative_binomial(mu=2.0, alpha=0.3, shape=(2,2)) = [[ 2.,  1.],                                                                    [ 6.,  4.]]Defined in G:\deeplearn\mxnet\src\operator\random\sample_op.cc:L158
+/// </summary>
+/// <param name="mu">Mean of the negative binomial distribution.</param>
+/// <param name="alpha">Alpha (dispersion) parameter of the negative binomial distribution.</param>
+/// <param name="shape">Shape of the output.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n). Only used for imperative calls.</param>
+/// <param name="dtype">DType of the output in case this can't be inferred. Defaults to float32 if not defined (dtype=None).</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RandomGeneralizedNegativeBinomial(float mu=1f,
+float alpha=1f,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{
+return new Operator("_random_generalized_negative_binomial")
+.SetParam("mu", mu)
+.SetParam("alpha", alpha)
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
 /// Splits an array along a particular axis into multiple sub-arrays... note:: ``SliceChannel`` is deprecated. Use ``split`` instead.**Note** that `num_outputs` should evenly divide the length of the axisalong which to split the array.Example::   x  = [[[ 1.]          [ 2.]]         [[ 3.]          [ 4.]]         [[ 5.]          [ 6.]]]   x.shape = (3, 2, 1)   y = split(x, axis=1, num_outputs=2) // a list of 2 arrays with shape (3, 1, 1)   y = [[[ 1.]]        [[ 3.]]        [[ 5.]]]       [[[ 2.]]        [[ 4.]]        [[ 6.]]]   y[0].shape = (3, 1, 1)   z = split(x, axis=0, num_outputs=3) // a list of 3 arrays with shape (1, 2, 1)   z = [[[ 1.]         [ 2.]]]       [[[ 3.]         [ 4.]]]       [[[ 5.]         [ 6.]]]   z[0].shape = (1, 2, 1)`squeeze_axis=1` removes the axis with length 1 from the shapes of the output arrays.**Note** that setting `squeeze_axis` to ``1`` removes axis with length 1 onlyalong the `axis` which it is split.Also `squeeze_axis` can be set to true only if ``input.shape[axis] == num_outputs``.Example::   z = split(x, axis=0, num_outputs=3, squeeze_axis=1) // a list of 3 arrays with shape (2, 1)   z = [[ 1.]        [ 2.]]       [[ 3.]        [ 4.]]       [[ 5.]        [ 6.]]   z[0].shape = (2 ,1 )Defined in G:\deeplearn\mxnet\src\operator\slice_channel.cc:L106
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1161,8 +2363,8 @@ return new Operator("SliceChannel")
  /// <returns>returns new symbol</returns>
 public static NdArray SwapAxis(NdArray @out,
 NdArray data,
-int dim1=0,
-int dim2=0)
+uint dim1=0,
+uint dim2=0)
 {
 return new Operator("SwapAxis")
 .SetParam("dim1", dim1)
@@ -1178,8 +2380,8 @@ return new Operator("SwapAxis")
 /// <param name="dim2">the second axis to be swapped.</param>
  /// <returns>returns new symbol</returns>
 public static NdArray SwapAxis(NdArray data,
-int dim1=0,
-int dim2=0)
+uint dim1=0,
+uint dim2=0)
 {
 return new Operator("SwapAxis")
 .SetParam("dim1", dim1)
@@ -1326,6 +2528,25 @@ return new Operator("pick")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPick(NdArray @out)
+{
+return new Operator("_backward_pick")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPick()
+{
+return new Operator("_backward_pick")
+.Invoke();
+}
+/// <summary>
 /// Computes the sum of array elements over given axes... Note::  `sum` and `sum_axis` are equivalent.Example::  data = [[[1,2],[2,3],[1,3]],          [[1,4],[4,3],[5,2]],          [[7,1],[7,2],[7,3]]]  sum(data, axis=1)  [[  4.   8.]   [ 10.   9.]   [ 21.   6.]]  sum(data, axis=[1,2])  [ 12.  19.  27.]Defined in G:\deeplearn\mxnet\src\operator\tensor\broadcast_reduce_op_value.cc:L69
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1365,6 +2586,25 @@ return new Operator("sum")
 .SetParam("keepdims", keepdims)
 .SetParam("exclude", exclude)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSum(NdArray @out)
+{
+return new Operator("_backward_sum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSum()
+{
+return new Operator("_backward_sum")
 .Invoke();
 }
 /// <summary>
@@ -1410,6 +2650,25 @@ return new Operator("mean")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMean(NdArray @out)
+{
+return new Operator("_backward_mean")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMean()
+{
+return new Operator("_backward_mean")
+.Invoke();
+}
+/// <summary>
 /// Computes the product of array elements over given axes.Defined in G:\deeplearn\mxnet\src\operator\tensor\broadcast_reduce_op_value.cc:L95
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1449,6 +2708,25 @@ return new Operator("prod")
 .SetParam("keepdims", keepdims)
 .SetParam("exclude", exclude)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardProd(NdArray @out)
+{
+return new Operator("_backward_prod")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardProd()
+{
+return new Operator("_backward_prod")
 .Invoke();
 }
 /// <summary>
@@ -1494,6 +2772,25 @@ return new Operator("nansum")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNansum(NdArray @out)
+{
+return new Operator("_backward_nansum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNansum()
+{
+return new Operator("_backward_nansum")
+.Invoke();
+}
+/// <summary>
 /// Computes the product of array elements over given axes treating Not a Numbers (``NaN``) as one.Defined in G:\deeplearn\mxnet\src\operator\tensor\broadcast_reduce_op_value.cc:L125
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1533,6 +2830,25 @@ return new Operator("nanprod")
 .SetParam("keepdims", keepdims)
 .SetParam("exclude", exclude)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNanprod(NdArray @out)
+{
+return new Operator("_backward_nanprod")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNanprod()
+{
+return new Operator("_backward_nanprod")
 .Invoke();
 }
 /// <summary>
@@ -1578,6 +2894,25 @@ return new Operator("max")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMax(NdArray @out)
+{
+return new Operator("_backward_max")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMax()
+{
+return new Operator("_backward_max")
+.Invoke();
+}
+/// <summary>
 /// Computes the min of array elements over given axes.Defined in G:\deeplearn\mxnet\src\operator\tensor\broadcast_reduce_op_value.cc:L153
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1617,6 +2952,25 @@ return new Operator("min")
 .SetParam("keepdims", keepdims)
 .SetParam("exclude", exclude)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMin(NdArray @out)
+{
+return new Operator("_backward_min")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMin()
+{
+return new Operator("_backward_min")
 .Invoke();
 }
 /// <summary>
@@ -1683,6 +3037,25 @@ Shape shape=null)
 return new Operator("broadcast_to")
 .SetParam("shape", shape)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BroadcastBackward(NdArray @out)
+{
+return new Operator("_broadcast_backward")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BroadcastBackward()
+{
+return new Operator("_broadcast_backward")
 .Invoke();
 }
 /// <summary>
@@ -1777,6 +3150,25 @@ return new Operator("where")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardWhere(NdArray @out)
+{
+return new Operator("_backward_where")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardWhere()
+{
+return new Operator("_backward_where")
+.Invoke();
+}
+/// <summary>
 /// Dot product of two arrays.``dot``'s behavior depends on the input array dimensions:- 1-D arrays: inner product of vectors- 2-D arrays: matrix multiplication- N-D arrays: a sum product over the last axis of the first input and the first  axis of the second input  For example, given 3-D ``x`` with shape `(n,m,k)` and ``y`` with shape `(k,r,s)`, the  result array will have shape `(n,m,r,s)`. It is computed by::    dot(x,y)[i,j,a,b] = sum(x[i,j,:]*y[:,a,b])  Example::    x = reshape([0,1,2,3,4,5,6,7], shape=(2,2,2))    y = reshape([7,6,5,4,3,2,1,0], shape=(2,2,2))    dot(x,y)[0,0,1,1] = 0    sum(x[0,0,:]*y[:,1,1]) = 0The storage type of ``dot`` output depends on storage types of inputs and transpose options:- dot(csr, default) = default- dot(csr.T, default) = row_sparse- dot(csr, row_sparse) = default- otherwise, ``dot`` generates output with default storageDefined in G:\deeplearn\mxnet\src\operator\tensor\dot.cc:L61
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1816,6 +3208,36 @@ return new Operator("dot")
 .SetParam("transpose_b", transpose_b)
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="transpose_a">If true then transpose the first input before dot.</param>
+/// <param name="transpose_b">If true then transpose the second input before dot.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDot(NdArray @out,
+bool transpose_a=false,
+bool transpose_b=false)
+{
+return new Operator("_backward_dot")
+.SetParam("transpose_a", transpose_a)
+.SetParam("transpose_b", transpose_b)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="transpose_a">If true then transpose the first input before dot.</param>
+/// <param name="transpose_b">If true then transpose the second input before dot.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDot(bool transpose_a=false,
+bool transpose_b=false)
+{
+return new Operator("_backward_dot")
+.SetParam("transpose_a", transpose_a)
+.SetParam("transpose_b", transpose_b)
 .Invoke();
 }
 /// <summary>
@@ -1861,6 +3283,25 @@ return new Operator("batch_dot")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBatchDot(NdArray @out)
+{
+return new Operator("_backward_batch_dot")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBatchDot()
+{
+return new Operator("_backward_batch_dot")
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise sum of the input arrays with broadcasting.`broadcast_plus` is an alias to the function `broadcast_add`.Example::   x = [[ 1.,  1.,  1.],        [ 1.,  1.,  1.]]   y = [[ 0.],        [ 1.]]   broadcast_add(x, y) = [[ 1.,  1.,  1.],                          [ 2.,  2.,  2.]]   broadcast_plus(x, y) = [[ 1.,  1.,  1.],                           [ 2.,  2.,  2.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_broadcast_op_basic.cc:L50
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1888,6 +3329,25 @@ NdArray rhs)
 return new Operator("broadcast_add")
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastAdd(NdArray @out)
+{
+return new Operator("_backward_broadcast_add")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastAdd()
+{
+return new Operator("_backward_broadcast_add")
 .Invoke();
 }
 /// <summary>
@@ -1921,6 +3381,25 @@ return new Operator("broadcast_sub")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastSub(NdArray @out)
+{
+return new Operator("_backward_broadcast_sub")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastSub()
+{
+return new Operator("_backward_broadcast_sub")
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise product of the input arrays with broadcasting.Example::   x = [[ 1.,  1.,  1.],        [ 1.,  1.,  1.]]   y = [[ 0.],        [ 1.]]   broadcast_mul(x, y) = [[ 0.,  0.,  0.],                          [ 1.,  1.,  1.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_broadcast_op_basic.cc:L122
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -1948,6 +3427,25 @@ NdArray rhs)
 return new Operator("broadcast_mul")
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMul(NdArray @out)
+{
+return new Operator("_backward_broadcast_mul")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMul()
+{
+return new Operator("_backward_broadcast_mul")
 .Invoke();
 }
 /// <summary>
@@ -1981,6 +3479,25 @@ return new Operator("broadcast_div")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastDiv(NdArray @out)
+{
+return new Operator("_backward_broadcast_div")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastDiv()
+{
+return new Operator("_backward_broadcast_div")
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise modulo of the input arrays with broadcasting.Example::   x = [[ 8.,  8.,  8.],        [ 8.,  8.,  8.]]   y = [[ 2.],        [ 3.]]   broadcast_mod(x, y) = [[ 0.,  0.,  0.],                          [ 2.,  2.,  2.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_broadcast_op_basic.cc:L189
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2008,6 +3525,25 @@ NdArray rhs)
 return new Operator("broadcast_mod")
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMod(NdArray @out)
+{
+return new Operator("_backward_broadcast_mod")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMod()
+{
+return new Operator("_backward_broadcast_mod")
 .Invoke();
 }
 /// <summary>
@@ -2041,6 +3577,25 @@ return new Operator("broadcast_power")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastPower(NdArray @out)
+{
+return new Operator("_backward_broadcast_power")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastPower()
+{
+return new Operator("_backward_broadcast_power")
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise maximum of the input arrays with broadcasting.This function compares two input arrays and returns a new array having the element-wise maxima.Example::   x = [[ 1.,  1.,  1.],        [ 1.,  1.,  1.]]   y = [[ 0.],        [ 1.]]   broadcast_maximum(x, y) = [[ 1.,  1.,  1.],                              [ 1.,  1.,  1.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_broadcast_op_extended.cc:L79
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2068,6 +3623,25 @@ NdArray rhs)
 return new Operator("broadcast_maximum")
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMaximum(NdArray @out)
+{
+return new Operator("_backward_broadcast_maximum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMaximum()
+{
+return new Operator("_backward_broadcast_maximum")
 .Invoke();
 }
 /// <summary>
@@ -2101,6 +3675,25 @@ return new Operator("broadcast_minimum")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMinimum(NdArray @out)
+{
+return new Operator("_backward_broadcast_minimum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastMinimum()
+{
+return new Operator("_backward_broadcast_minimum")
+.Invoke();
+}
+/// <summary>
 ///  Returns the hypotenuse of a right angled triangle, given its "legs"with broadcasting.It is equivalent to doing :math:`sqrt(x_1^2 + x_2^2)`.Example::   x = [[ 3.,  3.,  3.]]   y = [[ 4.],        [ 4.]]   broadcast_hypot(x, y) = [[ 5.,  5.,  5.],                            [ 5.,  5.,  5.]]   z = [[ 0.],        [ 4.]]   broadcast_hypot(x, z) = [[ 3.,  3.,  3.],                            [ 5.,  5.,  5.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_broadcast_op_extended.cc:L155
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2128,6 +3721,25 @@ NdArray rhs)
 return new Operator("broadcast_hypot")
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastHypot(NdArray @out)
+{
+return new Operator("_backward_broadcast_hypot")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBroadcastHypot()
+{
+return new Operator("_backward_broadcast_hypot")
 .Invoke();
 }
 /// <summary>
@@ -2341,6 +3953,55 @@ return new Operator("elemwise_add")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GradAdd(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_grad_add")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GradAdd(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_grad_add")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardAdd(NdArray @out)
+{
+return new Operator("_backward_add")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardAdd()
+{
+return new Operator("_backward_add")
+.Invoke();
+}
+/// <summary>
 /// Subtracts arguments element-wise.The storage type of ``elemwise_sub`` output depends on storage types of inputs   - elemwise_sub(row_sparse, row_sparse) = row_sparse   - otherwise, ``elemwise_add`` generates output with default storage
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2368,6 +4029,25 @@ NdArray rhs)
 return new Operator("elemwise_sub")
 .SetInput("lhs", lhs)
 .SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSub(NdArray @out)
+{
+return new Operator("_backward_sub")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSub()
+{
+return new Operator("_backward_sub")
 .Invoke();
 }
 /// <summary>
@@ -2401,6 +4081,25 @@ return new Operator("elemwise_mul")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMul(NdArray @out)
+{
+return new Operator("_backward_mul")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMul()
+{
+return new Operator("_backward_mul")
+.Invoke();
+}
+/// <summary>
 /// Divides arguments element-wise.The storage type of ``elemwise_dev`` output is always dense
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2431,6 +4130,1158 @@ return new Operator("elemwise_div")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDiv(NdArray @out)
+{
+return new Operator("_backward_div")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDiv()
+{
+return new Operator("_backward_div")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Mod(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_mod")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Mod(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_mod")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMod(NdArray @out)
+{
+return new Operator("_backward_mod")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMod()
+{
+return new Operator("_backward_mod")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Power(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_power")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Power(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_power")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPower(NdArray @out)
+{
+return new Operator("_backward_power")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPower()
+{
+return new Operator("_backward_power")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Maximum(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_maximum")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Maximum(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_maximum")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMaximum(NdArray @out)
+{
+return new Operator("_backward_maximum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMaximum()
+{
+return new Operator("_backward_maximum")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Minimum(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_minimum")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Minimum(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_minimum")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMinimum(NdArray @out)
+{
+return new Operator("_backward_minimum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMinimum()
+{
+return new Operator("_backward_minimum")
+.Invoke();
+}
+/// <summary>
+/// Given the "legs" of a right triangle, return its hypotenuse.Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_op_extended.cc:L78
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Hypot(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_hypot")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// Given the "legs" of a right triangle, return its hypotenuse.Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_op_extended.cc:L78
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Hypot(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_hypot")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardHypot(NdArray @out)
+{
+return new Operator("_backward_hypot")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardHypot()
+{
+return new Operator("_backward_hypot")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Equal(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Equal(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NotEqual(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_not_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NotEqual(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_not_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Greater(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_greater")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Greater(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_greater")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GreaterEqual(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_greater_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GreaterEqual(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_greater_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Lesser(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_lesser")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Lesser(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_lesser")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LesserEqual(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_lesser_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LesserEqual(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_lesser_equal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray PlusScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_plus_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray PlusScalar(NdArray data,
+float scalar)
+{
+return new Operator("_plus_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MinusScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_minus_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MinusScalar(NdArray data,
+float scalar)
+{
+return new Operator("_minus_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RminusScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_rminus_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RminusScalar(NdArray data,
+float scalar)
+{
+return new Operator("_rminus_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MulScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_mul_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MulScalar(NdArray data,
+float scalar)
+{
+return new Operator("_mul_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMulScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_backward_mul_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMulScalar(NdArray data,
+float scalar)
+{
+return new Operator("_backward_mul_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray DivScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_div_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray DivScalar(NdArray data,
+float scalar)
+{
+return new Operator("_div_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RdivScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_rdiv_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RdivScalar(NdArray data,
+float scalar)
+{
+return new Operator("_rdiv_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRdivScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_rdiv_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRdivScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_rdiv_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ModScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_mod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ModScalar(NdArray data,
+float scalar)
+{
+return new Operator("_mod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardModScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_mod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardModScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_mod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RmodScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_rmod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RmodScalar(NdArray data,
+float scalar)
+{
+return new Operator("_rmod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRmodScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_rmod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRmodScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_rmod_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MaximumScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_maximum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MaximumScalar(NdArray data,
+float scalar)
+{
+return new Operator("_maximum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMaximumScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_maximum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMaximumScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_maximum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MinimumScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_minimum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray MinimumScalar(NdArray data,
+float scalar)
+{
+return new Operator("_minimum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMinimumScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_minimum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMinimumScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_minimum_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray PowerScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_power_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray PowerScalar(NdArray data,
+float scalar)
+{
+return new Operator("_power_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPowerScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_power_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPowerScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_power_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RpowerScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_rpower_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray RpowerScalar(NdArray data,
+float scalar)
+{
+return new Operator("_rpower_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRpowerScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_rpower_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRpowerScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_rpower_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray HypotScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_hypot_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray HypotScalar(NdArray data,
+float scalar)
+{
+return new Operator("_hypot_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardHypotScalar(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_hypot_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+/// <param name="scalar">scalar value</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardHypotScalar(NdArray lhs,
+NdArray rhs,
+float scalar)
+{
+return new Operator("_backward_hypot_scalar")
+.SetParam("scalar", scalar)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Calculate Smooth L1 Loss(lhs, scalar) by summing.. math::    f(x) =    \begin{cases}    (\sigma x)^2/2,& \text{if }x < 1/\sigma^2\\    |x|-0.5/\sigma^2,& \text{otherwise}    \end{cases}where :math:`x` is an element of the tensor *lhs* and :math:`\sigma` is the scalar.Example::  smooth_l1([1, 2, 3, 4], sigma=1) = [0.5, 1.5, 2.5, 3.5]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_binary_scalar_op_extended.cc:L102
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2456,6 +5307,216 @@ public static NdArray SmoothL1(NdArray data,
 float scalar)
 {
 return new Operator("smooth_l1")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSmoothL1(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_smooth_l1")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSmoothL1(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_smooth_l1")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray EqualScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray EqualScalar(NdArray data,
+float scalar)
+{
+return new Operator("_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NotEqualScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_not_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NotEqualScalar(NdArray data,
+float scalar)
+{
+return new Operator("_not_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GreaterScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_greater_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GreaterScalar(NdArray data,
+float scalar)
+{
+return new Operator("_greater_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GreaterEqualScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_greater_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray GreaterEqualScalar(NdArray data,
+float scalar)
+{
+return new Operator("_greater_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LesserScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_lesser_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LesserScalar(NdArray data,
+float scalar)
+{
+return new Operator("_lesser_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LesserEqualScalar(NdArray @out,
+NdArray data,
+float scalar)
+{
+return new Operator("_lesser_equal_scalar")
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">source input</param>
+/// <param name="scalar">scalar input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LesserEqualScalar(NdArray data,
+float scalar)
+{
+return new Operator("_lesser_equal_scalar")
 .SetParam("scalar", scalar)
 .SetInput("data", data)
 .Invoke();
@@ -2509,6 +5570,36 @@ return new Operator("relu")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRelu(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_relu")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRelu(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_relu")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Computes sigmoid of x element-wise... math::   y = 1 / (1 + exp(-x))The storage type of ``sigmoid`` output is always denseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L64
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2530,6 +5621,79 @@ public static NdArray Sigmoid(NdArray data)
 {
 return new Operator("sigmoid")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSigmoid(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sigmoid")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSigmoid(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sigmoid")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// Returns a copy of the input.From:G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:73
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">The input array.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Copy(NdArray @out,
+NdArray data)
+{
+return new Operator("_copy")
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// Returns a copy of the input.From:G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:73
+/// </summary>
+/// <param name="data">The input array.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Copy(NdArray data)
+{
+return new Operator("_copy")
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCopy(NdArray @out)
+{
+return new Operator("_backward_copy")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCopy()
+{
+return new Operator("_backward_copy")
 .Invoke();
 }
 /// <summary>
@@ -2580,7 +5744,36 @@ return new Operator("make_loss")
 .SetInput("data", data)
 .Invoke();
 }
-private static readonly List<string> CastDtypeConvert = new List<string>(){"float16","float32","float64","int32","uint8"};
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">First input.</param>
+/// <param name="rhs">Second input.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray IdentityWithAttrLikeRhs(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_identity_with_attr_like_rhs")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">First input.</param>
+/// <param name="rhs">Second input.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray IdentityWithAttrLikeRhs(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_identity_with_attr_like_rhs")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
 /// <summary>
 /// Casts all elements of the input to a new type... note:: ``Cast`` is deprecated. Use ``cast`` instead.Example::   cast([0.9, 1.3], dtype='int32') = [0, 1]   cast([1e20, 11.1], dtype='float16') = [inf, 11.09375]   cast([300, 11.1, 10.9, -1, -3], dtype='uint8') = [44, 11, 10, 255, 253]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L218
 /// </summary>
@@ -2590,10 +5783,10 @@ private static readonly List<string> CastDtypeConvert = new List<string>(){"floa
  /// <returns>returns new symbol</returns>
 public static NdArray Cast(NdArray @out,
 NdArray data,
-CastDtype dtype)
+Dtype dtype)
 {
 return new Operator("Cast")
-.SetParam("dtype", Util.EnumToString<CastDtype>(dtype,CastDtypeConvert))
+.SetParam("dtype", dtype)
 .SetInput("data", data)
 .Invoke(@out);
 }
@@ -2604,11 +5797,30 @@ return new Operator("Cast")
 /// <param name="dtype">Output data type.</param>
  /// <returns>returns new symbol</returns>
 public static NdArray Cast(NdArray data,
-CastDtype dtype)
+Dtype dtype)
 {
 return new Operator("Cast")
-.SetParam("dtype", Util.EnumToString<CastDtype>(dtype,CastDtypeConvert))
+.SetParam("dtype", dtype)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCast(NdArray @out)
+{
+return new Operator("_backward_cast")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCast()
+{
+return new Operator("_backward_cast")
 .Invoke();
 }
 /// <summary>
@@ -2660,6 +5872,36 @@ return new Operator("reciprocal")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardReciprocal(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_reciprocal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardReciprocal(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_reciprocal")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise absolute value of the input.Example::   abs([-2, 0, 3]) = [2, 0, 3]The storage type of ``abs`` output depends upon the input storage type:   - abs(default) = default   - abs(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L293
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2684,6 +5926,36 @@ return new Operator("abs")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardAbs(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_abs")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardAbs(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_abs")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise sign of the input.Example::   sign([-2, 0, 3]) = [-1, 0, 1]The storage type of ``sign`` output depends upon the input storage type:   - sign(default) = default   - sign(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L312
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2705,6 +5977,36 @@ public static NdArray Sign(NdArray data)
 {
 return new Operator("sign")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSign(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sign")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSign(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sign")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -2876,6 +6178,36 @@ return new Operator("square")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSquare(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_square")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSquare(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_square")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise square-root value of the input... math::   \textrm{sqrt}(x) = \sqrt{x}Example::   sqrt([4, 9, 16]) = [2, 3, 4]The storage type of ``sqrt`` output depends upon the input storage type:   - sqrt(default) = default   - sqrt(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L467
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2897,6 +6229,36 @@ public static NdArray Sqrt(NdArray data)
 {
 return new Operator("sqrt")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSqrt(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sqrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSqrt(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sqrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -2924,6 +6286,36 @@ return new Operator("rsqrt")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRsqrt(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_rsqrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRsqrt(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_rsqrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise cube-root value of the input... math::   cbrt(x) = \sqrt[3]{x}Example::   cbrt([1, 8, -125]) = [1, 2, -5]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L504
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2948,6 +6340,36 @@ return new Operator("cbrt")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCbrt(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_cbrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCbrt(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_cbrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise inverse cube-root value of the input... math::   rcbrt(x) = 1/\sqrt[3]{x}Example::   rcbrt([1,8,-125]) = [1.0, 0.5, -0.2]Defined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L521
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -2969,6 +6391,36 @@ public static NdArray Rcbrt(NdArray data)
 {
 return new Operator("rcbrt")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRcbrt(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_rcbrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRcbrt(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_rcbrt")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3068,6 +6520,36 @@ return new Operator("log2")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLog(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_log")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLog(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_log")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Computes the element-wise sine of the input array.The input should be in radians (:math:`2\pi` rad equals 360 degrees)... math::   sin([0, \pi/4, \pi/2]) = [0, 0.707, 1]The storage type of ``sin`` output depends upon the input storage type:   - sin(default) = default   - sin(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L599
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3089,6 +6571,36 @@ public static NdArray Sin(NdArray data)
 {
 return new Operator("sin")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSin(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sin")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSin(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sin")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3116,6 +6628,36 @@ return new Operator("log1p")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLog1P(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_log1p")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLog1P(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_log1p")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns ``exp(x) - 1`` computed element-wise on the input.This function provides greater precision than ``exp(x) - 1`` for small values of ``x``.The storage type of ``expm1`` output depends upon the input storage type:   - expm1(default) = default   - expm1(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L635
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3137,6 +6679,36 @@ public static NdArray Expm1(NdArray data)
 {
 return new Operator("expm1")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardExpm1(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_expm1")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardExpm1(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_expm1")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3164,6 +6736,36 @@ return new Operator("cos")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCos(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_cos")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCos(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_cos")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Computes the element-wise tangent of the input array.The input should be in radians (:math:`2\pi` rad equals 360 degrees)... math::   tan([0, \pi/4, \pi/2]) = [0, 1, -inf]The storage type of ``tan`` output depends upon the input storage type:   - tan(default) = default   - tan(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L672
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3185,6 +6787,36 @@ public static NdArray Tan(NdArray data)
 {
 return new Operator("tan")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTan(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_tan")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTan(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_tan")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3212,6 +6844,36 @@ return new Operator("arcsin")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArcsin(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arcsin")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArcsin(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arcsin")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns element-wise inverse cosine of the input array.The input should be in range `[-1, 1]`.The output is in the closed interval :math:`[0, \pi]`.. math::   arccos([-1, -.707, 0, .707, 1]) = [\pi, 3\pi/4, \pi/2, \pi/4, 0]The storage type of ``arccos`` output is always denseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L712
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3233,6 +6895,36 @@ public static NdArray Arccos(NdArray data)
 {
 return new Operator("arccos")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArccos(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arccos")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArccos(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arccos")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3260,6 +6952,36 @@ return new Operator("arctan")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArctan(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arctan")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArctan(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arctan")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Converts each element of the input array from radians to degrees... math::   degrees([0, \pi/2, \pi, 3\pi/2, 2\pi]) = [0, 90, 180, 270, 360]The storage type of ``degrees`` output depends upon the input storage type:   - degrees(default) = default   - degrees(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L752
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3281,6 +7003,36 @@ public static NdArray Degrees(NdArray data)
 {
 return new Operator("degrees")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDegrees(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_degrees")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDegrees(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_degrees")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3308,6 +7060,36 @@ return new Operator("radians")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRadians(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_radians")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRadians(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_radians")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns the hyperbolic sine of the input array, computed element-wise... math::   sinh(x) = 0.5\times(exp(x) - exp(-x))The storage type of ``sinh`` output depends upon the input storage type:   - sinh(default) = default   - sinh(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L790
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3329,6 +7111,36 @@ public static NdArray Sinh(NdArray data)
 {
 return new Operator("sinh")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSinh(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sinh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSinh(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_sinh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3356,6 +7168,36 @@ return new Operator("cosh")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCosh(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_cosh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCosh(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_cosh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns the hyperbolic tangent of the input array, computed element-wise... math::   tanh(x) = sinh(x) / cosh(x)The storage type of ``tanh`` output depends upon the input storage type:   - tanh(default) = default   - tanh(row_sparse) = row_sparseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L823
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3377,6 +7219,36 @@ public static NdArray Tanh(NdArray data)
 {
 return new Operator("tanh")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTanh(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_tanh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTanh(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_tanh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3404,6 +7276,36 @@ return new Operator("arcsinh")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArcsinh(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arcsinh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArcsinh(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arcsinh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns the element-wise inverse hyperbolic cosine of the input array, \computed element-wise.The storage type of ``arccosh`` output is always denseDefined in G:\deeplearn\mxnet\src\operator\tensor\elemwise_unary_op.cc:L853
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3425,6 +7327,36 @@ public static NdArray Arccosh(NdArray data)
 {
 return new Operator("arccosh")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArccosh(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arccosh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArccosh(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arccosh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3452,6 +7384,36 @@ return new Operator("arctanh")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArctanh(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arctanh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardArctanh(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_arctanh")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
 /// Returns the gamma function (extension of the factorial function \to the reals), computed element-wise on the input array.The storage type of ``gamma`` output is always dense
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3473,6 +7435,36 @@ public static NdArray Gamma(NdArray data)
 {
 return new Operator("gamma")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardGamma(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_gamma")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardGamma(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_gamma")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -3499,7 +7491,36 @@ return new Operator("gammaln")
 .SetInput("data", data)
 .Invoke();
 }
-private static readonly List<string> EmbeddingDtypeConvert = new List<string>(){"float16","float32","float64","int32","uint8"};
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardGammaln(NdArray @out,
+NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_gammaln")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">first input</param>
+/// <param name="rhs">second input</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardGammaln(NdArray lhs,
+NdArray rhs)
+{
+return new Operator("_backward_gammaln")
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
 /// <summary>
 /// Maps integer indices to vector representations (embeddings).This operator maps words to real-valued vectors in a high-dimensional space,called word embeddings. These embeddings can capture semantic and syntactic properties of the words.For example, it has been noted that in the learned embedding spaces, similar words tendto be close to each other and dissimilar words far apart.For an input array of shape (d1, ..., dK),the shape of an output array is (d1, ..., dK, output_dim).All the input values should be integers in the range [0, input_dim).If the input_dim is ip0 and output_dim is op0, then shape of the embedding weight matrix must be(ip0, op0).By default, if any index mentioned is too large, it is replaced by the index that addressesthe last vector in an embedding matrix.Examples::  input_dim = 4  output_dim = 5  // Each row in weight matrix y represents a word. So, y = (w0,w1,w2,w3)  y = [[  0.,   1.,   2.,   3.,   4.],       [  5.,   6.,   7.,   8.,   9.],       [ 10.,  11.,  12.,  13.,  14.],       [ 15.,  16.,  17.,  18.,  19.]]  // Input array x represents n-grams(2-gram). So, x = [(w1,w3), (w0,w2)]  x = [[ 1.,  3.],       [ 0.,  2.]]  // Mapped input x to its vector representation y.  Embedding(x, y, 4, 5) = [[[  5.,   6.,   7.,   8.,   9.],                            [ 15.,  16.,  17.,  18.,  19.]],                           [[  0.,   1.,   2.,   3.,   4.],                            [ 10.,  11.,  12.,  13.,  14.]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\indexing_op.cc:L74
 /// </summary>
@@ -3515,12 +7536,13 @@ NdArray data,
 int input_dim,
 int output_dim,
 NdArray weight=null,
-EmbeddingDtype dtype=EmbeddingDtype.Float32)
-{
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
 return new Operator("Embedding")
 .SetParam("input_dim", input_dim)
 .SetParam("output_dim", output_dim)
-.SetParam("dtype", Util.EnumToString<EmbeddingDtype>(dtype,EmbeddingDtypeConvert))
+.SetParam("dtype", dtype)
 .SetInput("data", data)
 .SetInput("weight", weight)
 .Invoke(@out);
@@ -3538,14 +7560,34 @@ public static NdArray Embedding(NdArray data,
 int input_dim,
 int output_dim,
 NdArray weight=null,
-EmbeddingDtype dtype=EmbeddingDtype.Float32)
-{
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
 return new Operator("Embedding")
 .SetParam("input_dim", input_dim)
 .SetParam("output_dim", output_dim)
-.SetParam("dtype", Util.EnumToString<EmbeddingDtype>(dtype,EmbeddingDtypeConvert))
+.SetParam("dtype", dtype)
 .SetInput("data", data)
 .SetInput("weight", weight)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardEmbedding(NdArray @out)
+{
+return new Operator("_backward_Embedding")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardEmbedding()
+{
+return new Operator("_backward_Embedding")
 .Invoke();
 }
 private static readonly List<string> TakeModeConvert = new List<string>(){"clip","raise","wrap"};
@@ -3592,6 +7634,25 @@ return new Operator("take")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTake(NdArray @out)
+{
+return new Operator("_backward_take")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTake()
+{
+return new Operator("_backward_take")
+.Invoke();
+}
+/// <summary>
 /// Takes elements from a data batch... note::  `batch_take` is deprecated. Use `pick` instead.Given an input array of shape ``(d0, d1)`` and indices of shape ``(i0,)``, the result will bean output array of shape ``(i0,)`` with::  output[i] = input[i, indices[i]]Examples::  x = [[ 1.,  2.],       [ 3.,  4.],       [ 5.,  6.]]  // takes elements with specified indices  batch_take(x, [0,1,0]) = [ 1.  4.  5.]Defined in G:\deeplearn\mxnet\src\operator\tensor\indexing_op.cc:L190
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3621,7 +7682,6 @@ return new Operator("batch_take")
 .SetInput("indices", indices)
 .Invoke();
 }
-private static readonly List<string> OneHotDtypeConvert = new List<string>(){"float16","float32","float64","int32","uint8"};
 /// <summary>
 /// Returns a one-hot array.The locations represented by `indices` take value `on_value`, while allother locations take value `off_value`.`one_hot` operation with `indices` of shape ``(i0, i1)`` and `depth`  of ``d`` would resultin an output array of shape ``(i0, i1, d)`` with::  output[i,j,:] = off_value  output[i,j,indices[i,j]] = on_valueExamples::  one_hot([1,0,2,0], 3) = [[ 0.  1.  0.]                           [ 1.  0.  0.]                           [ 0.  0.  1.]                           [ 1.  0.  0.]]  one_hot([1,0,2,0], 3, on_value=8, off_value=1,          dtype='int32') = [[1 8 1]                            [8 1 1]                            [1 1 8]                            [8 1 1]]  one_hot([[1,0],[1,0],[2,0]], 3) = [[[ 0.  1.  0.]                                      [ 1.  0.  0.]]                                     [[ 0.  1.  0.]                                      [ 1.  0.  0.]]                                     [[ 0.  0.  1.]                                      [ 1.  0.  0.]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\indexing_op.cc:L236
 /// </summary>
@@ -3637,13 +7697,14 @@ NdArray indices,
 int depth,
 double on_value=1,
 double off_value=0,
-OneHotDtype dtype=OneHotDtype.Float32)
-{
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
 return new Operator("one_hot")
 .SetParam("depth", depth)
 .SetParam("on_value", on_value)
 .SetParam("off_value", off_value)
-.SetParam("dtype", Util.EnumToString<OneHotDtype>(dtype,OneHotDtypeConvert))
+.SetParam("dtype", dtype)
 .SetInput("indices", indices)
 .Invoke(@out);
 }
@@ -3660,13 +7721,14 @@ public static NdArray OneHot(NdArray indices,
 int depth,
 double on_value=1,
 double off_value=0,
-OneHotDtype dtype=OneHotDtype.Float32)
-{
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
 return new Operator("one_hot")
 .SetParam("depth", depth)
 .SetParam("on_value", on_value)
 .SetParam("off_value", off_value)
-.SetParam("dtype", Util.EnumToString<OneHotDtype>(dtype,OneHotDtypeConvert))
+.SetParam("dtype", dtype)
 .SetInput("indices", indices)
 .Invoke();
 }
@@ -3737,6 +7799,138 @@ return new Operator("scatter_nd")
 .Invoke();
 }
 /// <summary>
+/// fill target with zeros
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="shape">The shape of the output</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
+/// <param name="dtype">Target data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Zeros(NdArray @out,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
+return new Operator("_zeros")
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// fill target with zeros
+/// </summary>
+/// <param name="shape">The shape of the output</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
+/// <param name="dtype">Target data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Zeros(Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
+return new Operator("_zeros")
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// fill target with ones
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="shape">The shape of the output</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
+/// <param name="dtype">Target data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Ones(NdArray @out,
+Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
+return new Operator("_ones")
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// fill target with ones
+/// </summary>
+/// <param name="shape">The shape of the output</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
+/// <param name="dtype">Target data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Ones(Shape shape=null,
+Context ctx=null,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
+return new Operator("_ones")
+.SetParam("shape", shape)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
+/// Return evenly spaced values within a given interval. Similar to Numpy
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="start">Start of interval. The interval includes this value. The default start value is 0.</param>
+/// <param name="stop">End of interval. The interval does not include this value, except in some cases where step is not an integer and floating point round-off affects the length of out.</param>
+/// <param name="step">Spacing between values.</param>
+/// <param name="repeat">The repeating time of all elements. E.g repeat=3, the element a will be repeated three times --> a, a, a.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
+/// <param name="dtype">Target data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Arange(NdArray @out,
+float start,
+float? stop=null,
+float step=1f,
+int repeat=1,
+Context ctx=null,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
+return new Operator("_arange")
+.SetParam("start", start)
+.SetParam("stop", stop)
+.SetParam("step", step)
+.SetParam("repeat", repeat)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke(@out);
+}
+/// <summary>
+/// Return evenly spaced values within a given interval. Similar to Numpy
+/// </summary>
+/// <param name="start">Start of interval. The interval includes this value. The default start value is 0.</param>
+/// <param name="stop">End of interval. The interval does not include this value, except in some cases where step is not an integer and floating point round-off affects the length of out.</param>
+/// <param name="step">Spacing between values.</param>
+/// <param name="repeat">The repeating time of all elements. E.g repeat=3, the element a will be repeated three times --> a, a, a.</param>
+/// <param name="ctx">Context of output, in format [cpu|gpu|cpu_pinned](n).Only used for imperative calls.</param>
+/// <param name="dtype">Target data type.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Arange(float start,
+float? stop=null,
+float step=1f,
+int repeat=1,
+Context ctx=null,
+Dtype dtype=null)
+{if(dtype==null){ dtype= Dtype.Float32;}
+
+return new Operator("_arange")
+.SetParam("start", start)
+.SetParam("stop", stop)
+.SetParam("step", step)
+.SetParam("repeat", repeat)
+.SetParam("ctx", ctx)
+.SetParam("dtype", dtype)
+.Invoke();
+}
+/// <summary>
 /// Return an array of zeros with the same shape and typeas the input array.The storage type of ``zeros_like`` output depends on the storage type of the input- zeros_like(row_sparse) = row_sparse- zeros_like(csr) = csr- zeros_like(default) = defaultExamples::  x = [[ 1.,  1.,  1.],       [ 1.,  1.,  1.]]  zeros_like(x) = [[ 0.,  0.,  0.],                   [ 0.,  0.,  0.]]
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3782,6 +7976,556 @@ public static NdArray OnesLike(NdArray data)
 {
 return new Operator("ones_like")
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// Performs general matrix multiplication and accumulation.Input are tensors *A*, *B*, *C*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, the BLAS3 function *gemm* is performed:   *out* = *alpha* \* *op*\ (*A*) \* *op*\ (*B*) + *beta* \* *C*Here, *alpha* and *beta* are scalar parameters, and *op()* is either the identity ormatrix transposition (depending on *transpose_a*, *transpose_b*).If *n>2*, *gemm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix multiply-add   A = [[1.0, 1.0], [1.0, 1.0]]   B = [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0]]   C = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]   gemm(A, B, C, transpose_b=True, alpha=2.0, beta=10.0)           = [[14.0, 14.0, 14.0], [14.0, 14.0, 14.0]]   // Batch matrix multiply-add   A = [[[1.0, 1.0]], [[0.1, 0.1]]]   B = [[[1.0, 1.0]], [[0.1, 0.1]]]   C = [[[10.0]], [[0.01]]]   gemm(A, B, C, transpose_b=True, alpha=2.0 , beta=10.0)           = [[[104.0]], [[0.14]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L68
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of input matrices</param>
+/// <param name="B">Tensor of input matrices</param>
+/// <param name="C">Tensor of input matrices</param>
+/// <param name="transpose_a">Multiply with transposed of first input (A).</param>
+/// <param name="transpose_b">Multiply with transposed of second input (B).</param>
+/// <param name="alpha">Scalar factor multiplied with A*B.</param>
+/// <param name="beta">Scalar factor multiplied with C.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgGemm(NdArray @out,
+NdArray A,
+NdArray B,
+NdArray C,
+bool transpose_a=false,
+bool transpose_b=false,
+double alpha=1,
+double beta=1)
+{
+return new Operator("_linalg_gemm")
+.SetParam("transpose_a", transpose_a)
+.SetParam("transpose_b", transpose_b)
+.SetParam("alpha", alpha)
+.SetParam("beta", beta)
+.SetInput("A", A)
+.SetInput("B", B)
+.SetInput("C", C)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs general matrix multiplication and accumulation.Input are tensors *A*, *B*, *C*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, the BLAS3 function *gemm* is performed:   *out* = *alpha* \* *op*\ (*A*) \* *op*\ (*B*) + *beta* \* *C*Here, *alpha* and *beta* are scalar parameters, and *op()* is either the identity ormatrix transposition (depending on *transpose_a*, *transpose_b*).If *n>2*, *gemm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix multiply-add   A = [[1.0, 1.0], [1.0, 1.0]]   B = [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0]]   C = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]   gemm(A, B, C, transpose_b=True, alpha=2.0, beta=10.0)           = [[14.0, 14.0, 14.0], [14.0, 14.0, 14.0]]   // Batch matrix multiply-add   A = [[[1.0, 1.0]], [[0.1, 0.1]]]   B = [[[1.0, 1.0]], [[0.1, 0.1]]]   C = [[[10.0]], [[0.01]]]   gemm(A, B, C, transpose_b=True, alpha=2.0 , beta=10.0)           = [[[104.0]], [[0.14]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L68
+/// </summary>
+/// <param name="A">Tensor of input matrices</param>
+/// <param name="B">Tensor of input matrices</param>
+/// <param name="C">Tensor of input matrices</param>
+/// <param name="transpose_a">Multiply with transposed of first input (A).</param>
+/// <param name="transpose_b">Multiply with transposed of second input (B).</param>
+/// <param name="alpha">Scalar factor multiplied with A*B.</param>
+/// <param name="beta">Scalar factor multiplied with C.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgGemm(NdArray A,
+NdArray B,
+NdArray C,
+bool transpose_a=false,
+bool transpose_b=false,
+double alpha=1,
+double beta=1)
+{
+return new Operator("_linalg_gemm")
+.SetParam("transpose_a", transpose_a)
+.SetParam("transpose_b", transpose_b)
+.SetParam("alpha", alpha)
+.SetParam("beta", beta)
+.SetInput("A", A)
+.SetInput("B", B)
+.SetInput("C", C)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgGemm(NdArray @out)
+{
+return new Operator("_backward_linalg_gemm")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgGemm()
+{
+return new Operator("_backward_linalg_gemm")
+.Invoke();
+}
+/// <summary>
+/// Performs general matrix multiplication.Input are tensors *A*, *B*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, the BLAS3 function *gemm* is performed:   *out* = *alpha* \* *op*\ (*A*) \* *op*\ (*B*)Here *alpha* is a scalar parameter and *op()* is either the identity or the matrixtransposition (depending on *transpose_a*, *transpose_b*).If *n>2*, *gemm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix multiply   A = [[1.0, 1.0], [1.0, 1.0]]   B = [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0]]   gemm2(A, B, transpose_b=True, alpha=2.0)            = [[4.0, 4.0, 4.0], [4.0, 4.0, 4.0]]   // Batch matrix multiply   A = [[[1.0, 1.0]], [[0.1, 0.1]]]   B = [[[1.0, 1.0]], [[0.1, 0.1]]]   gemm2(A, B, transpose_b=True, alpha=2.0)           = [[[4.0]], [[0.04 ]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L127
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of input matrices</param>
+/// <param name="B">Tensor of input matrices</param>
+/// <param name="transpose_a">Multiply with transposed of first input (A).</param>
+/// <param name="transpose_b">Multiply with transposed of second input (B).</param>
+/// <param name="alpha">Scalar factor multiplied with A*B.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgGemm2(NdArray @out,
+NdArray A,
+NdArray B,
+bool transpose_a=false,
+bool transpose_b=false,
+double alpha=1)
+{
+return new Operator("_linalg_gemm2")
+.SetParam("transpose_a", transpose_a)
+.SetParam("transpose_b", transpose_b)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.SetInput("B", B)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs general matrix multiplication.Input are tensors *A*, *B*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, the BLAS3 function *gemm* is performed:   *out* = *alpha* \* *op*\ (*A*) \* *op*\ (*B*)Here *alpha* is a scalar parameter and *op()* is either the identity or the matrixtransposition (depending on *transpose_a*, *transpose_b*).If *n>2*, *gemm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix multiply   A = [[1.0, 1.0], [1.0, 1.0]]   B = [[1.0, 1.0], [1.0, 1.0], [1.0, 1.0]]   gemm2(A, B, transpose_b=True, alpha=2.0)            = [[4.0, 4.0, 4.0], [4.0, 4.0, 4.0]]   // Batch matrix multiply   A = [[[1.0, 1.0]], [[0.1, 0.1]]]   B = [[[1.0, 1.0]], [[0.1, 0.1]]]   gemm2(A, B, transpose_b=True, alpha=2.0)           = [[[4.0]], [[0.04 ]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L127
+/// </summary>
+/// <param name="A">Tensor of input matrices</param>
+/// <param name="B">Tensor of input matrices</param>
+/// <param name="transpose_a">Multiply with transposed of first input (A).</param>
+/// <param name="transpose_b">Multiply with transposed of second input (B).</param>
+/// <param name="alpha">Scalar factor multiplied with A*B.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgGemm2(NdArray A,
+NdArray B,
+bool transpose_a=false,
+bool transpose_b=false,
+double alpha=1)
+{
+return new Operator("_linalg_gemm2")
+.SetParam("transpose_a", transpose_a)
+.SetParam("transpose_b", transpose_b)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.SetInput("B", B)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgGemm2(NdArray @out)
+{
+return new Operator("_backward_linalg_gemm2")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgGemm2()
+{
+return new Operator("_backward_linalg_gemm2")
+.Invoke();
+}
+/// <summary>
+/// Performs Cholesky factorization of a symmetric positive-definite matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, the Cholesky factor *L* of the symmetric, positive definite matrix *A* iscomputed. *L* is lower triangular (entries of upper triangle are all zero), haspositive diagonal entries, and:  *A* = *L* \* *L*\ :sup:`T`If *n>2*, *potrf* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix factorization   A = [[4.0, 1.0], [1.0, 4.25]]   potrf(A) = [[2.0, 0], [0.5, 2.0]]   // Batch matrix factorization   A = [[[4.0, 1.0], [1.0, 4.25]], [[16.0, 4.0], [4.0, 17.0]]]   potrf(A) = [[[2.0, 0], [0.5, 2.0]], [[4.0, 0], [1.0, 4.0]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L177
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of input matrices to be decomposed</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgPotrf(NdArray @out,
+NdArray A)
+{
+return new Operator("_linalg_potrf")
+.SetInput("A", A)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs Cholesky factorization of a symmetric positive-definite matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, the Cholesky factor *L* of the symmetric, positive definite matrix *A* iscomputed. *L* is lower triangular (entries of upper triangle are all zero), haspositive diagonal entries, and:  *A* = *L* \* *L*\ :sup:`T`If *n>2*, *potrf* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix factorization   A = [[4.0, 1.0], [1.0, 4.25]]   potrf(A) = [[2.0, 0], [0.5, 2.0]]   // Batch matrix factorization   A = [[[4.0, 1.0], [1.0, 4.25]], [[16.0, 4.0], [4.0, 17.0]]]   potrf(A) = [[[2.0, 0], [0.5, 2.0]], [[4.0, 0], [1.0, 4.0]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L177
+/// </summary>
+/// <param name="A">Tensor of input matrices to be decomposed</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgPotrf(NdArray A)
+{
+return new Operator("_linalg_potrf")
+.SetInput("A", A)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgPotrf(NdArray @out)
+{
+return new Operator("_backward_linalg_potrf")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgPotrf()
+{
+return new Operator("_backward_linalg_potrf")
+.Invoke();
+}
+/// <summary>
+/// Performs matrix inversion from a Cholesky factorization.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, *A* is a lower triangular matrix (entries of upper triangle are all zero)with positive diagonal. We compute:  *out* = *A*\ :sup:`-T` \* *A*\ :sup:`-1`In other words, if *A* is the Cholesky factor of a symmetric positive definite matrix*B* (obtained by *potrf*), then  *out* = *B*\ :sup:`-1`If *n>2*, *potri* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only... note:: Use this operator only if you are certain you need the inverse of *B*, and          cannot use the Cholesky factor *A* (*potrf*), together with backsubstitution          (*trsm*). The latter is numerically much safer, and also cheaper.Examples::   // Single matrix inverse   A = [[2.0, 0], [0.5, 2.0]]   potri(A) = [[0.26563, -0.0625], [-0.0625, 0.25]]   // Batch matrix inverse   A = [[[2.0, 0], [0.5, 2.0]], [[4.0, 0], [1.0, 4.0]]]   potri(A) = [[[0.26563, -0.0625], [-0.0625, 0.25]],               [[0.06641, -0.01562], [-0.01562, 0,0625]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L235
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of lower triangular matrices</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgPotri(NdArray @out,
+NdArray A)
+{
+return new Operator("_linalg_potri")
+.SetInput("A", A)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs matrix inversion from a Cholesky factorization.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, *A* is a lower triangular matrix (entries of upper triangle are all zero)with positive diagonal. We compute:  *out* = *A*\ :sup:`-T` \* *A*\ :sup:`-1`In other words, if *A* is the Cholesky factor of a symmetric positive definite matrix*B* (obtained by *potrf*), then  *out* = *B*\ :sup:`-1`If *n>2*, *potri* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only... note:: Use this operator only if you are certain you need the inverse of *B*, and          cannot use the Cholesky factor *A* (*potrf*), together with backsubstitution          (*trsm*). The latter is numerically much safer, and also cheaper.Examples::   // Single matrix inverse   A = [[2.0, 0], [0.5, 2.0]]   potri(A) = [[0.26563, -0.0625], [-0.0625, 0.25]]   // Batch matrix inverse   A = [[[2.0, 0], [0.5, 2.0]], [[4.0, 0], [1.0, 4.0]]]   potri(A) = [[[0.26563, -0.0625], [-0.0625, 0.25]],               [[0.06641, -0.01562], [-0.01562, 0,0625]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L235
+/// </summary>
+/// <param name="A">Tensor of lower triangular matrices</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgPotri(NdArray A)
+{
+return new Operator("_linalg_potri")
+.SetInput("A", A)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgPotri(NdArray @out)
+{
+return new Operator("_backward_linalg_potri")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgPotri()
+{
+return new Operator("_backward_linalg_potri")
+.Invoke();
+}
+/// <summary>
+/// Performs multiplication with a lower triangular matrix.Input are tensors *A*, *B*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, *A* must be lower triangular. The operator performs the BLAS3 function*trmm*:   *out* = *alpha* \* *op*\ (*A*) \* *B*if *rightside=False*, or   *out* = *alpha* \* *B* \* *op*\ (*A*)if *rightside=True*. Here, *alpha* is a scalar parameter, and *op()* is either theidentity or the matrix transposition (depending on *transpose*).If *n>2*, *trmm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single triangular matrix multiply   A = [[1.0, 0], [1.0, 1.0]]   B = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]   trmm(A, B, alpha=2.0) = [[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]]   // Batch triangular matrix multiply   A = [[[1.0, 0], [1.0, 1.0]], [[1.0, 0], [1.0, 1.0]]]   B = [[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]], [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5]]]   trmm(A, B, alpha=2.0) = [[[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]],                            [[1.0, 1.0, 1.0], [2.0, 2.0, 2.0]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L292
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of lower triangular matrices</param>
+/// <param name="B">Tensor of matrices</param>
+/// <param name="transpose">Use transposed of the triangular matrix</param>
+/// <param name="rightside">Multiply triangular matrix from the right to non-triangular one.</param>
+/// <param name="alpha">Scalar factor to be applied to the result.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgTrmm(NdArray @out,
+NdArray A,
+NdArray B,
+bool transpose=false,
+bool rightside=false,
+double alpha=1)
+{
+return new Operator("_linalg_trmm")
+.SetParam("transpose", transpose)
+.SetParam("rightside", rightside)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.SetInput("B", B)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs multiplication with a lower triangular matrix.Input are tensors *A*, *B*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, *A* must be lower triangular. The operator performs the BLAS3 function*trmm*:   *out* = *alpha* \* *op*\ (*A*) \* *B*if *rightside=False*, or   *out* = *alpha* \* *B* \* *op*\ (*A*)if *rightside=True*. Here, *alpha* is a scalar parameter, and *op()* is either theidentity or the matrix transposition (depending on *transpose*).If *n>2*, *trmm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single triangular matrix multiply   A = [[1.0, 0], [1.0, 1.0]]   B = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]   trmm(A, B, alpha=2.0) = [[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]]   // Batch triangular matrix multiply   A = [[[1.0, 0], [1.0, 1.0]], [[1.0, 0], [1.0, 1.0]]]   B = [[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]], [[0.5, 0.5, 0.5], [0.5, 0.5, 0.5]]]   trmm(A, B, alpha=2.0) = [[[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]],                            [[1.0, 1.0, 1.0], [2.0, 2.0, 2.0]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L292
+/// </summary>
+/// <param name="A">Tensor of lower triangular matrices</param>
+/// <param name="B">Tensor of matrices</param>
+/// <param name="transpose">Use transposed of the triangular matrix</param>
+/// <param name="rightside">Multiply triangular matrix from the right to non-triangular one.</param>
+/// <param name="alpha">Scalar factor to be applied to the result.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgTrmm(NdArray A,
+NdArray B,
+bool transpose=false,
+bool rightside=false,
+double alpha=1)
+{
+return new Operator("_linalg_trmm")
+.SetParam("transpose", transpose)
+.SetParam("rightside", rightside)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.SetInput("B", B)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgTrmm(NdArray @out)
+{
+return new Operator("_backward_linalg_trmm")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgTrmm()
+{
+return new Operator("_backward_linalg_trmm")
+.Invoke();
+}
+/// <summary>
+/// Solves matrix equation involving a lower triangular matrix.Input are tensors *A*, *B*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, *A* must be lower triangular. The operator performs the BLAS3 function*trsm*, solving for *out* in:   *op*\ (*A*) \* *out* = *alpha* \* *B*if *rightside=False*, or   *out* \* *op*\ (*A*) = *alpha* \* *B*if *rightside=True*. Here, *alpha* is a scalar parameter, and *op()* is either theidentity or the matrix transposition (depending on *transpose*).If *n>2*, *trsm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix solve   A = [[1.0, 0], [1.0, 1.0]]   B = [[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]]   trsm(A, B, alpha=0.5) = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]   // Batch matrix solve   A = [[[1.0, 0], [1.0, 1.0]], [[1.0, 0], [1.0, 1.0]]]   B = [[[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]],        [[4.0, 4.0, 4.0], [8.0, 8.0, 8.0]]]   trsm(A, B, alpha=0.5) = [[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]],                            [[2.0, 2.0, 2.0], [2.0, 2.0, 2.0]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L355
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of lower triangular matrices</param>
+/// <param name="B">Tensor of matrices</param>
+/// <param name="transpose">Use transposed of the triangular matrix</param>
+/// <param name="rightside">Multiply triangular matrix from the right to non-triangular one.</param>
+/// <param name="alpha">Scalar factor to be applied to the result.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgTrsm(NdArray @out,
+NdArray A,
+NdArray B,
+bool transpose=false,
+bool rightside=false,
+double alpha=1)
+{
+return new Operator("_linalg_trsm")
+.SetParam("transpose", transpose)
+.SetParam("rightside", rightside)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.SetInput("B", B)
+.Invoke(@out);
+}
+/// <summary>
+/// Solves matrix equation involving a lower triangular matrix.Input are tensors *A*, *B*, each of dimension *n >= 2* and having the same shapeon the leading *n-2* dimensions.If *n=2*, *A* must be lower triangular. The operator performs the BLAS3 function*trsm*, solving for *out* in:   *op*\ (*A*) \* *out* = *alpha* \* *B*if *rightside=False*, or   *out* \* *op*\ (*A*) = *alpha* \* *B*if *rightside=True*. Here, *alpha* is a scalar parameter, and *op()* is either theidentity or the matrix transposition (depending on *transpose*).If *n>2*, *trsm* is performed separately on the trailing two dimensions for all inputs(batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix solve   A = [[1.0, 0], [1.0, 1.0]]   B = [[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]]   trsm(A, B, alpha=0.5) = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]   // Batch matrix solve   A = [[[1.0, 0], [1.0, 1.0]], [[1.0, 0], [1.0, 1.0]]]   B = [[[2.0, 2.0, 2.0], [4.0, 4.0, 4.0]],        [[4.0, 4.0, 4.0], [8.0, 8.0, 8.0]]]   trsm(A, B, alpha=0.5) = [[[1.0, 1.0, 1.0], [1.0, 1.0, 1.0]],                            [[2.0, 2.0, 2.0], [2.0, 2.0, 2.0]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L355
+/// </summary>
+/// <param name="A">Tensor of lower triangular matrices</param>
+/// <param name="B">Tensor of matrices</param>
+/// <param name="transpose">Use transposed of the triangular matrix</param>
+/// <param name="rightside">Multiply triangular matrix from the right to non-triangular one.</param>
+/// <param name="alpha">Scalar factor to be applied to the result.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgTrsm(NdArray A,
+NdArray B,
+bool transpose=false,
+bool rightside=false,
+double alpha=1)
+{
+return new Operator("_linalg_trsm")
+.SetParam("transpose", transpose)
+.SetParam("rightside", rightside)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.SetInput("B", B)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgTrsm(NdArray @out)
+{
+return new Operator("_backward_linalg_trsm")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgTrsm()
+{
+return new Operator("_backward_linalg_trsm")
+.Invoke();
+}
+/// <summary>
+/// Computes the sum of the logarithms of the diagonal elements of a square matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, *A* must be square with positive diagonal entries. We sum the naturallogarithms of the diagonal elements, the result has shape (1,).If *n>2*, *sumlogdiag* is performed separately on the trailing two dimensions for allinputs (batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix reduction   A = [[1.0, 1.0], [1.0, 7.0]]   sumlogdiag(A) = [1.9459]   // Batch matrix reduction   A = [[[1.0, 1.0], [1.0, 7.0]], [[3.0, 0], [0, 17.0]]]   sumlogdiag(A) = [1.9459, 3.9318]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L404
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of square matrices</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgSumlogdiag(NdArray @out,
+NdArray A)
+{
+return new Operator("_linalg_sumlogdiag")
+.SetInput("A", A)
+.Invoke(@out);
+}
+/// <summary>
+/// Computes the sum of the logarithms of the diagonal elements of a square matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, *A* must be square with positive diagonal entries. We sum the naturallogarithms of the diagonal elements, the result has shape (1,).If *n>2*, *sumlogdiag* is performed separately on the trailing two dimensions for allinputs (batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix reduction   A = [[1.0, 1.0], [1.0, 7.0]]   sumlogdiag(A) = [1.9459]   // Batch matrix reduction   A = [[[1.0, 1.0], [1.0, 7.0]], [[3.0, 0], [0, 17.0]]]   sumlogdiag(A) = [1.9459, 3.9318]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L404
+/// </summary>
+/// <param name="A">Tensor of square matrices</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgSumlogdiag(NdArray A)
+{
+return new Operator("_linalg_sumlogdiag")
+.SetInput("A", A)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgSumlogdiag(NdArray @out)
+{
+return new Operator("_backward_linalg_sumlogdiag")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgSumlogdiag()
+{
+return new Operator("_backward_linalg_sumlogdiag")
+.Invoke();
+}
+/// <summary>
+/// Multiplication of matrix with its transpose.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, the operator performs the BLAS3 function *syrk*:  *out* = *alpha* \* *A* \* *A*\ :sup:`T`if *transpose=False*, or  *out* = *alpha* \* *A*\ :sup:`T` \ \* *A*if *transpose=True*.If *n>2*, *syrk* is performed separately on the trailing two dimensions for allinputs (batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix multiply   A = [[1., 2., 3.], [4., 5., 6.]]   syrk(A, alpha=1., transpose=False)            = [[14., 32.],               [32., 77.]]   syrk(A, alpha=1., transpose=True)            = [[17., 22., 27.],               [22., 29., 36.],               [27., 36., 45.]]   // Batch matrix multiply   A = [[[1., 1.]], [[0.1, 0.1]]]   syrk(A, alpha=2., transpose=False) = [[[4.]], [[0.04]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L460
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of input matrices</param>
+/// <param name="transpose">Use transpose of input matrix.</param>
+/// <param name="alpha">Scalar factor to be applied to the result.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgSyrk(NdArray @out,
+NdArray A,
+bool transpose=false,
+double alpha=1)
+{
+return new Operator("_linalg_syrk")
+.SetParam("transpose", transpose)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.Invoke(@out);
+}
+/// <summary>
+/// Multiplication of matrix with its transpose.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, the operator performs the BLAS3 function *syrk*:  *out* = *alpha* \* *A* \* *A*\ :sup:`T`if *transpose=False*, or  *out* = *alpha* \* *A*\ :sup:`T` \ \* *A*if *transpose=True*.If *n>2*, *syrk* is performed separately on the trailing two dimensions for allinputs (batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single matrix multiply   A = [[1., 2., 3.], [4., 5., 6.]]   syrk(A, alpha=1., transpose=False)            = [[14., 32.],               [32., 77.]]   syrk(A, alpha=1., transpose=True)            = [[17., 22., 27.],               [22., 29., 36.],               [27., 36., 45.]]   // Batch matrix multiply   A = [[[1., 1.]], [[0.1, 0.1]]]   syrk(A, alpha=2., transpose=False) = [[[4.]], [[0.04]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L460
+/// </summary>
+/// <param name="A">Tensor of input matrices</param>
+/// <param name="transpose">Use transpose of input matrix.</param>
+/// <param name="alpha">Scalar factor to be applied to the result.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgSyrk(NdArray A,
+bool transpose=false,
+double alpha=1)
+{
+return new Operator("_linalg_syrk")
+.SetParam("transpose", transpose)
+.SetParam("alpha", alpha)
+.SetInput("A", A)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgSyrk(NdArray @out)
+{
+return new Operator("_backward_linalg_syrk")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgSyrk()
+{
+return new Operator("_backward_linalg_syrk")
+.Invoke();
+}
+/// <summary>
+/// LQ factorization for general matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, we compute the LQ factorization (LAPACK *gelqf*, followed by *orglq*). *A*must have shape *(x, y)* with *x <= y*, and must have full rank *=x*. The LQfactorization consists of *L* with shape *(x, x)* and *Q* with shape *(x, y)*, sothat:   *A* = *L* \* *Q*Here, *L* is lower triangular (upper triangle equal to zero) with nonzero diagonal,and *Q* is row-orthonormal, meaning that   *Q* \* *Q*\ :sup:`T`is equal to the identity matrix of shape *(x, x)*.If *n>2*, *gelqf* is performed separately on the trailing two dimensions for allinputs (batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single LQ factorization   A = [[1., 2., 3.], [4., 5., 6.]]   Q, L = gelqf(A)   Q = [[-0.26726124, -0.53452248, -0.80178373],        [0.87287156, 0.21821789, -0.43643578]]   L = [[-3.74165739, 0.],        [-8.55235974, 1.96396101]]   // Batch LQ factorization   A = [[[1., 2., 3.], [4., 5., 6.]],        [[7., 8., 9.], [10., 11., 12.]]]   Q, L = gelqf(A)   Q = [[[-0.26726124, -0.53452248, -0.80178373],         [0.87287156, 0.21821789, -0.43643578]],        [[-0.50257071, -0.57436653, -0.64616234],         [0.7620735, 0.05862104, -0.64483142]]]   L = [[[-3.74165739, 0.],         [-8.55235974, 1.96396101]],        [[-13.92838828, 0.],         [-19.09768702, 0.52758934]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L528
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of input matrices to be factorized</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgGelqf(NdArray @out,
+NdArray A)
+{
+return new Operator("_linalg_gelqf")
+.SetInput("A", A)
+.Invoke(@out);
+}
+/// <summary>
+/// LQ factorization for general matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, we compute the LQ factorization (LAPACK *gelqf*, followed by *orglq*). *A*must have shape *(x, y)* with *x <= y*, and must have full rank *=x*. The LQfactorization consists of *L* with shape *(x, x)* and *Q* with shape *(x, y)*, sothat:   *A* = *L* \* *Q*Here, *L* is lower triangular (upper triangle equal to zero) with nonzero diagonal,and *Q* is row-orthonormal, meaning that   *Q* \* *Q*\ :sup:`T`is equal to the identity matrix of shape *(x, x)*.If *n>2*, *gelqf* is performed separately on the trailing two dimensions for allinputs (batch mode)... note:: The operator supports float32 and float64 data types only.Examples::   // Single LQ factorization   A = [[1., 2., 3.], [4., 5., 6.]]   Q, L = gelqf(A)   Q = [[-0.26726124, -0.53452248, -0.80178373],        [0.87287156, 0.21821789, -0.43643578]]   L = [[-3.74165739, 0.],        [-8.55235974, 1.96396101]]   // Batch LQ factorization   A = [[[1., 2., 3.], [4., 5., 6.]],        [[7., 8., 9.], [10., 11., 12.]]]   Q, L = gelqf(A)   Q = [[[-0.26726124, -0.53452248, -0.80178373],         [0.87287156, 0.21821789, -0.43643578]],        [[-0.50257071, -0.57436653, -0.64616234],         [0.7620735, 0.05862104, -0.64483142]]]   L = [[[-3.74165739, 0.],         [-8.55235974, 1.96396101]],        [[-13.92838828, 0.],         [-19.09768702, 0.52758934]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L528
+/// </summary>
+/// <param name="A">Tensor of input matrices to be factorized</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgGelqf(NdArray A)
+{
+return new Operator("_linalg_gelqf")
+.SetInput("A", A)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgGelqf(NdArray @out)
+{
+return new Operator("_backward_linalg_gelqf")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgGelqf()
+{
+return new Operator("_backward_linalg_gelqf")
+.Invoke();
+}
+/// <summary>
+/// Eigendecomposition for symmetric matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, *A* must be symmetric, of shape *(x, x)*. We compute the eigendecomposition,resulting in the orthonormal matrix *U* of eigenvectors, shape *(x, x)*, and thevector *L* of eigenvalues, shape *(x,)*, so that:   *U* \* *A* = *diag(L)* \* *U*Here:   *U* \* *U*\ :sup:`T` = *U*\ :sup:`T` \* *U* = *I*where *I* is the identity matrix. Also, *L(0) <= L(1) <= L(2) <= ...* (ascending order).If *n>2*, *syevd* is performed separately on the trailing two dimensions of *A* (batchmode). In this case, *U* has *n* dimensions like *A*, and *L* has *n-1* dimensions... note:: The operator supports float32 and float64 data types only... note:: For the time being, this operator supports the float64 data type only. If the          rest of your expression uses float32, please apply the Cast operator to inputs          and outputs... note:: Derivatives for this operator are defined only if *A* is such that all its          eigenvalues are distinct, and the eigengaps are not too small. If you need          gradients, do not apply this operator to matrices with multiple eigenvalues.Examples::   // Single symmetric eigendecomposition   A = [[1., 2.], [2., 4.]]   U, L = syevd(A)   U = [[0.89442719, -0.4472136],        [0.4472136, 0.89442719]]   L = [0., 5.]   // Batch symmetric eigendecomposition   A = [[[1., 2.], [2., 4.]],        [[1., 2.], [2., 5.]]]   U, L = syevd(A)   U = [[[0.89442719, -0.4472136],         [0.4472136, 0.89442719]],        [[0.92387953, -0.38268343],         [0.38268343, 0.92387953]]]   L = [[0., 5.],        [0.17157288, 5.82842712]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L601
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="A">Tensor of input matrices to be factorized</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgSyevd(NdArray @out,
+NdArray A)
+{
+return new Operator("_linalg_syevd")
+.SetInput("A", A)
+.Invoke(@out);
+}
+/// <summary>
+/// Eigendecomposition for symmetric matrix.Input is a tensor *A* of dimension *n >= 2*.If *n=2*, *A* must be symmetric, of shape *(x, x)*. We compute the eigendecomposition,resulting in the orthonormal matrix *U* of eigenvectors, shape *(x, x)*, and thevector *L* of eigenvalues, shape *(x,)*, so that:   *U* \* *A* = *diag(L)* \* *U*Here:   *U* \* *U*\ :sup:`T` = *U*\ :sup:`T` \* *U* = *I*where *I* is the identity matrix. Also, *L(0) <= L(1) <= L(2) <= ...* (ascending order).If *n>2*, *syevd* is performed separately on the trailing two dimensions of *A* (batchmode). In this case, *U* has *n* dimensions like *A*, and *L* has *n-1* dimensions... note:: The operator supports float32 and float64 data types only... note:: For the time being, this operator supports the float64 data type only. If the          rest of your expression uses float32, please apply the Cast operator to inputs          and outputs... note:: Derivatives for this operator are defined only if *A* is such that all its          eigenvalues are distinct, and the eigengaps are not too small. If you need          gradients, do not apply this operator to matrices with multiple eigenvalues.Examples::   // Single symmetric eigendecomposition   A = [[1., 2.], [2., 4.]]   U, L = syevd(A)   U = [[0.89442719, -0.4472136],        [0.4472136, 0.89442719]]   L = [0., 5.]   // Batch symmetric eigendecomposition   A = [[[1., 2.], [2., 4.]],        [[1., 2.], [2., 5.]]]   U, L = syevd(A)   U = [[[0.89442719, -0.4472136],         [0.4472136, 0.89442719]],        [[0.92387953, -0.38268343],         [0.38268343, 0.92387953]]]   L = [[0., 5.],        [0.17157288, 5.82842712]]Defined in G:\deeplearn\mxnet\src\operator\tensor\la_op.cc:L601
+/// </summary>
+/// <param name="A">Tensor of input matrices to be factorized</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray LinalgSyevd(NdArray A)
+{
+return new Operator("_linalg_syevd")
+.SetInput("A", A)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgSyevd(NdArray @out)
+{
+return new Operator("_backward_linalg_syevd")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinalgSyevd()
+{
+return new Operator("_backward_linalg_syevd")
 .Invoke();
 }
 /// <summary>
@@ -3941,6 +8685,109 @@ return new Operator("slice")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSlice(NdArray @out)
+{
+return new Operator("_backward_slice")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSlice()
+{
+return new Operator("_backward_slice")
+.Invoke();
+}
+/// <summary>
+/// Assign the rhs to a cropped subset of lhs.Requirements------------- output should be explicitly given and be the same as lhs.- lhs and rhs are of the same data type, and on the same device.From:G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:300
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">Source input</param>
+/// <param name="rhs">value to assign</param>
+/// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
+/// <param name="end">ending indices for the slice operation, supports negative indices.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SliceAssign(NdArray @out,
+NdArray lhs,
+NdArray rhs,
+Shape begin,
+Shape end)
+{
+return new Operator("_slice_assign")
+.SetParam("begin", begin)
+.SetParam("end", end)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// Assign the rhs to a cropped subset of lhs.Requirements------------- output should be explicitly given and be the same as lhs.- lhs and rhs are of the same data type, and on the same device.From:G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:300
+/// </summary>
+/// <param name="lhs">Source input</param>
+/// <param name="rhs">value to assign</param>
+/// <param name="begin">starting indices for the slice operation, supports negative indices.</param>
+/// <param name="end">ending indices for the slice operation, supports negative indices.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SliceAssign(NdArray lhs,
+NdArray rhs,
+Shape begin,
+Shape end)
+{
+return new Operator("_slice_assign")
+.SetParam("begin", begin)
+.SetParam("end", end)
+.SetInput("lhs", lhs)
+.SetInput("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// (Assign the scalar to a cropped subset of the input.Requirements------------- output should be explicitly given and be the same as input)From:G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:324
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Source input</param>
+/// <param name="begin">starting coordinates</param>
+/// <param name="end">ending coordinates</param>
+/// <param name="scalar">The scalar value for assignment.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CropAssignScalar(NdArray @out,
+NdArray data,
+Shape begin,
+Shape end,
+float scalar=0f)
+{
+return new Operator("_crop_assign_scalar")
+.SetParam("begin", begin)
+.SetParam("end", end)
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// (Assign the scalar to a cropped subset of the input.Requirements------------- output should be explicitly given and be the same as input)From:G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:324
+/// </summary>
+/// <param name="data">Source input</param>
+/// <param name="begin">starting coordinates</param>
+/// <param name="end">ending coordinates</param>
+/// <param name="scalar">The scalar value for assignment.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CropAssignScalar(NdArray data,
+Shape begin,
+Shape end,
+float scalar=0f)
+{
+return new Operator("_crop_assign_scalar")
+.SetParam("begin", begin)
+.SetParam("end", end)
+.SetParam("scalar", scalar)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
 /// Slices along a given axis.Returns an array slice along a given `axis` starting from the `begin` indexto the `end` index.Examples::  x = [[  1.,   2.,   3.,   4.],       [  5.,   6.,   7.,   8.],       [  9.,  10.,  11.,  12.]]  slice_axis(x, axis=0, begin=1, end=3) = [[  5.,   6.,   7.,   8.],                                           [  9.,  10.,  11.,  12.]]  slice_axis(x, axis=1, begin=0, end=2) = [[  1.,   2.],                                           [  5.,   6.],                                           [  9.,  10.]]  slice_axis(x, axis=1, begin=-3, end=-1) = [[  2.,   3.],                                             [  6.,   7.],                                             [ 10.,  11.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:L360
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -3953,7 +8800,7 @@ public static NdArray SliceAxis(NdArray @out,
 NdArray data,
 int axis,
 int begin,
-int end)
+int? end)
 {
 return new Operator("slice_axis")
 .SetParam("axis", axis)
@@ -3973,13 +8820,32 @@ return new Operator("slice_axis")
 public static NdArray SliceAxis(NdArray data,
 int axis,
 int begin,
-int end)
+int? end)
 {
 return new Operator("slice_axis")
 .SetParam("axis", axis)
 .SetParam("begin", begin)
 .SetParam("end", end)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSliceAxis(NdArray @out)
+{
+return new Operator("_backward_slice_axis")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSliceAxis()
+{
+return new Operator("_backward_slice_axis")
 .Invoke();
 }
 /// <summary>
@@ -4019,6 +8885,25 @@ return new Operator("clip")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardClip(NdArray @out)
+{
+return new Operator("_backward_clip")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardClip()
+{
+return new Operator("_backward_clip")
+.Invoke();
+}
+/// <summary>
 /// Repeats elements of an array.By default, ``repeat`` flattens the input array into 1-D and then repeats theelements::  x = [[ 1, 2],       [ 3, 4]]  repeat(x, repeats=2) = [ 1.,  1.,  2.,  2.,  3.,  3.,  4.,  4.]The parameter ``axis`` specifies the axis along which to perform repeat::  repeat(x, repeats=2, axis=1) = [[ 1.,  1.,  2.,  2.],                                  [ 3.,  3.,  4.,  4.]]  repeat(x, repeats=2, axis=0) = [[ 1.,  2.],                                  [ 1.,  2.],                                  [ 3.,  4.],                                  [ 3.,  4.]]  repeat(x, repeats=2, axis=-1) = [[ 1.,  1.,  2.,  2.],                                   [ 3.,  3.,  4.,  4.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:L434
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4055,6 +8940,25 @@ return new Operator("repeat")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRepeat(NdArray @out)
+{
+return new Operator("_backward_repeat")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRepeat()
+{
+return new Operator("_backward_repeat")
+.Invoke();
+}
+/// <summary>
 /// Repeats the whole array multiple times.If ``reps`` has length *d*, and input array has dimension of *n*. There arethere cases:- **n=d**. Repeat *i*-th dimension of the input by ``reps[i]`` times::    x = [[1, 2],         [3, 4]]    tile(x, reps=(2,3)) = [[ 1.,  2.,  1.,  2.,  1.,  2.],                           [ 3.,  4.,  3.,  4.,  3.,  4.],                           [ 1.,  2.,  1.,  2.,  1.,  2.],                           [ 3.,  4.,  3.,  4.,  3.,  4.]]- **n>d**. ``reps`` is promoted to length *n* by pre-pending 1's to it. Thus for  an input shape ``(2,3)``, ``repos=(2,)`` is treated as ``(1,2)``::    tile(x, reps=(2,)) = [[ 1.,  2.,  1.,  2.],                          [ 3.,  4.,  3.,  4.]]- **n<d**. The input is promoted to be d-dimensional by prepending new axes. So a  shape ``(2,2)`` array is promoted to ``(1,2,2)`` for 3-D replication::    tile(x, reps=(2,2,3)) = [[[ 1.,  2.,  1.,  2.,  1.,  2.],                              [ 3.,  4.,  3.,  4.,  3.,  4.],                              [ 1.,  2.,  1.,  2.,  1.,  2.],                              [ 3.,  4.,  3.,  4.,  3.,  4.]],                             [[ 1.,  2.,  1.,  2.,  1.,  2.],                              [ 3.,  4.,  3.,  4.,  3.,  4.],                              [ 1.,  2.,  1.,  2.,  1.,  2.],                              [ 3.,  4.,  3.,  4.,  3.,  4.]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:L495
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4085,6 +8989,25 @@ return new Operator("tile")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTile(NdArray @out)
+{
+return new Operator("_backward_tile")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTile()
+{
+return new Operator("_backward_tile")
+.Invoke();
+}
+/// <summary>
 /// Reverses the order of elements along given axis while preserving array shape.Note: reverse and flip are equivalent. We use reverse in the following examples.Examples::  x = [[ 0.,  1.,  2.,  3.,  4.],       [ 5.,  6.,  7.,  8.,  9.]]  reverse(x, axis=0) = [[ 5.,  6.,  7.,  8.,  9.],                        [ 0.,  1.,  2.,  3.,  4.]]  reverse(x, axis=1) = [[ 4.,  3.,  2.,  1.,  0.],                        [ 9.,  8.,  7.,  6.,  5.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\matrix_op.cc:L536
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4112,6 +9035,25 @@ Shape axis)
 return new Operator("reverse")
 .SetParam("axis", axis)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardReverse(NdArray @out)
+{
+return new Operator("_backward_reverse")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardReverse()
+{
+return new Operator("_backward_reverse")
 .Invoke();
 }
 /// <summary>
@@ -4150,6 +9092,25 @@ return new Operator("stack")
 .AddInput(data)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardStack(NdArray @out)
+{
+return new Operator("_backward_stack")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardStack()
+{
+return new Operator("_backward_stack")
+.Invoke();
+}
 private static readonly List<string> TopkRetTypConvert = new List<string>(){"both","indices","mask","value"};
 /// <summary>
 /// Returns the top *k* elements in an input array along the given axis.Examples::  x = [[ 0.3,  0.2,  0.4],       [ 0.1,  0.3,  0.2]]  // returns an index of the largest element on last axis  topk(x) = [[ 2.],             [ 1.]]  // returns the value of top-2 largest elements on last axis  topk(x, ret_typ='value', k=2) = [[ 0.4,  0.3],                                   [ 0.3,  0.2]]  // returns the value of top-2 smallest elements on last axis  topk(x, ret_typ='value', k=2, is_ascend=1) = [[ 0.2 ,  0.3],                                               [ 0.1 ,  0.2]]  // returns the value of top-2 largest elements on axis 0  topk(x, axis=0, ret_typ='value', k=2) = [[ 0.3,  0.3,  0.4],                                           [ 0.1,  0.2,  0.2]]  // flattens and then returns list of both values and indices  topk(x, ret_typ='both', k=2) = [[[ 0.4,  0.3], [ 0.3,  0.2]] ,  [[ 2.,  0.], [ 1.,  2.]]]Defined in G:\deeplearn\mxnet\src\operator\tensor\ordering_op.cc:L62
@@ -4163,7 +9124,7 @@ private static readonly List<string> TopkRetTypConvert = new List<string>(){"bot
  /// <returns>returns new symbol</returns>
 public static NdArray Topk(NdArray @out,
 NdArray data,
-int axis=-1,
+int? axis=-1,
 int k=1,
 TopkRetTyp ret_typ=TopkRetTyp.Indices,
 bool is_ascend=false)
@@ -4186,7 +9147,7 @@ return new Operator("topk")
 /// <param name="is_ascend">Whether to choose k largest or k smallest elements. Top K largest elements will be chosen if set to false.</param>
  /// <returns>returns new symbol</returns>
 public static NdArray Topk(NdArray data,
-int axis=-1,
+int? axis=-1,
 int k=1,
 TopkRetTyp ret_typ=TopkRetTyp.Indices,
 bool is_ascend=false)
@@ -4200,6 +9161,25 @@ return new Operator("topk")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTopk(NdArray @out)
+{
+return new Operator("_backward_topk")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardTopk()
+{
+return new Operator("_backward_topk")
+.Invoke();
+}
+/// <summary>
 /// Returns a sorted copy of an input array along the given axis.Examples::  x = [[ 1, 4],       [ 3, 1]]  // sorts along the last axis  sort(x) = [[ 1.,  4.],             [ 1.,  3.]]  // flattens and then sorts  sort(x) = [ 1.,  1.,  3.,  4.]  // sorts along the first axis  sort(x, axis=0) = [[ 1.,  1.],                     [ 3.,  4.]]  // in a descend order  sort(x, is_ascend=0) = [[ 4.,  1.],                          [ 3.,  1.]]Defined in G:\deeplearn\mxnet\src\operator\tensor\ordering_op.cc:L125
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4209,7 +9189,7 @@ return new Operator("topk")
  /// <returns>returns new symbol</returns>
 public static NdArray Sort(NdArray @out,
 NdArray data,
-int axis=-1,
+int? axis=-1,
 bool is_ascend=true)
 {
 return new Operator("sort")
@@ -4226,7 +9206,7 @@ return new Operator("sort")
 /// <param name="is_ascend">Whether to sort in ascending or descending order.</param>
  /// <returns>returns new symbol</returns>
 public static NdArray Sort(NdArray data,
-int axis=-1,
+int? axis=-1,
 bool is_ascend=true)
 {
 return new Operator("sort")
@@ -4245,7 +9225,7 @@ return new Operator("sort")
  /// <returns>returns new symbol</returns>
 public static NdArray Argsort(NdArray @out,
 NdArray data,
-int axis=-1,
+int? axis=-1,
 bool is_ascend=true)
 {
 return new Operator("argsort")
@@ -4262,13 +9242,123 @@ return new Operator("argsort")
 /// <param name="is_ascend">Whether to sort in ascending or descending order.</param>
  /// <returns>returns new symbol</returns>
 public static NdArray Argsort(NdArray data,
-int axis=-1,
+int? axis=-1,
 bool is_ascend=true)
 {
 return new Operator("argsort")
 .SetParam("axis", axis)
 .SetParam("is_ascend", is_ascend)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// pick rows specified by user input index array from a row sparse matrixand save them in the output sparse matrix.Example::  data = [[1, 2], [3, 4], [5, 6]]  indices = [0, 1, 3]  shape = (4, 2)  rsp_in = row_sparse(data, indices)  to_retain = [0, 3]  rsp_out = retain(rsp_in, to_retain)  rsp_out.values = [[1, 2], [5, 6]]  rsp_out.indices = [0, 3]The storage type of ``retain`` output depends on storage types of inputs- retain(row_sparse, default) = row_sparse- otherwise, ``retain`` is not supportedDefined in G:\deeplearn\mxnet\src\operator\tensor\sparse_retain.cc:L53
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">The input array for sparse_retain operator.</param>
+/// <param name="indices">The index array of rows ids that will be retained.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SparseRetain(NdArray @out,
+NdArray data,
+NdArray indices)
+{
+return new Operator("_sparse_retain")
+.SetInput("data", data)
+.SetInput("indices", indices)
+.Invoke(@out);
+}
+/// <summary>
+/// pick rows specified by user input index array from a row sparse matrixand save them in the output sparse matrix.Example::  data = [[1, 2], [3, 4], [5, 6]]  indices = [0, 1, 3]  shape = (4, 2)  rsp_in = row_sparse(data, indices)  to_retain = [0, 3]  rsp_out = retain(rsp_in, to_retain)  rsp_out.values = [[1, 2], [5, 6]]  rsp_out.indices = [0, 3]The storage type of ``retain`` output depends on storage types of inputs- retain(row_sparse, default) = row_sparse- otherwise, ``retain`` is not supportedDefined in G:\deeplearn\mxnet\src\operator\tensor\sparse_retain.cc:L53
+/// </summary>
+/// <param name="data">The input array for sparse_retain operator.</param>
+/// <param name="indices">The index array of rows ids that will be retained.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SparseRetain(NdArray data,
+NdArray indices)
+{
+return new Operator("_sparse_retain")
+.SetInput("data", data)
+.SetInput("indices", indices)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSparseRetain(NdArray @out)
+{
+return new Operator("_backward_sparse_retain")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSparseRetain()
+{
+return new Operator("_backward_sparse_retain")
+.Invoke();
+}
+/// <summary>
+/// Computes the square sum of array elements over a given axisfor row-sparse matrix. This is a temporary solution for fusing ops square andsum together for row-sparse matrix to save memory for storing gradients.It will become deprecated once the functionality of fusing operators is finishedin the future.Example::  dns = mx.nd.array([[0, 0], [1, 2], [0, 0], [3, 4], [0, 0]])  rsp = dns.tostype('row_sparse')  sum = mx.nd._internal._square_sum(rsp, axis=1)  sum = [0, 5, 0, 25, 0]Defined in G:\deeplearn\mxnet\src\operator\tensor\square_sum.cc:L41
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">The input</param>
+/// <param name="axis">The axis or axes along which to perform the reduction.      The default, `axis=()`, will compute over all elements into a      scalar array with shape `(1,)`.      If `axis` is int, a reduction is performed on a particular axis.      If `axis` is a tuple of ints, a reduction is performed on all the axes      specified in the tuple.      If `exclude` is true, reduction will be performed on the axes that are      NOT in axis instead.      Negative values means indexing from right to left.</param>
+/// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
+/// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SquareSum(NdArray @out,
+NdArray data,
+Shape axis=null,
+bool keepdims=false,
+bool exclude=false)
+{
+return new Operator("_square_sum")
+.SetParam("axis", axis)
+.SetParam("keepdims", keepdims)
+.SetParam("exclude", exclude)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// Computes the square sum of array elements over a given axisfor row-sparse matrix. This is a temporary solution for fusing ops square andsum together for row-sparse matrix to save memory for storing gradients.It will become deprecated once the functionality of fusing operators is finishedin the future.Example::  dns = mx.nd.array([[0, 0], [1, 2], [0, 0], [3, 4], [0, 0]])  rsp = dns.tostype('row_sparse')  sum = mx.nd._internal._square_sum(rsp, axis=1)  sum = [0, 5, 0, 25, 0]Defined in G:\deeplearn\mxnet\src\operator\tensor\square_sum.cc:L41
+/// </summary>
+/// <param name="data">The input</param>
+/// <param name="axis">The axis or axes along which to perform the reduction.      The default, `axis=()`, will compute over all elements into a      scalar array with shape `(1,)`.      If `axis` is int, a reduction is performed on a particular axis.      If `axis` is a tuple of ints, a reduction is performed on all the axes      specified in the tuple.      If `exclude` is true, reduction will be performed on the axes that are      NOT in axis instead.      Negative values means indexing from right to left.</param>
+/// <param name="keepdims">If this is set to `True`, the reduced axes are left in the result as dimension with size one.</param>
+/// <param name="exclude">Whether to perform reduction on axis that are NOT in axis instead.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray SquareSum(NdArray data,
+Shape axis=null,
+bool keepdims=false,
+bool exclude=false)
+{
+return new Operator("_square_sum")
+.SetParam("axis", axis)
+.SetParam("keepdims", keepdims)
+.SetParam("exclude", exclude)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSquareSum(NdArray @out)
+{
+return new Operator("_backward_square_sum")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSquareSum()
+{
+return new Operator("_backward_square_sum")
 .Invoke();
 }
 private static readonly List<string> UpsamplingSampleTypeConvert = new List<string>(){"bilinear","nearest"};
@@ -4287,12 +9377,12 @@ private static readonly List<string> UpsamplingMultiInputModeConvert = new List<
  /// <returns>returns new symbol</returns>
 public static NdArray UpSampling(NdArray @out,
 NdArray[] data,
-int scale,
+uint scale,
 UpsamplingSampleType sample_type,
 int num_args,
-int num_filter=0,
+uint num_filter=0,
 UpsamplingMultiInputMode multi_input_mode=UpsamplingMultiInputMode.Concat,
-long workspace=512)
+ulong workspace=512)
 {
 return new Operator("UpSampling")
 .SetParam("scale", scale)
@@ -4316,12 +9406,12 @@ return new Operator("UpSampling")
 /// <param name="workspace">Tmp workspace for deconvolution (MB)</param>
  /// <returns>returns new symbol</returns>
 public static NdArray UpSampling(NdArray[] data,
-int scale,
+uint scale,
 UpsamplingSampleType sample_type,
 int num_args,
-int num_filter=0,
+uint num_filter=0,
 UpsamplingMultiInputMode multi_input_mode=UpsamplingMultiInputMode.Concat,
-long workspace=512)
+ulong workspace=512)
 {
 return new Operator("UpSampling")
 .SetParam("scale", scale)
@@ -4365,6 +9455,63 @@ return new Operator("Activation")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardActivation(NdArray @out)
+{
+return new Operator("_backward_Activation")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardActivation()
+{
+return new Operator("_backward_Activation")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBatchNorm(NdArray @out)
+{
+return new Operator("_backward_BatchNorm")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBatchNorm()
+{
+return new Operator("_backward_BatchNorm")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBatchNormV1(NdArray @out)
+{
+return new Operator("_backward_BatchNorm_v1")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBatchNormV1()
+{
+return new Operator("_backward_BatchNorm_v1")
+.Invoke();
+}
+/// <summary>
 /// Applies bilinear sampling to input feature map.Bilinear Sampling is the key of  [NIPS2015] \"Spatial Transformer Networks\". The usage of the operator is very similar to remap function in OpenCV,except that the operator has the backward pass.Given :math:`data` and :math:`grid`, then the output is computed by.. math::  x_{src} = grid[batch, 0, y_{dst}, x_{dst}] \\  y_{src} = grid[batch, 1, y_{dst}, x_{dst}] \\  output[batch, channel, y_{dst}, x_{dst}] = G(data[batch, channel, y_{src}, x_{src}):math:`x_{dst}`, :math:`y_{dst}` enumerate all spatial locations in :math:`output`, and :math:`G()` denotes the bilinear interpolation kernel.The out-boundary points will be padded with zeros.The shape of the output will be (data.shape[0], data.shape[1], grid.shape[2], grid.shape[3]).The operator assumes that :math:`data` has 'NCHW' layout and :math:`grid` has been normalized to [-1, 1].BilinearSampler often cooperates with GridGenerator which generates sampling grids for BilinearSampler.GridGenerator supports two kinds of transformation: ``affine`` and ``warp``.If users want to design a CustomOp to manipulate :math:`grid`, please firstly refer to the code of GridGenerator.Example 1::  ## Zoom out data two times  data = array([[[[1, 4, 3, 6],                  [1, 8, 8, 9],                  [0, 4, 1, 5],                  [1, 0, 1, 3]]]])  affine_matrix = array([[2, 0, 0],                         [0, 2, 0]])  affine_matrix = reshape(affine_matrix, shape=(1, 6))  grid = GridGenerator(data=affine_matrix, transform_type='affine', target_shape=(4, 4))  out = BilinearSampler(data, grid)  out  [[[[ 0,   0,     0,   0],     [ 0,   3.5,   6.5, 0],     [ 0,   1.25,  2.5, 0],     [ 0,   0,     0,   0]]]Example 2::  ## shift data horizontally by -1 pixel  data = array([[[[1, 4, 3, 6],                  [1, 8, 8, 9],                  [0, 4, 1, 5],                  [1, 0, 1, 3]]]])  warp_maxtrix = array([[[[1, 1, 1, 1],                          [1, 1, 1, 1],                          [1, 1, 1, 1],                          [1, 1, 1, 1]],                         [[0, 0, 0, 0],                          [0, 0, 0, 0],                          [0, 0, 0, 0],                          [0, 0, 0, 0]]]])  grid = GridGenerator(data=warp_matrix, transform_type='warp')  out = BilinearSampler(data, grid)  out  [[[[ 4,  3,  6,  0],     [ 8,  8,  9,  0],     [ 4,  1,  5,  0],     [ 0,  1,  3,  0]]]Defined in G:\deeplearn\mxnet\src\operator\bilinear_sampler.cc:L244
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4394,6 +9541,1025 @@ return new Operator("BilinearSampler")
 .SetInput("grid", grid)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBilinearSampler(NdArray @out)
+{
+return new Operator("_backward_BilinearSampler")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardBilinearSampler()
+{
+return new Operator("_backward_BilinearSampler")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardConcat(NdArray @out)
+{
+return new Operator("_backward_Concat")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardConcat()
+{
+return new Operator("_backward_Concat")
+.Invoke();
+}
+/// <summary>
+/// Apply CountSketch to input: map a d-dimension data to k-dimension data".. note:: `count_sketch` is only available on GPU.Assume input data has shape (N, d), sign hash table s has shape (N, d),index hash table h has shape (N, d) and mapping dimension out_dim = k,each element in s is either +1 or -1, each element in h is random integer from 0 to k-1.Then the operator computs:.. math::   out[h[i]] += data[i] * s[i]Example::   out_dim = 5   x = [[1.2, 2.5, 3.4],[3.2, 5.7, 6.6]]   h = [[0, 3, 4]]   s = [[1, -1, 1]]   mx.contrib.ndarray.count_sketch(data=x, h=h, s=s, out_dim = 5) = [[1.2, 0, 0, -2.5, 3.4],                                                                     [3.2, 0, 0, -5.7, 6.6]]Defined in G:\deeplearn\mxnet\src\operator\contrib\count_sketch.cc:L66
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the CountSketchOp.</param>
+/// <param name="h">The index vector</param>
+/// <param name="s">The sign vector</param>
+/// <param name="out_dim">The output dimension.</param>
+/// <param name="processing_batch_size">How many sketch vectors to process at one time.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribCountSketch(NdArray @out,
+NdArray data,
+NdArray h,
+NdArray s,
+int out_dim,
+int processing_batch_size=32)
+{
+return new Operator("_contrib_count_sketch")
+.SetParam("out_dim", out_dim)
+.SetParam("processing_batch_size", processing_batch_size)
+.SetInput("data", data)
+.SetInput("h", h)
+.SetInput("s", s)
+.Invoke(@out);
+}
+/// <summary>
+/// Apply CountSketch to input: map a d-dimension data to k-dimension data".. note:: `count_sketch` is only available on GPU.Assume input data has shape (N, d), sign hash table s has shape (N, d),index hash table h has shape (N, d) and mapping dimension out_dim = k,each element in s is either +1 or -1, each element in h is random integer from 0 to k-1.Then the operator computs:.. math::   out[h[i]] += data[i] * s[i]Example::   out_dim = 5   x = [[1.2, 2.5, 3.4],[3.2, 5.7, 6.6]]   h = [[0, 3, 4]]   s = [[1, -1, 1]]   mx.contrib.ndarray.count_sketch(data=x, h=h, s=s, out_dim = 5) = [[1.2, 0, 0, -2.5, 3.4],                                                                     [3.2, 0, 0, -5.7, 6.6]]Defined in G:\deeplearn\mxnet\src\operator\contrib\count_sketch.cc:L66
+/// </summary>
+/// <param name="data">Input data to the CountSketchOp.</param>
+/// <param name="h">The index vector</param>
+/// <param name="s">The sign vector</param>
+/// <param name="out_dim">The output dimension.</param>
+/// <param name="processing_batch_size">How many sketch vectors to process at one time.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribCountSketch(NdArray data,
+NdArray h,
+NdArray s,
+int out_dim,
+int processing_batch_size=32)
+{
+return new Operator("_contrib_count_sketch")
+.SetParam("out_dim", out_dim)
+.SetParam("processing_batch_size", processing_batch_size)
+.SetInput("data", data)
+.SetInput("h", h)
+.SetInput("s", s)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribCountSketch(NdArray @out)
+{
+return new Operator("_backward__contrib_count_sketch")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribCountSketch()
+{
+return new Operator("_backward__contrib_count_sketch")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribCTCLoss(NdArray @out)
+{
+return new Operator("_backward__contrib_CTCLoss")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribCTCLoss()
+{
+return new Operator("_backward__contrib_CTCLoss")
+.Invoke();
+}
+private static readonly List<string> ContribDeformableconvolutionLayoutConvert = new List<string>(){"NCDHW","NCHW","NCW"};
+/// <summary>
+/// Compute 2-D deformable convolution on 4-D input.The deformable convolution operation is described in https://arxiv.org/abs/1703.06211For 2-D deformable convolution, the shapes are- **data**: *(batch_size, channel, height, width)*- **offset**: *(batch_size, num_deformable_group * kernel[0] * kernel[1], height, width)*- **weight**: *(num_filter, channel, kernel[0], kernel[1])*- **bias**: *(num_filter,)*- **out**: *(batch_size, num_filter, out_height, out_width)*.Define::  f(x,k,p,s,d) = floor((x+2*p-d*(k-1)-1)/s)+1then we have::  out_height=f(height, kernel[0], pad[0], stride[0], dilate[0])  out_width=f(width, kernel[1], pad[1], stride[1], dilate[1])If ``no_bias`` is set to be true, then the ``bias`` term is ignored.The default data ``layout`` is *NCHW*, namely *(batch_size, channle, height,width)*.If ``num_group`` is larger than 1, denoted by *g*, then split the input ``data``evenly into *g* parts along the channel axis, and also evenly split ``weight``along the first dimension. Next compute the convolution on the *i*-th part ofthe data with the *i*-th weight part. The output is obtained by concating allthe *g* results.If ``num_deformable_group`` is larger than 1, denoted by *dg*, then split theinput ``offset`` evenly into *dg* parts along the channel axis, and also evenlysplit ``out`` evenly into *dg* parts along the channel axis. Next compute thedeformable convolution, apply the *i*-th part of the offset part on the *i*-thout.Both ``weight`` and ``bias`` are learnable parameters.Defined in G:\deeplearn\mxnet\src\operator\contrib\deformable_convolution.cc:L100
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the DeformableConvolutionOp.</param>
+/// <param name="offset">Input offset to the DeformableConvolutionOp.</param>
+/// <param name="kernel">convolution kernel size: (h, w) or (d, h, w)</param>
+/// <param name="num_filter">convolution filter(channel) number</param>
+/// <param name="weight">Weight matrix.</param>
+/// <param name="bias">Bias parameter.</param>
+/// <param name="stride">convolution stride: (h, w) or (d, h, w)</param>
+/// <param name="dilate">convolution dilate: (h, w) or (d, h, w)</param>
+/// <param name="pad">pad for convolution: (h, w) or (d, h, w)</param>
+/// <param name="num_group">Number of group partitions.</param>
+/// <param name="num_deformable_group">Number of deformable group partitions.</param>
+/// <param name="workspace">Maximum temperal workspace allowed for convolution (MB).</param>
+/// <param name="no_bias">Whether to disable bias parameter.</param>
+/// <param name="layout">Set layout for input, output and weight. Empty for    default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribDeformableConvolution(NdArray @out,
+NdArray data,
+NdArray offset,
+Shape kernel,
+uint num_filter,
+NdArray weight=null,
+NdArray bias=null,
+Shape stride=null,
+Shape dilate=null,
+Shape pad=null,
+uint num_group=1,
+uint num_deformable_group=1,
+ulong workspace=1024,
+bool no_bias=false,
+ContribDeformableconvolutionLayout? layout=null)
+{
+return new Operator("_contrib_DeformableConvolution")
+.SetParam("kernel", kernel)
+.SetParam("num_filter", num_filter)
+.SetParam("stride", stride)
+.SetParam("dilate", dilate)
+.SetParam("pad", pad)
+.SetParam("num_group", num_group)
+.SetParam("num_deformable_group", num_deformable_group)
+.SetParam("workspace", workspace)
+.SetParam("no_bias", no_bias)
+.SetParam("layout", Util.EnumToString<ContribDeformableconvolutionLayout>(layout,ContribDeformableconvolutionLayoutConvert))
+.SetInput("data", data)
+.SetInput("offset", offset)
+.SetInput("weight", weight)
+.SetInput("bias", bias)
+.Invoke(@out);
+}
+/// <summary>
+/// Compute 2-D deformable convolution on 4-D input.The deformable convolution operation is described in https://arxiv.org/abs/1703.06211For 2-D deformable convolution, the shapes are- **data**: *(batch_size, channel, height, width)*- **offset**: *(batch_size, num_deformable_group * kernel[0] * kernel[1], height, width)*- **weight**: *(num_filter, channel, kernel[0], kernel[1])*- **bias**: *(num_filter,)*- **out**: *(batch_size, num_filter, out_height, out_width)*.Define::  f(x,k,p,s,d) = floor((x+2*p-d*(k-1)-1)/s)+1then we have::  out_height=f(height, kernel[0], pad[0], stride[0], dilate[0])  out_width=f(width, kernel[1], pad[1], stride[1], dilate[1])If ``no_bias`` is set to be true, then the ``bias`` term is ignored.The default data ``layout`` is *NCHW*, namely *(batch_size, channle, height,width)*.If ``num_group`` is larger than 1, denoted by *g*, then split the input ``data``evenly into *g* parts along the channel axis, and also evenly split ``weight``along the first dimension. Next compute the convolution on the *i*-th part ofthe data with the *i*-th weight part. The output is obtained by concating allthe *g* results.If ``num_deformable_group`` is larger than 1, denoted by *dg*, then split theinput ``offset`` evenly into *dg* parts along the channel axis, and also evenlysplit ``out`` evenly into *dg* parts along the channel axis. Next compute thedeformable convolution, apply the *i*-th part of the offset part on the *i*-thout.Both ``weight`` and ``bias`` are learnable parameters.Defined in G:\deeplearn\mxnet\src\operator\contrib\deformable_convolution.cc:L100
+/// </summary>
+/// <param name="data">Input data to the DeformableConvolutionOp.</param>
+/// <param name="offset">Input offset to the DeformableConvolutionOp.</param>
+/// <param name="kernel">convolution kernel size: (h, w) or (d, h, w)</param>
+/// <param name="num_filter">convolution filter(channel) number</param>
+/// <param name="weight">Weight matrix.</param>
+/// <param name="bias">Bias parameter.</param>
+/// <param name="stride">convolution stride: (h, w) or (d, h, w)</param>
+/// <param name="dilate">convolution dilate: (h, w) or (d, h, w)</param>
+/// <param name="pad">pad for convolution: (h, w) or (d, h, w)</param>
+/// <param name="num_group">Number of group partitions.</param>
+/// <param name="num_deformable_group">Number of deformable group partitions.</param>
+/// <param name="workspace">Maximum temperal workspace allowed for convolution (MB).</param>
+/// <param name="no_bias">Whether to disable bias parameter.</param>
+/// <param name="layout">Set layout for input, output and weight. Empty for    default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribDeformableConvolution(NdArray data,
+NdArray offset,
+Shape kernel,
+uint num_filter,
+NdArray weight=null,
+NdArray bias=null,
+Shape stride=null,
+Shape dilate=null,
+Shape pad=null,
+uint num_group=1,
+uint num_deformable_group=1,
+ulong workspace=1024,
+bool no_bias=false,
+ContribDeformableconvolutionLayout? layout=null)
+{
+return new Operator("_contrib_DeformableConvolution")
+.SetParam("kernel", kernel)
+.SetParam("num_filter", num_filter)
+.SetParam("stride", stride)
+.SetParam("dilate", dilate)
+.SetParam("pad", pad)
+.SetParam("num_group", num_group)
+.SetParam("num_deformable_group", num_deformable_group)
+.SetParam("workspace", workspace)
+.SetParam("no_bias", no_bias)
+.SetParam("layout", Util.EnumToString<ContribDeformableconvolutionLayout>(layout,ContribDeformableconvolutionLayoutConvert))
+.SetInput("data", data)
+.SetInput("offset", offset)
+.SetInput("weight", weight)
+.SetInput("bias", bias)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribDeformableConvolution(NdArray @out)
+{
+return new Operator("_backward__contrib_DeformableConvolution")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribDeformableConvolution()
+{
+return new Operator("_backward__contrib_DeformableConvolution")
+.Invoke();
+}
+/// <summary>
+/// Performs deformable position-sensitive region-of-interest pooling on inputs.The DeformablePSROIPooling operation is described in https://arxiv.org/abs/1703.06211 .batch_size will change to the number of region bounding boxes after DeformablePSROIPooling
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the pooling operator, a 4D Feature maps</param>
+/// <param name="rois">Bounding box coordinates, a 2D array of [[batch_index, x1, y1, x2, y2]]. (x1, y1) and (x2, y2) are top left and down right corners of designated region of interest. batch_index indicates the index of corresponding image in the input data</param>
+/// <param name="trans">transition parameter</param>
+/// <param name="spatial_scale">Ratio of input feature map height (or w) to raw image height (or w). Equals the reciprocal of total stride in convolutional layers</param>
+/// <param name="output_dim">fix output dim</param>
+/// <param name="group_size">fix group size</param>
+/// <param name="pooled_size">fix pooled size</param>
+/// <param name="part_size">fix part size</param>
+/// <param name="sample_per_part">fix samples per part</param>
+/// <param name="trans_std">fix transition std</param>
+/// <param name="no_trans">Whether to disable trans parameter.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribDeformablePSROIPooling(NdArray @out,
+Symbol data,
+Symbol rois,
+Symbol trans,
+float spatial_scale,
+int output_dim,
+int group_size,
+int pooled_size,
+int part_size=0,
+int sample_per_part=1,
+float trans_std=0f,
+bool no_trans=false)
+{
+return new Operator("_contrib_DeformablePSROIPooling")
+.SetParam("data", data)
+.SetParam("rois", rois)
+.SetParam("trans", trans)
+.SetParam("spatial_scale", spatial_scale)
+.SetParam("output_dim", output_dim)
+.SetParam("group_size", group_size)
+.SetParam("pooled_size", pooled_size)
+.SetParam("part_size", part_size)
+.SetParam("sample_per_part", sample_per_part)
+.SetParam("trans_std", trans_std)
+.SetParam("no_trans", no_trans)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs deformable position-sensitive region-of-interest pooling on inputs.The DeformablePSROIPooling operation is described in https://arxiv.org/abs/1703.06211 .batch_size will change to the number of region bounding boxes after DeformablePSROIPooling
+/// </summary>
+/// <param name="data">Input data to the pooling operator, a 4D Feature maps</param>
+/// <param name="rois">Bounding box coordinates, a 2D array of [[batch_index, x1, y1, x2, y2]]. (x1, y1) and (x2, y2) are top left and down right corners of designated region of interest. batch_index indicates the index of corresponding image in the input data</param>
+/// <param name="trans">transition parameter</param>
+/// <param name="spatial_scale">Ratio of input feature map height (or w) to raw image height (or w). Equals the reciprocal of total stride in convolutional layers</param>
+/// <param name="output_dim">fix output dim</param>
+/// <param name="group_size">fix group size</param>
+/// <param name="pooled_size">fix pooled size</param>
+/// <param name="part_size">fix part size</param>
+/// <param name="sample_per_part">fix samples per part</param>
+/// <param name="trans_std">fix transition std</param>
+/// <param name="no_trans">Whether to disable trans parameter.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribDeformablePSROIPooling(Symbol data,
+Symbol rois,
+Symbol trans,
+float spatial_scale,
+int output_dim,
+int group_size,
+int pooled_size,
+int part_size=0,
+int sample_per_part=1,
+float trans_std=0f,
+bool no_trans=false)
+{
+return new Operator("_contrib_DeformablePSROIPooling")
+.SetParam("data", data)
+.SetParam("rois", rois)
+.SetParam("trans", trans)
+.SetParam("spatial_scale", spatial_scale)
+.SetParam("output_dim", output_dim)
+.SetParam("group_size", group_size)
+.SetParam("pooled_size", pooled_size)
+.SetParam("part_size", part_size)
+.SetParam("sample_per_part", sample_per_part)
+.SetParam("trans_std", trans_std)
+.SetParam("no_trans", no_trans)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribDeformablePSROIPooling(NdArray @out)
+{
+return new Operator("_backward__contrib_DeformablePSROIPooling")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribDeformablePSROIPooling()
+{
+return new Operator("_backward__contrib_DeformablePSROIPooling")
+.Invoke();
+}
+/// <summary>
+/// Apply 1D FFT to input".. note:: `fft` is only available on GPU.Currently accept 2 input data shapes: (N, d) or (N1, N2, N3, d), data can only be real numbers.The output data has shape: (N, 2*d) or (N1, N2, N3, 2*d). The format is: [real0, imag0, real1, imag1, ...].Example::   data = np.random.normal(0,1,(3,4))   out = mx.contrib.ndarray.fft(data = mx.nd.array(data,ctx = mx.gpu(0)))Defined in G:\deeplearn\mxnet\src\operator\contrib\fft.cc:L55
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the FFTOp.</param>
+/// <param name="compute_size">Maximum size of sub-batch to be forwarded at one time</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribFft(NdArray @out,
+NdArray data,
+int compute_size=128)
+{
+return new Operator("_contrib_fft")
+.SetParam("compute_size", compute_size)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// Apply 1D FFT to input".. note:: `fft` is only available on GPU.Currently accept 2 input data shapes: (N, d) or (N1, N2, N3, d), data can only be real numbers.The output data has shape: (N, 2*d) or (N1, N2, N3, 2*d). The format is: [real0, imag0, real1, imag1, ...].Example::   data = np.random.normal(0,1,(3,4))   out = mx.contrib.ndarray.fft(data = mx.nd.array(data,ctx = mx.gpu(0)))Defined in G:\deeplearn\mxnet\src\operator\contrib\fft.cc:L55
+/// </summary>
+/// <param name="data">Input data to the FFTOp.</param>
+/// <param name="compute_size">Maximum size of sub-batch to be forwarded at one time</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribFft(NdArray data,
+int compute_size=128)
+{
+return new Operator("_contrib_fft")
+.SetParam("compute_size", compute_size)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribFft(NdArray @out)
+{
+return new Operator("_backward__contrib_fft")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribFft()
+{
+return new Operator("_backward__contrib_fft")
+.Invoke();
+}
+/// <summary>
+/// Apply 1D ifft to input".. note:: `ifft` is only available on GPU.Currently accept 2 input data shapes: (N, d) or (N1, N2, N3, d). Data is in format: [real0, imag0, real1, imag1, ...].Last dimension must be an even number.The output data has shape: (N, d/2) or (N1, N2, N3, d/2). It is only the real part of the result.Example::   data = np.random.normal(0,1,(3,4))   out = mx.contrib.ndarray.ifft(data = mx.nd.array(data,ctx = mx.gpu(0)))Defined in G:\deeplearn\mxnet\src\operator\contrib\ifft.cc:L57
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the IFFTOp.</param>
+/// <param name="compute_size">Maximum size of sub-batch to be forwarded at one time</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribIfft(NdArray @out,
+NdArray data,
+int compute_size=128)
+{
+return new Operator("_contrib_ifft")
+.SetParam("compute_size", compute_size)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// Apply 1D ifft to input".. note:: `ifft` is only available on GPU.Currently accept 2 input data shapes: (N, d) or (N1, N2, N3, d). Data is in format: [real0, imag0, real1, imag1, ...].Last dimension must be an even number.The output data has shape: (N, d/2) or (N1, N2, N3, d/2). It is only the real part of the result.Example::   data = np.random.normal(0,1,(3,4))   out = mx.contrib.ndarray.ifft(data = mx.nd.array(data,ctx = mx.gpu(0)))Defined in G:\deeplearn\mxnet\src\operator\contrib\ifft.cc:L57
+/// </summary>
+/// <param name="data">Input data to the IFFTOp.</param>
+/// <param name="compute_size">Maximum size of sub-batch to be forwarded at one time</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribIfft(NdArray data,
+int compute_size=128)
+{
+return new Operator("_contrib_ifft")
+.SetParam("compute_size", compute_size)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribIfft(NdArray @out)
+{
+return new Operator("_backward__contrib_ifft")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribIfft()
+{
+return new Operator("_backward__contrib_ifft")
+.Invoke();
+}
+/// <summary>
+/// Generate region proposals via RPN
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="cls_score">Score of how likely proposal is object.</param>
+/// <param name="bbox_pred">BBox Predicted deltas from anchors for proposals</param>
+/// <param name="im_info">Image size and scale.</param>
+/// <param name="rpn_pre_nms_top_n">Number of top scoring boxes to keep after applying NMS to RPN proposals</param>
+/// <param name="rpn_post_nms_top_n">Overlap threshold used for non-maximumsuppresion(suppress boxes with IoU >= this threshold</param>
+/// <param name="threshold">NMS value, below which to suppress.</param>
+/// <param name="rpn_min_size">Minimum height or width in proposal</param>
+/// <param name="scales">Used to generate anchor windows by enumerating scales</param>
+/// <param name="ratios">Used to generate anchor windows by enumerating ratios</param>
+/// <param name="feature_stride">The size of the receptive field each unit in the convolution layer of the rpn,for example the product of all stride's prior to this layer.</param>
+/// <param name="output_score">Add score to outputs</param>
+/// <param name="iou_loss">Usage of IoU Loss</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiProposal(NdArray @out,
+NdArray cls_score,
+NdArray bbox_pred,
+NdArray im_info,
+int rpn_pre_nms_top_n=6000,
+int rpn_post_nms_top_n=300,
+float threshold=0.7f,
+int rpn_min_size=16,
+Tuple<float> scales=null,
+Tuple<float> ratios=null,
+int feature_stride=16,
+bool output_score=false,
+bool iou_loss=false)
+{if(scales==null){ scales= new Tuple<float>(4f,8f,16f,32f);}
+if(ratios==null){ ratios= new Tuple<float>(0.5f,1f,2f);}
+
+return new Operator("_contrib_MultiProposal")
+.SetParam("rpn_pre_nms_top_n", rpn_pre_nms_top_n)
+.SetParam("rpn_post_nms_top_n", rpn_post_nms_top_n)
+.SetParam("threshold", threshold)
+.SetParam("rpn_min_size", rpn_min_size)
+.SetParam("scales", scales)
+.SetParam("ratios", ratios)
+.SetParam("feature_stride", feature_stride)
+.SetParam("output_score", output_score)
+.SetParam("iou_loss", iou_loss)
+.SetInput("cls_score", cls_score)
+.SetInput("bbox_pred", bbox_pred)
+.SetInput("im_info", im_info)
+.Invoke(@out);
+}
+/// <summary>
+/// Generate region proposals via RPN
+/// </summary>
+/// <param name="cls_score">Score of how likely proposal is object.</param>
+/// <param name="bbox_pred">BBox Predicted deltas from anchors for proposals</param>
+/// <param name="im_info">Image size and scale.</param>
+/// <param name="rpn_pre_nms_top_n">Number of top scoring boxes to keep after applying NMS to RPN proposals</param>
+/// <param name="rpn_post_nms_top_n">Overlap threshold used for non-maximumsuppresion(suppress boxes with IoU >= this threshold</param>
+/// <param name="threshold">NMS value, below which to suppress.</param>
+/// <param name="rpn_min_size">Minimum height or width in proposal</param>
+/// <param name="scales">Used to generate anchor windows by enumerating scales</param>
+/// <param name="ratios">Used to generate anchor windows by enumerating ratios</param>
+/// <param name="feature_stride">The size of the receptive field each unit in the convolution layer of the rpn,for example the product of all stride's prior to this layer.</param>
+/// <param name="output_score">Add score to outputs</param>
+/// <param name="iou_loss">Usage of IoU Loss</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiProposal(NdArray cls_score,
+NdArray bbox_pred,
+NdArray im_info,
+int rpn_pre_nms_top_n=6000,
+int rpn_post_nms_top_n=300,
+float threshold=0.7f,
+int rpn_min_size=16,
+Tuple<float> scales=null,
+Tuple<float> ratios=null,
+int feature_stride=16,
+bool output_score=false,
+bool iou_loss=false)
+{if(scales==null){ scales= new Tuple<float>(4f,8f,16f,32f);}
+if(ratios==null){ ratios= new Tuple<float>(0.5f,1f,2f);}
+
+return new Operator("_contrib_MultiProposal")
+.SetParam("rpn_pre_nms_top_n", rpn_pre_nms_top_n)
+.SetParam("rpn_post_nms_top_n", rpn_post_nms_top_n)
+.SetParam("threshold", threshold)
+.SetParam("rpn_min_size", rpn_min_size)
+.SetParam("scales", scales)
+.SetParam("ratios", ratios)
+.SetParam("feature_stride", feature_stride)
+.SetParam("output_score", output_score)
+.SetParam("iou_loss", iou_loss)
+.SetInput("cls_score", cls_score)
+.SetInput("bbox_pred", bbox_pred)
+.SetInput("im_info", im_info)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiProposal(NdArray @out)
+{
+return new Operator("_backward__contrib_MultiProposal")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiProposal()
+{
+return new Operator("_backward__contrib_MultiProposal")
+.Invoke();
+}
+/// <summary>
+/// Convert multibox detection predictions.
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="cls_prob">Class probabilities.</param>
+/// <param name="loc_pred">Location regression predictions.</param>
+/// <param name="anchor">Multibox prior anchor boxes</param>
+/// <param name="clip">Clip out-of-boundary boxes.</param>
+/// <param name="threshold">Threshold to be a positive prediction.</param>
+/// <param name="background_id">Background id.</param>
+/// <param name="nms_threshold">Non-maximum suppression threshold.</param>
+/// <param name="force_suppress">Suppress all detections regardless of class_id.</param>
+/// <param name="variances">Variances to be decoded from box regression output.</param>
+/// <param name="nms_topk">Keep maximum top k detections before nms, -1 for no limit.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiBoxDetection(NdArray @out,
+NdArray cls_prob,
+NdArray loc_pred,
+NdArray anchor,
+bool clip=true,
+float threshold=0.01f,
+int background_id=0,
+float nms_threshold=0.5f,
+bool force_suppress=false,
+Tuple<float> variances=null,
+int nms_topk=-1)
+{if(variances==null){ variances= new Tuple<float>(0.1f,0.1f,0.2f,0.2f);}
+
+return new Operator("_contrib_MultiBoxDetection")
+.SetParam("clip", clip)
+.SetParam("threshold", threshold)
+.SetParam("background_id", background_id)
+.SetParam("nms_threshold", nms_threshold)
+.SetParam("force_suppress", force_suppress)
+.SetParam("variances", variances)
+.SetParam("nms_topk", nms_topk)
+.SetInput("cls_prob", cls_prob)
+.SetInput("loc_pred", loc_pred)
+.SetInput("anchor", anchor)
+.Invoke(@out);
+}
+/// <summary>
+/// Convert multibox detection predictions.
+/// </summary>
+/// <param name="cls_prob">Class probabilities.</param>
+/// <param name="loc_pred">Location regression predictions.</param>
+/// <param name="anchor">Multibox prior anchor boxes</param>
+/// <param name="clip">Clip out-of-boundary boxes.</param>
+/// <param name="threshold">Threshold to be a positive prediction.</param>
+/// <param name="background_id">Background id.</param>
+/// <param name="nms_threshold">Non-maximum suppression threshold.</param>
+/// <param name="force_suppress">Suppress all detections regardless of class_id.</param>
+/// <param name="variances">Variances to be decoded from box regression output.</param>
+/// <param name="nms_topk">Keep maximum top k detections before nms, -1 for no limit.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiBoxDetection(NdArray cls_prob,
+NdArray loc_pred,
+NdArray anchor,
+bool clip=true,
+float threshold=0.01f,
+int background_id=0,
+float nms_threshold=0.5f,
+bool force_suppress=false,
+Tuple<float> variances=null,
+int nms_topk=-1)
+{if(variances==null){ variances= new Tuple<float>(0.1f,0.1f,0.2f,0.2f);}
+
+return new Operator("_contrib_MultiBoxDetection")
+.SetParam("clip", clip)
+.SetParam("threshold", threshold)
+.SetParam("background_id", background_id)
+.SetParam("nms_threshold", nms_threshold)
+.SetParam("force_suppress", force_suppress)
+.SetParam("variances", variances)
+.SetParam("nms_topk", nms_topk)
+.SetInput("cls_prob", cls_prob)
+.SetInput("loc_pred", loc_pred)
+.SetInput("anchor", anchor)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiBoxDetection(NdArray @out)
+{
+return new Operator("_backward__contrib_MultiBoxDetection")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiBoxDetection()
+{
+return new Operator("_backward__contrib_MultiBoxDetection")
+.Invoke();
+}
+/// <summary>
+/// Generate prior(anchor) boxes from data, sizes and ratios.
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data.</param>
+/// <param name="sizes">List of sizes of generated MultiBoxPriores.</param>
+/// <param name="ratios">List of aspect ratios of generated MultiBoxPriores.</param>
+/// <param name="clip">Whether to clip out-of-boundary boxes.</param>
+/// <param name="steps">Priorbox step across y and x, -1 for auto calculation.</param>
+/// <param name="offsets">Priorbox center offsets, y and x respectively</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiBoxPrior(NdArray @out,
+NdArray data,
+Tuple<float> sizes=null,
+Tuple<float> ratios=null,
+bool clip=false,
+Tuple<float> steps=null,
+Tuple<float> offsets=null)
+{if(sizes==null){ sizes= new Tuple<float>(1f);}
+if(ratios==null){ ratios= new Tuple<float>(1f);}
+if(steps==null){ steps= new Tuple<float>(-1f,-1f);}
+if(offsets==null){ offsets= new Tuple<float>(0.5f,0.5f);}
+
+return new Operator("_contrib_MultiBoxPrior")
+.SetParam("sizes", sizes)
+.SetParam("ratios", ratios)
+.SetParam("clip", clip)
+.SetParam("steps", steps)
+.SetParam("offsets", offsets)
+.SetInput("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// Generate prior(anchor) boxes from data, sizes and ratios.
+/// </summary>
+/// <param name="data">Input data.</param>
+/// <param name="sizes">List of sizes of generated MultiBoxPriores.</param>
+/// <param name="ratios">List of aspect ratios of generated MultiBoxPriores.</param>
+/// <param name="clip">Whether to clip out-of-boundary boxes.</param>
+/// <param name="steps">Priorbox step across y and x, -1 for auto calculation.</param>
+/// <param name="offsets">Priorbox center offsets, y and x respectively</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiBoxPrior(NdArray data,
+Tuple<float> sizes=null,
+Tuple<float> ratios=null,
+bool clip=false,
+Tuple<float> steps=null,
+Tuple<float> offsets=null)
+{if(sizes==null){ sizes= new Tuple<float>(1f);}
+if(ratios==null){ ratios= new Tuple<float>(1f);}
+if(steps==null){ steps= new Tuple<float>(-1f,-1f);}
+if(offsets==null){ offsets= new Tuple<float>(0.5f,0.5f);}
+
+return new Operator("_contrib_MultiBoxPrior")
+.SetParam("sizes", sizes)
+.SetParam("ratios", ratios)
+.SetParam("clip", clip)
+.SetParam("steps", steps)
+.SetParam("offsets", offsets)
+.SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiBoxPrior(NdArray @out)
+{
+return new Operator("_backward__contrib_MultiBoxPrior")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiBoxPrior()
+{
+return new Operator("_backward__contrib_MultiBoxPrior")
+.Invoke();
+}
+/// <summary>
+/// Compute Multibox training targets
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="anchor">Generated anchor boxes.</param>
+/// <param name="label">Object detection labels.</param>
+/// <param name="cls_pred">Class predictions.</param>
+/// <param name="overlap_threshold">Anchor-GT overlap threshold to be regarded as a positive match.</param>
+/// <param name="ignore_label">Label for ignored anchors.</param>
+/// <param name="negative_mining_ratio">Max negative to positive samples ratio, use -1 to disable mining</param>
+/// <param name="negative_mining_thresh">Threshold used for negative mining.</param>
+/// <param name="minimum_negative_samples">Minimum number of negative samples.</param>
+/// <param name="variances">Variances to be encoded in box regression target.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiBoxTarget(NdArray @out,
+NdArray anchor,
+NdArray label,
+NdArray cls_pred,
+float overlap_threshold=0.5f,
+float ignore_label=-1f,
+float negative_mining_ratio=-1f,
+float negative_mining_thresh=0.5f,
+int minimum_negative_samples=0,
+Tuple<float> variances=null)
+{if(variances==null){ variances= new Tuple<float>(0.1f,0.1f,0.2f,0.2f);}
+
+return new Operator("_contrib_MultiBoxTarget")
+.SetParam("overlap_threshold", overlap_threshold)
+.SetParam("ignore_label", ignore_label)
+.SetParam("negative_mining_ratio", negative_mining_ratio)
+.SetParam("negative_mining_thresh", negative_mining_thresh)
+.SetParam("minimum_negative_samples", minimum_negative_samples)
+.SetParam("variances", variances)
+.SetInput("anchor", anchor)
+.SetInput("label", label)
+.SetInput("cls_pred", cls_pred)
+.Invoke(@out);
+}
+/// <summary>
+/// Compute Multibox training targets
+/// </summary>
+/// <param name="anchor">Generated anchor boxes.</param>
+/// <param name="label">Object detection labels.</param>
+/// <param name="cls_pred">Class predictions.</param>
+/// <param name="overlap_threshold">Anchor-GT overlap threshold to be regarded as a positive match.</param>
+/// <param name="ignore_label">Label for ignored anchors.</param>
+/// <param name="negative_mining_ratio">Max negative to positive samples ratio, use -1 to disable mining</param>
+/// <param name="negative_mining_thresh">Threshold used for negative mining.</param>
+/// <param name="minimum_negative_samples">Minimum number of negative samples.</param>
+/// <param name="variances">Variances to be encoded in box regression target.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribMultiBoxTarget(NdArray anchor,
+NdArray label,
+NdArray cls_pred,
+float overlap_threshold=0.5f,
+float ignore_label=-1f,
+float negative_mining_ratio=-1f,
+float negative_mining_thresh=0.5f,
+int minimum_negative_samples=0,
+Tuple<float> variances=null)
+{if(variances==null){ variances= new Tuple<float>(0.1f,0.1f,0.2f,0.2f);}
+
+return new Operator("_contrib_MultiBoxTarget")
+.SetParam("overlap_threshold", overlap_threshold)
+.SetParam("ignore_label", ignore_label)
+.SetParam("negative_mining_ratio", negative_mining_ratio)
+.SetParam("negative_mining_thresh", negative_mining_thresh)
+.SetParam("minimum_negative_samples", minimum_negative_samples)
+.SetParam("variances", variances)
+.SetInput("anchor", anchor)
+.SetInput("label", label)
+.SetInput("cls_pred", cls_pred)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiBoxTarget(NdArray @out)
+{
+return new Operator("_backward__contrib_MultiBoxTarget")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribMultiBoxTarget()
+{
+return new Operator("_backward__contrib_MultiBoxTarget")
+.Invoke();
+}
+/// <summary>
+/// Generate region proposals via RPN
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="cls_score">Score of how likely proposal is object.</param>
+/// <param name="bbox_pred">BBox Predicted deltas from anchors for proposals</param>
+/// <param name="im_info">Image size and scale.</param>
+/// <param name="rpn_pre_nms_top_n">Number of top scoring boxes to keep after applying NMS to RPN proposals</param>
+/// <param name="rpn_post_nms_top_n">Overlap threshold used for non-maximumsuppresion(suppress boxes with IoU >= this threshold</param>
+/// <param name="threshold">NMS value, below which to suppress.</param>
+/// <param name="rpn_min_size">Minimum height or width in proposal</param>
+/// <param name="scales">Used to generate anchor windows by enumerating scales</param>
+/// <param name="ratios">Used to generate anchor windows by enumerating ratios</param>
+/// <param name="feature_stride">The size of the receptive field each unit in the convolution layer of the rpn,for example the product of all stride's prior to this layer.</param>
+/// <param name="output_score">Add score to outputs</param>
+/// <param name="iou_loss">Usage of IoU Loss</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribProposal(NdArray @out,
+NdArray cls_score,
+NdArray bbox_pred,
+NdArray im_info,
+int rpn_pre_nms_top_n=6000,
+int rpn_post_nms_top_n=300,
+float threshold=0.7f,
+int rpn_min_size=16,
+Tuple<float> scales=null,
+Tuple<float> ratios=null,
+int feature_stride=16,
+bool output_score=false,
+bool iou_loss=false)
+{if(scales==null){ scales= new Tuple<float>(4f,8f,16f,32f);}
+if(ratios==null){ ratios= new Tuple<float>(0.5f,1f,2f);}
+
+return new Operator("_contrib_Proposal")
+.SetParam("rpn_pre_nms_top_n", rpn_pre_nms_top_n)
+.SetParam("rpn_post_nms_top_n", rpn_post_nms_top_n)
+.SetParam("threshold", threshold)
+.SetParam("rpn_min_size", rpn_min_size)
+.SetParam("scales", scales)
+.SetParam("ratios", ratios)
+.SetParam("feature_stride", feature_stride)
+.SetParam("output_score", output_score)
+.SetParam("iou_loss", iou_loss)
+.SetInput("cls_score", cls_score)
+.SetInput("bbox_pred", bbox_pred)
+.SetInput("im_info", im_info)
+.Invoke(@out);
+}
+/// <summary>
+/// Generate region proposals via RPN
+/// </summary>
+/// <param name="cls_score">Score of how likely proposal is object.</param>
+/// <param name="bbox_pred">BBox Predicted deltas from anchors for proposals</param>
+/// <param name="im_info">Image size and scale.</param>
+/// <param name="rpn_pre_nms_top_n">Number of top scoring boxes to keep after applying NMS to RPN proposals</param>
+/// <param name="rpn_post_nms_top_n">Overlap threshold used for non-maximumsuppresion(suppress boxes with IoU >= this threshold</param>
+/// <param name="threshold">NMS value, below which to suppress.</param>
+/// <param name="rpn_min_size">Minimum height or width in proposal</param>
+/// <param name="scales">Used to generate anchor windows by enumerating scales</param>
+/// <param name="ratios">Used to generate anchor windows by enumerating ratios</param>
+/// <param name="feature_stride">The size of the receptive field each unit in the convolution layer of the rpn,for example the product of all stride's prior to this layer.</param>
+/// <param name="output_score">Add score to outputs</param>
+/// <param name="iou_loss">Usage of IoU Loss</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribProposal(NdArray cls_score,
+NdArray bbox_pred,
+NdArray im_info,
+int rpn_pre_nms_top_n=6000,
+int rpn_post_nms_top_n=300,
+float threshold=0.7f,
+int rpn_min_size=16,
+Tuple<float> scales=null,
+Tuple<float> ratios=null,
+int feature_stride=16,
+bool output_score=false,
+bool iou_loss=false)
+{if(scales==null){ scales= new Tuple<float>(4f,8f,16f,32f);}
+if(ratios==null){ ratios= new Tuple<float>(0.5f,1f,2f);}
+
+return new Operator("_contrib_Proposal")
+.SetParam("rpn_pre_nms_top_n", rpn_pre_nms_top_n)
+.SetParam("rpn_post_nms_top_n", rpn_post_nms_top_n)
+.SetParam("threshold", threshold)
+.SetParam("rpn_min_size", rpn_min_size)
+.SetParam("scales", scales)
+.SetParam("ratios", ratios)
+.SetParam("feature_stride", feature_stride)
+.SetParam("output_score", output_score)
+.SetParam("iou_loss", iou_loss)
+.SetInput("cls_score", cls_score)
+.SetInput("bbox_pred", bbox_pred)
+.SetInput("im_info", im_info)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribProposal(NdArray @out)
+{
+return new Operator("_backward__contrib_Proposal")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribProposal()
+{
+return new Operator("_backward__contrib_Proposal")
+.Invoke();
+}
+/// <summary>
+/// Performs region-of-interest pooling on inputs. Resize bounding box coordinates by spatial_scale and crop input feature maps accordingly. The cropped feature maps are pooled by max pooling to a fixed size output indicated by pooled_size. batch_size will change to the number of region bounding boxes after PSROIPooling
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data to the pooling operator, a 4D Feature maps</param>
+/// <param name="rois">Bounding box coordinates, a 2D array of [[batch_index, x1, y1, x2, y2]]. (x1, y1) and (x2, y2) are top left and down right corners of designated region of interest. batch_index indicates the index of corresponding image in the input data</param>
+/// <param name="spatial_scale">Ratio of input feature map height (or w) to raw image height (or w). Equals the reciprocal of total stride in convolutional layers</param>
+/// <param name="output_dim">fix output dim</param>
+/// <param name="pooled_size">fix pooled size</param>
+/// <param name="group_size">fix group size</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribPSROIPooling(NdArray @out,
+Symbol data,
+Symbol rois,
+float spatial_scale,
+int output_dim,
+int pooled_size,
+int group_size=0)
+{
+return new Operator("_contrib_PSROIPooling")
+.SetParam("data", data)
+.SetParam("rois", rois)
+.SetParam("spatial_scale", spatial_scale)
+.SetParam("output_dim", output_dim)
+.SetParam("pooled_size", pooled_size)
+.SetParam("group_size", group_size)
+.Invoke(@out);
+}
+/// <summary>
+/// Performs region-of-interest pooling on inputs. Resize bounding box coordinates by spatial_scale and crop input feature maps accordingly. The cropped feature maps are pooled by max pooling to a fixed size output indicated by pooled_size. batch_size will change to the number of region bounding boxes after PSROIPooling
+/// </summary>
+/// <param name="data">Input data to the pooling operator, a 4D Feature maps</param>
+/// <param name="rois">Bounding box coordinates, a 2D array of [[batch_index, x1, y1, x2, y2]]. (x1, y1) and (x2, y2) are top left and down right corners of designated region of interest. batch_index indicates the index of corresponding image in the input data</param>
+/// <param name="spatial_scale">Ratio of input feature map height (or w) to raw image height (or w). Equals the reciprocal of total stride in convolutional layers</param>
+/// <param name="output_dim">fix output dim</param>
+/// <param name="pooled_size">fix pooled size</param>
+/// <param name="group_size">fix group size</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray ContribPSROIPooling(Symbol data,
+Symbol rois,
+float spatial_scale,
+int output_dim,
+int pooled_size,
+int group_size=0)
+{
+return new Operator("_contrib_PSROIPooling")
+.SetParam("data", data)
+.SetParam("rois", rois)
+.SetParam("spatial_scale", spatial_scale)
+.SetParam("output_dim", output_dim)
+.SetParam("pooled_size", pooled_size)
+.SetParam("group_size", group_size)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribPSROIPooling(NdArray @out)
+{
+return new Operator("_backward__contrib_PSROIPooling")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardContribPSROIPooling()
+{
+return new Operator("_backward__contrib_PSROIPooling")
+.Invoke();
+}
 private static readonly List<string> ConvolutionCudnnTuneConvert = new List<string>(){"fastest","limited_workspace","off"};
 private static readonly List<string> ConvolutionLayoutConvert = new List<string>(){"NCDHW","NCHW","NCW","NDHWC","NHWC"};
 /// <summary>
@@ -4418,14 +10584,14 @@ private static readonly List<string> ConvolutionLayoutConvert = new List<string>
 public static NdArray Convolution(NdArray @out,
 NdArray data,
 Shape kernel,
-int num_filter,
+uint num_filter,
 NdArray weight=null,
 NdArray bias=null,
 Shape stride=null,
 Shape dilate=null,
 Shape pad=null,
-int num_group=1,
-long workspace=1024,
+uint num_group=1,
+ulong workspace=1024,
 bool no_bias=false,
 ConvolutionCudnnTune? cudnn_tune=null,
 bool cudnn_off=false,
@@ -4468,14 +10634,14 @@ return new Operator("Convolution")
  /// <returns>returns new symbol</returns>
 public static NdArray Convolution(NdArray data,
 Shape kernel,
-int num_filter,
+uint num_filter,
 NdArray weight=null,
 NdArray bias=null,
 Shape stride=null,
 Shape dilate=null,
 Shape pad=null,
-int num_group=1,
-long workspace=1024,
+uint num_group=1,
+ulong workspace=1024,
 bool no_bias=false,
 ConvolutionCudnnTune? cudnn_tune=null,
 bool cudnn_off=false,
@@ -4496,6 +10662,25 @@ return new Operator("Convolution")
 .SetInput("data", data)
 .SetInput("weight", weight)
 .SetInput("bias", bias)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardConvolution(NdArray @out)
+{
+return new Operator("_backward_Convolution")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardConvolution()
+{
+return new Operator("_backward_Convolution")
 .Invoke();
 }
 private static readonly List<string> ConvolutionV1CudnnTuneConvert = new List<string>(){"fastest","limited_workspace","off"};
@@ -4522,14 +10707,14 @@ private static readonly List<string> ConvolutionV1LayoutConvert = new List<strin
 public static NdArray ConvolutionV1(NdArray @out,
 NdArray data,
 Shape kernel,
-int num_filter,
+uint num_filter,
 NdArray weight=null,
 NdArray bias=null,
 Shape stride=null,
 Shape dilate=null,
 Shape pad=null,
-int num_group=1,
-long workspace=1024,
+uint num_group=1,
+ulong workspace=1024,
 bool no_bias=false,
 ConvolutionV1CudnnTune? cudnn_tune=null,
 bool cudnn_off=false,
@@ -4572,14 +10757,14 @@ return new Operator("Convolution_v1")
  /// <returns>returns new symbol</returns>
 public static NdArray ConvolutionV1(NdArray data,
 Shape kernel,
-int num_filter,
+uint num_filter,
 NdArray weight=null,
 NdArray bias=null,
 Shape stride=null,
 Shape dilate=null,
 Shape pad=null,
-int num_group=1,
-long workspace=1024,
+uint num_group=1,
+ulong workspace=1024,
 bool no_bias=false,
 ConvolutionV1CudnnTune? cudnn_tune=null,
 bool cudnn_off=false,
@@ -4603,6 +10788,25 @@ return new Operator("Convolution_v1")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardConvolutionV1(NdArray @out)
+{
+return new Operator("_backward_Convolution_v1")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardConvolutionV1()
+{
+return new Operator("_backward_Convolution_v1")
+.Invoke();
+}
+/// <summary>
 /// Applies correlation to inputs.The correlation layer performs multiplicative patch comparisons between two feature maps.Given two multi-channel feature maps :math:`f_{1}, f_{2}`, with :math:`w`, :math:`h`, and :math:`c` being their width, height, and number of channels,the correlation layer lets the network compare each patch from :math:`f_{1}` with each patch from :math:`f_{2}`.For now we consider only a single comparison of two patches. The 'correlation' of two patches centered at :math:`x_{1}` in the first map and:math:`x_{2}` in the second map is then defined as:.. math::   c(x_{1}, x_{2}) = \sum_{o \in [-k,k] \times [-k,k]} <f_{1}(x_{1} + o), f_{2}(x_{2} + o)>for a square patch of size :math:`K:=2k+1`.Note that the equation above is identical to one step of a convolution in neural networks, but instead of convolving data with a filter, it convolves data with otherdata. For this reason, it has no training weights.Computing :math:`c(x_{1}, x_{2})` involves :math:`c * K^{2}` multiplications. Comparing all patch combinations involves :math:`w^{2}*h^{2}` such computations.Given a maximum displacement :math:`d`, for each location :math:`x_{1}` it computes correlations :math:`c(x_{1}, x_{2})` only in a neighborhood of size :math:`D:=2d+1`,by limiting the range of :math:`x_{2}`. We use strides :math:`s_{1}, s_{2}`, to quantize :math:`x_{1}` globally and to quantize :math:`x_{2}` within the neighborhoodcentered around :math:`x_{1}`.The final output is defined by the following expression:.. math::  out[n, q, i, j] = c(x_{i, j}, x_{q})where :math:`i` and :math:`j` enumerate spatial locations in :math:`f_{1}`, and :math:`q` denotes the :math:`q^{th}` neighborhood of :math:`x_{i,j}`.Defined in G:\deeplearn\mxnet\src\operator\correlation.cc:L191
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4618,11 +10822,11 @@ return new Operator("Convolution_v1")
 public static NdArray Correlation(NdArray @out,
 NdArray data1,
 NdArray data2,
-int kernel_size=1,
-int max_displacement=1,
-int stride1=1,
-int stride2=1,
-int pad_size=0,
+uint kernel_size=1,
+uint max_displacement=1,
+uint stride1=1,
+uint stride2=1,
+uint pad_size=0,
 bool is_multiply=true)
 {
 return new Operator("Correlation")
@@ -4650,11 +10854,11 @@ return new Operator("Correlation")
  /// <returns>returns new symbol</returns>
 public static NdArray Correlation(NdArray data1,
 NdArray data2,
-int kernel_size=1,
-int max_displacement=1,
-int stride1=1,
-int stride2=1,
-int pad_size=0,
+uint kernel_size=1,
+uint max_displacement=1,
+uint stride1=1,
+uint stride2=1,
+uint pad_size=0,
 bool is_multiply=true)
 {
 return new Operator("Correlation")
@@ -4669,6 +10873,25 @@ return new Operator("Correlation")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCorrelation(NdArray @out)
+{
+return new Operator("_backward_Correlation")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCorrelation()
+{
+return new Operator("_backward_Correlation")
+.Invoke();
+}
+/// <summary>
 /// .. note:: `Crop` is deprecated. Use `slice` instead.Crop the 2nd and 3rd dim of input data, with the corresponding size of h_w orwith width and height of the second input symbol, i.e., with one input, we need h_w tospecify the crop height and width, otherwise the second input symbol's size will be usedDefined in G:\deeplearn\mxnet\src\operator\crop.cc:L49
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -4679,7 +10902,7 @@ return new Operator("Correlation")
 /// <param name="center_crop">If set to true, then it will use be the center_crop,or it will crop using the shape of crop_like</param>
  /// <returns>returns new symbol</returns>
 public static NdArray Crop(NdArray @out,
-Symbol data,
+List<Symbol> data,
 int num_args,
 Shape offset=null,
 Shape h_w=null,
@@ -4704,7 +10927,7 @@ return new Operator("Crop")
 /// <param name="h_w">crop height and width: (h, w)</param>
 /// <param name="center_crop">If set to true, then it will use be the center_crop,or it will crop using the shape of crop_like</param>
  /// <returns>returns new symbol</returns>
-public static NdArray Crop(Symbol data,
+public static NdArray Crop(List<Symbol> data,
 int num_args,
 Shape offset=null,
 Shape h_w=null,
@@ -4718,6 +10941,186 @@ return new Operator("Crop")
 .SetParam("offset", offset)
 .SetParam("h_w", h_w)
 .SetParam("center_crop", center_crop)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCrop(NdArray @out)
+{
+return new Operator("_backward_Crop")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCrop()
+{
+return new Operator("_backward_Crop")
+.Invoke();
+}
+/// <summary>
+/// Special op to copy data cross device
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray CrossDeviceCopy(NdArray @out)
+{
+return new Operator("_CrossDeviceCopy")
+.Invoke(@out);
+}
+/// <summary>
+/// Special op to copy data cross device
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray CrossDeviceCopy()
+{
+return new Operator("_CrossDeviceCopy")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCrossDeviceCopy(NdArray @out)
+{
+return new Operator("_backward__CrossDeviceCopy")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCrossDeviceCopy()
+{
+return new Operator("_backward__CrossDeviceCopy")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCuDNNBatchNorm(NdArray @out)
+{
+return new Operator("_backward_CuDNNBatchNorm")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardCuDNNBatchNorm()
+{
+return new Operator("_backward_CuDNNBatchNorm")
+.Invoke();
+}
+/// <summary>
+/// Stub for implementing an operator implemented in native frontend language.
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data for the custom operator.</param>
+/// <param name="info"></param>
+/// <param name="need_top_grad">Whether this layer needs out grad for backward. Should be false for loss layers.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Native(NdArray @out,
+NdArray[] data,
+IntPtr info,
+bool need_top_grad=true)
+{
+return new Operator("_Native")
+.SetParam("info", info)
+.SetParam("need_top_grad", need_top_grad)
+.AddInput(data)
+.Invoke(@out);
+}
+/// <summary>
+/// Stub for implementing an operator implemented in native frontend language.
+/// </summary>
+/// <param name="data">Input data for the custom operator.</param>
+/// <param name="info"></param>
+/// <param name="need_top_grad">Whether this layer needs out grad for backward. Should be false for loss layers.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Native(NdArray[] data,
+IntPtr info,
+bool need_top_grad=true)
+{
+return new Operator("_Native")
+.SetParam("info", info)
+.SetParam("need_top_grad", need_top_grad)
+.AddInput(data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNative(NdArray @out)
+{
+return new Operator("_backward__Native")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNative()
+{
+return new Operator("_backward__Native")
+.Invoke();
+}
+/// <summary>
+/// Stub for implementing an operator implemented in native frontend language with ndarray.
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Input data for the custom operator.</param>
+/// <param name="info"></param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NDArray(NdArray @out,
+NdArray[] data,
+IntPtr info)
+{
+return new Operator("_NDArray")
+.SetParam("info", info)
+.AddInput(data)
+.Invoke(@out);
+}
+/// <summary>
+/// Stub for implementing an operator implemented in native frontend language with ndarray.
+/// </summary>
+/// <param name="data">Input data for the custom operator.</param>
+/// <param name="info"></param>
+ /// <returns>returns new symbol</returns>
+public static NdArray NDArray(NdArray[] data,
+IntPtr info)
+{
+return new Operator("_NDArray")
+.SetParam("info", info)
+.AddInput(data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNDArray(NdArray @out)
+{
+return new Operator("_backward__NDArray")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardNDArray()
+{
+return new Operator("_backward__NDArray")
 .Invoke();
 }
 private static readonly List<string> DeconvolutionCudnnTuneConvert = new List<string>(){"fastest","limited_workspace","off"};
@@ -4746,7 +11149,7 @@ private static readonly List<string> DeconvolutionLayoutConvert = new List<strin
 public static NdArray Deconvolution(NdArray @out,
 NdArray data,
 Shape kernel,
-int num_filter,
+uint num_filter,
 NdArray weight=null,
 NdArray bias=null,
 Shape stride=null,
@@ -4754,8 +11157,8 @@ Shape dilate=null,
 Shape pad=null,
 Shape adj=null,
 Shape target_shape=null,
-int num_group=1,
-long workspace=512,
+uint num_group=1,
+ulong workspace=512,
 bool no_bias=true,
 DeconvolutionCudnnTune? cudnn_tune=null,
 bool cudnn_off=false,
@@ -4802,7 +11205,7 @@ return new Operator("Deconvolution")
  /// <returns>returns new symbol</returns>
 public static NdArray Deconvolution(NdArray data,
 Shape kernel,
-int num_filter,
+uint num_filter,
 NdArray weight=null,
 NdArray bias=null,
 Shape stride=null,
@@ -4810,8 +11213,8 @@ Shape dilate=null,
 Shape pad=null,
 Shape adj=null,
 Shape target_shape=null,
-int num_group=1,
-long workspace=512,
+uint num_group=1,
+ulong workspace=512,
 bool no_bias=true,
 DeconvolutionCudnnTune? cudnn_tune=null,
 bool cudnn_off=false,
@@ -4834,6 +11237,25 @@ return new Operator("Deconvolution")
 .SetInput("data", data)
 .SetInput("weight", weight)
 .SetInput("bias", bias)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDeconvolution(NdArray @out)
+{
+return new Operator("_backward_Deconvolution")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDeconvolution()
+{
+return new Operator("_backward_Deconvolution")
 .Invoke();
 }
 private static readonly List<string> DropoutModeConvert = new List<string>(){"always","training"};
@@ -4871,6 +11293,25 @@ return new Operator("Dropout")
 .SetParam("p", p)
 .SetParam("mode", Util.EnumToString<DropoutMode>(mode,DropoutModeConvert))
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDropout(NdArray @out)
+{
+return new Operator("_backward_Dropout")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardDropout()
+{
+return new Operator("_backward_Dropout")
 .Invoke();
 }
 /// <summary>
@@ -4927,6 +11368,25 @@ return new Operator("FullyConnected")
 .SetInput("bias", bias)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardFullyConnected(NdArray @out)
+{
+return new Operator("_backward_FullyConnected")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardFullyConnected()
+{
+return new Operator("_backward_FullyConnected")
+.Invoke();
+}
 private static readonly List<string> GridgeneratorTransformTypeConvert = new List<string>(){"affine","warp"};
 /// <summary>
 /// Generates 2D sampling grid for bilinear sampling.
@@ -4964,6 +11424,44 @@ return new Operator("GridGenerator")
 .SetParam("transform_type", Util.EnumToString<GridgeneratorTransformType>(transform_type,GridgeneratorTransformTypeConvert))
 .SetParam("target_shape", target_shape)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardGridGenerator(NdArray @out)
+{
+return new Operator("_backward_GridGenerator")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardGridGenerator()
+{
+return new Operator("_backward_GridGenerator")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardIdentityAttachKLSparseReg(NdArray @out)
+{
+return new Operator("_backward_IdentityAttachKLSparseReg")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardIdentityAttachKLSparseReg()
+{
+return new Operator("_backward_IdentityAttachKLSparseReg")
 .Invoke();
 }
 /// <summary>
@@ -5008,6 +11506,25 @@ return new Operator("InstanceNorm")
 .SetInput("beta", beta)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardInstanceNorm(NdArray @out)
+{
+return new Operator("_backward_InstanceNorm")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardInstanceNorm()
+{
+return new Operator("_backward_InstanceNorm")
+.Invoke();
+}
 private static readonly List<string> L2normalizationModeConvert = new List<string>(){"channel","instance","spatial"};
 /// <summary>
 /// Normalize the input array using the L2 norm.For 1-D NDArray, it computes::  out = data / sqrt(sum(data ** 2) + eps)For N-D NDArray, if the input array has shape (N, N, ..., N),with ``mode`` = ``instance``, it normalizes each instance in the multidimensionalarray by its L2 norm.::  for i in 0...N    out[i,:,:,...,:] = data[i,:,:,...,:] / sqrt(sum(data[i,:,:,...,:] ** 2) + eps)with ``mode`` = ``channel``, it normalizes each channel in the array by its L2 norm.::  for i in 0...N    out[:,i,:,...,:] = data[:,i,:,...,:] / sqrt(sum(data[:,i,:,...,:] ** 2) + eps)with ``mode`` = ``spatial``, it normalizes the cross channel norm for each positionin the array by its L2 norm.::  for dim in 2...N    for i in 0...N      out[.....,i,...] = take(out, indices=i, axis=dim) / sqrt(sum(take(out, indices=i, axis=dim) ** 2) + eps)          -dim-Example::  x = [[[1,2],        [3,4]],       [[2,2],        [5,6]]]  L2Normalization(x, mode='instance')  =[[[ 0.18257418  0.36514837]     [ 0.54772252  0.73029673]]    [[ 0.24077171  0.24077171]     [ 0.60192931  0.72231513]]]  L2Normalization(x, mode='channel')  =[[[ 0.31622776  0.44721359]     [ 0.94868326  0.89442718]]    [[ 0.37139067  0.31622776]     [ 0.92847669  0.94868326]]]  L2Normalization(x, mode='spatial')  =[[[ 0.44721359  0.89442718]     [ 0.60000002  0.80000001]]    [[ 0.70710677  0.70710677]     [ 0.6401844   0.76822126]]]Defined in G:\deeplearn\mxnet\src\operator\l2_normalization.cc:L92
@@ -5046,6 +11563,44 @@ return new Operator("L2Normalization")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardL2Normalization(NdArray @out)
+{
+return new Operator("_backward_L2Normalization")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardL2Normalization()
+{
+return new Operator("_backward_L2Normalization")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLeakyReLU(NdArray @out)
+{
+return new Operator("_backward_LeakyReLU")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLeakyReLU()
+{
+return new Operator("_backward_LeakyReLU")
+.Invoke();
+}
+/// <summary>
 /// Applies local response normalization to the input.The local response normalization layer performs "lateral inhibition" by normalizingover local input regions.If :math:`a_{x,y}^{i}` is the activity of a neuron computed by applying kernel :math:`i` at position:math:`(x, y)` and then applying the ReLU nonlinearity, the response-normalizedactivity :math:`b_{x,y}^{i}` is given by the expression:.. math::   b_{x,y}^{i} = \frac{a_{x,y}^{i}}{\Bigg({k + \alpha \sum_{j=max(0, i-\frac{n}{2})}^{min(N-1, i+\frac{n}{2})} (a_{x,y}^{j})^{2}}\Bigg)^{\beta}}where the sum runs over :math:`n` "adjacent" kernel maps at the same spatial position, and :math:`N` is the totalnumber of kernels in the layer.Defined in G:\deeplearn\mxnet\src\operator\lrn.cc:L72
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -5057,7 +11612,7 @@ return new Operator("L2Normalization")
  /// <returns>returns new symbol</returns>
 public static NdArray LRN(NdArray @out,
 NdArray data,
-int nsize,
+uint nsize,
 float alpha=0.0001f,
 float beta=0.75f,
 float knorm=2f)
@@ -5080,7 +11635,7 @@ return new Operator("LRN")
 /// <param name="knorm">The parameter :math:`k` in the LRN expression.</param>
  /// <returns>returns new symbol</returns>
 public static NdArray LRN(NdArray data,
-int nsize,
+uint nsize,
 float alpha=0.0001f,
 float beta=0.75f,
 float knorm=2f)
@@ -5091,6 +11646,25 @@ return new Operator("LRN")
 .SetParam("beta", beta)
 .SetParam("knorm", knorm)
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLRN(NdArray @out)
+{
+return new Operator("_backward_LRN")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLRN()
+{
+return new Operator("_backward_LRN")
 .Invoke();
 }
 private static readonly List<string> MakelossNormalizationConvert = new List<string>(){"batch","null","valid"};
@@ -5134,6 +11708,44 @@ return new Operator("MakeLoss")
 .SetParam("valid_thresh", valid_thresh)
 .SetParam("normalization", Util.EnumToString<MakelossNormalization>(normalization,MakelossNormalizationConvert))
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMakeLoss(NdArray @out)
+{
+return new Operator("_backward_MakeLoss")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMakeLoss()
+{
+return new Operator("_backward_MakeLoss")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPad(NdArray @out)
+{
+return new Operator("_backward_Pad")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPad()
+{
+return new Operator("_backward_Pad")
 .Invoke();
 }
 private static readonly List<string> PoolingPoolTypeConvert = new List<string>(){"avg","max","sum"};
@@ -5204,6 +11816,25 @@ return new Operator("Pooling")
 .SetInput("data", data)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPooling(NdArray @out)
+{
+return new Operator("_backward_Pooling")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPooling()
+{
+return new Operator("_backward_Pooling")
+.Invoke();
+}
 private static readonly List<string> PoolingV1PoolTypeConvert = new List<string>(){"avg","max","sum"};
 private static readonly List<string> PoolingV1PoolingConventionConvert = new List<string>(){"full","valid"};
 /// <summary>
@@ -5267,6 +11898,25 @@ return new Operator("Pooling_v1")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPoolingV1(NdArray @out)
+{
+return new Operator("_backward_Pooling_v1")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardPoolingV1()
+{
+return new Operator("_backward_Pooling_v1")
+.Invoke();
+}
+/// <summary>
 /// Computes and optimizes for squared loss during backward propagation.Just outputs ``data`` during forward propagation.If :math:`\hat{y}_i` is the predicted value of the i-th sample, and :math:`y_i` is the corresponding target value,then the squared loss estimated over :math:`n` samples is defined as:math:`\text{SquaredLoss}(y, \hat{y} ) = \frac{1}{n} \sum_{i=0}^{n-1} \left( y_i - \hat{y}_i \right)^2`.. note::   Use the LinearRegressionOutput as the final output layer of a net.By default, gradients of this loss function are scaled by factor `1/n`, where n is the number of training examples.The parameter `grad_scale` can be used to change this scale to `grad_scale/n`.Defined in G:\deeplearn\mxnet\src\operator\regression_output.cc:L69
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -5300,6 +11950,25 @@ return new Operator("LinearRegressionOutput")
 .SetParam("grad_scale", grad_scale)
 .SetInput("data", data)
 .SetInput("label", label)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinearRegressionOutput(NdArray @out)
+{
+return new Operator("_backward_LinearRegressionOutput")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLinearRegressionOutput()
+{
+return new Operator("_backward_LinearRegressionOutput")
 .Invoke();
 }
 /// <summary>
@@ -5339,6 +12008,25 @@ return new Operator("MAERegressionOutput")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMAERegressionOutput(NdArray @out)
+{
+return new Operator("_backward_MAERegressionOutput")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardMAERegressionOutput()
+{
+return new Operator("_backward_MAERegressionOutput")
+.Invoke();
+}
+/// <summary>
 /// Applies a logistic function to the input.The logistic function, also known as the sigmoid function, is computed as:math:`\frac{1}{1+exp(-x)}`.Commonly, the sigmoid is used to squash the real-valued output of a linear model:math:wTx+b into the [0,1] range so that it can be interpreted as a probability.It is suitable for binary classification or probability prediction tasks... note::   Use the LogisticRegressionOutput as the final output layer of a net.By default, gradients of this loss function are scaled by factor `1/n`, where n is the number of training examples.The parameter `grad_scale` can be used to change this scale to `grad_scale/n`.Defined in G:\deeplearn\mxnet\src\operator\regression_output.cc:L111
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -5374,6 +12062,25 @@ return new Operator("LogisticRegressionOutput")
 .SetInput("label", label)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLogisticRegressionOutput(NdArray @out)
+{
+return new Operator("_backward_LogisticRegressionOutput")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardLogisticRegressionOutput()
+{
+return new Operator("_backward_LogisticRegressionOutput")
+.Invoke();
+}
 private static readonly List<string> RNNModeConvert = new List<string>(){"gru","lstm","rnn_relu","rnn_tanh"};
 /// <summary>
 /// Applies a recurrent layer to input.
@@ -5395,8 +12102,8 @@ NdArray data,
 NdArray parameters,
 NdArray state,
 NdArray state_cell,
-int state_size,
-int num_layers,
+uint state_size,
+uint num_layers,
 RNNMode mode,
 bool bidirectional=false,
 float p=0f,
@@ -5433,8 +12140,8 @@ public static NdArray RNN(NdArray data,
 NdArray parameters,
 NdArray state,
 NdArray state_cell,
-int state_size,
-int num_layers,
+uint state_size,
+uint num_layers,
 RNNMode mode,
 bool bidirectional=false,
 float p=0f,
@@ -5451,6 +12158,25 @@ return new Operator("RNN")
 .SetInput("parameters", parameters)
 .SetInput("state", state)
 .SetInput("state_cell", state_cell)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRNN(NdArray @out)
+{
+return new Operator("_backward_RNN")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardRNN()
+{
+return new Operator("_backward_RNN")
 .Invoke();
 }
 /// <summary>
@@ -5496,6 +12222,25 @@ return new Operator("ROIPooling")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardROIPooling(NdArray @out)
+{
+return new Operator("_backward_ROIPooling")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardROIPooling()
+{
+return new Operator("_backward_ROIPooling")
+.Invoke();
+}
+/// <summary>
 /// Takes the last element of a sequence.This function takes an n-dimensional input array of the form[max_sequence_length, batch_size, other_feature_dims] and returns a (n-1)-dimensional arrayof the form [batch_size, other_feature_dims].Parameter `sequence_length` is used to handle variable-length sequences. `sequence_length` should bean input array of positive ints of dimension [batch_size]. To use this parameter,set `use_sequence_length` to `True`, otherwise each example in the batch is assumedto have the max sequence length... note:: Alternatively, you can also use `take` operator.Example::   x = [[[  1.,   2.,   3.],         [  4.,   5.,   6.],         [  7.,   8.,   9.]],        [[ 10.,   11.,   12.],         [ 13.,   14.,   15.],         [ 16.,   17.,   18.]],        [[  19.,   20.,   21.],         [  22.,   23.,   24.],         [  25.,   26.,   27.]]]   // returns last sequence when sequence_length parameter is not used   SequenceLast(x) = [[  19.,   20.,   21.],                      [  22.,   23.,   24.],                      [  25.,   26.,   27.]]   // sequence_length y is used   SequenceLast(x, y=[1,1,1], use_sequence_length=True) =            [[  1.,   2.,   3.],             [  4.,   5.,   6.],             [  7.,   8.,   9.]]   // sequence_length y is used   SequenceLast(x, y=[1,2,3], use_sequence_length=True) =            [[  1.,    2.,   3.],             [  13.,  14.,  15.],             [  25.,  26.,  27.]]Defined in G:\deeplearn\mxnet\src\operator\sequence_last.cc:L91
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -5529,6 +12274,25 @@ return new Operator("SequenceLast")
 .SetParam("use_sequence_length", use_sequence_length)
 .SetInput("data", data)
 .SetInput("sequence_length", sequence_length)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSequenceLast(NdArray @out)
+{
+return new Operator("_backward_SequenceLast")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSequenceLast()
+{
+return new Operator("_backward_SequenceLast")
 .Invoke();
 }
 /// <summary>
@@ -5574,6 +12338,25 @@ return new Operator("SequenceMask")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSequenceMask(NdArray @out)
+{
+return new Operator("_backward_SequenceMask")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSequenceMask()
+{
+return new Operator("_backward_SequenceMask")
+.Invoke();
+}
+/// <summary>
 /// Reverses the elements of each sequence.This function takes an n-dimensional input array of the form [max_sequence_length, batch_size, other_feature_dims]and returns an array of the same shape.Parameter `sequence_length` is used to handle variable-length sequences.`sequence_length` should be an input array of positive ints of dimension [batch_size].To use this parameter, set `use_sequence_length` to `True`,otherwise each example in the batch is assumed to have the max sequence length.Example::   x = [[[  1.,   2.,   3.],         [  4.,   5.,   6.]],        [[  7.,   8.,   9.],         [ 10.,  11.,  12.]],        [[ 13.,  14.,   15.],         [ 16.,  17.,   18.]]]   // Batch 1   B1 = [[  1.,   2.,   3.],         [  7.,   8.,   9.],         [ 13.,  14.,  15.]]   // Batch 2   B2 = [[  4.,   5.,   6.],         [ 10.,  11.,  12.],         [ 16.,  17.,  18.]]   // returns reverse sequence when sequence_length parameter is not used   SequenceReverse(x) = [[[ 13.,  14.,   15.],                          [ 16.,  17.,   18.]],                         [[  7.,   8.,   9.],                          [ 10.,  11.,  12.]],                         [[  1.,   2.,   3.],                          [  4.,   5.,   6.]]]   // sequence_length [2,2] means 2 rows of   // both batch B1 and B2 will be reversed.   SequenceReverse(x, y=[2,2], use_sequence_length=True) =                     [[[  7.,   8.,   9.],                       [ 10.,  11.,  12.]],                      [[  1.,   2.,   3.],                       [  4.,   5.,   6.]],                      [[ 13.,  14.,   15.],                       [ 16.,  17.,   18.]]]   // sequence_length [2,3] means 2 of batch B2 and 3 of batch B3   // will be reversed.   SequenceReverse(x, y=[2,3], use_sequence_length=True) =                    [[[  7.,   8.,   9.],                      [ 16.,  17.,  18.]],                     [[  1.,   2.,   3.],                      [ 10.,  11.,  12.]],                     [[ 13.,  14,   15.],                      [  4.,   5.,   6.]]]Defined in G:\deeplearn\mxnet\src\operator\sequence_reverse.cc:L112
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -5609,6 +12392,44 @@ return new Operator("SequenceReverse")
 .SetInput("sequence_length", sequence_length)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSequenceReverse(NdArray @out)
+{
+return new Operator("_backward_SequenceReverse")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSequenceReverse()
+{
+return new Operator("_backward_SequenceReverse")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSliceChannel(NdArray @out)
+{
+return new Operator("_backward_SliceChannel")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSliceChannel()
+{
+return new Operator("_backward_SliceChannel")
+.Invoke();
+}
 private static readonly List<string> SoftmaxactivationModeConvert = new List<string>(){"channel","instance"};
 /// <summary>
 /// Applies softmax activation to input. This is intended for internal layers... note::  This operator has been deprecated, please use `softmax`.If `mode` = ``instance``, this operator will compute a softmax for each instance in the batch.This is the default mode.If `mode` = ``channel``, this operator will compute a k-class softmax at each positionof each instance, where `k` = ``num_channel``. This mode can only be used when the input arrayhas at least 3 dimensions.This can be used for `fully convolutional network`, `image segmentation`, etc.Example::  >>> input_array = mx.nd.array([[3., 0.5, -0.5, 2., 7.],  >>>                            [2., -.4, 7.,   3., 0.2]])  >>> softmax_act = mx.nd.SoftmaxActivation(input_array)  >>> print softmax_act.asnumpy()  [[  1.78322066e-02   1.46375655e-03   5.38485940e-04   6.56010211e-03   9.73605454e-01]   [  6.56221947e-03   5.95310994e-04   9.73919690e-01   1.78379621e-02   1.08472735e-03]]Defined in G:\deeplearn\mxnet\src\operator\softmax_activation.cc:L66
@@ -5638,6 +12459,25 @@ SoftmaxactivationMode mode=SoftmaxactivationMode.Instance)
 return new Operator("SoftmaxActivation")
 .SetParam("mode", Util.EnumToString<SoftmaxactivationMode>(mode,SoftmaxactivationModeConvert))
 .SetInput("data", data)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmaxActivation(NdArray @out)
+{
+return new Operator("_backward_SoftmaxActivation")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmaxActivation()
+{
+return new Operator("_backward_SoftmaxActivation")
 .Invoke();
 }
 private static readonly List<string> SoftmaxoutputNormalizationConvert = new List<string>(){"batch","null","valid"};
@@ -5713,6 +12553,25 @@ return new Operator("SoftmaxOutput")
 .SetInput("label", label)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmaxOutput(NdArray @out)
+{
+return new Operator("_backward_SoftmaxOutput")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmaxOutput()
+{
+return new Operator("_backward_SoftmaxOutput")
+.Invoke();
+}
 private static readonly List<string> SoftmaxNormalizationConvert = new List<string>(){"batch","null","valid"};
 /// <summary>
 /// Please use `SoftmaxOutput`... note::  This operator has been renamed to `SoftmaxOutput`, which  computes the gradient of cross-entropy loss w.r.t softmax output.  To just compute softmax output, use the `softmax` operator.Defined in G:\deeplearn\mxnet\src\operator\softmax_output.cc:L137
@@ -5780,6 +12639,25 @@ return new Operator("Softmax")
 .SetInput("data", data)
 .Invoke();
 }
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmax(NdArray @out)
+{
+return new Operator("_backward_Softmax")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSoftmax()
+{
+return new Operator("_backward_Softmax")
+.Invoke();
+}
 private static readonly List<string> SpatialtransformerTransformTypeConvert = new List<string>(){"affine"};
 private static readonly List<string> SpatialtransformerSamplerTypeConvert = new List<string>(){"bilinear"};
 /// <summary>
@@ -5833,6 +12711,25 @@ return new Operator("SpatialTransformer")
 .Invoke();
 }
 /// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSpatialTransformer(NdArray @out)
+{
+return new Operator("_backward_SpatialTransformer")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSpatialTransformer()
+{
+return new Operator("_backward_SpatialTransformer")
+.Invoke();
+}
+/// <summary>
 /// Computes support vector machine based transformation of the input.This tutorial demonstrates using SVM as output layer for classification instead of softmax:https://github.com/dmlc/mxnet/tree/master/example/svm_mnist.
 /// </summary>
 /// <param name="@out">output Ndarray</param>
@@ -5878,6 +12775,93 @@ return new Operator("SVMOutput")
 .SetParam("use_linear", use_linear)
 .SetInput("data", data)
 .SetInput("label", label)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSVMOutput(NdArray @out)
+{
+return new Operator("_backward_SVMOutput")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSVMOutput()
+{
+return new Operator("_backward_SVMOutput")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSwapAxis(NdArray @out)
+{
+return new Operator("_backward_SwapAxis")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardSwapAxis()
+{
+return new Operator("_backward_SwapAxis")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardUpSampling(NdArray @out)
+{
+return new Operator("_backward_UpSampling")
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+ /// <returns>returns new symbol</returns>
+public static NdArray BackwardUpSampling()
+{
+return new Operator("_backward_UpSampling")
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="lhs">Left operand to the function.</param>
+/// <param name="rhs">Right operand to the function.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray OnehotEncode(NdArray @out,
+Symbol lhs,
+Symbol rhs)
+{
+return new Operator("_onehot_encode")
+.SetParam("lhs", lhs)
+.SetParam("rhs", rhs)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="lhs">Left operand to the function.</param>
+/// <param name="rhs">Right operand to the function.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray OnehotEncode(Symbol lhs,
+Symbol rhs)
+{
+return new Operator("_onehot_encode")
+.SetParam("lhs", lhs)
+.SetParam("rhs", rhs)
 .Invoke();
 }
 /// <summary>
@@ -5944,6 +12928,96 @@ return new Operator("fill_element_0index")
 .SetParam("lhs", lhs)
 .SetParam("mhs", mhs)
 .SetParam("rhs", rhs)
+.Invoke();
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="data">Source input to the function.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Copyto(NdArray @out,
+Symbol data)
+{
+return new Operator("_copyto")
+.SetParam("data", data)
+.Invoke(@out);
+}
+/// <summary>
+/// 
+/// </summary>
+/// <param name="data">Source input to the function.</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Copyto(Symbol data)
+{
+return new Operator("_copyto")
+.SetParam("data", data)
+.Invoke();
+}
+/// <summary>
+/// Decode an image, clip to (x0, y0, x1, y1), subtract mean, and write to buffer
+/// </summary>
+/// <param name="@out">output Ndarray</param>
+/// <param name="mean">image mean</param>
+/// <param name="index">buffer position for output</param>
+/// <param name="x0">x0</param>
+/// <param name="y0">y0</param>
+/// <param name="x1">x1</param>
+/// <param name="y1">y1</param>
+/// <param name="c">channel</param>
+/// <param name="size">length of str_img</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Imdecode(NdArray @out,
+NdArray mean,
+int index,
+int x0,
+int y0,
+int x1,
+int y1,
+int c,
+int size)
+{
+return new Operator("_imdecode")
+.SetParam("index", index)
+.SetParam("x0", x0)
+.SetParam("y0", y0)
+.SetParam("x1", x1)
+.SetParam("y1", y1)
+.SetParam("c", c)
+.SetParam("size", size)
+.SetInput("mean", mean)
+.Invoke(@out);
+}
+/// <summary>
+/// Decode an image, clip to (x0, y0, x1, y1), subtract mean, and write to buffer
+/// </summary>
+/// <param name="mean">image mean</param>
+/// <param name="index">buffer position for output</param>
+/// <param name="x0">x0</param>
+/// <param name="y0">y0</param>
+/// <param name="x1">x1</param>
+/// <param name="y1">y1</param>
+/// <param name="c">channel</param>
+/// <param name="size">length of str_img</param>
+ /// <returns>returns new symbol</returns>
+public static NdArray Imdecode(NdArray mean,
+int index,
+int x0,
+int y0,
+int x1,
+int y1,
+int c,
+int size)
+{
+return new Operator("_imdecode")
+.SetParam("index", index)
+.SetParam("x0", x0)
+.SetParam("y0", y0)
+.SetParam("x1", x1)
+.SetParam("y1", y1)
+.SetParam("c", c)
+.SetParam("size", size)
+.SetInput("mean", mean)
 .Invoke();
 }
 }

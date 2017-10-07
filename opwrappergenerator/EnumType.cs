@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace opwrappergenerator
 {
+
+ 
+
     class EnumType
     {
         private static readonly Regex TypeReg = new Regex("'(.*?)'");

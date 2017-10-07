@@ -175,8 +175,8 @@ namespace mxnet.csharp
 
             }
 
-            NativeMethods.MXImperativeInvoke(_handle, num_inputs, _inputValues.ToArray(),ref num_outputs, ref outputs_receiver,
-                paramKeys.Count, paramKeys.ToArray(), paramValues.ToArray());
+            Util.CallCheck(NativeMethods.MXImperativeInvoke(_handle, num_inputs, _inputValues.ToArray(),ref num_outputs, ref outputs_receiver,
+                paramKeys.Count, paramKeys.ToArray(), paramValues.ToArray()));
 
             if (outputs.Count > 0)
             {
@@ -207,6 +207,7 @@ namespace mxnet.csharp
             Invoke(outputs);
             return outputs.First();
         }
+
 
     }
 }

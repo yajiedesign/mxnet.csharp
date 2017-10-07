@@ -10,6 +10,7 @@ namespace opwrappergenerator
 {
     class OpWrapperGenerator
     {
+        private List<string> black = new List<string>(){ "_set_value" };
         public (string, string, string) ParseAllOps()
         {
 
@@ -38,9 +39,9 @@ namespace opwrappergenerator
                     Console.WriteLine($"error namePtr {i}");
                     continue;;
                 }
-                if (name.StartsWith("_"))
+                if (black.Contains(name))
                 {
-                    //continue;
+                    continue;
                 }
 
                 string description = Marshal.PtrToStringAnsi(descriptionPtr);

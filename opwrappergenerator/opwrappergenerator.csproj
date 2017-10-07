@@ -90,6 +90,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arg.cs" />
+    <Compile Include="Dtype.cs" />
     <Compile Include="EnumType.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Op.cs" />

@@ -94,11 +94,11 @@ namespace mxnet.csharp
             _blobPtr = new NdBlob(handle);
         }
 
-        public NdArray(Shape shape, Context context, bool delayAlloc, Type dtype)
+        public NdArray(Shape shape, Context context, bool delayAlloc, Dtype dtype)
         {
             NDArrayHandle handle;
             Util.CallCheck(NativeMethods.MXNDArrayCreateEx(shape.Data().ToArray(), shape.Ndim(), context.DeviceType,
-                               context.DeviceId, delayAlloc ? 1 : 0, Util.DtypeNpToMx[dtype], out handle));
+                               context.DeviceId, delayAlloc ? 1 : 0, dtype.Index, out handle));
             _blobPtr = new NdBlob(handle);
         }
 
@@ -196,7 +196,7 @@ namespace mxnet.csharp
             float[] scalar = { value };
             IntPtr zero = IntPtr.Zero;
             var handle = _blobPtr.Handle;
-            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new[] { zero}, scalar, ref handle));
+            Util.CallCheck(NativeMethods.MXFuncInvoke(funcHandle, new[] { zero }, scalar, ref handle));
             return this;
         }
 
@@ -225,11 +225,11 @@ namespace mxnet.csharp
             return new Shape(ret.Select(s => (uint)s).ToArray());
         }
 
-        public Type GetDtype()
+        public Dtype GetDtype()
         {
             int outDtype;
             Util.CallCheck(NativeMethods.MXNDArrayGetDType(_blobPtr.Handle, out outDtype));
-            return Util.DtypeMxToNp[outDtype];
+            return (Dtype)outDtype;
         }
 
 
@@ -249,21 +249,21 @@ namespace mxnet.csharp
         [DebuggerHidden]
         public NDArrayHandle Handle => _blobPtr.Handle;
 
-        public static NdArray Zeros(Shape shape, Context ctx = null, Type dtype = null)
-        {
-            if (ctx == null)
-            {
-                ctx = Context.DefaultCtx;
-            }
-            if (dtype == null)
-            {
-                dtype = typeof(float);
-            }
+        //public static NdArray Zeros(Shape shape, Context ctx = null, Type dtype = null)
+        //{
+        //    if (ctx == null)
+        //    {
+        //        ctx = Context.DefaultCtx;
+        //    }
+        //    if (dtype == null)
+        //    {
+        //        dtype = typeof(float);
+        //    }
 
-            var array = new NdArray(shape, ctx, false, dtype);
-            array.SetValue(0);
-            return array;
-        }
+        //    var array = new NdArray(shape, ctx, false, dtype);
+        //    array.SetValue(0);
+        //    return array;
+        //}
 
         #region Numerics
         public SingleNArray AsNumerics()

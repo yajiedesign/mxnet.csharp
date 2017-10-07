@@ -8,6 +8,25 @@ using System.Threading.Tasks;
 namespace mxnet.csharp
 {
 /// <summary>
+/// Set the label that is reserved for blank label.If "first", 0-th label is reserved, and label values for tokens in the vocabulary are between ``1`` and ``alphabet_size-1``, and the padding mask is ``-1``. If "last", last label value ``alphabet_size-1`` is reserved for blank label instead, and label values for tokens in the vocabulary are between ``0`` and ``alphabet_size-2``, and the padding mask is ``0``.
+/// </summary>
+public enum ContribCtclossBlankLabel
+{First,
+Last
+};
+/// <summary>
+/// Output data type.
+/// </summary>
+public enum ContribDequantizeOutType
+{Float32
+};
+/// <summary>
+/// Output data type.
+/// </summary>
+public enum ContribQuantizeOutType
+{Uint8
+};
+/// <summary>
 /// Activation function to be applied.
 /// </summary>
 public enum LeakyreluActType
@@ -33,42 +52,12 @@ Default,
 RowSparse
 };
 /// <summary>
-/// Output data type.
-/// </summary>
-public enum CastDtype
-{Float16,
-Float32,
-Float64,
-Int32,
-Uint8
-};
-/// <summary>
-/// Data type of weight.
-/// </summary>
-public enum EmbeddingDtype
-{Float16,
-Float32,
-Float64,
-Int32,
-Uint8
-};
-/// <summary>
 /// Specify how out-of-bound indices bahave. "clip" means clip to the range. So, if all indices mentioned are too large, they are replaced by the index that addresses the last element along an axis.  "wrap" means to wrap around.  "raise" means to raise an error. 
 /// </summary>
 public enum TakeMode
 {Clip,
 Raise,
 Wrap
-};
-/// <summary>
-/// DType of the output
-/// </summary>
-public enum OneHotDtype
-{Float16,
-Float32,
-Float64,
-Int32,
-Uint8
 };
 /// <summary>
 /// The return type. "value" means to return the top k values, "indices" means to return the indices of the top k values, "mask" means to return a mask array containing 0 and 1. 1 means the top k values. "both" means to return a list of both values and indices of top k elements.
@@ -101,6 +90,14 @@ public enum ActivationActType
 Sigmoid,
 Softrelu,
 Tanh
+};
+/// <summary>
+/// Set layout for input, output and weight. Empty for    default layout: NCW for 1d, NCHW for 2d and NCDHW for 3d.
+/// </summary>
+public enum ContribDeformableconvolutionLayout
+{NCDHW,
+NCHW,
+NCW
 };
 /// <summary>
 /// Whether to pick convolution algo by running performance test.

@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 
 namespace mxnet.csharp
@@ -61,7 +62,19 @@ namespace mxnet.csharp
             return new Context(DeviceType.KCpu, deviceId);
         }
 
-
-
+        public override string ToString()
+        {
+            switch (DeviceType)
+            {
+                case DeviceType.KCpu:
+                    return $"cpu({DeviceId})";
+                case DeviceType.KGpu:
+                    return $"gpu({DeviceId})";
+                case DeviceType.KCpuPinned:
+                    return $"cpu_pinned({DeviceId})";
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
     };
 }

@@ -109,7 +109,7 @@ namespace test.console
                     initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f));
 
                  model = new FeedForward(pnet, new List<Context> { ctx },
-                    numEpoch: 1,
+                    numEpoch: 10,
                     optimizer: optimizer,
                     initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f),
                     argParams: modelload.ArgParams,
