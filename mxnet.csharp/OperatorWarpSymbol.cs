@@ -1035,8 +1035,8 @@ return new Operator("sgd_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
-.SetInput("grad", grad)
 .SetInput("weight", weight)
+.SetInput("grad", grad)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1061,8 +1061,8 @@ return new Operator("sgd_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
-.SetInput("grad", grad)
 .SetInput("weight", weight)
+.SetInput("grad", grad)
 .CreateSymbol();
 }
 /// <summary>
@@ -1094,9 +1094,9 @@ return new Operator("sgd_mom_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("mom", mom)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1126,9 +1126,9 @@ return new Operator("sgd_mom_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("mom", mom)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 /// <summary>
@@ -1157,9 +1157,9 @@ return new Operator("mp_sgd_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("weight32", weight32)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1186,9 +1186,9 @@ return new Operator("mp_sgd_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("weight32", weight32)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 /// <summary>
@@ -1222,10 +1222,10 @@ return new Operator("mp_sgd_mom_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("mom", mom)
 .SetInput("weight32", weight32)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1257,10 +1257,10 @@ return new Operator("mp_sgd_mom_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("mom", mom)
 .SetInput("weight32", weight32)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 /// <summary>
@@ -1300,10 +1300,10 @@ return new Operator("adam_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("mean", mean)
 .SetInput("var", var)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1341,10 +1341,10 @@ return new Operator("adam_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("mean", mean)
 .SetInput("var", var)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 /// <summary>
@@ -1382,9 +1382,9 @@ return new Operator("rmsprop_update")
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
 .SetParam("clip_weights", clip_weights)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("n", n)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1420,9 +1420,9 @@ return new Operator("rmsprop_update")
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
 .SetParam("clip_weights", clip_weights)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("n", n)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 /// <summary>
@@ -1467,11 +1467,11 @@ return new Operator("rmspropalex_update")
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
 .SetParam("clip_weights", clip_weights)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("n", n)
 .SetInput("g", g)
 .SetInput("delta", delta)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1514,11 +1514,11 @@ return new Operator("rmspropalex_update")
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
 .SetParam("clip_weights", clip_weights)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("n", n)
 .SetInput("g", g)
 .SetInput("delta", delta)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 /// <summary>
@@ -1555,10 +1555,10 @@ return new Operator("ftrl_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("z", z)
 .SetInput("n", n)
-.SetInput("weight", weight)
 .CreateSymbol(symbol_name);
 }
 /// <summary>
@@ -1593,10 +1593,10 @@ return new Operator("ftrl_update")
 .SetParam("wd", wd)
 .SetParam("rescale_grad", rescale_grad)
 .SetParam("clip_gradient", clip_gradient)
+.SetInput("weight", weight)
 .SetInput("grad", grad)
 .SetInput("z", z)
 .SetInput("n", n)
-.SetInput("weight", weight)
 .CreateSymbol();
 }
 private static readonly List<string> PadModeConvert = new List<string>(){"constant","edge","reflect"};
@@ -8761,9 +8761,9 @@ Shape end,
 float scalar=0f)
 {
 return new Operator("_crop_assign_scalar")
+.SetParam("scalar", scalar)
 .SetParam("begin", begin)
 .SetParam("end", end)
-.SetParam("scalar", scalar)
 .SetInput("data", data)
 .CreateSymbol(symbol_name);
 }
@@ -8781,9 +8781,9 @@ Shape end,
 float scalar=0f)
 {
 return new Operator("_crop_assign_scalar")
+.SetParam("scalar", scalar)
 .SetParam("begin", begin)
 .SetParam("end", end)
-.SetParam("scalar", scalar)
 .SetInput("data", data)
 .CreateSymbol();
 }
@@ -9070,8 +9070,8 @@ int num_args,
 int axis=0)
 {
 return new Operator("stack")
-.SetParam("num_args", num_args)
 .SetParam("axis", axis)
+.SetParam("num_args", num_args)
 .AddInput(data)
 .CreateSymbol(symbol_name);
 }
@@ -9087,8 +9087,8 @@ int num_args,
 int axis=0)
 {
 return new Operator("stack")
-.SetParam("num_args", num_args)
 .SetParam("axis", axis)
+.SetParam("num_args", num_args)
 .AddInput(data)
 .CreateSymbol();
 }
@@ -9386,10 +9386,10 @@ ulong workspace=512)
 {
 return new Operator("UpSampling")
 .SetParam("scale", scale)
-.SetParam("sample_type", Util.EnumToString<UpsamplingSampleType>(sample_type,UpsamplingSampleTypeConvert))
-.SetParam("num_args", num_args)
 .SetParam("num_filter", num_filter)
+.SetParam("sample_type", Util.EnumToString<UpsamplingSampleType>(sample_type,UpsamplingSampleTypeConvert))
 .SetParam("multi_input_mode", Util.EnumToString<UpsamplingMultiInputMode>(multi_input_mode,UpsamplingMultiInputModeConvert))
+.SetParam("num_args", num_args)
 .SetParam("workspace", workspace)
 .AddInput(data)
 .CreateSymbol(symbol_name);
@@ -9415,10 +9415,10 @@ ulong workspace=512)
 {
 return new Operator("UpSampling")
 .SetParam("scale", scale)
-.SetParam("sample_type", Util.EnumToString<UpsamplingSampleType>(sample_type,UpsamplingSampleTypeConvert))
-.SetParam("num_args", num_args)
 .SetParam("num_filter", num_filter)
+.SetParam("sample_type", Util.EnumToString<UpsamplingSampleType>(sample_type,UpsamplingSampleTypeConvert))
 .SetParam("multi_input_mode", Util.EnumToString<UpsamplingMultiInputMode>(multi_input_mode,UpsamplingMultiInputModeConvert))
+.SetParam("num_args", num_args)
 .SetParam("workspace", workspace)
 .AddInput(data)
 .CreateSymbol();
@@ -9703,10 +9703,10 @@ ContribDeformableconvolutionLayout? layout=null)
 {
 return new Operator("_contrib_DeformableConvolution")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("num_deformable_group", num_deformable_group)
 .SetParam("workspace", workspace)
@@ -9753,10 +9753,10 @@ ContribDeformableconvolutionLayout? layout=null)
 {
 return new Operator("_contrib_DeformableConvolution")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("num_deformable_group", num_deformable_group)
 .SetParam("workspace", workspace)
@@ -10599,10 +10599,10 @@ ConvolutionLayout? layout=null)
 {
 return new Operator("Convolution")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("workspace", workspace)
 .SetParam("no_bias", no_bias)
@@ -10649,10 +10649,10 @@ ConvolutionLayout? layout=null)
 {
 return new Operator("Convolution")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("workspace", workspace)
 .SetParam("no_bias", no_bias)
@@ -10722,10 +10722,10 @@ ConvolutionV1Layout? layout=null)
 {
 return new Operator("Convolution_v1")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("workspace", workspace)
 .SetParam("no_bias", no_bias)
@@ -10772,10 +10772,10 @@ ConvolutionV1Layout? layout=null)
 {
 return new Operator("Convolution_v1")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("workspace", workspace)
 .SetParam("no_bias", no_bias)
@@ -11166,12 +11166,12 @@ DeconvolutionLayout? layout=null)
 {
 return new Operator("Deconvolution")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
 .SetParam("adj", adj)
 .SetParam("target_shape", target_shape)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("workspace", workspace)
 .SetParam("no_bias", no_bias)
@@ -11222,12 +11222,12 @@ DeconvolutionLayout? layout=null)
 {
 return new Operator("Deconvolution")
 .SetParam("kernel", kernel)
-.SetParam("num_filter", num_filter)
 .SetParam("stride", stride)
 .SetParam("dilate", dilate)
 .SetParam("pad", pad)
 .SetParam("adj", adj)
 .SetParam("target_shape", target_shape)
+.SetParam("num_filter", num_filter)
 .SetParam("num_group", num_group)
 .SetParam("workspace", workspace)
 .SetParam("no_bias", no_bias)
@@ -11618,10 +11618,10 @@ float beta=0.75f,
 float knorm=2f)
 {
 return new Operator("LRN")
-.SetParam("nsize", nsize)
 .SetParam("alpha", alpha)
 .SetParam("beta", beta)
 .SetParam("knorm", knorm)
+.SetParam("nsize", nsize)
 .SetInput("data", data)
 .CreateSymbol(symbol_name);
 }
@@ -11641,10 +11641,10 @@ float beta=0.75f,
 float knorm=2f)
 {
 return new Operator("LRN")
-.SetParam("nsize", nsize)
 .SetParam("alpha", alpha)
 .SetParam("beta", beta)
 .SetParam("knorm", knorm)
+.SetParam("nsize", nsize)
 .SetInput("data", data)
 .CreateSymbol();
 }
@@ -11774,10 +11774,10 @@ Shape stride=null,
 Shape pad=null)
 {
 return new Operator("Pooling")
-.SetParam("kernel", kernel)
-.SetParam("pool_type", Util.EnumToString<PoolingPoolType>(pool_type,PoolingPoolTypeConvert))
 .SetParam("global_pool", global_pool)
 .SetParam("cudnn_off", cudnn_off)
+.SetParam("kernel", kernel)
+.SetParam("pool_type", Util.EnumToString<PoolingPoolType>(pool_type,PoolingPoolTypeConvert))
 .SetParam("pooling_convention", Util.EnumToString<PoolingPoolingConvention>(pooling_convention,PoolingPoolingConventionConvert))
 .SetParam("stride", stride)
 .SetParam("pad", pad)
@@ -11806,10 +11806,10 @@ Shape stride=null,
 Shape pad=null)
 {
 return new Operator("Pooling")
-.SetParam("kernel", kernel)
-.SetParam("pool_type", Util.EnumToString<PoolingPoolType>(pool_type,PoolingPoolTypeConvert))
 .SetParam("global_pool", global_pool)
 .SetParam("cudnn_off", cudnn_off)
+.SetParam("kernel", kernel)
+.SetParam("pool_type", Util.EnumToString<PoolingPoolType>(pool_type,PoolingPoolTypeConvert))
 .SetParam("pooling_convention", Util.EnumToString<PoolingPoolingConvention>(pooling_convention,PoolingPoolingConventionConvert))
 .SetParam("stride", stride)
 .SetParam("pad", pad)
@@ -11859,9 +11859,9 @@ Shape stride=null,
 Shape pad=null)
 {
 return new Operator("Pooling_v1")
+.SetParam("global_pool", global_pool)
 .SetParam("kernel", kernel)
 .SetParam("pool_type", Util.EnumToString<PoolingV1PoolType>(pool_type,PoolingV1PoolTypeConvert))
-.SetParam("global_pool", global_pool)
 .SetParam("pooling_convention", Util.EnumToString<PoolingV1PoolingConvention>(pooling_convention,PoolingV1PoolingConventionConvert))
 .SetParam("stride", stride)
 .SetParam("pad", pad)
@@ -11888,9 +11888,9 @@ Shape stride=null,
 Shape pad=null)
 {
 return new Operator("Pooling_v1")
+.SetParam("global_pool", global_pool)
 .SetParam("kernel", kernel)
 .SetParam("pool_type", Util.EnumToString<PoolingV1PoolType>(pool_type,PoolingV1PoolTypeConvert))
-.SetParam("global_pool", global_pool)
 .SetParam("pooling_convention", Util.EnumToString<PoolingV1PoolingConvention>(pooling_convention,PoolingV1PoolingConventionConvert))
 .SetParam("stride", stride)
 .SetParam("pad", pad)
@@ -12112,8 +12112,8 @@ bool state_outputs=false)
 return new Operator("RNN")
 .SetParam("state_size", state_size)
 .SetParam("num_layers", num_layers)
-.SetParam("mode", Util.EnumToString<RNNMode>(mode,RNNModeConvert))
 .SetParam("bidirectional", bidirectional)
+.SetParam("mode", Util.EnumToString<RNNMode>(mode,RNNModeConvert))
 .SetParam("p", p)
 .SetParam("state_outputs", state_outputs)
 .SetInput("data", data)
@@ -12150,8 +12150,8 @@ bool state_outputs=false)
 return new Operator("RNN")
 .SetParam("state_size", state_size)
 .SetParam("num_layers", num_layers)
-.SetParam("mode", Util.EnumToString<RNNMode>(mode,RNNModeConvert))
 .SetParam("bidirectional", bidirectional)
+.SetParam("mode", Util.EnumToString<RNNMode>(mode,RNNModeConvert))
 .SetParam("p", p)
 .SetParam("state_outputs", state_outputs)
 .SetInput("data", data)
@@ -12679,9 +12679,9 @@ Shape target_shape=null)
 {if(target_shape==null){ target_shape= new Shape(0,0);}
 
 return new Operator("SpatialTransformer")
+.SetParam("target_shape", target_shape)
 .SetParam("transform_type", Util.EnumToString<SpatialtransformerTransformType>(transform_type,SpatialtransformerTransformTypeConvert))
 .SetParam("sampler_type", Util.EnumToString<SpatialtransformerSamplerType>(sampler_type,SpatialtransformerSamplerTypeConvert))
-.SetParam("target_shape", target_shape)
 .SetInput("data", data)
 .SetInput("loc", loc)
 .CreateSymbol(symbol_name);
@@ -12703,9 +12703,9 @@ Shape target_shape=null)
 {if(target_shape==null){ target_shape= new Shape(0,0);}
 
 return new Operator("SpatialTransformer")
+.SetParam("target_shape", target_shape)
 .SetParam("transform_type", Util.EnumToString<SpatialtransformerTransformType>(transform_type,SpatialtransformerTransformTypeConvert))
 .SetParam("sampler_type", Util.EnumToString<SpatialtransformerSamplerType>(sampler_type,SpatialtransformerSamplerTypeConvert))
-.SetParam("target_shape", target_shape)
 .SetInput("data", data)
 .SetInput("loc", loc)
 .CreateSymbol();

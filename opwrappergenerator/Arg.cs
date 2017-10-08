@@ -63,7 +63,7 @@ namespace opwrappergenerator
 
         public Arg(string opName = "", string argName = "", string typeString = "", string descString = "")
         {
-            if (opName == "_zeros")
+            if (opName == "sgd_mom_update")
             {
                 
             }

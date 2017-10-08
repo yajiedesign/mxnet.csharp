@@ -56,6 +56,8 @@ namespace test.console
 
         static void Main(string[] args)
         {
+            Environment.SetEnvironmentVariable("MXNET_ENGINE_TYPE", "NaiveEngine");
+
             var log4NetConfig = Path.Combine(Path.GetDirectoryName(typeof(Program).Assembly.Location), "log4net.config");
             XmlConfigurator.Configure(new FileInfo(log4NetConfig));
 
@@ -98,7 +100,7 @@ namespace test.console
 
             CustomMetric customMetric = new CustomMetric((l, p) => Accuracy(l, p, batch_size), "Accuracy");
 
-            Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.001f, wd: 0.00001f, rescaleGrad: 1.0f / batch_size);
+            Optimizer optimizer = new CcSgd(momentum: 0.9f, learningRate: 0.01f, wd: 0.00001f, rescaleGrad: 1.0f / batch_size);
 
             FeedForward model = null;
             try
@@ -109,7 +111,7 @@ namespace test.console
                     initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f));
 
                  model = new FeedForward(pnet, new List<Context> { ctx },
-                    numEpoch: 10,
+                    numEpoch: 1000,
                     optimizer: optimizer,
                     initializer: new Xavier(factorType: FactorType.In, magnitude: 2.34f),
                     argParams: modelload.ArgParams,

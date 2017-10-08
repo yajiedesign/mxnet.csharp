@@ -232,6 +232,14 @@ namespace mxnet.csharp
             return (Dtype)outDtype;
         }
 
+        public Context GetContext()
+        {
+            int outDevType =0;
+            int outDevId =0;
+            NativeMethods.MXNDArrayGetContext(_blobPtr.Handle, ref  outDevType, ref  outDevId);
+
+            return new Context((DeviceType)outDevType, outDevId);
+        }
 
         public NdArray ArgmaxChannel()
         {

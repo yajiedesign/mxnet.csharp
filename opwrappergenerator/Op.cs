@@ -26,6 +26,7 @@ namespace opwrappergenerator
         private readonly string _name;
         private readonly string _description;
         private readonly List<Arg> _args;
+        private readonly List<Arg> _argCss;
 
         public Op(string name, string description, List<Arg> args)
         {
@@ -37,7 +38,8 @@ namespace opwrappergenerator
                 "string",
                 "name of the resulting symbol");
             args.Insert(0, nameArg);
-            this._args = args.Where(w => !w.HasDefault).Concat(args.Where(w => w.HasDefault)).ToList();
+            this._args = args.ToList();
+            this._argCss = args.Where(w => !w.HasDefault).Concat(args.Where(w => w.HasDefault)).ToList();
 
         }
 
@@ -64,7 +66,7 @@ namespace opwrappergenerator
                     throw new ArgumentOutOfRangeException(nameof(opNdArrayOrSymbol), opNdArrayOrSymbol, null);
             }
             string ret = "";
-            List<Arg> argsLocal = this._args.Skip(useName ? 0 : 1).ToList();
+            List<Arg> argsLocal = this._argCss.Skip(useName ? 0 : 1).ToList();
             switch (opNdArrayOrSymbol)
             {
                 case OpNdArrayOrSymbol.Symbol:
@@ -73,7 +75,7 @@ namespace opwrappergenerator
                 case OpNdArrayOrSymbol.NdArray:
                     if (useName)
                     {
-                        argsLocal = this._args.Skip(1).ToList();
+                        argsLocal = this._argCss.Skip(1).ToList();
                         argsLocal.Insert(0, new Arg("", "@out", "NDArray-or-Symbol", "output Ndarray") { });
                     }
               

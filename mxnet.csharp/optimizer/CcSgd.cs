@@ -7,9 +7,7 @@ namespace mxnet.csharp.optimizer
 {
     public class CcSgd : Optimizer
     {
-        private float _momentum;
-        private readonly IntPtr _handle;
-
+        private readonly float _momentum;
 
         public CcSgd(
             float momentum = 0.0f,
@@ -35,7 +33,11 @@ namespace mxnet.csharp.optimizer
 
         public override NdArray create_state(int index, NdArray weight)
         {
-            return null;
+            if (Math.Abs(this._momentum) < float.Epsilon)
+            {
+                return null;
+            }
+            return NdArray.Zeros(weight.GetShape(), weight.GetContext(), weight.GetDtype());
         }
 
         public override void update(int index, NdArray weight, NdArray grad, NdArray state)
@@ -46,11 +48,11 @@ namespace mxnet.csharp.optimizer
 
             if (state != null)
             {
-                NdArray.SgdMomUpdate(grad, state, lr, weight, this._momentum, wd, this._rescaleGrad, _clipGradient);
+                NdArray.SgdMomUpdate(weight, grad, state, lr, weight, this._momentum, wd, this._rescaleGrad, this._clipGradient);
             }
             else
             {
-                NdArray.SgdUpdate(grad, lr, weight, wd, this._rescaleGrad, _clipGradient);
+                NdArray.SgdUpdate(weight, grad, lr, weight, wd, this._rescaleGrad, this._clipGradient);
             }
         }
     }

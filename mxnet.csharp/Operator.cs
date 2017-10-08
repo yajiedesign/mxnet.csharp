@@ -147,9 +147,6 @@ namespace mxnet.csharp
 
         public void Invoke(List<NdArray> outputs)
         {
-
-   
-            List<string> inputKeys = new List<string>();
             List<string> paramKeys = new List<string>();
             List<string> paramValues = new List<string>();
 
@@ -158,24 +155,21 @@ namespace mxnet.csharp
                 paramKeys.Add(data.Key);
                 paramValues.Add(data.Value);
             }
-            foreach (var data in this._inputKeys)
-            {
-                inputKeys.Add(data);
-            }
-            int num_inputs = _inputValues.Count;
-            int num_outputs = outputs.Count;
 
-            NdArrayHandle[] output_handles = outputs.Select(s => s.get_handle()).ToArray();
-            IntPtr outputs_receiver = IntPtr.Zero;
+            int numInputs = _inputValues.Count;
+            int numOutputs = outputs.Count;
+
+            NdArrayHandle[] outputHandles = outputs.Select(s => s.get_handle()).ToArray();
+            IntPtr outputsReceiver = IntPtr.Zero;
             GCHandle? gcHandle = null;
             if (outputs.Count > 0)
             {
-                gcHandle = GCHandle.Alloc(output_handles, GCHandleType.Pinned);
-                outputs_receiver = gcHandle.Value.AddrOfPinnedObject();
+                gcHandle = GCHandle.Alloc(outputHandles, GCHandleType.Pinned);
+                outputsReceiver = gcHandle.Value.AddrOfPinnedObject();
 
             }
 
-            Util.CallCheck(NativeMethods.MXImperativeInvoke(_handle, num_inputs, _inputValues.ToArray(),ref num_outputs, ref outputs_receiver,
+            Util.CallCheck(NativeMethods.MXImperativeInvoke(_handle, numInputs, _inputValues.ToArray(),ref numOutputs, ref outputsReceiver,
                 paramKeys.Count, paramKeys.ToArray(), paramValues.ToArray()));
 
             if (outputs.Count > 0)
@@ -183,11 +177,11 @@ namespace mxnet.csharp
                 gcHandle?.Free();
                 return;
             }
-            output_handles = new IntPtr[num_outputs];
+            outputHandles = new IntPtr[numOutputs];
 
-            Marshal.Copy(outputs_receiver, output_handles,0, num_outputs);
+            Marshal.Copy(outputsReceiver, outputHandles,0, numOutputs);
 
-            foreach (IntPtr outputHandle in output_handles)
+            foreach (IntPtr outputHandle in outputHandles)
             {
                 outputs.Add(new NdArray(outputHandle));
             }
